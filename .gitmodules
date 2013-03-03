@@ -1,0 +1,3 @@
+[submodule "lib/forem"]
+	path = lib/forem
+	url = git@bitbucket.org:sensoricollective/forem.git
