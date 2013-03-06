@@ -1,5 +1,11 @@
 Sensori::Application.routes.draw do
 
+  get "home/prelaunch"
+
+  post "prelaunch_signups" => "prelaunch_signups#create"
+  
+  get "admin/prelaunch_signups" => "admin/prelaunch_signups#index"
+
   # This line mounts Forem's routes at /forums by default.
   # This means, any requests to the /forums URL of your application will go to Forem::ForumsController#index.
   # If you would like to change where this extension is mounted, simply change the :at option to something different.
@@ -58,7 +64,7 @@ Sensori::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  # root :to => 'welcome#index'
+  root :to => 'home#prelaunch'
 
   # See how all your routes lay out with "rake routes"
 

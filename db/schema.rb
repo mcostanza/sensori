@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130305144331) do
+ActiveRecord::Schema.define(:version => 20130306045337) do
 
   create_table "forem_categories", :force => true do |t|
     t.string   "name",       :null => false
@@ -108,6 +108,12 @@ ActiveRecord::Schema.define(:version => 20130305144331) do
   add_index "forem_views", ["user_id"], :name => "index_forem_views_on_user_id"
   add_index "forem_views", ["viewable_id"], :name => "index_forem_views_on_topic_id"
 
+  create_table "prelaunch_signups", :force => true do |t|
+    t.string   "email"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "users", :force => true do |t|
     t.string   "email",                  :default => "",               :null => false
     t.string   "encrypted_password",     :default => "",               :null => false
@@ -125,6 +131,7 @@ ActiveRecord::Schema.define(:version => 20130305144331) do
     t.string   "forem_state",            :default => "pending_review"
     t.boolean  "forem_auto_subscribe",   :default => false
     t.string   "username"
+    t.boolean  "admin",                  :default => false
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
