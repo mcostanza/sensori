@@ -4,7 +4,7 @@ Sensori::Application.routes.draw do
 
   post "prelaunch_signups" => "prelaunch_signups#create"
   
-  get "admin/prelaunch_signups" => "admin/prelaunch_signups#index"
+  get "admin/prelaunch_signups(.:format)" => "admin/prelaunch_signups#index", :defaults => { :format => :csv }, :constraints => { :format => "csv" }
 
   # This line mounts Forem's routes at /forums by default.
   # This means, any requests to the /forums URL of your application will go to Forem::ForumsController#index.
