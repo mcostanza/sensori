@@ -4,7 +4,10 @@ class Admin::PrelaunchSignupsController < ApplicationController
   before_filter :ensure_admin
   
   def index
-    @prelaunch_signups = PrelaunchSignup.all
+    @prelaunch_signups = PrelaunchSignup.order(:id)
+    respond_to do |format|
+      format.csv { send_data @prelaunch_signups.to_csv }
+    end
   end
   
   def ensure_admin
