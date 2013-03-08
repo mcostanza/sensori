@@ -60,6 +60,8 @@ module Sensori
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
     
+    config.assets.paths << File.join(Rails.root, "app/assets/fonts")
+
     config.generators do |g|
       g.fixture_replacement :factory_girl
     end

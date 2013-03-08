@@ -4,7 +4,12 @@
 
 $main-color: #666;
 $dark-color: #494949;
-$font-family: 'Arial';
+$font-family: 'Orator';
+
+@font-face {
+	font-family: $font-family;
+	src: url('/assets/oratorstd-webfont.woff');
+}
 
 body { 
 	background:image-url('sensori-splash-bg.png') transparent top left repeat; 
