@@ -1,5 +1,13 @@
-<%= form_for @prelaunch_signup do |f| %>
-	<%= f.text_field :email %>
-<% end %>
+<div class="logo">
+	<div class="inner">
+		<h1>KNOWLEDGE.</h1>
+		<h1>BEATS.</h1>
+		<h1>LIFE.</h1>
 
-holla
+		<%= form_for @prelaunch_signup do |f| %>
+			<%= f.text_field :email, :size => nil, :class => "email" %>
+			<%= f.submit "STAY INFORMED.", :class => "stay-informed" %>
+		<% end %>
+
+	</div>
+</div>
