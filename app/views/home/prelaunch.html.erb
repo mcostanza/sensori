@@ -5,9 +5,8 @@
 		<h1>LIFE.</h1>
 
 		<%= form_for @prelaunch_signup do |f| %>
-			<%= f.text_field :email, :size => nil, :class => "email" %>
+			<%= f.text_field :email, :size => nil, :class => "email", :type => "email" %>
 			<%= f.submit "STAY INFORMED.", :class => "stay-informed" %>
 		<% end %>
-
 	</div>
 </div>

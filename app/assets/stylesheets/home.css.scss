@@ -11,50 +11,75 @@ $font-family: 'Orator';
 	src: url('/assets/oratorstd-webfont.woff');
 }
 
-body { 
-	background:image-url('sensori-splash-bg.png') transparent top left repeat; 
+.home {
+	width: 100%;
+	height: 100%;
+	background:image-url('sensorisplashbg-new.png') #676767 top center no-repeat; 
 	margin: 0;
 	padding: 0;
 	font-family: $font-family;
 	color: $main-color; 
+
+	div.logo {
+		background-image:image-url('sensori-splash-logo.png');
+		background-repeat: no-repeat;
+		width: 1041px;
+		height: 641px;
+		margin: auto; 
+	}
+
+	div.inner {
+		margin: auto;
+		padding-top: 433px;
+		width: 200px;
+		text-align: center;
+	}
+
+	h1 { 
+		font-size: 22px;
+		font-weight: lighter;
+		letter-spacing: 2px;
+		padding: 0; 
+		margin: 0 0 4px 0;
+	}
+
+	input.email {
+		font-size: 14px; 
+		border: 2px solid #686a68;
+		box-shadow: 3px 3px 3px $main-color;
+		padding: 4px;
+		background-color: #c8cac8;
+		color: $dark-color;
+	}
+
+	input.stay-informed {
+		font-family: $font-family;
+		color: $dark-color; 
+		font-size: 12px;
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 0px;
+	}
+
+	input.stay-informed:hover {
+		text-decoration: underline;
+	}	
+	
+	form {
+		padding-top: 12px;
+	}
 }
 
-div.logo {
-	background-image:image-url('sensori-splash-logo.png');
-	background-repeat: no-repeat;
-	width: 1041px;
-	height: 641px;
-	margin: auto; 
-}
-
-div.inner {
+div.notice {
+	background: #6699CC;
+	color: #ffffff;
+	position: absolute;
+	top: 60px;
+	left: 0;
+	right: 0;
 	margin: auto;
-	padding-top: 425px;
-	width: 200px;
+	width: 300px;
 	text-align: center;
-}
-
-h1 { 
-	font-size: 20px;
-	padding: 0; 
-	margin: 0 0 4px 0; 
-}
-
-input.email {
-	font-size: 14px; 
-	border: 2px solid #686a68;
-	box-shadow: 3px 3px 3px $main-color;
 	padding: 4px;
-	background-color: #c8cac8;
-	margin-bottom: 4px;
-	color: $dark-color;
-}
-
-input.stay-informed {
-	font-family: $font-family;
-	color: $dark-color; 
-	font-size: 14px;
-	background: none;
-	border: none;
-	cursor: pointer;
 }

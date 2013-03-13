@@ -1,4 +1,9 @@
+<% if is_mobile_device? %>
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.2//EN"
+	"http://www.openmobilealliance.org/tech/DTD/xhtml-mobile12.dtd">
+<% else %>
 <!DOCTYPE html>
+<% end %>
 <html>
 <head>
   <title>Sensori</title>
@@ -6,11 +11,11 @@
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
-<body>
-
-<%= content_tag(:div, flash[:notice], :class => "notice") if flash[:notice] %>
+<%= content_tag :body, :class => controller.controller_name do %>
+	
+<%= content_tag(:div, flash[:notice], :class => "notice") if flash[:notice] %>	
 
 <%= yield %>
 
-</body>
+<% end %>
 </html>

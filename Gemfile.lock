@@ -1,4 +1,10 @@
 GIT
+  remote: git://github.com/radar/forem-theme-twist.git
+  revision: f08ab243ee695bd5485d589c1177d99d00602150
+  specs:
+    forem-theme-twist (0.0.1)
+
+GIT
   remote: https://sensori_readonly:thatsright@bitbucket.org/sensoricollective/forem.git
   revision: 80f44dc62d77a7e1f1db1ff4cf295450aceacd05
   specs:
@@ -90,8 +96,8 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.21)
     multi_json (1.6.1)
+    mysql2 (0.3.11)
     orm_adapter (0.4.0)
-    pg (0.14.1)
     polyglot (0.3.3)
     pygments.rb (0.2.4)
       rubypython (~> 0.5.3)
@@ -171,8 +177,9 @@ DEPENDENCIES
   devise
   factory_girl_rails
   forem!
+  forem-theme-twist!
   jquery-rails
-  pg
+  mysql2
   rails (= 3.2.12)
   rspec-rails (~> 2.0)
   sass-rails (~> 3.2.3)
