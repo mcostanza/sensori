@@ -2,8 +2,8 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-$main-color: #666;
-$dark-color: #494949;
+$main-color: #000;
+$dark-color: #000;
 $font-family: 'Orator';
 
 @font-face {
@@ -14,25 +14,26 @@ $font-family: 'Orator';
 .home {
 	width: 100%;
 	height: 100%;
-	background:image-url('sensorisplashbg-new.png') #676767 top center no-repeat; 
+	background:image-url('bg-spotlight.png') #515151 50% -175px no-repeat; 
 	margin: 0;
 	padding: 0;
 	font-family: $font-family;
 	color: $main-color; 
 
 	div.logo {
-		background-image:image-url('sensori-splash-logo.png');
+		background-image:image-url('sensori-s-logo.png');
 		background-repeat: no-repeat;
-		width: 1041px;
-		height: 641px;
-		margin: auto; 
+		width: 525px;
+		height: 459px;
+		margin: 85px auto auto; 
 	}
 
 	div.inner {
 		margin: auto;
 		padding-top: 433px;
-		width: 200px;
+		width: 420px;
 		text-align: center;
+		margin-bottom: 50px;
 	}
 
 	h1 { 
@@ -44,30 +45,17 @@ $font-family: 'Orator';
 	}
 
 	input.email {
-		font-size: 14px; 
-		border: 2px solid #686a68;
-		box-shadow: 3px 3px 3px $main-color;
-		padding: 4px;
-		background-color: #c8cac8;
-		color: $dark-color;
+		width: 300px;
+		font-size: 24px;
+		padding: 5px 14px;
+		height: 28px;
 	}
 
 	input.stay-informed {
-		font-family: $font-family;
-		color: $dark-color; 
-		font-size: 12px;
-		background: none;
-		border: none;
-		cursor: pointer;
-		padding: 0px;
 	}
 
-	input.stay-informed:hover {
-		text-decoration: underline;
-	}	
-	
 	form {
-		padding-top: 12px;
+		padding-top: 30px;
 	}
 }
 
@@ -82,4 +70,40 @@ div.notice {
 	width: 300px;
 	text-align: center;
 	padding: 4px;
+}
+ 
+.blue-button {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #6699cc), color-stop(1, #4274a6) );
+	background:-moz-linear-gradient( center top, #6699cc 5%, #4274a6 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#6699cc', endColorstr='#4274a6');
+	background-color:#6699cc;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+	border:1px solid #515151;
+	display:inline-block;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:24px;
+	font-weight:bold;
+	padding:5px 14px;
+	text-decoration:none;
+	text-shadow:1px 1px 0px #515151;
+	cursor: pointer;
+}.blue-button:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #4274a6), color-stop(1, #6699cc) );
+	background:-moz-linear-gradient( center top, #4274a6 5%, #6699cc 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#4274a6', endColorstr='#6699cc');
+	background-color:#4274a6;
+}.blue-button:active {
+	position:relative;
+	top:1px;
+}
+
+input {
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+	border:1px solid #515151;
+	height: 40px;
 }
