@@ -1,12 +1,12 @@
 ---
 oratorstd-webfont.woff: oratorstd-webfont-98351f8250e5d1177b58c1b4a6f8fa3a.woff
 oratorstd-webfont/index.woff: oratorstd-webfont-98351f8250e5d1177b58c1b4a6f8fa3a.woff
-bg-spotlight.png: bg-spotlight-ee2a3aca665d79ae4383838101c468e6.png
-bg-spotlight/index.png: bg-spotlight-ee2a3aca665d79ae4383838101c468e6.png
+bg-spotlight.png: bg-spotlight-e7e391f26db5b32ebf59f8c2be8f573f.png
+bg-spotlight/index.png: bg-spotlight-e7e391f26db5b32ebf59f8c2be8f573f.png
 rails.png: rails-a3386665c05a2d82f711a4aaa72d247c.png
 rails/index.png: rails-a3386665c05a2d82f711a4aaa72d247c.png
-sensori-s-logo.png: sensori-s-logo-5eda8b3f67a14aec585222a5572f9c9e.png
-sensori-s-logo/index.png: sensori-s-logo-5eda8b3f67a14aec585222a5572f9c9e.png
+sensori-s-logo.png: sensori-s-logo-dbf8535087aca98ae1f896b0c4fb4c0e.png
+sensori-s-logo/index.png: sensori-s-logo-dbf8535087aca98ae1f896b0c4fb4c0e.png
 sensori-splash-bg.png: sensori-splash-bg-1a221f3d7784076bdd8e5ddfe9c11dbe.png
 sensori-splash-bg/index.png: sensori-splash-bg-1a221f3d7784076bdd8e5ddfe9c11dbe.png
 sensori-splash-logo.png: sensori-splash-logo-a7651e6e53029885ad5356c0e545e133.png
@@ -15,8 +15,8 @@ sensorisplashbg-new.png: sensorisplashbg-new-1a221f3d7784076bdd8e5ddfe9c11dbe.pn
 sensorisplashbg-new/index.png: sensorisplashbg-new-1a221f3d7784076bdd8e5ddfe9c11dbe.png
 application.js: application-a5e35b8eea776528b69d51283b095db5.js
 application/index.js: application-a5e35b8eea776528b69d51283b095db5.js
-application.css: application-ef3eef059bfcfb9a2feec54233d86016.css
-application/index.css: application-ef3eef059bfcfb9a2feec54233d86016.css
+application.css: application-e148f8984fca27c8f13ae833845ad956.css
+application/index.css: application-e148f8984fca27c8f13ae833845ad956.css
 forem/lock_icon.png: forem/lock_icon-4388854cb57bc9b212340b8761ec0bc4.png
 forem/lock_icon/index.png: forem/lock_icon-4388854cb57bc9b212340b8761ec0bc4.png
 forem/pin_icon.png: forem/pin_icon-40c7af357aa9b1b7b085f0501ccbd699.png
