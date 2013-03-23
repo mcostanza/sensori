@@ -18,3 +18,4 @@
 *.swp
 .rvmrc
 config/database.yml
+.elasticbeanstalk/
