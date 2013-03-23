@@ -41,6 +41,6 @@ gem 'debugger'
 gem 'devise'
 gem "cancan"
 gem 'will_paginate', '3.0.3'
-gem 'forem-theme-twist', :path => "lib/forem-theme-twist"
+#gem 'forem-theme-twist', :path => "lib/forem-theme-twist"
 gem 'forem', :path => "lib/forem"
 gem 'rake'
