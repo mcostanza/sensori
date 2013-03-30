@@ -22,4 +22,12 @@ describe User do
       other_user.valid?.should be_false
     end
   end
+
+  describe "#to_s" do
+    it "should return the username" do
+      @user.username = "jones"
+      @user.to_s.should == "jones"
+    end
+  end
+
 end

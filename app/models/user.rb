@@ -9,4 +9,9 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation, :remember_me, :username
   
   validates :username, :uniqueness => true, :presence => true
+
+  def to_s
+  	username
+  end
+
 end
