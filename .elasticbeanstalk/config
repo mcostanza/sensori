@@ -1,6 +1,6 @@
 [global]
 ApplicationName=sensori
-AwsCredentialFile=/Users/mcostanza/.elasticbeanstalk/aws_credential_file
+AwsCredentialFile=/Users/mikecostanza/.elasticbeanstalk/aws_credential_file
 DevToolsEndpoint=git.elasticbeanstalk.us-west-1.amazonaws.com
 EnvironmentName=sensori-env
 OptionSettingFile=/Users/mcostanza/prog/sensori/.elasticbeanstalk/optionsettings.sensori-env
@@ -9,15 +9,5 @@ RdsEnabled=Yes
 RdsSourceSnapshotName=
 Region=us-west-1
 ServiceEndpoint=https://elasticbeanstalk.us-west-1.amazonaws.com
-SolutionStack=32bit Amazon Linux running Ruby 1.9.3
-
-[branches]
-mysql=sensori-mysql-env
-
-[branch:mysql]
-EnvironmentName=sensori-mysql-env
-OptionSettingFile=/Users/mcostanza/prog/sensori/.elasticbeanstalk/optionsettings.sensori-mysql-env
-RdsDeletionPolicy=Snapshot
-RdsEnabled=Yes
-RdsSourceSnapshotName=
+SolutionStack=64bit Amazon Linux running Ruby 1.9.3
 
