@@ -1,5 +1,12 @@
-PATH
-  remote: lib/forem
+GIT
+  remote: git://github.com/radar/forem-theme-twist.git
+  revision: f08ab243ee695bd5485d589c1177d99d00602150
+  specs:
+    forem-theme-twist (0.0.1)
+
+GIT
+  remote: git://github.com/radar/forem.git
+  revision: 244a8224d9f7ee5598204de68d7df02ee2be4419
   specs:
     forem (1.0.0.beta1)
       cancan (= 1.6.8)
@@ -169,6 +176,7 @@ DEPENDENCIES
   devise
   factory_girl_rails
   forem!
+  forem-theme-twist!
   jquery-rails
   mysql2
   rails (= 3.2.12)
