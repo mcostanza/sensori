@@ -39,12 +39,3 @@ production:
   password: <%= ENV['RDS_PASSWORD'] %>
   host: <%= ENV['RDS_HOSTNAME'] %>
   port: <%= ENV['RDS_PORT'] %>
-
-proxied-appfog:
-  adapter: mysql2
-  username: uhhBNppm1jCpj
-  password: pNMSMxovBJLlW
-  database: dfb4aa6d4ffae447380a4208d1ca1df31
-  port: 10000
-  host: 127.0.0.1
-  reconnect: true
