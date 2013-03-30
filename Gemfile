@@ -37,6 +37,9 @@ end
 # To use debugger
 gem 'debugger'
 
+# Cannot run `rails console` from AWS elastic beanstalk without this, probably a rails bug: https://github.com/rails/rails/issues/9256
+gem 'minitest'
+
 # Forem requirements
 gem 'devise'
 gem "cancan"
