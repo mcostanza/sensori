@@ -13,8 +13,6 @@
 </head>
 <%= content_tag :body, :class => controller.controller_name do %>
 	
-<%= content_tag(:div, flash[:notice], :class => "notice") if flash[:notice] %>	
-
 <%= yield %>
 
 <% end %>

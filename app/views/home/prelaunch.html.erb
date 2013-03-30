@@ -1,11 +1,13 @@
 <div class="logo">
 	<div class="inner">
-		<h1>Knowledge.</h1>
-		<h1>Beats.</h1>
-		<h1>Life.</h1>
-
+		<h1>Community music space in San Diego</h1>
+		<h1>Opening <span class="light">Summer 2013</span></h1>
+		
+		<%= content_tag(:div, flash[:notice], :class => "notice") if flash[:notice] %>	
+		
 		<%= form_for @prelaunch_signup do |f| %>
-			<%= f.text_field :email, :size => nil, :class => "email", :type => "email", :placeholder => "Email Address" %>
+			<%= f.label "email", "Enter email for updates and news", :class => "light" %>
+			<%= f.text_field :email, :size => nil, :class => "email", :type => "email", :placeholder => "Email Address", :required => "required" %>
 			<%= f.submit "OK", :class => 'blue-button' %>
 		<% end %>
 	</div>

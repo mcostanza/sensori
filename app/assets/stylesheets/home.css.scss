@@ -2,8 +2,9 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-$main-color: #000;
-$dark-color: #000;
+$main-color:  #666666;
+$light-color: #00b5f3;
+$dark-color:  #336699;
 $font-family: 'Orator';
 
 @font-face {
@@ -14,87 +15,103 @@ $font-family: 'Orator';
 .home {
 	width: 100%;
 	height: 100%;
-	background:image-url('bg-spotlight.png') #515151 50% -138px no-repeat; 
+  background:image-url('text-transparent-bg.png') repeat scroll 0 0 transparent;
 	margin: 0;
 	padding: 0;
 	font-family: $font-family;
 	color: $main-color; 
+	text-transform: uppercase;
 
 	div.logo {
-		background-image:image-url('sensori-s-logo.png');
+		background-image:image-url('sensori-logo-black.png');
 		background-repeat: no-repeat;
-		width: 430px;
-		height: 366px;
-		margin: 85px auto auto; 
+		width: 900px;
+		height: 390px;
+		margin: 0px auto; 
 	}
 
 	div.inner {
 		margin: auto;
-		padding-top: 337px;
-		width: 420px;
-		text-align: center;
+		padding-top: 325px;
+		width: 750px;
+		text-align: right;
 		margin-bottom: 50px;
+		position: relative;
 	}
 
 	h1 { 
-		font-size: 17px;
+		font-size: 28px;
+		line-height: 28px;
 		font-weight: lighter;
-		letter-spacing: 2px;
-		padding: 0; 
-		margin: 0 0 4px 0;
+		letter-spacing: 1px;
+		padding: 0;
+		margin: 0;
 	}
 
 	input.email {
-		width: 225px;
-		font-size: 13px;
+		width: 310px;
+		font-size: 20px;
 		padding: 6px 10px;
-		height: 20px;
+		height: 38px;
 	}
 
 	input.stay-informed {
 	}
 
 	form {
-		padding-top: 30px;
+		padding-top: 150px;
 	}
-}
-
-div.notice {
-	background: #6699CC;
-	color: #ffffff;
-	position: absolute;
-	top: 60px;
-	left: 0;
-	right: 0;
-	margin: auto;
-	width: 300px;
-	text-align: center;
-	padding: 4px;
+	
+	.light { 
+		color: $light-color;
+	}
+	
+	label {
+		display: block;
+		font-size: 20px;
+		margin-bottom: 6px;
+	}
+	
+	div.notice {
+		background: $light-color;
+		color: #FFFFFF;
+		top: 434px;
+		right: 0;
+		margin: auto;
+		text-align: right;
+		padding: 8px;
+		font-size: 16px;
+		line-height: 16px;
+		position: absolute;
+		border-radius: 3px;
+		-moz-border-radius:3px;
+		-webkit-border-radius:3px;
+	}
 }
  
 .blue-button {
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #6699cc), color-stop(1, #4274a6) );
-	background:-moz-linear-gradient( center top, #6699cc 5%, #4274a6 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#6699cc', endColorstr='#4274a6');
-	background-color:#6699cc;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, $light-color), color-stop(1, $dark-color) );
+	background:-moz-linear-gradient( center top, $light-color 5%, $dark-color 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='$light-color', endColorstr='$dark-color');
+	background-color:$light-color;
 	-moz-border-radius:3px;
 	-webkit-border-radius:3px;
 	border-radius:3px;
 	border:1px solid #515151;
 	display:inline-block;
-	color:#ffffff;
+	color:#FFFFFF;
 	font-family:arial;
-	font-size:15px;
+	font-size:20px;
 	font-weight:bold;
 	padding:6px 10px;
 	text-decoration:none;
 	text-shadow:1px 1px 0px #515151;
   cursor: pointer;
 }.blue-button:hover {
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #4274a6), color-stop(1, #6699cc) );
-	background:-moz-linear-gradient( center top, #4274a6 5%, #6699cc 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#4274a6', endColorstr='#6699cc');
-	background-color:#4274a6;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, $dark-color), color-stop(1, $light-color) );
+	background:-moz-linear-gradient( center top, $dark-color 5%, $light-color 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='$dark-color', endColorstr='$light-color');
+	background-color:$dark-color;	
 }.blue-button:active {
 	position:relative;
 	top:1px;
@@ -105,4 +122,8 @@ input {
 	-webkit-border-radius:3px;
 	border-radius:3px;
 	border:1px solid #515151;
+}
+
+input[type=submit] {
+	height: 52px;
 }
