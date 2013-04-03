@@ -37,6 +37,9 @@ end
 # To use debugger
 gem 'debugger'
 
+# AWS Email
+gem "aws-ses"
+
 # Forem requirements
 gem 'devise'
 gem "cancan"
