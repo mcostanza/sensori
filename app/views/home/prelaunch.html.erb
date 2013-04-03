@@ -6,9 +6,9 @@
 		<%= content_tag(:div, flash[:notice], :class => "notice") if flash[:notice] %>	
 		
 		<%= form_for @prelaunch_signup do |f| %>
-			<%= f.label "email", "Enter email for updates and news", :class => "light" %>
+			<%= f.label "email", "Enter email for updates and news" %>
 			<%= f.text_field :email, :size => nil, :class => "email", :type => "email", :placeholder => "Email Address", :required => "required" %>
-			<%= f.submit "OK", :class => 'blue-button' %>
+			<%= f.submit "OK" %>
 		<% end %>
 	</div>
 </div>

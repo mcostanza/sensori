@@ -4,8 +4,6 @@
 
 $main-color:  #666666;
 $light-color: #00b5f3;
-$button-color-light: #00b5f3;
-$button-color-dark:  #336699;
 $font-family: 'Orator';
 
 @font-face {
@@ -49,11 +47,28 @@ $font-family: 'Orator';
 		margin: 0;
 	}
 
+	input {
+		-moz-border-radius:3px;
+		-webkit-border-radius:3px;
+		border-radius:3px;
+		border:1px solid #b3b3b3;
+	}
+
 	input.email {
-		width: 292px;
+		width: 300px;
 		font-size: 20px;
 		padding: 6px 10px;
-		height: 38px;
+		height: 29px;
+	}
+
+	input[type=submit] {
+		height: 43px;
+		cursor: pointer;
+		background-color: #dcdcdc;
+	}
+
+	input[type=submit]:hover {
+		background-color: #cccccc;
 	}
 
 	input.stay-informed {
@@ -61,6 +76,11 @@ $font-family: 'Orator';
 
 	form {
 		padding-top: 97px;
+	}
+
+	form input, form textarea {
+		font-size: 110%;
+		padding: 0.5em;
 	}
 	
 	.light { 
@@ -90,41 +110,4 @@ $font-family: 'Orator';
 	}
 }
  
-.blue-button {
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, $button-color-light), color-stop(1, $button-color-dark) );
-	background:-moz-linear-gradient( center top, $button-color-light 5%, $button-color-dark 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='$button-color-light', endColorstr='$button-color-dark');
-	background-color:$button-color-light;
-	-moz-border-radius:3px;
-	-webkit-border-radius:3px;
-	border-radius:3px;
-	border:1px solid #515151;
-	display:inline-block;
-	color:#FFFFFF;
-	font-family:arial;
-	font-size:20px;
-	font-weight:bold;
-	padding:6px 10px;
-	text-decoration:none;
-	text-shadow:1px 1px 0px #515151;
-  cursor: pointer;
-}.blue-button:hover {
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, $button-color-dark), color-stop(1, $button-color-light) );
-	background:-moz-linear-gradient( center top, $button-color-dark 5%, $button-color-light 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='$button-color-dark', endColorstr='$button-color-light');
-	background-color:$button-color-dark;	
-}.blue-button:active {
-	position:relative;
-	top:1px;
-}
 
-input {
-	-moz-border-radius:3px;
-	-webkit-border-radius:3px;
-	border-radius:3px;
-	border:1px solid #515151;
-}
-
-input[type=submit] {
-	height: 52px;
-}
