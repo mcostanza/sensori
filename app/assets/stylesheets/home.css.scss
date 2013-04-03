@@ -4,7 +4,8 @@
 
 $main-color:  #666666;
 $light-color: #00b5f3;
-$dark-color:  #336699;
+$button-color-light: #00b5f3;
+$button-color-dark:  #336699;
 $font-family: 'Orator';
 
 @font-face {
@@ -90,10 +91,10 @@ $font-family: 'Orator';
 }
  
 .blue-button {
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, $light-color), color-stop(1, $dark-color) );
-	background:-moz-linear-gradient( center top, $light-color 5%, $dark-color 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='$light-color', endColorstr='$dark-color');
-	background-color:$light-color;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, $button-color-light), color-stop(1, $button-color-dark) );
+	background:-moz-linear-gradient( center top, $button-color-light 5%, $button-color-dark 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='$button-color-light', endColorstr='$button-color-dark');
+	background-color:$button-color-light;
 	-moz-border-radius:3px;
 	-webkit-border-radius:3px;
 	border-radius:3px;
@@ -108,10 +109,10 @@ $font-family: 'Orator';
 	text-shadow:1px 1px 0px #515151;
   cursor: pointer;
 }.blue-button:hover {
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, $dark-color), color-stop(1, $light-color) );
-	background:-moz-linear-gradient( center top, $dark-color 5%, $light-color 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='$dark-color', endColorstr='$light-color');
-	background-color:$dark-color;	
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, $button-color-dark), color-stop(1, $button-color-light) );
+	background:-moz-linear-gradient( center top, $button-color-dark 5%, $button-color-light 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='$button-color-dark', endColorstr='$button-color-light');
+	background-color:$button-color-dark;	
 }.blue-button:active {
 	position:relative;
 	top:1px;
