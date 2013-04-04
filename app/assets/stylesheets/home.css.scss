@@ -148,3 +148,27 @@ $font-family: 'Orator';
 input[type=text], input[type=email], textarea {
 	width: 300px;
 }
+
+header {
+	width: 100%;
+	text-align: right;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	line-height: 18px;
+	background-color: #DCDCDC;
+
+	div {
+		width: 750px;
+		margin: auto;
+
+		a {
+			color: $light-color;
+			text-decoration: none;
+		}
+
+		a:hover {
+			text-decoration: underline;
+		}
+
+	}
+}
