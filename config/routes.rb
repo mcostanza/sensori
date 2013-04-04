@@ -1,6 +1,8 @@
 Sensori::Application.routes.draw do
 
   get "home/prelaunch"
+  match "contact_us" => "home#contact_us", :via => "get"
+  match "send_feedback"   => "home#send_feedback",   :via => "post"
 
   post "prelaunch_signups" => "prelaunch_signups#create"
   

@@ -2,6 +2,6 @@
 // All this logic will automatically be available in application.js.
 $(function() {
 	setTimeout(function() {
-		$(".notice").fadeOut();
+		$(".flash").fadeOut();
 	}, 5000);
 });

@@ -40,6 +40,9 @@ gem 'debugger'
 # Cannot run `rails console` from AWS elastic beanstalk without this, probably a rails bug: https://github.com/rails/rails/issues/9256
 gem 'minitest'
 
+# AWS Email
+gem "aws-ses"
+
 # Forem requirements
 gem 'devise'
 gem "cancan"
