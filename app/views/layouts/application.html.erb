@@ -13,7 +13,10 @@
 </head>
 <%= content_tag :body, :class => controller.controller_name do %>
 	
-<%= yield %>
+  <%= content_tag(:div, flash[:notice], :class => "flash notice") if flash[:notice] && params[:action] != "prelaunch" %>  
+  <%= content_tag(:div, flash[:error], :class => "flash error") if flash[:error] %>  
+
+  <%= yield %>
 
 <% end %>
 </html>

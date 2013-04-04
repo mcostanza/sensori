@@ -1,9 +1,9 @@
-<div class="logo">
+<div class="logo prelaunch">
 	<div class="inner">
 		<h1>Community music space in San Diego</h1>
 		<h1>Opening <span class="light">Summer 2013</span></h1>
 		
-		<%= content_tag(:div, flash[:notice], :class => "notice") if flash[:notice] %>	
+		<%= content_tag(:div, flash[:notice], :class => "flash notice") if flash[:notice] %>	
 		
 		<%= form_for @prelaunch_signup do |f| %>
 			<%= f.label "email", "Enter email for updates and news", :class => "light" %>
