@@ -97,6 +97,7 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.21)
+    minitest (4.7.0)
     multi_json (1.7.2)
     mysql2 (0.3.11)
     orm_adapter (0.4.0)
@@ -183,6 +184,7 @@ DEPENDENCIES
   forem!
   forem-theme-twist!
   jquery-rails
+  minitest
   mysql2
   rails (= 3.2.12)
   rake
