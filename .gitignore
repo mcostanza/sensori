@@ -18,4 +18,3 @@
 *.swp
 .rvmrc
 .elasticbeanstalk/
-config/application.yml
