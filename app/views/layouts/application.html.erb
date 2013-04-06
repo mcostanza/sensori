@@ -5,15 +5,18 @@
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <%= content_tag :body, :class => controller.controller_name do %>
-
   <%= render :partial => "/shared/header" %>
-	
-  <%= content_tag(:div, flash[:notice], :class => "flash notice") if flash[:notice] && params[:action] != "prelaunch" %>  
-  <%= content_tag(:div, flash[:error], :class => "flash error") if flash[:error] %>  
 
-  <%= yield %>
+  <div class="container">
+  	
+    <%= content_tag(:div, flash[:notice], :class => "flash notice") if flash[:notice] && params[:action] != "prelaunch" %>  
+    <%= content_tag(:div, flash[:error], :class => "flash error") if flash[:error] %>  
+
+    <%= yield %>
+  </div>
 
 <% end %>
 </html>

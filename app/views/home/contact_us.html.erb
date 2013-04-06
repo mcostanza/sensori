@@ -1,7 +1,7 @@
 <div class="contact-us">
-  <h1>Contact Us</h1>
+  <%= form_tag send_feedback_path, :method => :post do %>
+    <h1>Contact Us</h1>
 
-  <%= form_tag send_feedback_path, :method => :post, :class => "contact-us" do %>
     <%= label_tag "name", "Name" %>
     <%= text_field_tag :name, "", :size => nil, :required => "required" %>
 
