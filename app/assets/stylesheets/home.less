@@ -1,24 +1,23 @@
 // Place all the styles related to the Home controller here.
 // They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
 
-$main-color:  #666666;
-$light-color: #00b5f3;
-$font-family: 'Orator';
+@main-color:  #666666;
+@light-color: #00b5f3;
+@font-family: 'Orator';
 
 @font-face {
-	font-family: $font-family;
+	font-family: @font-family;
 	src: url('/assets/oratorstd-webfont.woff');
 }
 
 .home {
 	width: 100%;
 	height: 100%;
-  background:image-url('text-transparent-bg.png') repeat scroll 0 0 transparent;
+    background:image-url('text-transparent-bg.png') repeat scroll 0 0 transparent;
 	margin: 0;
 	padding: 0;
-	font-family: $font-family;
-	color: $main-color; 
+	font-family: @font-family;
+	color: @main-color; 
 	text-transform: uppercase;
 
 	div.logo {
@@ -77,7 +76,7 @@ $font-family: 'Orator';
 	}
 	
 	.light { 
-		color: $light-color;
+		color: @light-color;
 	}
 	
 	label {
@@ -99,7 +98,7 @@ $font-family: 'Orator';
 		}
 
 		.notice {
-			background: $light-color;
+			background: @light-color;
 			color: #FFFFFF;
 			top: 412px;
 			right: 0;
@@ -162,7 +161,7 @@ header {
 		margin: auto;
 
 		a {
-			color: $light-color;
+			color: @light-color;
 			text-decoration: none;
 		}
 
