@@ -52,6 +52,7 @@
 
 	input[type=submit] {
 		height: 43px;
+		width: 43px;
 		cursor: pointer;
 		background-color: #dcdcdc;
 	}
@@ -82,7 +83,7 @@
 		max-width: 100%;
 
 		input.email {
-			width: 314px;
+			width: 310px;
 			font-size: 20px;
 			padding: 6px 10px;
 			height: 29px;
@@ -188,18 +189,20 @@ header {
 	padding-top: 4px;
 	padding-bottom: 4px;
 	line-height: 18px;
-	background-color: #DCDCDC;
+	background-color: #000000;
 
 	div {
 		padding: 0px 10px;
 		margin: auto;
 
 		a {
-			color: @light-color;
+			color: #FFFFFF;
 			text-decoration: none;
+			margin-left: 8px;
 		}
 
-		a:hover {
+		a:hover, a:focus {
+			color: #FFFFFF;
 			text-decoration: underline;
 		}
 	}
