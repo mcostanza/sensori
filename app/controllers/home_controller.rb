@@ -18,8 +18,7 @@ class HomeController < ApplicationController
   end
 
   def kickstarter
-    # TODO: real url
-    redirect_to "http://www.kickstarter.com/projects/1123891588/566962090", :status => 302
+    redirect_to "http://www.kickstarter.com/projects/philsergi/sensori-collective-community-music-center", :status => 302
   end
 
 end
