@@ -85,9 +85,10 @@ describe HomeController do
   end
 
   describe "GET /" do
-    it "should redirect to kickstarter" do
+    it "should redirect to kickstarter with 302 status" do
       get "kickstarter"
       response.should redirect_to("http://www.kickstarter.com/projects/1123891588/566962090")
+      response.status.should == 302
     end
     it "should be connected as the root url" do
       assert_generates '/', :controller => 'home', :action => 'kickstarter'
