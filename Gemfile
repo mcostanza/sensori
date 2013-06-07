@@ -6,13 +6,11 @@ gem 'mysql2'
 
 gem 'less-rails'
 gem 'less-rails-bootstrap'
-gem 'sass-rails'
 
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
   
-
   # Required for less
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem 'therubyracer', :platforms => :ruby
@@ -48,12 +46,4 @@ gem 'minitest'
 # AWS Email
 gem "aws-ses"
 
-# Forem requirements
-gem 'devise'
-gem "cancan"
-gem 'will_paginate', '3.0.3'
-gem 'forem-theme-twist', :path => "lib/forem-theme-twist"
-gem 'forem', :path => "lib/forem"
-#gem 'forem-theme-twist', :git => "git://github.com/radar/forem-theme-twist.git"
-#gem 'forem', :git => "git://github.com/radar/forem.git"
 gem 'rake'
