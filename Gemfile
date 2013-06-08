@@ -49,3 +49,6 @@ gem "aws-ses"
 gem 'rake'
 
 gem "soundcloud"
+
+# Add foreign key support for migrations
+gem "foreigner"
