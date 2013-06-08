@@ -47,3 +47,5 @@ gem 'minitest'
 gem "aws-ses"
 
 gem 'rake'
+
+gem "soundcloud"

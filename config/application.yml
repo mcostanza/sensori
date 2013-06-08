@@ -2,13 +2,22 @@ development:
   aws:
     access_key_id: 'key'
     secret_access_key: 'secret'
+  soundcloud:
+    client_id: 494e196d6f6ada1d6259cd7c3d0b9dee
+    secret: fbcc56d453ed700d9bedcdb24e8c58a9
 
 test:
   aws:
     access_key_id: 'key'
     secret_access_key: 'secret'
+  soundcloud:
+    client_id: 494e196d6f6ada1d6259cd7c3d0b9dee
+    secret: fbcc56d453ed700d9bedcdb24e8c58a9
 
 production:
   aws:
     access_key_id: 'key'
     secret_access_key: 'secret'
+  soundcloud:
+    client_id: 494e196d6f6ada1d6259cd7c3d0b9dee
+    secret: fbcc56d453ed700d9bedcdb24e8c58a9
