@@ -11,17 +11,18 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130607020752) do
+ActiveRecord::Schema.define(:version => 20130608161908) do
 
   create_table "members", :force => true do |t|
     t.integer  "soundcloud_id"
-    t.string   "name"
-    t.string   "slug"
+    t.string   "name",                                       :null => false
+    t.string   "slug",                                       :null => false
     t.string   "image_url"
-    t.boolean  "admin"
+    t.boolean  "admin",                   :default => false
     t.string   "email"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",                                 :null => false
+    t.datetime "updated_at",                                 :null => false
+    t.string   "soundcloud_access_token"
   end
 
   create_table "prelaunch_signups", :force => true do |t|
@@ -29,5 +30,21 @@ ActiveRecord::Schema.define(:version => 20130607020752) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "tracks", :force => true do |t|
+    t.integer  "soundcloud_id", :null => false
+    t.integer  "member_id",     :null => false
+    t.string   "title",         :null => false
+    t.string   "permalink_url", :null => false
+    t.string   "stream_url",    :null => false
+    t.datetime "posted_at",     :null => false
+    t.string   "artwork_url",   :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "tracks", ["member_id"], :name => "tracks_member_id_fk"
+
+  add_foreign_key "tracks", "members", :name => "tracks_member_id_fk"
 
 end

@@ -31,6 +31,16 @@ describe Member do
       @member.image_url = nil
       @member.valid?.should be_false
     end
+    it "should be invalid without soundcloud_access_token" do
+      @member.soundcloud_access_token = nil
+      @member.valid?.should be_false
+    end
+  end
+
+  describe "associations" do
+    it "should have a tracks association" do
+      @member.should respond_to(:tracks)
+    end
   end
 
 end

@@ -19,5 +19,7 @@ FactoryGirl.define do
     sequence :email do |n|
       "jones-#{n}@email.com"
     end
+
+    soundcloud_access_token "tokez"
   end
 end
