@@ -1,5 +1,7 @@
 class MembersController < ApplicationController
   
+  before_filter :ensure_signed_out, :only => [:sign_in]
+
   def sign_in
     redirect_to self.soundcloud_app_client.authorize_url
   end

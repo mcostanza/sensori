@@ -16,7 +16,11 @@
   <%= content_tag :body, :class => controller.controller_name do %>
     <%= render 'shared/navbar' %>
     <div class="container">
-      <%= render 'shared/join_message' %>
+      <% if signed_in? %>
+        <div>You're signed in as <strong><%= @member.name %></strong></div>
+      <% else %>
+        <%= render 'shared/join_message' %>
+      <% end %>
       <%= yield %>
     </div>
     <%= render 'shared/footer' %>
