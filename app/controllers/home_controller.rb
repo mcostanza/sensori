@@ -3,6 +3,9 @@ class HomeController < ApplicationController
     @prelaunch_signup = PrelaunchSignup.new
   end
 
+  def index
+  end
+
   def contact_us
   end
 

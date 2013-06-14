@@ -2,6 +2,17 @@ require 'spec_helper'
 
 describe HomeController do
 
+  describe "GET 'index'" do
+    it "should return http success" do
+      get 'index'
+      response.should be_success
+    end
+    it "should render the index template" do
+      get 'index'
+      response.should render_template('home/index')
+    end
+  end
+
   describe "GET 'prelaunch'" do
     it "should return http success" do
       get 'prelaunch'
@@ -84,14 +95,11 @@ describe HomeController do
     end
   end
 
-  describe "GET /" do
+  describe "GET 'kickstarter'" do
     it "should redirect to kickstarter with 302 status" do
       get "kickstarter"
       response.should redirect_to("http://www.kickstarter.com/projects/philsergi/sensori-collective-community-music-center")
       response.status.should == 302
-    end
-    it "should be connected as the root url" do
-      assert_generates '/', :controller => 'home', :action => 'kickstarter'
     end
   end
 
