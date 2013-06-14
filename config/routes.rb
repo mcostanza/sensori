@@ -1,5 +1,9 @@
 Sensori::Application.routes.draw do
 
+  get "members/sign_in"
+  get "members/sign_out"
+  get "members/soundcloud_connect"
+
   get "home/prelaunch"
   match "contact_us" => "home#contact_us", :via => "get"
   match "send_feedback"   => "home#send_feedback",   :via => "post"
@@ -57,7 +61,7 @@ Sensori::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'home#kickstarter'
+  root :to => 'home#prelaunch'
 
   # See how all your routes lay out with "rake routes"
 
