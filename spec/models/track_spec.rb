@@ -39,6 +39,10 @@ describe Track do
       @track.posted_at = nil
       @track.should_not be_valid
     end
+    it "should be invalid without an artwork_url" do
+      @track.artwork_url = nil
+      @track.should_not be_valid
+    end
   end
 
   describe "associations" do

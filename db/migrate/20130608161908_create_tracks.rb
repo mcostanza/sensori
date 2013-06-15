@@ -8,7 +8,7 @@ class CreateTracks < ActiveRecord::Migration
       t.string :permalink_url, :null => false
       t.string :stream_url, :null => false
       t.datetime :posted_at, :null => false
-      t.string :artwork_url
+      t.string :artwork_url, :null => false
 
       t.foreign_key :members
 
