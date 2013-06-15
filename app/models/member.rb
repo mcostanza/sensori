@@ -22,10 +22,11 @@ class Member < ActiveRecord::Base
   def sync_soundcloud_tracks
     self.soundcloud_tracks(:reload).each do |soundcloud_track|
       track = self.tracks.find_or_initialize_by_soundcloud_id(soundcloud_track.id)
+      artwork_url = soundcloud_track.artwork_url.gsub(/-\w+\.jpg/, "-t500x500.jpg") if soundcloud_track.artwork_url.present?
       track.update_attributes({
         :title => soundcloud_track.title,
         :permalink_url => soundcloud_track.permalink_url,
-        :artwork_url => soundcloud_track.artwork_url || self.image_url,
+        :artwork_url => artwork_url || self.image_url,
         :stream_url => soundcloud_track.stream_url,
         :posted_at => Time.parse(soundcloud_track.created_at)
       })

@@ -138,7 +138,7 @@ describe Member do
         expected_attributes = {
           :title => @soundcloud_track.title,
           :permalink_url => @soundcloud_track.permalink_url,
-          :artwork_url => @soundcloud_track.artwork_url,
+          :artwork_url => "http://i1.sndcdn.com/artworks-000050386537-zjgsyi-t500x500.jpg?0c5f27c",
           :stream_url => @soundcloud_track.stream_url,
           :posted_at => Time.parse(@soundcloud_track.created_at)
         }
