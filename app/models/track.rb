@@ -7,7 +7,6 @@ class Track < ActiveRecord::Base
   validates :soundcloud_id, :presence => true, :uniqueness => true
   validates :title, :presence => true
   validates :permalink_url, :presence => true, :uniqueness => true
-  validates :artwork_url, :presence => true
   validates :stream_url, :presence => true
   validates :posted_at, :presence => true
 end

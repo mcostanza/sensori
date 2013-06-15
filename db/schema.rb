@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(:version => 20130615002452) do
     t.string   "permalink_url", :null => false
     t.string   "stream_url",    :null => false
     t.datetime "posted_at",     :null => false
-    t.string   "artwork_url",   :null => false
+    t.string   "artwork_url"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
   end
