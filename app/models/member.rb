@@ -25,7 +25,7 @@ class Member < ActiveRecord::Base
       track.update_attributes({
         :title => soundcloud_track.title,
         :permalink_url => soundcloud_track.permalink_url,
-        :artwork_url => soundcloud_track.artwork_url,
+        :artwork_url => soundcloud_track.artwork_url || self.image_url,
         :stream_url => soundcloud_track.stream_url,
         :posted_at => Time.parse(soundcloud_track.created_at)
       })

@@ -145,6 +145,11 @@ describe Member do
         @track.should_receive(:update_attributes).with(expected_attributes)
         @member.sync_soundcloud_tracks 
       end
+      it "should set the Track's artwork_url to the Member's image_url if no artwork_url is given in the response" do
+        @soundcloud_track.artwork_url = nil
+        @track.should_receive(:update_attributes).with(hash_including(:artwork_url => @member.image_url))
+        @member.sync_soundcloud_tracks 
+      end
     end
   end
 
