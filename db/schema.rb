@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130608161908) do
+ActiveRecord::Schema.define(:version => 20130615002452) do
 
   create_table "members", :force => true do |t|
     t.integer  "soundcloud_id"
@@ -24,6 +24,8 @@ ActiveRecord::Schema.define(:version => 20130608161908) do
     t.datetime "updated_at",                                 :null => false
     t.string   "soundcloud_access_token"
   end
+
+  add_index "members", ["soundcloud_id"], :name => "index_members_on_soundcloud_id"
 
   create_table "prelaunch_signups", :force => true do |t|
     t.string   "email"
@@ -44,6 +46,7 @@ ActiveRecord::Schema.define(:version => 20130608161908) do
   end
 
   add_index "tracks", ["member_id"], :name => "tracks_member_id_fk"
+  add_index "tracks", ["soundcloud_id"], :name => "index_tracks_on_soundcloud_id"
 
   add_foreign_key "tracks", "members", :name => "tracks_member_id_fk"
 
