@@ -15,18 +15,7 @@ class MembersController < ApplicationController
   def soundcloud_connect
     if params[:code].present?
       access_token = self.soundcloud_app_client.exchange_token(:code => params[:code]).access_token
-      soundcloud_profile = ::Soundcloud.new(:access_token => access_token).get("/me") if access_token.present?
-      
-      if soundcloud_profile.present?
-        @member = Member.find_or_initialize_by_soundcloud_id({
-          :soundcloud_id => soundcloud_profile.id,
-          :name => soundcloud_profile.username,
-          :slug => soundcloud_profile.permalink,
-          :image_url => soundcloud_profile.avatar_url,
-          :soundcloud_access_token => access_token
-        })
-        @member.save
-      end
+      @member = Member.sync_from_soundcloud(access_token)
     end
 
     if @member && @member.valid?

@@ -31,4 +31,22 @@ class Member < ActiveRecord::Base
       })
     end
   end
+
+  def self.sync_from_soundcloud(access_token)
+    return unless access_token.present?
+    soundcloud_profile = ::Soundcloud.new(:access_token => access_token).get("/me")
+    
+    image_url = soundcloud_profile.avatar_url.gsub(/-\w+\.jpg/, "-t500x500.jpg")
+
+    member = Member.find_or_initialize_by_soundcloud_id({
+      :soundcloud_id => soundcloud_profile.id,
+      :name => soundcloud_profile.username,
+      :slug => soundcloud_profile.permalink,
+      :image_url => image_url,
+      :soundcloud_access_token => access_token
+    })
+    member.save
+
+    member
+  end
 end

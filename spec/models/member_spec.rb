@@ -148,4 +148,56 @@ describe Member do
     end
   end
 
+  describe ".sync_from_soundcloud(access_token)" do
+    before(:each) do
+      @access_token = 'soundtokez'
+
+      @member_profile = ::Soundcloud::HashResponseWrapper.new({
+        "id" => 3897419, 
+        "permalink" => "dj-costanza", 
+        "username" => "DJ Costanza", 
+        "uri" => "https://api.soundcloud.com/users/3897419", 
+        "permalink_url" => "http://soundcloud.com/dj-costanza", 
+        "avatar_url" => "https://i1.sndcdn.com/avatars-000039096498-86ivun-large.jpg?0c5f27c"
+      })
+      @soundcloud_client = mock(::Soundcloud, :get => @member_profile)
+      ::Soundcloud.stub!(:new).and_return(@soundcloud_client)
+
+      @member = mock(Member, :save => true, :valid? => true, :soundcloud_id => @member_profile.soundcloud_id)
+      Member.stub!(:find_or_initialize_by_soundcloud_id).and_return(@member)
+    end
+    describe "access token is present" do
+      it "should load the soundcloud user's profile" do
+        ::Soundcloud.should_receive(:new).with(:access_token => @access_token).and_return(@soundcloud_client)
+        @soundcloud_client.should_receive(:get).with('/me').and_return(@member_profile)
+        Member.sync_from_soundcloud(@access_token)
+      end
+      it "should find or initialize a Member from soundcloud profile data" do
+        expected_attributes = {
+          :soundcloud_id => @member_profile.id,
+          :name => @member_profile.username,
+          :slug => @member_profile.permalink,
+          :image_url => "https://i1.sndcdn.com/avatars-000039096498-86ivun-t500x500.jpg?0c5f27c",
+          :soundcloud_access_token => @access_token
+        }
+        Member.should_receive(:find_or_initialize_by_soundcloud_id).with(expected_attributes).and_return(@member)
+        Member.sync_from_soundcloud(@access_token)
+      end
+      it "should attempt to save the Member" do
+        @member.should_receive(:save)
+        Member.sync_from_soundcloud(@access_token)
+      end
+      it "should return the Member" do
+        Member.sync_from_soundcloud(@access_token).should == @member
+      end
+    end
+    describe "access_token is nil" do
+      it "should return without loading any data" do
+        ::Soundcloud.should_not_receive(:new)
+        Member.should_not_receive(:find_or_initialize_by_soundcloud_id)
+        Member.sync_from_soundcloud(nil).should be_nil
+      end
+    end
+  end
+
 end

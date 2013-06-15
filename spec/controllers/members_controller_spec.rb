@@ -33,100 +33,49 @@ describe MembersController do
     before(:each) do
       @soundcloud_app_client = mock(::Soundcloud)
       controller.stub!(:soundcloud_app_client).and_return(@soundcloud_app_client)
+      @member = mock(Member, :valid? => true, :soundcloud_id => '123')
+      Member.stub!(:sync_from_soundcloud).and_return(@member)
     end
     describe "soundcloud code is present" do
       before(:each) do
         @code = 'soundcayode'
+        @exchange_response = ::Soundcloud::HashResponseWrapper.new({ :access_token => 'soundtokez' })
+        @soundcloud_app_client.stub!(:exchange_token).and_return(@exchange_response)
       end
-      describe "token exchange succeeds" do
-        before(:each) do
-          @exchange_response = ::Soundcloud::HashResponseWrapper.new({ :access_token => 'soundtokez' })
-          @soundcloud_app_client.stub!(:exchange_token).and_return(@exchange_response)
-
-          @member_profile = ::Soundcloud::HashResponseWrapper.new({
-            "id" => 3897419, 
-            "permalink" => "dj-costanza", 
-            "username" => "DJ Costanza", 
-            "uri" => "https://api.soundcloud.com/users/3897419", 
-            "permalink_url" => "http://soundcloud.com/dj-costanza", 
-            "avatar_url" => "https://i1.sndcdn.com/avatars-000039096498-86ivun-large.jpg?0c5f27c"
-          })
-          @member_client = mock(::Soundcloud, :get => @member_profile)
-          ::Soundcloud.stub!(:new).and_return(@member_client)
-
-          @member = mock(Member, :save => true, :valid? => true, :soundcloud_id => @member_profile.soundcloud_id)
-          Member.stub!(:find_or_initialize_by_soundcloud_id).and_return(@member)
-        end
-        it "should load the soundcloud user's profile" do
-          @soundcloud_app_client.should_receive(:exchange_token).with(:code => @code).and_return(@exchange_response)
-          ::Soundcloud.should_receive(:new).with(:access_token => @exchange_response.access_token).and_return(@member_client)
-          @member_client.should_receive(:get).with('/me').and_return(@member_profile)
+      it "should sync Member data from soundcloud" do
+        @soundcloud_app_client.should_receive(:exchange_token).with(:code => @code).and_return(@exchange_response)
+        Member.should_receive(:sync_from_soundcloud).with('soundtokez').and_return(@member)
+        get 'soundcloud_connect', :code => @code
+      end
+      describe "valid Member successfully found/created" do
+        it "should set session[:soundcloud_id]" do
           get 'soundcloud_connect', :code => @code
+          session[:soundcloud_id].should == @member.soundcloud_id
         end
-        it "should find or initialize a Member from soundcloud profile data" do
-          expected_attributes = {
-            :soundcloud_id => @member_profile.id,
-            :name => @member_profile.username,
-            :slug => @member_profile.permalink,
-            :image_url => @member_profile.avatar_url,
-            :soundcloud_access_token => @exchange_response.access_token
-          }
-          Member.should_receive(:find_or_initialize_by_soundcloud_id).with(expected_attributes).and_return(@member)
+        it "should redirect to the root url with a flash notice" do
           get 'soundcloud_connect', :code => @code
-        end
-        it "should attempt to save the Member" do
-          @member.should_receive(:save)
-          get 'soundcloud_connect', :code => @code
-        end
-        describe "valid Member successfully found/initialized" do
-          it "should set session[:soundcloud_id]" do
-            get 'soundcloud_connect', :code => @code
-            session[:soundcloud_id].should == @member_profile.soundcloud_id
-          end
-          it "should redirect to the root url with a flash notice" do
-            get 'soundcloud_connect', :code => @code
-            response.should redirect_to(root_url)
-            flash[:notice].should_not be_nil
-          end
-        end
-        describe "valid Member not successfully found/initialized" do
-          before(:each) do
-            @member.stub!(:valid?).and_return(false)
-          end
-          it "should not set session data" do
-            get 'soundcloud_connect', :code => @code
-            session[:soundcloud_id].should be_nil
-          end
-          it "should redirect to the root url with an error message" do
-            get 'soundcloud_connect', :code => @code
-            response.should redirect_to root_url
-            flash[:error].should_not be_nil
-          end
+          response.should redirect_to(root_url)
+          flash[:notice].should_not be_nil
         end
       end
-      describe "token exchange fails" do
+      describe "valid Member not successfully found/created" do
         before(:each) do
-          @exchange_response = ::Soundcloud::HashResponseWrapper.new({})
-          @soundcloud_app_client.stub!(:exchange_token).and_return(@exchange_response)
+          @member.stub!(:valid?).and_return(false)
         end
-        it "should not attempt to find/initialize a Member" do
-          Member.should_not_receive(:find_or_initialize_by_soundcloud_id)
+        it "should not set session data" do
           get 'soundcloud_connect', :code => @code
+          session[:soundcloud_id].should be_nil
         end
         it "should redirect to the root url with an error message" do
           get 'soundcloud_connect', :code => @code
           response.should redirect_to root_url
           flash[:error].should_not be_nil
         end
-        it "should not set session data" do
-          get 'soundcloud_connect', :code => @code
-          session[:soundcloud_id].should be_nil
-        end
       end
     end
     describe "soundcloud code is not present" do
-      it "should not attempt to find/initialize a Member" do
-        Member.should_not_receive(:find_or_initialize_by_soundcloud_id)
+      it "should not attempt to sync Member data from soundcloud" do
+        Member.should_not_receive(:sync_from_soundcloud)
         get 'soundcloud_connect'
       end
       it "should redirect to the root url with an error message" do
