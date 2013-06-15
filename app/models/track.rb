@@ -10,4 +10,6 @@ class Track < ActiveRecord::Base
   validates :stream_url, :presence => true
   validates :artwork_url, :presence => true
   validates :posted_at, :presence => true
+
+  scope :latest, lambda { |limit| order("posted_at DESC").limit(limit) }
 end

@@ -4,6 +4,7 @@ class HomeController < ApplicationController
   end
 
   def index
+    @latest_tracks = Track.includes(:member).latest(4)
   end
 
   def contact_us

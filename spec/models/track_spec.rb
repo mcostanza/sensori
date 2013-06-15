@@ -50,4 +50,15 @@ describe Track do
       @track.should respond_to(:member)
     end
   end
+
+  describe "scopes" do
+    describe ".latest(limit)" do
+      it "should return the specified number of Tracks, ordered by posted_at DESC" do
+        @track.posted_at = 1.hour.ago
+        track_2 = FactoryGirl.create(:track, :posted_at => 5.minutes.ago)
+        track_3 = FactoryGirl.create(:track, :posted_at => 30.minutes.ago)
+        Track.latest(2).should == [track_2, track_3]       
+      end
+    end
+  end
 end

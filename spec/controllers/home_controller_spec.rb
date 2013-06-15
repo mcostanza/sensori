@@ -3,6 +3,11 @@ require 'spec_helper'
 describe HomeController do
 
   describe "GET 'index'" do
+    before(:each) do
+      @track = mock(Track)
+      @scope = mock('tracks with members', :latest => [@track])
+      Track.stub!(:includes).and_return(@scope)
+    end
     it "should return http success" do
       get 'index'
       response.should be_success
@@ -10,6 +15,12 @@ describe HomeController do
     it "should render the index template" do
       get 'index'
       response.should render_template('home/index')
+    end
+    it "should load the latest 4 tracks with member association and assign to @latest_tracks" do
+      Track.should_receive(:includes).with(:member).and_return(@scope)
+      @scope.should_receive(:latest).with(4).and_return([@track])
+      get 'index'
+      assigns[:latest_tracks].should == [@track]
     end
   end
 
