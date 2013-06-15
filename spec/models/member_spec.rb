@@ -121,6 +121,9 @@ describe Member do
         "attachments_uri"=>"http://api.soundcloud.com/tracks/96520157/attachments"
       })
       @member.stub!(:soundcloud_tracks).and_return([@soundcloud_track])
+
+      @track = mock(Track, :update_attributes => true)
+      @member.tracks.stub!(:find_or_initialize_by_soundcloud_id).and_return(@track)
     end
     it "should load the member's soundcloud tracks" do
       @member.should_receive(:soundcloud_tracks).with(:reload).and_return([@soundcloud_track])
@@ -128,10 +131,19 @@ describe Member do
     end
     describe "for each soundcloud track" do
       it "should find or initialize a Track based on the soundcloud_id" do
-        pending
+        @member.tracks.should_receive(:find_or_initialize_by_soundcloud_id).with(@soundcloud_track.id).and_return(@track)
+        @member.sync_soundcloud_tracks 
       end
       it "should update the Track attributes from soundcloud track data" do
-        pending
+        expected_attributes = {
+          :title => @soundcloud_track.title,
+          :permalink_url => @soundcloud_track.permalink_url,
+          :artwork_url => @soundcloud_track.artwork_url,
+          :stream_url => @soundcloud_track.stream_url,
+          :posted_at => Time.parse(@soundcloud_track.created_at)
+        }
+        @track.should_receive(:update_attributes).with(expected_attributes)
+        @member.sync_soundcloud_tracks 
       end
     end
   end
