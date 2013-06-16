@@ -9,8 +9,8 @@
       <a class="brand" href="/">Sensori</a>
       <div class="nav-collapse collapse">
         <ul class="nav">
-          <li class="active"><a href="/">Home</a></li>
-          <li><a href="/beats">Beats</a></li>
+          <%= content_tag :li, link_to("Home", root_path), :class => current_page?(root_path) ? "active" : "" %>
+          <%= content_tag :li, link_to("Beats", beats_path), :class => current_page?(beats_path) ? "active" : "" %>
           <li><a href="/discussions">Discussions</a></li>
           <li><a href="/tutorials">Tips/Tutorials</a></li>
           <li><a href="/about">About</a></li>

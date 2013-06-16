@@ -52,3 +52,6 @@ gem "soundcloud"
 
 # Add foreign key support for migrations
 gem "foreigner"
+
+# pagination
+gem "kaminari"

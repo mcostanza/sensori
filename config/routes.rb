@@ -1,5 +1,7 @@
 Sensori::Application.routes.draw do
 
+  match "beats" => "tracks#index", :via => "get"
+
   get "members/sign_in"
   get "members/sign_out"
   get "members/soundcloud_connect"
