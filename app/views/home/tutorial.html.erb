@@ -1,0 +1,461 @@
+
+<h1>Remaking Classics: Zion I - Bird's Eye View</h1>
+<h2>by DJ Costanza</h2>
+
+<div class="tutorial well">
+  
+  <h3>Overview</h3>
+  <p>In this tutorial I will be recreating the beat for Bird's Eye View by Zion I using Audacity, Reason, some records, an Akai MPD, and Recycle.</p>
+
+  <h3>Why Recreate This Beat?</h3>
+  <p>
+    First and most importantly, it's one of my favorites!  I've been a fan of Zion I for a long time and I think Amp Live, the group's producer, is very under rated.  Secondly, I already own the record with the original sample so it was convenient.
+  </p>
+
+  <h3>Recreating the Drums</h3>
+  <p>
+    Everyone has a different process for making beats.  For me it almost always starts with drums, and then going through records I've already listened to and finding something to sample that sounds good over the drums.  For this beat I already know the end result so I could start anywhere, but I'm going to stick with my normal technique.
+  </p>
+
+  <p>
+    I listened to the Zion I beat to hear what type of drums are used, specifically if there are breaks or if it's using a drum kit made of individual sounds.  I didn't hear any breaks so I'll create my own drum kit within Reason and attempt to match each drum: kick, snare, closed hi-hat, open hi-hat, and ride cymbal. 
+  </p>
+
+  <p>
+    I'm going to start by creating a separate mixer for my drums because I like to mix each drum sound individually, and later mix the entire drum kit as a single channel on the main mixer (this helps keep my projects more organized).
+  </p>
+
+  <p>
+    Next I'll add an NNXT Advanced Sampler which will contain all my drum sounds.  In Reason many people use Redrum for drums.  It's simpler to set up than the NNXT, but I find the NNXT allows more fine-grained control for filter settings, layered drums, mute groups, and other settings which I find myself using frequently.  Also I have an older version of Reason so I don’t have the Kong device available, otherwise I might use that.
+  </p>
+
+  <p>Here's my project with the Mixer, Drum Mixer, and Drum NNXT added:</p>
+
+  <%= image_tag "tutorial/1.png", :title => "Initial Reason Project: Mixer, Drum Mixer, and Drum NNXT added" %>
+
+  <h4>Kick Drum</h4>
+
+  <p>
+    I went through my drum library and chose a kick that sounded similar to the original when I decreased the pitch by about 7 semitones and adjusted the filter settings:
+  </p>
+
+  <%= image_tag "tutorial/2.png", :title => "Kick Drum: NNXT filter settings" %>
+
+  <p>
+    One element it's missing compared to the Zion I kick is a distorted or "blown out" effect.  To recreate that, I added a Scream Distortion device as a send effect on my drum mixer with the Damage Type parameter set to <b>Overdrive</b>.
+  </p>
+  
+  <p>
+    Quick tip for Reason users based on my personal experience: the Scream is a very powerful effects tool but it can be difficult to use because a lot of the presets are so distorted.  Because of this if I usually start with a blank patch instead of loading a built-in patch.
+  </p>
+
+  <p>
+    I also added a second Scream send effect.  This one is using <b>Digital</b> distortion to give my kick a lo-fi, gritty sound.  You can use this type of distortion to emulate the sound of an old sampler like the SP-1200.
+  </p>
+
+  <%= image_tag "tutorial/3.png", :title => "Kick Drum: Scream digital distortion settings" %>
+
+  <p>
+    I experimented with different levels of the Overdrive and Digital distortion on the kick until I got a sound I was satisfied with.
+  </p>
+
+  <h4>Snare Drum</h4>
+
+  <p>
+    The next part of the drums is picking a snare sample to use.  I used the same process I used for the kick, searching through my drum library to find a similar sound.
+  </p>
+
+  <p>
+    There's a slight reverb in the snare sample I picked, and I want to get rid of it to make the sound sharper.  I remove the reverb by decreasing the sample length so it's only playing the first 53% of the sample:
+  </p>
+
+  <%= image_tag "tutorial/4.png", :title => "Snare Drum: Decreasing the sample length to remove the existing reverb/tail" %>
+  
+  <p>
+    Now the sound is much sharper, and I'm going to add my own reverb back to the sound to make it less flat.  I added an RV-7000 with a Snare Plate patch as another send effect on my Drum Mixer and decreased the wet/dry balance to mostly dry.  Then I put the snare drum on a separate output channel from the kick and adjusted the Reverb, Overdrive, and Digital send effect levels.
+  </p>
+
+  <h4>Closed Hi-Hat, Open Hi-Hat, Ride Cymbal</h4>
+
+  <p>
+    The next part of drums is adding the closed hi-hat, open hi-hat, and ride cymbal.  For these drums I only used a single mixer channel, and I used the same process of searching through my drum library for sounds similar to the original beat and adjusting send effect levels.
+  </p>
+    
+  <p>
+    Here's my drum kit so far:
+  </p>
+
+  <%= image_tag "tutorial/5.png", :title => "NNXT Drum setup" %>
+
+  <p>
+    With the samples arranged like this in the NNXT, Pad Bank A on the MPD is set up to play the following samples:
+  </p>
+
+  <ul>
+    <li>Pad 1: Kick</li>
+    <li>Pad 2: Snare</li>
+    <li>Pad 3: Closed Hi-Hat</li>
+    <li>Pad 4: Open Hi-Hat</li>
+    <li>Pad 8: Ride Cymbal</li>
+  </ul>
+
+  <%= image_tag "tutorial/6.png", :title => "MPD pad layout" %>
+
+    
+  <h3>Recording The Base Drum Pattern</h3>
+
+  <p>
+    The drum patterns change frequently throughout the song, but just to get started I’m going to quickly record a 4 bar loop that I'll use as the main pattern at first.  I’m not very coordinated at drumming so I record in layers.  The first layer will be the snare, closed hi-hat, and open hi-hat.  The second layer is the kick pattern I was too uncoordinated to record with the other drums. 
+  </p>
+
+  <p>Here's the 4-bar pattern with both layers recorded on a single note lane:</p>
+  
+  <%= image_tag "tutorial/7.png", :title => "4-bar drum pattern on a single note lane" %>
+
+  <p>
+    After recording the pattern, I split the drums onto separate note lanes.  This makes it easier to do drum arrangements later on -- for example if I want to isolate the kick drum I can mute or delete the other note lanes.
+  <p>
+
+  <p>Here's the same pattern with separate note lanes for kick, snare, and hi-hats:</p>
+
+  <%= image_tag "tutorial/8.png", :title => "4-bar drum pattern on separate note lanes" %>
+
+  <p>
+    An alternative way to do this, which is probably better for live performance or on the fly adjustments, is to record a Mixer track where you apply mute/solo to different channels.  If you’re using Redrum you could also set up different patterns and record a track where you’re automating which pattern is playing.
+  </p>
+
+  <p>
+    Next I’m going to add a groove template to clean up any inconsistencies with my playing.  I set each note lane to use Groove Mixer Channel A1, and load an MPC-3000 52% Swing template onto that channel.  These groove templates don't come with Reason, they were created by a guy named Peff.  They're very useful for hip-hop style beats and I definitely recommend them.  The swing percentage is a value between 50-75%, and it affects the timing of the off-beat 16th notes (in this beat the kicks and open hi-hats).  At 50% all 16th notes are evenly spaced, and because the Zion-I beat is close to evenly spaced I chose the 52% template.
+  </p>
+
+  <p>
+    You can apply the groove template on a scale between 0-100%.  If it's at 0% it's as if you're not using anything at all, and at 100% it's fully quantized.  I set it in the middle at 71%, and it cleaned up the minor timing issues from my recording.
+  </p>
+
+  <%= image_tag "tutorial/9.png", :title => "Adding the MPC-3000 groove template" %>
+
+  <p>
+    Now I have the main 4-bar drum loop recorded, and I will use this as a base pattern to record and arrange the samples before going back to add the drum pattern changes.
+  </p>
+
+  <h3>Background of the Sample</h3>
+
+  <p>
+    The group that was sampled for this song is the Alan Parsons Project.  They were mainly active from the late 70’s to mid 80’s, and I would describe them as a progressive rock group with a pop/commercial influence which was always present and increased to where their later albums are mainly 80's pop.
+  </p>
+
+  <p>
+    The group was a collaboration between Alan Parsons and Eric Woolfson, who wrote all of the music.  They hired studio musicians to play with them, so the lineup for everything from drums to keyboards to vocalists was constantly changing album to album and even song to song.  Because of this they don't necessarily have a consistent sound in terms of the instruments, but what they do have is a very distinct high quality of sound recording which is from Alan Parsons' background as a sound engineer.  He recorded Dark Side of the Moon for Pink Floyd, Abbey Road for The Beatles, and worked at Abbey Road Studios for a long time recording many other groups.
+  </p>
+
+  <p>
+    If you’re digging for samples, their records are pretty easy to find and cheap, and there are a lot of interesting parts to sample especially on their earlier albums.  In particular I recommend their first album "Tales of Mystery and Imagination" from 1976, their second album "I, Robot" from 1977, and the album with the sample used for this beat, "Eye in the Sky" from 1982 (one of their later albums but still really good).
+  </p>
+
+  <%= image_tag "tutorial/10.png", :title => "\"Tales of Mystery & Imagination\" (1976), \"I, Robot\" (1977), and \"Eye in the Sky\" (1982)" %>
+
+  <p>
+    Also notable on this album, the first song Sirius is instantly recognizable to many people as it was used as background music for introducing the Chicago Bulls lineup as far back as the Michael Jordan era.
+  </p>
+
+  <p>
+    The sample for this beat is from the last song on Eye in the Sky, "Old and Wise."  It’s easy to find the sample, it’s right at the beginning of the song.  
+  </p>
+
+  <h4>Recording the Sample</h4>
+
+  <p>
+    I experimented with the pitch adjust on my turntable and found that I need to record the song playing at -12% of the original speed to match the sound of the Zion-I beat.
+  </p>
+
+  <p>
+    An alternative to get the correct sample speed would be to record at normal speed (0%) and then pitch up or down as necessary in your sampler or recording software, but I’m <b>DJ</b> Costanza and I prefer to do as much recording as I can using turntables.
+  </p>
+
+  <h4>Audacity</h4>
+
+  <p>
+    I recorded the first minute of the song into Audacity, but I’m not going to import the full minute of audio into Reason.  Instead I created labels for 2 sections which I'll use to create the beat.
+  </p>
+
+  <p>
+    The first section is an orchestra and the second is a piano:
+  </p>
+
+  <%= image_tag "tutorial/11.png", :title => "Orchestra loop recorded in Audacity" %>
+
+  <p>
+    Neither of these sections is an exact loop at this point.  Audacity is very easy for recording audio, but when you have to get really precise with slicing up samples the interface is a little clumsy, so I create approximate slices and export them as WAV files which I will edit in more detail in Recycle.
+  </p>
+
+  <h4>Recycle</h4>
+
+  <p>
+    I added slice points at the main notes of both loops in Recycle.  When I’m doing this I often play my drum track in Reason in the background to help line up the slice points better.  For this beat I also made sure to disable all the EQ and Envelope settings in Recycle.  Sometimes these are useful but I mainly use Recycle for the easy-to-use slicing interface.
+  </p>
+
+  <%= image_tag "tutorial/12.png", :title => "Orchestra loop with precise slices in Recycle" %>
+
+  <h3>Adding the Samples to Reason</h3>
+
+  <p>
+    Back in Reason, I created another NNXT connected to the main mixer and added the sample slices from the Recycle files.  
+  </p>
+
+  <%= image_tag "tutorial/13.png", :title => "Samples added to NNXT" %>
+
+  <p>
+    Once they're added, I select all the samples, then right click and choose Automap Zones Chromatically.  This assigns each selected sample to one pad, playing at the correct pitch.
+  </p>
+
+  <%= image_tag "tutorial/14.png", :title => "Samples added to NNXT with \"Automap Zones Chromatically\" selected" %>
+
+  <p>
+    Right now if I play these samples they're going to overlap.  This is not what I want, instead I want the NNXT set up so I can only play one sample at a time -- in other words, if I play one sample and then a second before the first finishes, the first sample should be cut off and I should only hear the second sample played.
+  </p>
+
+  <p>
+    To achieve this, I make sure all the samples are grouped together:
+  </p>
+
+  <%= image_tag "tutorial/15.png", :title => "Grouping the samples together" %>
+
+  <p>
+    Then I adjust Key Poly to 1 in the NNXT Group Settings:
+  </p>
+
+  <%= image_tag "tutorial/16.png", :title => "Set Key Poly to 1 in Group Settings" %>
+
+  <h4>Amp Envelope Settings</h4>
+
+  <p>
+    By default each sample has a short release which means it only plays as long as you hold the pad down.  As soon as you release the pad, the sample stops playing.
+  </p>
+
+  <%= image_tag "tutorial/17.png", :title => "Default Amp Envelope settings with a 60ms Release" %>
+
+  <p>
+    Depending on your playing style you might want to keep the samples this way.  However for this beat I want to only tap each pad once and have the entire sample play.  To do this I’ll increase the Amp Envelope Release setting to a very high value (the initial value was 60 milliseconds, I increased it to 149 seconds).
+  </p>
+
+  <%= image_tag "tutorial/18.png", :title => "Amp Envelope Release setting increased to a high value" %>
+
+  <p>
+    One disadvantage of using long release notes is you can no longer play a choppy sample pattern.  You can work around this by adding another sample zone in the same group, but intentionally leave it empty so it triggers silence when played.
+  </p>
+
+  <%= image_tag "tutorial/19.png", :title => "Adding a sample zone that triggers silence" %>
+
+  <p>
+    A few more adjustments before I start recording the sample patterns...
+  </p>
+
+  <p>
+    The intro and outro patterns both end with the sample currently on pad 8.  The intro and outro would sound better with a shorter, gradual release that fades out, but the rest of the song would still sound better with a long release that does not fade out.  I still have one open pad out of the 16 pads on bank A, so I make a copy of the sample playing on pad 8:
+  </p>
+
+  <%= image_tag "tutorial/20.png", :title => "Duplicating the sample played on pad 8" %>
+
+  <p>
+    Then I move the zones for pads 9-15 up one note each so they are now on pads 10-16, put the pad 8 duplicate on pad 9, and decrease the release so it fades out over 1.27 seconds.
+  </p>
+
+  <%= image_tag "tutorial/21.png", :title => "Decreasing pad 9 release to 1.27 seconds" %>
+
+  <p>
+    Sometimes when you chop samples there can be an audible pop or click right at the beginning. You can get rid of that by increasing the Amp Envelope Attack a bit so the sample fades in a bit instead of immediately playing at full volume.  I'm going to increase the Attack on just the orchestra samples from 0 milliseconds to 34 milliseconds, just enough time that you'll be able to hear the samples fade in a little.
+  </p>
+
+  <%= image_tag "tutorial/22.png", :title => "Increasing orchestra sample Amp Envelope Attack" %>
+
+  <h3>Recording the Sample Patterns</h3>
+
+  <p>
+    Now that the samples are mapped out on the pads, I’m going to record the patterns used throughout the song.  I’ll record these using the same groove template as the drums to correct any minor timing issues.
+  </p>
+
+  <p>
+    I spent time recording the full sample patterns for the song, broken down 4 bars at a time, and here it is laid out in the step sequencer.  I added a different color for each different 4-bar pattern and separated the note lanes to how the song is organized: intro, verse, hook, verse, extended hook, outro.  As you can see the intro and outro are identical and within the verses and hooks there are only 4 different patterns.
+  </p>
+
+  <%= image_tag "tutorial/23.png", :title => "Sequencer with sample patterns recorded." %>
+
+  <h3>Adjusting the Drums</h3>
+
+  <p>
+    Once I had the samples recorded I tweaked some of the drums.  I noticed my kick is much lower volume compared to the original beat.  I duplicated the kick, decreased the gain a bit, and added a low pass filter.  Now when I play the kick it actually triggers 2 versions of the same sample, the original and the duplicate which gives extra volume on lower frequencies.
+  </p>
+
+  <p>
+    I also noticed my ride cymbal was really low in the mix.  The samples play at a similar frequency and drown out the ride cymbal a little.  Since I had all the cymbals on a single channel in my drum mixer, I fixed this by increasing the sample gain.
+  </p>
+
+
+  <div class="thumbnails">
+    <%= link_to image_tag("tutorial/24.png", :title => "Duplicating the kick"), "#", :class => "thumbnail span2" %>
+    <%= link_to image_tag("tutorial/25.png", :title => "Decreasing the gain on the duplicate kick"), "#", :class => "thumbnail span2" %>
+    <%= link_to image_tag("tutorial/26.png", :title => "Adding a low pass filter on the duplicate kick"), "#", :class => "thumbnail span2" %>
+    <%= link_to image_tag("tutorial/27.png", :title => "Increasing the gain on the ride cymbal"), "#", :class => "thumbnail span2" %>
+  </div>
+
+  <h3>Adding the Bass</h3>
+
+  <p>
+    This sounds pretty good as just samples and drums but there’s no low end, so it’s time to add a bass.  I used a bass patch I made awhile ago, it’s a sampled bass note that’s mapped across a wide range of notes.
+  </p>
+
+  <p>
+    The bass sample is a relatively short note, but by adding a loop point from 80% to 85% of the sample it will repeat and can be held for extended notes.  However there will be a click sound you can easily hear.  You can cover up this clicking sound by adding a low pass filter, and since it's a bass note to start with it won't change the sound too much.
+  </p>
+
+  <p>
+    The bass line for this song is really simple, it’s only 3 notes.  I prefer playing more complex bass lines on my 25-key MIDI keyboard because I can visualize the notes of a scale better on piano keys, but because this is so simple I played it on my MPD.
+  </p>
+
+  <%= image_tag "tutorial/28.png", :title => "NNXT Settings for the sampled bass" %>
+  <%= image_tag "tutorial/29.png", :title => "Sequencer with the bass line fully recorded" %>
+  
+  <h3>Recording the Drum Patterns</h3>
+  
+  <p>
+    Just like with the samples, I went through the entire Zion I song and matched my drum patterns to the original beat.  As I mentioned earlier, the drum patterns change much more frequently than the sample patterns, so it took me longer but I used the same process of breaking it down 4 bars at a time and recording the drums in layers if necessary.
+  </p>
+
+  <%= image_tag "tutorial/30.png", :title => "Sequencer with the drums (almost) fully recorded" %>
+
+  <h4>Delayed Hi-Hat</h4>
+
+  <p>
+    One part of the drums that took a long time to reproduce is a closed hi-hat variation that plays once at about 1:40 into the song.
+  </p>
+
+  <p>
+    It's the same closed hi-hat that plays throughout the rest of the song, but it starts at a lower pitch, there’s a 32nd note delay added to it, and the pitch also decreases a bit as it’s played.
+  </p>
+
+  <p>
+    I started by duplicating the hi-hat in my NNXT and setting the output to a new mixer channel with the same settings as my original hi-hat mixer channel.
+  </p>
+
+  <p>
+    Next I created a Digital Delay to use as an insert effect for this hi-hat.  Notice on the left side of the delay there are two switches labeled Unit and Step Length.  If Unit is set to Steps, the delay is tempo-synced in either 16th or triplet 8th note increments.  Since I needed a 32nd note increment I couldn't use Steps, instead I need to use MS (milliseconds).
+  </p>
+
+  <p>
+    A 32nd note at 100 BPM is exactly 75 milliseconds.  This beat is 101 BPM so I used a slightly shorter value of 74 milliseconds.  This isn’t exact, but it plays for such a short time you won’t really notice the difference.
+  </p>
+
+  <ul class="thumbnails">
+    <li class="span2"><%= link_to image_tag("tutorial/31.png", :title => "Duplicating the closed hi-hat"), "#" %></li>
+    <li class="span2"><%= link_to image_tag("tutorial/32.png", :title => "Adding a Digital Delay"), "#" %></li>
+    <li class="span2"><%= link_to image_tag("tutorial/33.png", :title => "Final settings for hi-hat delay"), "#" %></li>
+  </ul>
+
+  <p>
+    Next I adjusted the wet/dry balance to the middle so the initial hi-hat and the delay both play around the same volume, and adjusted the feedback so the delay fades out after about 1 quarter note.
+  </p>
+
+  <p>
+    To recreate the effect of the hi-hat pitch decreasing as it plays I used the LFO1 parameters in the NNXT.
+  </p>
+
+  To recreate the effect of the hi-hat pitching down slightly as it plays, I’ll use the LFO-1 section of the NNXT.  First I set the pitch parameter to a negative value.  This means the sample will start playing at its original pitch, and as the waveform increases the pitch will be decreased.
+
+  Change the waveform to option 2, enable key sync.
+  Next I change the waveform shape to the second option here which is called “inverted sawtooth”.  This means that for one cycle of the LFO waveform, it starts at a low value, increases to a high value, then on the next waveform it resets back to the low value.  Next I enable key sync, which means the waveform will always reset to the beginning when I press the key, or in my case the drum pad, that plays this sample.
+
+  Change the LFO-1 tempo sync to on, frequency to 1/16th note, delay to 23.7ms
+  Next I change the LFO-1 waveform frequency, and because my hi-hat is a short sample I want this to be a high value, otherwise you won’t be able to hear any change.  A 16th note frequency should be fine.  And I add a slight delay so the LFO isn’t triggered immediately.
+
+  OK that was pretty complicated.  To recap:  Whenever I play my hi-hat, after a 23 millisecond delay, the pitch will decrease from the original value by about 1 octave, over the course of one 16th note.
+
+  Adjust the sample so it plays over C3-C5, with the root note at C4.
+  Finally, I spread the hi-hat over a range of notes so I could experiment and find a good pitch to use.  (Play a range of notes) 
+
+  That’s a lot of work for one note, but it definitely increased my understanding of what I can do with LFO’s!
+
+  Shot 28: Layering The Samples (Recycle)
+  Camera Angle: 2
+  Screenshot: Recycle piano-2.rns
+
+  At this point I noticed something I missed earlier in the samples.  In the original beat, whenever the orchestra loop is playing, the piano loop is also playing as a second layer at low volume.  This happens throughout the entire song with the exception of the intro and outro.  
+
+  I came up with a quick fix for this using velocity layers in the NNXT, but first I need to go back to recycle to edit the piano sample a bit.  In order for the piano slices to match up to the orchestra slices, I’m going to remove these 2 slices and save this as a separate file.
+
+
+  Shot 29: Layering the Samples (Reason)
+  Camera Angle: 2
+  Screenshot: Reason zion-17.rns DONE
+
+  Add the samples from piano-1-layer.rx2 to the NNXT and layer with pads 5-8.
+  I already have my samples setup with poly 1 and I wanted to avoid going back and re-recording if possible, and the quickest way I could think of to do this was using samples with velocity layers.  
+
+  Velocity is basically how hard you push a pad or key, and on a real instrument like a piano the more velocity you use the louder it plays.  On virtual instruments like the NNXT, increased velocity can mean loudness, but it can also control other things like filter frequency, and by default it does nothing.
+
+  Increase the min velocity for piano-2 samples to 17
+  All notes in Reason use a velocity value between 1 and 127, and when you add samples to the NNXT by default they play at any velocity value.  I’m going to change the piano notes so they only play when a note has velocity of 15 or higher.  Now any note on pads 5 through 8 with a velocity between 15 and 127 will play both samples -- this is basically every note with my normal playing style.  Any note on these pads with a velocity between 1 and 15 will not play the piano, they will only play the orchestra.
+
+  Switch to step sequencer, double click on the intro.  Edit pad 7 and 8 to velocity 10.  Go back to the step sequencer arrangement view, delete the outro, copy the intro to the outro.
+  Now I’m going to manually edit the notes I played in the intro so they are all playing at velocity 10.  Now the intro and outro play only the orchestra, and everything else plays piano and orchestra.  Like I said, pretty quick way to fix this.
+
+  Shot 30: Whistle (Audacity)
+  Camera Angle: 2
+  Screenshot: Audacity whistle-1.wav and whistle-2.wav
+
+  Probably my favorite part of remaking this beat was adding the bird chirping sound that plays over the intro and hook.  My first thought was to look through built-in Reason patches and see if there was something I could use, but I didn’t find anything.  Instead I decided to sample myself whistling.  I wasn’t sure if this would work because I don’t have a microphone, other than the one built into my laptop.  I recorded myself whistling a few times, here’s what it sounds like.  Play the full whistles
+
+  Switch to whistle-2.wav, play it
+  I picked the one that sounded the best and had the least ambient noise.  I was very accurate on the pitch but it was still a little too short, so I used a time stretch effect in Audacity to make it a bit longer.  This is what it sounds like after the time stretching.
+
+  Shot 31: Whistle (Reason)
+  Camera Angle: 2
+  Screenshot: Reason zion-18.rns DONE
+
+  Add the whistle sample, automap chromatically, move to pad 5, set to NNXT output 11/12.
+  I added the whistle sample as part of my NNXT drum kit in Reason, as usual on its own output channel.
+
+  Set filter to LP24, reduce freq to 7.0KHz, increase resonance to 32%.  Set LFO2 to 0.25Hz, panning to 50%.  
+  I added a low pass filter to reduce some of the ambient noise, and some panning using LFO2. 
+
+  Open drum mixer, set channel 5 send 3 level to 73.  Decrease mixer channel 5 volume to 68.
+  I added the same reverb effect I used for the snare.  This sounded pretty good but it’s too loud compared to the rest of the mix, so I decreased the mixer channel volume.
+
+  Create a digital delay, set to quarter note delay (4 steps, 16th step length), wet/dry balance in the middle.
+  Next I routed the NNXT output channel into another Digital Delay line, and just like with the delayed hi-hat I adjust the wet/dry balance to the middle so you can hear the initial whistle and the delay.  I put it on a quarter note delay at first, but this sounded a little too synced to the tempo.  I switched to millisecond delay and make it slightly slower than a quarter note.  All set with this whistle, now I’ll record the patterns.  Do it.
+
+  I’ve never sampled myself before, and considering it was just my laptop microphone I’m surprised how quick and easy it was to get a usable sound.  I can see myself doing this for more sound effects or percussion in the future.
+
+  Shot 32: Mixing
+  Camera Angle: 2
+  Screenshot: Reason zion-19.rns DONE
+
+  Now the beat has been fully sequenced, and I’m going to improve the mix.  If I had to pick one aspect of my own beats I need to improve, it’s definitely the mixing, most of the time they come out quieter than I would like.  Since I’m recreating this beat, I have a reference point for what everything should sound like.  I experimented with many different settings, and these are the final adjustments I came up with.
+
+  Open Samples NNXT, select piano samples, increase gain to 0.6DB
+  I slightly increased the volume of the isolated piano samples in the NNXT.
+
+  Lower the Bass level to 96
+  I slightly decreased the mixer channel volume of the bass.
+
+  Expand the mastering suite, turn on punch.  Increase Maximizer input gain to 7.1 DB.
+  In the mastering suite, I turned on the “punch” setting in which enables some soft clipping settings, then I increased the gain on the maximizer input.  During the course of mixing I actually learned the purpose of this is to increase the overall volume of my mix without any clipping or distortion.  
+
+  Shot 33: Comparing the mix in Audacity
+  Camera Angle: 2
+  Screenshot: Audacity zion-mix.aud
+
+  So how did I end up decided to do any of those steps when mastering?  Well here in Audacity, the top track has a version of the original Zion I beat, and my recreated version is the bottom track.  Basically in Reason I would try some new mix settings, export the song as a wav, and then listen to both and visually compare the waveforms.  
+
+  Select the outro
+  This version of the Zion I instrumental has drums playing over the intro, but other than that you can see they’re very similar!  In the outro you can see only the samples are playing and the levels are pretty close.  
+
+  Select 40 seconds in
+  Around 40 seconds in it’s just the drums and bass playing, again the levels are close, and in the rest of the song when everything is playing the levels are also very close.  Everything is sounding great, I think I’m finished!
+
+  Shot 34: Outro
+  Camera Angle: 1
+
+  That’s it!  Thank you for watching, I hope you enjoyed the video and found it informative! This is DJ Costanza on behalf of Sensori collective... I’m out!
+
+
+</div>

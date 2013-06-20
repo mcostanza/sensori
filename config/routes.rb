@@ -6,6 +6,7 @@ Sensori::Application.routes.draw do
   get "members/sign_out"
   get "members/soundcloud_connect"
 
+  get "home/tutorial"
   get "home/index"
   get "home/prelaunch"
   get "home/kickstarter"

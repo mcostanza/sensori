@@ -10,6 +10,10 @@ class HomeController < ApplicationController
   def contact_us
   end
 
+  def tutorial
+    
+  end
+
   def send_feedback
     if params[:email].present? && params[:name].present? && params[:message].present?
       SensoriMailer.contact_us(:email => params[:email], :name => params[:name], :message => params[:message]).deliver
