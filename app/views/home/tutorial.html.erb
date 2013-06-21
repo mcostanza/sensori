@@ -8,68 +8,71 @@
   <p>In this tutorial I will be recreating the beat for Bird's Eye View by Zion I using Audacity, Reason, some records, an Akai MPD, and Recycle.</p>
 
   <h3>Why Recreate This Beat?</h3>
+  
   <p>
-    First and most importantly, it's one of my favorites!  I've been a fan of Zion I for a long time and I think Amp Live, the group's producer, is very under rated.  Secondly, I already own the record with the original sample so it was convenient.
+    First and most importantly, it's one of my favorites!  I've been a fan of Zion I for a long time and I think Amp Live, the group's producer, is very under rated.
   </p>
-
+  
+  <p>
+    Secondly, I already own the record with the original sample so it was convenient.
+  </p>
+  
   <h3>Recreating the Drums</h3>
   <p>
-    Everyone has a different process for making beats.  For me it almost always starts with drums, and then going through records I've already listened to and finding something to sample that sounds good over the drums.  For this beat I already know the end result so I could start anywhere, but I'm going to stick with my normal technique.
+    Everyone has a different process for making beats.  For me it almost always starts with drums, then going through records I've already listened to and finding samples that sound good over them.  For this beat I already know the end result so I could start anywhere, but I'm going to stick with my normal technique.
   </p>
 
   <p>
-    I listened to the Zion I beat to hear what type of drums are used, specifically if there are breaks or if it's using a drum kit made of individual sounds.  I didn't hear any breaks so I'll create my own drum kit within Reason and attempt to match each drum: kick, snare, closed hi-hat, open hi-hat, and ride cymbal. 
+    I listened to the Zion I beat to identify the type of drums used (specifically if there are breaks or if it's using a drum kit made of individual sounds).  I didn't hear any breaks so I'm going to create my own drum kit in Reason by attempting to match the sound of each drum: kick, snare, closed hi-hat, open hi-hat, and ride cymbal.
   </p>
 
   <p>
-    I'm going to start by creating a separate mixer for my drums because I like to mix each drum sound individually, and later mix the entire drum kit as a single channel on the main mixer (this helps keep my projects more organized).
+    I started by creating a separate mixer for my drums because I like to mix each drum sound individually, and later mix the entire drum kit as a single channel on the main mixer (this also helps keep my projects more organized when I add a lot of drums).
   </p>
 
   <p>
-    Next I'll add an NNXT Advanced Sampler which will contain all my drum sounds.  In Reason many people use Redrum for drums.  It's simpler to set up than the NNXT, but I find the NNXT allows more fine-grained control for filter settings, layered drums, mute groups, and other settings which I find myself using frequently.  Also I have an older version of Reason so I don’t have the Kong device available, otherwise I might use that.
+    Next I added an NNXT Advanced Sampler which will contain all my drum sounds.  In Reason many people use Redrum for drums.  It's simpler to set up than the NNXT, but I find the NNXT allows more fine-grained control for filter settings, layered drums, mute groups, and other settings which I find myself using frequently.  I also have an older version of Reason so I don’t have the Kong device available, otherwise I might use that.
   </p>
-
-  <p>Here's my project with the Mixer, Drum Mixer, and Drum NNXT added:</p>
 
   <%= image_tag "tutorial/1.png", :title => "Initial Reason Project: Mixer, Drum Mixer, and Drum NNXT added" %>
 
   <h4>Kick Drum</h4>
 
   <p>
-    I went through my drum library and chose a kick that sounded similar to the original when I decreased the pitch by about 7 semitones and adjusted the filter settings:
+    I went through my drum library and chose a kick that sounded similar to the original when I decreased the pitch by about 7 semitones and adjusted the filter settings.
   </p>
 
   <%= image_tag "tutorial/2.png", :title => "Kick Drum: NNXT filter settings" %>
 
   <p>
-    One element it's missing compared to the Zion I kick is a distorted or "blown out" effect.  To recreate that, I added a Scream Distortion device as a send effect on my drum mixer with the Damage Type parameter set to <b>Overdrive</b>.
+    One element it's missing compared to the Zion I kick is a distorted or "blown out" effect.  To recreate that, I added a Scream Distortion device as a send effect on my drum mixer with the Damage Type parameter set to Overdrive.
   </p>
   
   <p>
-    Quick tip for Reason users based on my personal experience: the Scream is a very powerful effects tool but it can be difficult to use because a lot of the presets are so distorted.  Because of this if I usually start with a blank patch instead of loading a built-in patch.
+    I also added a second Scream send effect using Digital distortion to give my kick a lo-fi, gritty sound.  You can use this Damage Type to emulate the sound of an old sampler like the SP-1200.
   </p>
-
-  <p>
-    I also added a second Scream send effect.  This one is using <b>Digital</b> distortion to give my kick a lo-fi, gritty sound.  You can use this type of distortion to emulate the sound of an old sampler like the SP-1200.
-  </p>
-
-  <%= image_tag "tutorial/3.png", :title => "Kick Drum: Scream digital distortion settings" %>
 
   <p>
     I experimented with different levels of the Overdrive and Digital distortion on the kick until I got a sound I was satisfied with.
   </p>
 
+  <p>
+    Quick tip for Reason users based on my personal experience: Scream is a very powerful effects tool but it can be difficult to use because many of the included patches are overly distorted.  Because of this I usually start with a blank patch.
+  </p>
+
+  <%= image_tag "tutorial/3.png", :title => "Kick Drum: Scream digital distortion settings" %>
+
   <h4>Snare Drum</h4>
 
   <p>
-    The next part of the drums is picking a snare sample to use.  I used the same process I used for the kick, searching through my drum library to find a similar sound.
+    The next part of the drums was picking a snare sample to use.  I used the same process I used for the kick, searching through my drum library to find a similar sound.
   </p>
 
   <p>
-    There's a slight reverb in the snare sample I picked, and I want to get rid of it to make the sound sharper.  I remove the reverb by decreasing the sample length so it's only playing the first 53% of the sample:
+    There's a slight reverb in the snare sample I picked, and I wanted to get rid of it to make the sound sharper.  I removed the reverb by decreasing the Sample End parameter to about 53% of the snare sample:
   </p>
 
-  <%= image_tag "tutorial/4.png", :title => "Snare Drum: Decreasing the sample length to remove the existing reverb/tail" %>
+  <%= image_tag "tutorial/4.png", :title => "Snare Drum: Decreasing the Sample End parameter to remove the existing reverb/tail" %>
   
   <p>
     Now the sound is much sharper, and I'm going to add my own reverb back to the sound to make it less flat.  I added an RV-7000 with a Snare Plate patch as another send effect on my Drum Mixer and decreased the wet/dry balance to mostly dry.  Then I put the snare drum on a separate output channel from the kick and adjusted the Reverb, Overdrive, and Digital send effect levels.
@@ -78,7 +81,7 @@
   <h4>Closed Hi-Hat, Open Hi-Hat, Ride Cymbal</h4>
 
   <p>
-    The next part of drums is adding the closed hi-hat, open hi-hat, and ride cymbal.  For these drums I only used a single mixer channel, and I used the same process of searching through my drum library for sounds similar to the original beat and adjusting send effect levels.
+    The next part of drums was adding the closed hi-hat, open hi-hat, and ride cymbal.  For these drums I only used a single mixer channel, and I used the same process of searching through my drum library for sounds similar to the original beat and adjusting the send effect levels.
   </p>
     
   <p>
@@ -191,7 +194,7 @@
   <h4>Recycle</h4>
 
   <p>
-    I added slice points at the main notes of both loops in Recycle.  When I’m doing this I often play my drum track in Reason in the background to help line up the slice points better.  For this beat I also made sure to disable all the EQ and Envelope settings in Recycle.  Sometimes these are useful but I mainly use Recycle for the easy-to-use slicing interface.
+    I added slice points at the main notes of both loops in Recycle.  For this beat I also made sure to disable all the EQ and Envelope settings in Recycle.  Sometimes these are useful but I mainly use Recycle for the easy-to-use slicing interface.
   </p>
 
   <%= image_tag "tutorial/12.png", :title => "Orchestra loop with precise slices in Recycle" %>
@@ -251,19 +254,19 @@
   </p>
 
   <p>
-    The intro and outro patterns both end with the sample currently on pad 8.  The intro and outro would sound better with a shorter, gradual release that fades out, but the rest of the song would still sound better with a long release that does not fade out.  I still have one open pad out of the 16 pads on bank A, so I make a copy of the sample playing on pad 8:
+    The intro and outro patterns both end with the sample currently on pad 8,  The intro and outro would sound better with a shorter, gradual release that fades out, but the rest of the song would still sound better with a long release that does not fade out.  I still have one open pad out of the 16 pads on bank A, so I make a copy of the sample playing on pad 8:
   </p>
 
   <%= image_tag "tutorial/20.png", :title => "Duplicating the sample played on pad 8" %>
 
   <p>
-    Then I move the zones for pads 9-15 up one note each so they are now on pads 10-16, put the pad 8 duplicate on pad 9, and decrease the release so it fades out over 1.27 seconds.
+    Then I move the zones for pads 9-15 up one note each so they are now on pads 10-16, assign the pad 8 duplicate to pad 9, and decrease the release so it fades out over 1.27 seconds.
   </p>
 
   <%= image_tag "tutorial/21.png", :title => "Decreasing pad 9 release to 1.27 seconds" %>
 
   <p>
-    Sometimes when you chop samples there can be an audible pop or click right at the beginning. You can get rid of that by increasing the Amp Envelope Attack a bit so the sample fades in a bit instead of immediately playing at full volume.  I'm going to increase the Attack on just the orchestra samples from 0 milliseconds to 34 milliseconds, just enough time that you'll be able to hear the samples fade in a little.
+    Sometimes when you chop samples there can be an audible pop or click right at the beginning. You can get rid of this by increasing the Amp Envelope Attack a bit so the sample fades in briefly instead of immediately playing at full volume (Apollo Brown uses this to great effect in a lot of his beats).  I'm going to increase the Attack on just the orchestra samples from 0 milliseconds to 34 milliseconds, just enough time that you'll be able to hear the samples fade in a little.
   </p>
 
   <%= image_tag "tutorial/22.png", :title => "Increasing orchestra sample Amp Envelope Attack" %>
@@ -356,7 +359,7 @@
   </p>
 
   <p>
-    To recreate the effect of the hi-hat pitch decreasing as it plays I used the LFO1 parameters in the NNXT.
+    To recreate the effect of the hi-hat pitch decreasing as it plays I used the LFO1 parameters in the NNXT.  I set the pitch parameter to a negative value
   </p>
 
   To recreate the effect of the hi-hat pitching down slightly as it plays, I’ll use the LFO-1 section of the NNXT.  First I set the pitch parameter to a negative value.  This means the sample will start playing at its original pitch, and as the waveform increases the pitch will be decreased.
