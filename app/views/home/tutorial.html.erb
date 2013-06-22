@@ -5,12 +5,11 @@
 <div class="tutorial well">
   
   <h3>Overview</h3>
-  <p>In this tutorial I will be recreating the beat for Bird's Eye View by Zion I using Audacity, Reason, some records, an Akai MPD, and Recycle.</p>
+  <p>In this tutorial I will be recreating the beat for <%= link_to "Bird's Eye View by Zion I", "http://www.youtube.com/watch?v=vYJCT8EqbtU", :target => "_blank" %> from their 2005 album <b>True And Livin'</b> using Audacity, Reason, some records, an Akai MPD, and Recycle.</p>
 
   <h3>Why Recreate This Beat?</h3>
-  
   <p>
-    First and most importantly, it's one of my favorites!  I've been a fan of Zion I for a long time and I think Amp Live, the group's producer, is very under rated.
+    First and most importantly, it's one of my favorites!  I've been a fan of Zion I for a long time and I think Amp Live (the group's producer) is very under rated.
   </p>
   
   <p>
@@ -23,11 +22,11 @@
   </p>
 
   <p>
-    I listened to the Zion I beat to identify the type of drums used (specifically if there are breaks or if it's using a drum kit made of individual sounds).  I didn't hear any breaks so I'm going to create my own drum kit in Reason by attempting to match the sound of each drum: kick, snare, closed hi-hat, open hi-hat, and ride cymbal.
+    I listened to the Zion I beat to identify the type of drums used (specifically if there are breaks or if it's using a drum kit made of individual sounds).  I didn't hear any breaks so I'm going to create my own drum kit in Reason and attempt to match the sound of each drum: kick, snare, closed hi-hat, open hi-hat, and ride cymbal.
   </p>
 
   <p>
-    I started by creating a separate mixer for my drums because I like to mix each drum sound individually, and later mix the entire drum kit as a single channel on the main mixer (this also helps keep my projects more organized when I add a lot of drums).
+    I started by creating a separate mixer for my drums because I like to mix most drum sounds individually, and later mix the entire drum kit as a single channel on the main mixer (this also helps keep my projects more organized when I add a lot of drums).
   </p>
 
   <p>
@@ -420,21 +419,25 @@
     Now I’m going to manually edit the notes I played in the intro so they are all playing at velocity 10.  Now the intro and outro play only the orchestra, and everything else plays piano and orchestra.
   </p>
 
-  <!-- screenshot of reason with NNXT before adding sample layers -->
-  <!-- screenshot of reason with NNXT after adding sample layers -->
-  <!-- screenshot of intro edited with low velocity -->
-
+  <ul class="thumbnails">
+    <li><%= link_to image_tag("tutorial/41.png", :title => "NNXT without layered piano samples"), "#", :class => "span2" %></li>
+    <li><%= link_to image_tag("tutorial/42.png", :title => "NNXT with layered piano samples"), "#", :class => "span2" %></li>
+    <li><%= link_to image_tag("tutorial/43.png", :title => "Adjusting the layered piano samples to only play with a velocity range of 15-127"), "#", :class => "span2" %></li>
+    <li><%= link_to image_tag("tutorial/44.png", :title => "Sequencer view of the intro"), "#", :class => "span2" %></li>
+    <li><%= link_to image_tag("tutorial/45.png", :title => "Sequencer view of the intro after manually editing the notes with a low velocity so the piano layer will not be played"), "#", :class => "span2" %></li>
+  </ul>
+  
   <h3>Bird Chirp Sound Effect</h3>
   <p>
-    Probably my favorite part of remaking this beat was adding the bird chirping sound that plays during the intro, hook, and outro.  My first thought was to look through built-in Reason patches to find a sound effect or synth, but I didn’t find anything I could use.  Instead I decided to sample myself whistling.
+    Probably my favorite part of remaking this beat was adding the bird chirping sound that plays during the intro, hook, and outro.  My first idea was to look through built-in Reason patches to find a sound effect or synth, but I didn’t find anything I could use.  Instead I decided to sample myself whistling.
   </p>
 
   <p>
-    I recorded myself whistling a few times into Audacity, and I picked the one that sounded the best and had the least ambient noise.  I was very accurate on the pitch but it was a little shorter than the sound used in the Zion-I beat, so I used a time stretch effect in Audacity to make it a bit longer.
+    I recorded myself whistling a few times into Audacity, and I picked the one that sounded the best and had the least ambient noise.  I was very accurate on the pitch but it was a little shorter than the sound used in the Zion I beat, so I used a time stretch effect in Audacity to make it a bit longer.
   </p>
 
-  <!-- screenshot of multiple whistles in audacity -->
-  <!-- screenshot of time stretched whistle in audacity -->
+  <%= image_tag("tutorial/46.png", :title => "My whistling attempts recorded in Audacity") %>
+  <%= image_tag("tutorial/47.png", :title => "The best sounding whistle with a time stretch effect added to increase the duration") %>
 
   <p>
     I added the whistle sample as part of my NNXT drum kit in Reason on the next open pad and output channel.  I added a low pass filter to reduce the ambient noise, some panning using LFO2, and some of the reverb effect used for the snare.
@@ -448,8 +451,8 @@
     I’ve never sampled myself before, and considering this was just using my laptop microphone I’m surprised how quick and easy it was to get a usable sound!  I will definitely be trying this out more in the future for percussion or random sound effects...
   </p>
 
-  <!-- screenshot of Drum NNXT with whistle added -->
-  <!-- screenshot of Whistle delay -->
+  <%= image_tag("tutorial/48.png", :title => "Whistle and Delay added to NNXT drum kit") %>
+  <%= image_tag("tutorial/49.png", :title => "Recording the whistle in the sequencer") %>
 
   <h3>Mixing the Beat</h3>
   <p>
@@ -459,24 +462,29 @@
   <p>
     I slightly increased the volume of the isolated piano samples in the NNXT. 
   </p>
-  <!-- before and after screenshots -->
+  <%= image_tag("tutorial/50.png", :title => "Mix adjustments: piano sample gain (before)") %>
+  <%= image_tag("tutorial/51.png", :title => "Mix adjustments: piano sample gain (after)") %>
 
   <p>
     I had the drums, samples, and bass playing at the same volume in the main mixer, and slightly decreased the volume of the bass.
   </p>
-  <!-- before and after screenshots -->
+  <%= image_tag("tutorial/52.png", :title => "Mix adjustments: bass level (before)") %>
+  <%= image_tag("tutorial/53.png", :title => "Mix adjustments: bass level (after)") %>
 
   <p>
     In the mastering suite, I turned on the Punch setting in which enables some soft clipping settings, then I increased the gain on the maximizer input.  During the course of mixing I learned the purpose of a maximizer is to increase the overall volume of the mix without any clipping or distortion, so that was a good find!
   </p>
-  <!-- before and after screenshots -->
+  <ul class="thumbnails">
+    <li><%= link_to image_tag("tutorial/54.png", :title => "Mix adjustments: Mastering suite (before)"), "#", :class => "span2" %></li>
+    <li><%= link_to image_tag("tutorial/55.png", :title => "Mix adjustments: Mastering suite with Punch enabled"), "#", :class => "span2" %></li>
+    <li><%= link_to image_tag("tutorial/56.png", :title => "Mix adjustments: Maximizer gain increased"), "#", :class => "span2" %></li>
+  </ul>
 
   <p>
-    After making the final adjustments, I exported my Reason song as a WAV file and opened it in Audacity alongside an instrumental version of the original beat.  Through visual comparison between the Zion I track and my remake, you can see I was able to get a pretty close match to the original beat.  Everything sounded pretty good so I'm finished!
+    After making the final adjustments, I exported my Reason song as a WAV file and opened it in Audacity alongside an instrumental version of the original beat.  Through visual comparison between the Zion I track and my remake, you can see I was able to get a pretty close match to the original beat.  Everything sounded good so I'm finished!
   </p>
-
-  <!-- audacity visual comparison of original and my remake -->
-
+  <%= image_tag "tutorial/57.png", :title => "Original beat (top) and my remake (bottom) side by side in Audacity" %>
+  
   <p>
     Thank you for reading/watching this tutorial!
   </p>
