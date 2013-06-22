@@ -416,67 +416,68 @@
     All notes in Reason use a velocity value between 1 and 127, and when you add samples to the NNXT by default they play at any velocity value.  I’m going to change the piano notes so they only play when a note has velocity of 15 or higher.  Now any note on pads 5 through 8 with a velocity between 15 and 127 will play both samples -- this is basically every note with my normal playing style.  Any note on these pads with a velocity between 1 and 15 will not play the piano, they will only play the orchestra.
   </p>
 
-  Switch to step sequencer, double click on the intro.  Edit pad 7 and 8 to velocity 10.  Go back to the step sequencer arrangement view, delete the outro, copy the intro to the outro.
-  Now I’m going to manually edit the notes I played in the intro so they are all playing at velocity 10.  Now the intro and outro play only the orchestra, and everything else plays piano and orchestra.  Like I said, pretty quick way to fix this.
+  <p>
+    Now I’m going to manually edit the notes I played in the intro so they are all playing at velocity 10.  Now the intro and outro play only the orchestra, and everything else plays piano and orchestra.
+  </p>
 
-  Shot 30: Whistle (Audacity)
-  Camera Angle: 2
-  Screenshot: Audacity whistle-1.wav and whistle-2.wav
+  <!-- screenshot of reason with NNXT before adding sample layers -->
+  <!-- screenshot of reason with NNXT after adding sample layers -->
+  <!-- screenshot of intro edited with low velocity -->
 
-  Probably my favorite part of remaking this beat was adding the bird chirping sound that plays over the intro and hook.  My first thought was to look through built-in Reason patches and see if there was something I could use, but I didn’t find anything.  Instead I decided to sample myself whistling.  I wasn’t sure if this would work because I don’t have a microphone, other than the one built into my laptop.  I recorded myself whistling a few times, here’s what it sounds like.  Play the full whistles
+  <h3>Bird Chirp Sound Effect</h3>
+  <p>
+    Probably my favorite part of remaking this beat was adding the bird chirping sound that plays during the intro, hook, and outro.  My first thought was to look through built-in Reason patches to find a sound effect or synth, but I didn’t find anything I could use.  Instead I decided to sample myself whistling.
+  </p>
 
-  Switch to whistle-2.wav, play it
-  I picked the one that sounded the best and had the least ambient noise.  I was very accurate on the pitch but it was still a little too short, so I used a time stretch effect in Audacity to make it a bit longer.  This is what it sounds like after the time stretching.
+  <p>
+    I recorded myself whistling a few times into Audacity, and I picked the one that sounded the best and had the least ambient noise.  I was very accurate on the pitch but it was a little shorter than the sound used in the Zion-I beat, so I used a time stretch effect in Audacity to make it a bit longer.
+  </p>
 
-  Shot 31: Whistle (Reason)
-  Camera Angle: 2
-  Screenshot: Reason zion-18.rns DONE
+  <!-- screenshot of multiple whistles in audacity -->
+  <!-- screenshot of time stretched whistle in audacity -->
 
-  Add the whistle sample, automap chromatically, move to pad 5, set to NNXT output 11/12.
-  I added the whistle sample as part of my NNXT drum kit in Reason, as usual on its own output channel.
+  <p>
+    I added the whistle sample as part of my NNXT drum kit in Reason on the next open pad and output channel.  I added a low pass filter to reduce the ambient noise, some panning using LFO2, and some of the reverb effect used for the snare.
+  </p>
 
-  Set filter to LP24, reduce freq to 7.0KHz, increase resonance to 32%.  Set LFO2 to 0.25Hz, panning to 50%.  
-  I added a low pass filter to reduce some of the ambient noise, and some panning using LFO2. 
+  <p>
+    Next I routed the NNXT output channel into another Digital Delay line, and just like with the delayed hi-hat I adjusted the wet/dry balance to the middle so you can hear both the initial whistle (dry) and the delay (wet).  I set the delay length to 1/4 note at first, but this sounded too synced to the tempo.  I switched to millisecond delay and made it slightly slower than a quarter note.  After this I recorded myself playing the whistle on a new note lane.
+  </p>  
 
-  Open drum mixer, set channel 5 send 3 level to 73.  Decrease mixer channel 5 volume to 68.
-  I added the same reverb effect I used for the snare.  This sounded pretty good but it’s too loud compared to the rest of the mix, so I decreased the mixer channel volume.
+  <p>
+    I’ve never sampled myself before, and considering this was just using my laptop microphone I’m surprised how quick and easy it was to get a usable sound!  I will definitely be trying this out more in the future for percussion or random sound effects...
+  </p>
 
-  Create a digital delay, set to quarter note delay (4 steps, 16th step length), wet/dry balance in the middle.
-  Next I routed the NNXT output channel into another Digital Delay line, and just like with the delayed hi-hat I adjust the wet/dry balance to the middle so you can hear the initial whistle and the delay.  I put it on a quarter note delay at first, but this sounded a little too synced to the tempo.  I switched to millisecond delay and make it slightly slower than a quarter note.  All set with this whistle, now I’ll record the patterns.  Do it.
+  <!-- screenshot of Drum NNXT with whistle added -->
+  <!-- screenshot of Whistle delay -->
 
-  I’ve never sampled myself before, and considering it was just my laptop microphone I’m surprised how quick and easy it was to get a usable sound.  I can see myself doing this for more sound effects or percussion in the future.
+  <h3>Mixing the Beat</h3>
+  <p>
+    Now the beat has been fully sequenced, and I’m going to improve the mix.  Since I’m recreating this beat, I have a reference point for what everything should sound like.  I experimented with many different settings, and made these final adjustments:
+  </p>
 
-  Shot 32: Mixing
-  Camera Angle: 2
-  Screenshot: Reason zion-19.rns DONE
+  <p>
+    I slightly increased the volume of the isolated piano samples in the NNXT. 
+  </p>
+  <!-- before and after screenshots -->
 
-  Now the beat has been fully sequenced, and I’m going to improve the mix.  If I had to pick one aspect of my own beats I need to improve, it’s definitely the mixing, most of the time they come out quieter than I would like.  Since I’m recreating this beat, I have a reference point for what everything should sound like.  I experimented with many different settings, and these are the final adjustments I came up with.
+  <p>
+    I had the drums, samples, and bass playing at the same volume in the main mixer, and slightly decreased the volume of the bass.
+  </p>
+  <!-- before and after screenshots -->
 
-  Open Samples NNXT, select piano samples, increase gain to 0.6DB
-  I slightly increased the volume of the isolated piano samples in the NNXT.
+  <p>
+    In the mastering suite, I turned on the Punch setting in which enables some soft clipping settings, then I increased the gain on the maximizer input.  During the course of mixing I learned the purpose of a maximizer is to increase the overall volume of the mix without any clipping or distortion, so that was a good find!
+  </p>
+  <!-- before and after screenshots -->
 
-  Lower the Bass level to 96
-  I slightly decreased the mixer channel volume of the bass.
+  <p>
+    After making the final adjustments, I exported my Reason song as a WAV file and opened it in Audacity alongside an instrumental version of the original beat.  Through visual comparison between the Zion I track and my remake, you can see I was able to get a pretty close match to the original beat.  Everything sounded pretty good so I'm finished!
+  </p>
 
-  Expand the mastering suite, turn on punch.  Increase Maximizer input gain to 7.1 DB.
-  In the mastering suite, I turned on the “punch” setting in which enables some soft clipping settings, then I increased the gain on the maximizer input.  During the course of mixing I actually learned the purpose of this is to increase the overall volume of my mix without any clipping or distortion.  
+  <!-- audacity visual comparison of original and my remake -->
 
-  Shot 33: Comparing the mix in Audacity
-  Camera Angle: 2
-  Screenshot: Audacity zion-mix.aud
-
-  So how did I end up decided to do any of those steps when mastering?  Well here in Audacity, the top track has a version of the original Zion I beat, and my recreated version is the bottom track.  Basically in Reason I would try some new mix settings, export the song as a wav, and then listen to both and visually compare the waveforms.  
-
-  Select the outro
-  This version of the Zion I instrumental has drums playing over the intro, but other than that you can see they’re very similar!  In the outro you can see only the samples are playing and the levels are pretty close.  
-
-  Select 40 seconds in
-  Around 40 seconds in it’s just the drums and bass playing, again the levels are close, and in the rest of the song when everything is playing the levels are also very close.  Everything is sounding great, I think I’m finished!
-
-  Shot 34: Outro
-  Camera Angle: 1
-
-  That’s it!  Thank you for watching, I hope you enjoyed the video and found it informative! This is DJ Costanza on behalf of Sensori collective... I’m out!
-
-
+  <p>
+    Thank you for reading/watching this tutorial!
+  </p>
 </div>
