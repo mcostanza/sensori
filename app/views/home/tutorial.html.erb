@@ -5,7 +5,7 @@
 <div class="tutorial well">
   
   <h3>Overview</h3>
-  <p>In this tutorial I will be recreating the beat for <%= link_to "Bird's Eye View by Zion I", "http://www.youtube.com/watch?v=vYJCT8EqbtU", :target => "_blank" %> from their 2005 album <b>True And Livin'</b> using Audacity, Reason, some records, an Akai MPD, and Recycle.</p>
+  <p>In this tutorial I will be recreating the beat for <%= link_to "Bird's Eye View by Zion I", "http://www.youtube.com/watch?v=vYJCT8EqbtU", :target => "_blank" %> from their 2005 album <%= link_to "True And Livin'", "http://www.discogs.com/Zion-I-True-Livin/master/192612", :target => "_blank" %> using Audacity, Reason, some records, an Akai MPD, and Recycle.</p>
 
   <h3>Why Recreate This Beat?</h3>
   <p>
@@ -30,10 +30,10 @@
   </p>
 
   <p>
-    Next I added an NNXT Advanced Sampler which will contain all my drum sounds.  In Reason many people use Redrum for drums.  It's simpler to set up than the NNXT, but I find the NNXT allows more fine-grained control for filter settings, layered drums, mute groups, and other settings which I find myself using frequently.  I also have an older version of Reason so I don’t have the Kong device available, otherwise I might use that.
+    Next I added an NN-XT Advanced Sampler which will contain all my drum sounds.  In Reason many people use Redrum for drums.  It's simpler to set up than the NN-XT, but I find the NN-XT allows more fine-grained control for filter settings, layered drums, mute groups, and other settings which I find myself using frequently.  I also have an older version of Reason so I don’t have the Kong device available, otherwise I might use that.
   </p>
 
-  <%= image_tag "tutorial/1.png", :title => "Initial Reason Project: Mixer, Drum Mixer, and Drum NNXT added" %>
+  <%= image_tag "tutorial/1.png", :title => "Initial Reason Project: Mixer, Drum Mixer, and Drum NN-XT added" %>
 
   <h4>Kick Drum</h4>
 
@@ -41,7 +41,7 @@
     I went through my drum library and chose a kick that sounded similar to the original when I decreased the pitch by about 7 semitones and adjusted the filter settings.
   </p>
 
-  <%= image_tag "tutorial/2.png", :title => "Kick Drum: NNXT filter settings" %>
+  <%= image_tag "tutorial/2.png", :title => "Kick Drum: NN-XT filter settings" %>
 
   <p>
     One element it's missing compared to the Zion I kick is a distorted or "blown out" effect.  To recreate that, I added a Scream Distortion device as a send effect on my drum mixer with the Damage Type parameter set to Overdrive.
@@ -87,10 +87,10 @@
     Here's my drum kit so far:
   </p>
 
-  <%= image_tag "tutorial/5.png", :title => "NNXT Drum setup" %>
+  <%= image_tag "tutorial/5.png", :title => "NN-XT Drum setup" %>
 
   <p>
-    With the samples arranged like this in the NNXT, Pad Bank A on the MPD is set up to play the following samples:
+    With the samples arranged like this in the NN-XT, Pad Bank A on the MPD is set up to play the following samples:
   </p>
 
   <ul>
@@ -201,19 +201,19 @@
   <h3>Adding the Samples to Reason</h3>
 
   <p>
-    Back in Reason, I created another NNXT connected to the main mixer and added the sample slices from the Recycle files.  
+    Back in Reason, I created another NN-XT connected to the main mixer and added the sample slices from the Recycle files.  
   </p>
 
-  <%= image_tag "tutorial/13.png", :title => "Samples added to NNXT" %>
+  <%= image_tag "tutorial/13.png", :title => "Samples added to NN-XT" %>
 
   <p>
     Once they're added, I select all the samples, then right click and choose Automap Zones Chromatically.  This assigns each selected sample to one pad, playing at the correct pitch.
   </p>
 
-  <%= image_tag "tutorial/14.png", :title => "Samples added to NNXT with \"Automap Zones Chromatically\" selected" %>
+  <%= image_tag "tutorial/14.png", :title => "Samples added to NN-XT with \"Automap Zones Chromatically\" selected" %>
 
   <p>
-    Right now if I play these samples they're going to overlap.  This is not what I want, instead I want the NNXT set up so I can only play one sample at a time -- in other words, if I play one sample and then a second before the first finishes, the first sample should be cut off and I should only hear the second sample played.
+    Right now if I play these samples they're going to overlap.  This is not what I want, instead I want the NN-XT set up so I can only play one sample at a time -- in other words, if I play one sample and then a second before the first finishes, the first sample should be cut off and I should only hear the second sample played.
   </p>
 
   <p>
@@ -223,7 +223,7 @@
   <%= image_tag "tutorial/15.png", :title => "Grouping the samples together" %>
 
   <p>
-    Then I adjust Key Poly to 1 in the NNXT Group Settings:
+    Then I adjust Key Poly to 1 in the NN-XT Group Settings:
   </p>
 
   <%= image_tag "tutorial/16.png", :title => "Set Key Poly to 1 in Group Settings" %>
@@ -314,7 +314,7 @@
     The bass line for this song is really simple, it’s only 3 notes.  I prefer playing more complex bass lines on my 25-key MIDI keyboard because I can visualize the notes of a scale better on piano keys, but because this is so simple I played it on my MPD.
   </p>
 
-  <%= image_tag "tutorial/28.png", :title => "NNXT Settings for the sampled bass" %>
+  <%= image_tag "tutorial/28.png", :title => "NN-XT Settings for the sampled bass" %>
   <%= image_tag "tutorial/29.png", :title => "Sequencer with the bass line fully recorded" %>
   
   <h3>Recording the Drum Patterns</h3>
@@ -336,7 +336,7 @@
   </p>
 
   <p>
-    I started by duplicating the hi-hat in my NNXT and setting the output to a new mixer channel with the same settings as my original hi-hat mixer channel.
+    I started by duplicating the hi-hat in my NN-XT and setting the output to a new mixer channel with the same settings as my original hi-hat mixer channel.
   </p>
 
   <p>
@@ -358,7 +358,7 @@
   </p>
 
   <p>
-    To recreate the effect of the hi-hat pitch decreasing as it plays I used the LFO1 parameters in the NNXT.  I set the pitch parameter to a negative value which means the sample will start playing at its original pitch, and as the LFO1 waveform increases the pitch will be decreased.
+    To recreate the effect of the hi-hat pitch decreasing as it plays I used the LFO1 parameters in the NN-XT.  I set the pitch parameter to a negative value which means the sample will start playing at its original pitch, and as the LFO1 waveform increases the pitch will be decreased.
   </p>
 
   <p>
@@ -399,7 +399,7 @@
   </p>  
 
   <p>
-    I came up with a quick fix for this using velocity layers in the NNXT, but first I need to go back to recycle to edit the piano sample a bit.  In order for the piano slices to match up to the orchestra slices, I’m going to remove these 2 slices and save this as a separate file.
+    I came up with a quick fix for this using velocity layers in the NN-XT, but first I need to go back to recycle to edit the piano sample a bit.  In order for the piano slices to match up to the orchestra slices, I’m going to remove these 2 slices and save this as a separate file.
   </p>
 
     <ul class="thumbnails">
@@ -408,11 +408,11 @@
   </ul>
 
   <p>
-    Velocity is basically how hard you press a pad or key, so generally on a real instrument like a piano the more velocity you use the louder it plays.  On virtual instruments like the NNXT, increased velocity can mean loudness, but it can also control other things like filter frequency (by default it does nothing).
+    Velocity is basically how hard you press a pad or key, so generally on a real instrument like a piano the more velocity you use the louder it plays.  On virtual instruments like the NN-XT, increased velocity can mean loudness, but it can also control other things like filter frequency (by default it does nothing).
   </p>
 
   <p>
-    All notes in Reason use a velocity value between 1 and 127, and when you add samples to the NNXT by default they play at any velocity value.  I’m going to change the piano notes so they only play when a note has velocity of 15 or higher.  Now any note on pads 5 through 8 with a velocity between 15 and 127 will play both samples -- this is basically every note with my normal playing style.  Any note on these pads with a velocity between 1 and 15 will not play the piano, they will only play the orchestra.
+    All notes in Reason use a velocity value between 1 and 127, and when you add samples to the NN-XT by default they play at any velocity value.  I’m going to change the piano notes so they only play when a note has velocity of 15 or higher.  Now any note on pads 5 through 8 with a velocity between 15 and 127 will play both samples -- this is basically every note with my normal playing style.  Any note on these pads with a velocity between 1 and 15 will not play the piano, they will only play the orchestra.
   </p>
 
   <p>
@@ -420,8 +420,8 @@
   </p>
 
   <ul class="thumbnails">
-    <li><%= link_to image_tag("tutorial/41.png", :title => "NNXT without layered piano samples"), "#", :class => "span2" %></li>
-    <li><%= link_to image_tag("tutorial/42.png", :title => "NNXT with layered piano samples"), "#", :class => "span2" %></li>
+    <li><%= link_to image_tag("tutorial/41.png", :title => "NN-XT without layered piano samples"), "#", :class => "span2" %></li>
+    <li><%= link_to image_tag("tutorial/42.png", :title => "NN-XT with layered piano samples"), "#", :class => "span2" %></li>
     <li><%= link_to image_tag("tutorial/43.png", :title => "Adjusting the layered piano samples to only play with a velocity range of 15-127"), "#", :class => "span2" %></li>
     <li><%= link_to image_tag("tutorial/44.png", :title => "Sequencer view of the intro"), "#", :class => "span2" %></li>
     <li><%= link_to image_tag("tutorial/45.png", :title => "Sequencer view of the intro after manually editing the notes with a low velocity so the piano layer will not be played"), "#", :class => "span2" %></li>
@@ -440,18 +440,18 @@
   <%= image_tag("tutorial/47.png", :title => "The best sounding whistle with a time stretch effect added to increase the duration") %>
 
   <p>
-    I added the whistle sample as part of my NNXT drum kit in Reason on the next open pad and output channel.  I added a low pass filter to reduce the ambient noise, some panning using LFO2, and some of the reverb effect used for the snare.
+    I added the whistle sample as part of my NN-XT drum kit in Reason on the next open pad and output channel.  I added a low pass filter to reduce the ambient noise, some panning using LFO2, and some of the reverb effect used for the snare.
   </p>
 
   <p>
-    Next I routed the NNXT output channel into another Digital Delay line, and just like with the delayed hi-hat I adjusted the wet/dry balance to the middle so you can hear both the initial whistle (dry) and the delay (wet).  I set the delay length to 1/4 note at first, but this sounded too synced to the tempo.  I switched to millisecond delay and made it slightly slower than a quarter note.  After this I recorded myself playing the whistle on a new note lane.
+    Next I routed the NN-XT output channel into another Digital Delay line, and just like with the delayed hi-hat I adjusted the wet/dry balance to the middle so you can hear both the initial whistle (dry) and the delay (wet).  I set the delay length to 1/4 note at first, but this sounded too synced to the tempo.  I switched to millisecond delay and made it slightly slower than a quarter note.  After this I recorded myself playing the whistle on a new note lane.
   </p>  
 
   <p>
     I’ve never sampled myself before, and considering this was just using my laptop microphone I’m surprised how quick and easy it was to get a usable sound!  I will definitely be trying this out more in the future for percussion or random sound effects...
   </p>
 
-  <%= image_tag("tutorial/48.png", :title => "Whistle and Delay added to NNXT drum kit") %>
+  <%= image_tag("tutorial/48.png", :title => "Whistle and Delay added to NN-XT drum kit") %>
   <%= image_tag("tutorial/49.png", :title => "Recording the whistle in the sequencer") %>
 
   <h3>Mixing the Beat</h3>
@@ -460,7 +460,7 @@
   </p>
 
   <p>
-    I slightly increased the volume of the isolated piano samples in the NNXT. 
+    I slightly increased the volume of the isolated piano samples in the NN-XT. 
   </p>
   <%= image_tag("tutorial/50.png", :title => "Mix adjustments: piano sample gain (before)") %>
   <%= image_tag("tutorial/51.png", :title => "Mix adjustments: piano sample gain (after)") %>
