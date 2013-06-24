@@ -2,7 +2,7 @@
 <h2>by DJ Costanza</h2>
 
 <div class="tutorial well">
-  
+
   <h3>Overview</h3>
   <p>In this tutorial I will be recreating the beat for <%= link_to "Bird's Eye View by Zion I", "http://www.youtube.com/watch?v=vYJCT8EqbtU", :target => "_blank" %> from their 2005 album <%= link_to "True And Livin'", "http://www.discogs.com/Zion I-True-Livin/master/192612", :target => "_blank" %> using Audacity, Reason, some records, an Akai MPD, and Recycle.</p>
 
@@ -32,7 +32,7 @@
     Next I added an NN-XT Advanced Sampler which will contain all my drum sounds.  In Reason many people use Redrum for drums.  It's simpler to set up than the NN-XT, but I find the NN-XT allows more fine-grained control for filter settings, layered drums, mute groups, and other settings which I find myself using frequently.  I also have an older version of Reason so I don’t have the Kong device available, otherwise I might use that.
   </p>
 
-  <%= image_tag "tutorial/1.png", :title => "Initial Reason Project: Mixer, Drum Mixer, and Drum NN-XT added" %>
+  <%= link_to image_tag("tutorial/1.png", :title => "Initial Reason project with Mixer, Drum Mixer, and an NN-XT added"), "javascript:;", :"data-lightbox" => true %>
 
   <h4>Kick Drum</h4>
 
@@ -40,7 +40,7 @@
     I went through my drum library and chose a kick that sounded similar to the original when I decreased the pitch by about 7 semitones and adjusted the filter settings.
   </p>
 
-  <%= image_tag "tutorial/2.png", :title => "Kick Drum: NN-XT filter settings" %>
+  <%= link_to image_tag("tutorial/2.png", :title => "NN-XT filter settings for the kick drum sample"), "javascript:;", :"data-lightbox" => true %>
 
   <p>
     One element it's missing compared to the Zion I kick is a distorted or "blown out" effect.  To recreate that, I added a Scream device as a send effect on my drum mixer with the Damage Type parameter set to Overdrive.
@@ -58,7 +58,7 @@
     Quick tip for Reason users based on my personal experience: Scream is a very powerful effects tool but it can be difficult to use because many of the included patches are overly distorted.  Because of this I usually start with a blank patch.
   </p>
 
-  <%= image_tag "tutorial/3.png", :title => "Kick Drum: Scream digital distortion settings" %>
+  <%= link_to image_tag("tutorial/3.png", :title => "Scream digital distortion settings (available as a send effect on the drum mixer)"), "javascript:;", :"data-lightbox" => true %>
 
   <h4>Snare Drum</h4>
 
@@ -70,7 +70,7 @@
     There's a slight reverb in the snare sample I picked, and I wanted to get rid of it to make the sound sharper.  I removed the reverb by decreasing the Sample End parameter to about 53% of the snare sample:
   </p>
 
-  <%= image_tag "tutorial/4.png", :title => "Snare Drum: Decreasing the Sample End parameter to remove the existing reverb/tail" %>
+  <%= link_to image_tag("tutorial/4.png", :title => "Decreasing the Sample End parameter of the snare drum to remove the existing reverb/tail"), "javascript:;", :"data-lightbox" => true %>
   
   <p>
     Now the sound is much sharper, and I'm going to add my own reverb back to the sound to make it less flat.  I added an RV-7000 device with a Snare Plate patch as another send effect on my drum mixer and set the wet/dry balance to mostly dry.  Then I put the snare drum on a separate output channel from the kick and adjusted the send effect levels for this mixer channel.
@@ -86,7 +86,7 @@
     Here's my drum kit so far:
   </p>
 
-  <%= image_tag "tutorial/5.png", :title => "NN-XT Drum setup" %>
+  <%= link_to image_tag("tutorial/5.png", :title => "NN-XT drum kit setup with kick, snare, closed hi-hat, open hi-hat, and ride cymbal"), "javascript:;", :"data-lightbox" => true %>
 
   <p>
     With the samples arranged like this in the NN-XT, Pad Bank A on the MPD is set up to play the following samples:
@@ -100,8 +100,7 @@
     <li>Pad 8: Ride Cymbal</li>
   </ul>
 
-  <%= image_tag "tutorial/6.png", :title => "MPD pad layout" %>
-
+  <%= link_to image_tag("tutorial/6.png", :title => "MPD pad layout"), "javascript:;", :"data-lightbox" => true %>
     
   <h3>Recording The Base Drum Pattern</h3>
 
@@ -111,7 +110,7 @@
 
   <p>Here's the 4-bar pattern with both layers recorded on a single note lane:</p>
   
-  <%= image_tag "tutorial/7.png", :title => "4-bar drum pattern on a single note lane" %>
+  <%= link_to image_tag("tutorial/7.png", :title => "4-bar drum pattern on a single note lane"), "javascript:;", :"data-lightbox" => true %>
 
   <p>
     After recording the pattern, I split the drums onto separate note lanes.  This makes it easier to do drum arrangements later on -- for example if I want to isolate the kick drum I can mute or delete the other note lanes.
@@ -119,7 +118,7 @@
 
   <p>Here's the same pattern with separate note lanes for kick, snare, and hi-hats:</p>
 
-  <%= image_tag "tutorial/8.png", :title => "4-bar drum pattern on separate note lanes" %>
+  <%= link_to image_tag("tutorial/8.png", :title => "4-bar drum pattern with each drum split to a separate note lane"), "javascript:;", :"data-lightbox" => true %>
 
   <p>
     An alternative way to do this, which is probably better for live performance or on the fly adjustments, is to record a mixer track where you apply mute/solo to different channels.  If you’re using Redrum you could also set up different patterns and record a track where you automate which pattern is playing.
@@ -133,7 +132,7 @@
     You can apply the groove template on a scale between 0-100%.  If it's at 0% it's as if you're not using anything at all, and at 100% it's fully quantized.  I set it in the middle at 71%, and it cleaned up the minor timing issues from my recording.
   </p>
 
-  <%= image_tag "tutorial/9.png", :title => "Adding the MPC-3000 groove template" %>
+  <%= link_to image_tag("tutorial/9.png", :title => "Adjusting the Groove Amount of the MPC-3000 groove template"), "javascript:;", :"data-lightbox" => true %>
 
   <p>
     Now I have the main 4-bar drum loop recorded, and I will use it as a base pattern while recording and arranging the samples before going back to add the drum changes.
@@ -153,7 +152,7 @@
     If you’re digging for samples, their records are pretty easy to find and cheap, and there are a lot of interesting parts to sample especially on their earlier albums.  In particular I recommend their first album <%= link_to "Tales of Mystery and Imagination", "http://www.discogs.com/Alan-Parsons-Project-Tales-Of-Mystery-And-Imagination/master/4322", :target => "_blank" %> from 1976, their second album <%= link_to "I, Robot", "http://www.discogs.com/Alan-Parsons-Project-I-Robot/master/4338", :target => "_blank" %> from 1977, and the album with the sample used for Bird's Eye View, <%= link_to "Eye in the Sky", "http://www.discogs.com/Alan-Parsons-Project-Eye-In-The-Sky/master/4424", :target => "_blank" %> from 1982 which was their most commercially succesful release.
   </p>
 
-  <%= image_tag "tutorial/10.png", :title => "\"Tales of Mystery & Imagination\" (1976), \"I, Robot\" (1977), and \"Eye in the Sky\" (1982)" %>
+  <%= link_to image_tag("tutorial/10.png", :title => "Costanza-approved Alan Parsons Project albums: \"Tales of Mystery & Imagination\" (1976), \"I, Robot\" (1977), and \"Eye in the Sky\" (1982)"), "javascript:;", :"data-lightbox" => true %>
 
   <p>
     Also notable on this album, the first song <%= link_to "Sirius", "http://www.youtube.com/watch?v=yCR85u9QngQ", :target => "_blank" %> is instantly recognizable to many people as it was used as background music for <%= link_to "introducing the Chicago Bulls lineup as far back as the Michael Jordan era", "http://www.youtube.com/watch?v=Zn6kiimEsYc", :target => "_blank" %>.
@@ -183,7 +182,7 @@
     The first section is an orchestra playing (I called it "loop-1" for some reason) and the second section is a piano:
   </p>
 
-  <%= image_tag "tutorial/11.png", :title => "Orchestra loop recorded in Audacity" %>
+  <%= link_to image_tag("tutorial/11.png", :title => "Audacity project with orchestra and piano loop sections added"), "javascript:;", :"data-lightbox" => true %>
 
   <p>
     Neither of these sections is an exact loop at this point.  Audacity is very easy for recording audio, but when you have to get really precise with slicing up samples the interface is a little clumsy, so I usually create approximate slices and export them as WAV files which I will edit in more detail in Recycle.
@@ -197,7 +196,7 @@
 
   <p>Here's the orchestra loop with precise slices added:</p>
 
-  <%= image_tag "tutorial/12.png", :title => "Orchestra loop with precise slices in Recycle" %>
+  <%= link_to image_tag("tutorial/12.png", :title => "Orchestra loop with precise slices in Recycle"), "javascript:;", :"data-lightbox" => true %>
 
   <h3>Adding the Samples to Reason</h3>
 
@@ -206,8 +205,8 @@
   </p>
 
   <ul class="thumbnails">
-    <li class="span5"><%= link_to image_tag("tutorial/13.png", :title => "Samples added to NN-XT"), "#", :class => "thumbnail" %></li>
-    <li class="span5"><%= link_to image_tag("tutorial/14.png", :title => "Samples added to NN-XT with \"Automap Zones Chromatically\" selected"), "#", :class => "thumbnail" %></li>
+    <li class="span5"><%= link_to image_tag("tutorial/13.png", :title => "Orchestra and piano samples added to NN-XT"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span5"><%= link_to image_tag("tutorial/14.png", :title => "Orchestra and piano samples added to NN-XT with \"Automap Zones Chromatically\" selected"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
   </ul>
 
   <p>
@@ -219,8 +218,8 @@
   </p>
 
   <ul class="thumbnails">
-    <li class="span5"><%= link_to image_tag("tutorial/15.png", :title => "Grouping the samples together"), "#", :class => "thumbnail" %></li>
-    <li class="span2"><%= link_to image_tag("tutorial/16.png", :title => "Set Key Poly to 1 in Group Settings"), "#", :class => "thumbnail" %></li>
+    <li class="span5"><%= link_to image_tag("tutorial/15.png", :title => "Grouping the samples together"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span2"><%= link_to image_tag("tutorial/16.png", :title => "Seting Key Poly to 1 in Group Settings"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
   </ul>
 
   <h4>Amp Envelope Settings</h4>
@@ -234,15 +233,15 @@
   </p>
 
   <ul class="thumbnails">
-    <li class="span2"><%= link_to image_tag("tutorial/17.png", :title => "Default Amp Envelope settings with a 60ms Release"), "#", :class => "thumbnail" %></li>
-    <li class="span2"><%= link_to image_tag("tutorial/18.png", :title => "Amp Envelope Release setting increased to a high value"), "#", :class => "thumbnail" %></li>
+    <li class="span2"><%= link_to image_tag("tutorial/17.png", :title => "Default Amp Envelope settings with a 60 millisecond Release"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span2"><%= link_to image_tag("tutorial/18.png", :title => "Amp Envelope Release setting increased to a high value"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
   </ul>
 
   <p>
     One disadvantage of setting Amp Envelope Release to a high value is that you can no longer play a choppy sample pattern.  You can work around this by adding another sample zone in the same group, but intentionally leaving it empty so it triggers silence when played.
   </p>
 
-  <%= image_tag "tutorial/19.png", :title => "Adding a sample zone that triggers silence" %>
+  <%= link_to image_tag("tutorial/19.png", :title => "Adding a sample zone that triggers silence"), "javascript:;", :"data-lightbox" => true %>
 
   <p>
     A few more adjustments before I start recording the sample patterns...
@@ -253,15 +252,15 @@
   </p>
 
   <ul class="thumbnails">
-    <li class="span5"><%= link_to image_tag("tutorial/20.png", :title => "Duplicating the sample played on pad 8"), "#", :class => "thumbnail" %></li>
-    <li class="span5"><%= link_to image_tag("tutorial/21.png", :title => "Decreasing pad 9 release to 1.27 seconds"), "#", :class => "thumbnail" %></li>
+    <li class="span5"><%= link_to image_tag("tutorial/20.png", :title => "Duplicating the sample played on pad 8"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span5"><%= link_to image_tag("tutorial/21.png", :title => "Duplicate of the pad 8 sample moved to pad 9, with Amp Envelope Release set to 1.27 seconds"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
   </ul>
 
   <p>
     Sometimes when you chop samples you can hear a pop or click right at the beginning. You can get rid of this by increasing the Amp Envelope Attack a bit so the sample fades in briefly instead of immediately playing at full volume (side note: Apollo Brown uses a similar technique <%= link_to "to great effect", "http://mellomusicgroup.bandcamp.com/track/options", :target => "_blank" %> <%= link_to "in a lot of", "http://mellomusicgroup.bandcamp.com/track/the-11th-hour", :target => "_blank" %> <%= link_to "his beats", "http://mellomusicgroup.bandcamp.com/track/never-in-a-million-years", :target => "_blank" %>).  I'm going to increase the Amp Envelope Attack on the orchestra samples from 0 to 34 milliseconds, just enough time so you'll be able to hear the samples fade in a little.
   </p>
 
-  <%= image_tag "tutorial/22.png", :title => "Increasing orchestra sample Amp Envelope Attack" %>
+  <%= link_to image_tag("tutorial/22.png", :title => "Increasing Amp Envelope Attack for all the orchestra samples from 0 to 34 millseconds"), "javascript:;", :"data-lightbox" => true %>
 
   <h3>Recording the Sample Patterns</h3>
 
@@ -273,7 +272,7 @@
     I spent time recording the full sample patterns for the song, broken down 4 bars at a time, and here it is laid out in the step sequencer.  I added a different color for each unique 4-bar pattern and separated the note lanes to reflect the song structure: intro, verse, hook, verse, extended hook, outro.  As you can see the intro and outro are identical and within the verses and hooks there are only 4 different patterns.
   </p>
 
-  <%= image_tag "tutorial/23.png", :title => "Sequencer with sample patterns recorded." %>
+  <%= link_to image_tag("tutorial/23.png", :title => "Sequencer with sample patterns recorded."), "javascript:;", :"data-lightbox" => true %>
 
   <h3>Adjusting the Drums</h3>
 
@@ -287,10 +286,10 @@
 
 
   <ul class="thumbnails">
-    <li class="span2"><%= link_to image_tag("tutorial/24.png", :title => "Duplicating the kick"), "#", :class => "thumbnail" %></li>
-    <li class="span2"><%= link_to image_tag("tutorial/25.png", :title => "Decreasing the gain on the duplicate kick"), "#", :class => "thumbnail" %></li>
-    <li class="span2"><%= link_to image_tag("tutorial/26.png", :title => "Adding a low pass filter on the duplicate kick"), "#", :class => "thumbnail" %></li>
-    <li class="span2"><%= link_to image_tag("tutorial/27.png", :title => "Increasing the gain on the ride cymbal"), "#", :class => "thumbnail" %></li>
+    <li class="span2"><%= link_to image_tag("tutorial/24.png", :title => "Duplicating the kick sample"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span2"><%= link_to image_tag("tutorial/25.png", :title => "Decreasing the gain on the duplicate kick"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span2"><%= link_to image_tag("tutorial/26.png", :title => "Adding a low pass filter on the duplicate kick"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span2"><%= link_to image_tag("tutorial/27.png", :title => "Increasing the gain on the ride cymbal"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
   </ul>
 
   <h3>Adding the Bass</h3>
@@ -308,8 +307,8 @@
   </p>
 
   <ul class="thumbnails">
-    <li class="span5"><%= link_to image_tag("tutorial/28.png", :title => "NN-XT Settings for the sampled bass"), "#", :class => "thumbnail" %></li>
-    <li class="span5"><%= link_to image_tag("tutorial/29.png", :title => "Sequencer with the bass line fully recorded"), "#", :class => "thumbnail" %></li>
+    <li class="span5"><%= link_to image_tag("tutorial/28.png", :title => "NN-XT Settings for the sampled bass"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span5"><%= link_to image_tag("tutorial/29.png", :title => "Sequencer with the bass line fully recorded"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
   </ul>
   
   <h3>Recording the Drum Patterns</h3>
@@ -318,7 +317,7 @@
     Just like with the samples, I went through the entire Zion I song and matched my drum patterns to the original beat.  As I mentioned earlier, the drum patterns change much more frequently than the sample patterns, so it took me longer but I used the same process of breaking it down 4 bars at a time and recording the drums in layers if necessary.
   </p>
 
-  <%= image_tag "tutorial/30.png", :title => "Sequencer with the drums (almost) fully recorded" %>
+  <%= link_to image_tag("tutorial/30.png", :title => "Sequencer with the drums almost fully recorded"), "javascript:;", :"data-lightbox" => true %>
 
   <h4>Delayed Hi-Hat</h4>
 
@@ -347,9 +346,9 @@
   </p>
 
   <ul class="thumbnails">
-    <li class="span2"><%= link_to image_tag("tutorial/31.png", :title => "Duplicating the closed hi-hat"), "#", :class => "thumbnail" %></li>
-    <li class="span2"><%= link_to image_tag("tutorial/32.png", :title => "Adding a Digital Delay"), "#", :class => "thumbnail" %></li>
-    <li class="span2"><%= link_to image_tag("tutorial/33.png", :title => "Final settings for hi-hat delay"), "#", :class => "thumbnail" %></li>
+    <li class="span2"><%= link_to image_tag("tutorial/31.png", :title => "Duplicating the closed hi-hat"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span2"><%= link_to image_tag("tutorial/32.png", :title => "Adding a Digital Delay as an insert effect on the duplicate closed hi-hat"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span2"><%= link_to image_tag("tutorial/33.png", :title => "Final settings for hi-hat delay"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
   </ul>
 
   <p>
@@ -387,11 +386,11 @@
   </p>
 
   <ul class="thumbnails">
-    <li class="span2"><%= link_to image_tag("tutorial/34.png", :title => "Delayed Hi-Hat LFO1 Settings: Decreasing Pitch"), "#", :class => "thumbnail" %></li>
-    <li class="span2"><%= link_to image_tag("tutorial/35.png", :title => "Delayed Hi-Hat LFO1 Settings: Changing waveform shape to Inverted Sawtooth"), "#", :class => "thumbnail" %></li>
-    <li class="span2"><%= link_to image_tag("tutorial/36.png", :title => "Delayed Hi-Hat LFO1 Settings: Making sure Key Sync is enabled"), "#", :class => "thumbnail" %></li>
-    <li class="span2"><%= link_to image_tag("tutorial/37.png", :title => "Delayed Hi-Hat LFO1 Settings: Changing the LFO rate to 1/16th note"), "#", :class => "thumbnail" %></li>
-    <li class="span2"><%= link_to image_tag("tutorial/38.png", :title => "Delayed Hi-Hat LFO1 Settings: Adding a slight delay to the LFO waveform start"), "#", :class => "thumbnail" %></li>
+    <li class="span2"><%= link_to image_tag("tutorial/34.png", :title => "Delayed Hi-Hat LFO1 Settings: Decreasing Pitch"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span2"><%= link_to image_tag("tutorial/35.png", :title => "Delayed Hi-Hat LFO1 Settings: Changing waveform shape to Inverted Sawtooth"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span2"><%= link_to image_tag("tutorial/36.png", :title => "Delayed Hi-Hat LFO1 Settings: Making sure Key Sync is enabled"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span2"><%= link_to image_tag("tutorial/37.png", :title => "Delayed Hi-Hat LFO1 Settings: Changing the LFO rate to 1/16th note"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span2"><%= link_to image_tag("tutorial/38.png", :title => "Delayed Hi-Hat LFO1 Settings: Adding a slight delay to the LFO waveform start"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
   </ul>
 
   
@@ -406,8 +405,8 @@
   </p>
 
   <ul class="thumbnails">
-    <li class="span2"><%= link_to image_tag("tutorial/39.png", :title => "Piano loop sliced up in Recycle"), "#", :class => "thumbnail" %></li>
-    <li class="span2"><%= link_to image_tag("tutorial/40.png", :title => "Piano loop sliced up to match the orchestra loop slice points"), "#", :class => "thumbnail" %></li>
+    <li class="span2"><%= link_to image_tag("tutorial/39.png", :title => "Piano loop sliced up in Recycle"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span2"><%= link_to image_tag("tutorial/40.png", :title => "Piano loop sliced up to match the orchestra loop slice points"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
   </ul>
 
   <p>
@@ -419,15 +418,15 @@
   </p>
 
   <p>
-    Now I’m going to manually edit the notes I played in the intro so they are all playing at velocity 10.  Now the intro and outro play only the orchestra, and everything else plays piano and orchestra.
+    I’m going to manually edit the notes I played in the intro so they are all playing at velocity 10.  Now the intro and outro play only the orchestra, and everything else plays piano and orchestra.
   </p>
 
   <ul class="thumbnails">
-    <li class="span2"><%= link_to image_tag("tutorial/41.png", :title => "NN-XT without layered piano samples"), "#", :class => "thumbnail" %></li>
-    <li class="span2"><%= link_to image_tag("tutorial/42.png", :title => "NN-XT with layered piano samples added"), "#", :class => "thumbnail" %></li>
-    <li class="span2"><%= link_to image_tag("tutorial/43.png", :title => "Adjusting the piano samples to only play with a velocity range of 15-127"), "#", :class => "thumbnail" %></li>
-    <li class="span2"><%= link_to image_tag("tutorial/44.png", :title => "Sequencer view of the intro"), "#", :class => "thumbnail" %></li>
-    <li class="span2"><%= link_to image_tag("tutorial/45.png", :title => "Sequencer view of the intro after manually editing the notes with a low velocity so the piano layer will not be played"), "#", :class => "thumbnail" %></li>
+    <li class="span2"><%= link_to image_tag("tutorial/41.png", :title => "NN-XT without layered piano samples"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span2"><%= link_to image_tag("tutorial/42.png", :title => "NN-XT with layered piano samples added on pads 5-8"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span2"><%= link_to image_tag("tutorial/43.png", :title => "Adjusting the piano samples to only play with a velocity range of 15-127"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span2"><%= link_to image_tag("tutorial/44.png", :title => "Sequencer view of the intro"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span2"><%= link_to image_tag("tutorial/45.png", :title => "Sequencer view of the intro after manually editing the notes with a low velocity so the piano layer will not be played"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
   </ul>
   
   <h3>Bird Chirp Sound Effect</h3>
@@ -440,8 +439,8 @@
   </p>
 
   <ul class="thumbnails">
-    <li class="span5"><%= link_to image_tag("tutorial/46.png", :title => "My whistling attempts recorded in Audacity"), "#", :class => "thumbnail" %></li>
-    <li class="span5"><%= link_to image_tag("tutorial/47.png", :title => "The best sounding whistle with a time stretch effect added to increase the duration"), "#", :class => "thumbnail" %></li>
+    <li class="span5"><%= link_to image_tag("tutorial/46.png", :title => "My whistling attempts recorded in Audacity"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span5"><%= link_to image_tag("tutorial/47.png", :title => "The best sounding whistle with a time stretch effect added to increase the duration"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
   </ul>
 
   <p>
@@ -457,8 +456,8 @@
   </p>
 
   <ul class="thumbnails">
-    <li class="span5"><%= link_to image_tag("tutorial/48.png", :title => "Whistle and Delay added to NN-XT drum kit"), "#", :class => "thumbnail" %></li>
-    <li class="span5"><%= link_to image_tag("tutorial/49.png", :title => "Recording the whistle in the sequencer"), "#", :class => "thumbnail" %></li>
+    <li class="span5"><%= link_to image_tag("tutorial/48.png", :title => "Whistle and Delay added to NN-XT drum kit"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span5"><%= link_to image_tag("tutorial/49.png", :title => "Recording the whistle in the sequencer"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
   </ul>
 
   <h3>Mixing the Beat</h3>
@@ -471,8 +470,8 @@
   </p>
 
   <ul class="thumbnails">
-    <li class="span5"><%= link_to image_tag("tutorial/50.png", :title => "Mix adjustments: piano sample gain (before)"), "#", :class => "thumbnail" %></li>
-    <li class="span5"><%= link_to image_tag("tutorial/51.png", :title => "Mix adjustments: piano sample gain (after)"), "#", :class => "thumbnail" %></li>
+    <li class="span5"><%= link_to image_tag("tutorial/50.png", :title => "Mix adjustments: piano sample gain (before)"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span5"><%= link_to image_tag("tutorial/51.png", :title => "Mix adjustments: piano sample gain (after)"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
   </ul>
 
   <p>
@@ -480,23 +479,23 @@
   </p>
 
   <ul class="thumbnails">
-    <li class="span5"><%= link_to image_tag("tutorial/52.png", :title => "Mix adjustments: bass level (before)"), "#", :class => "thumbnail" %></li>
-    <li class="span5"><%= link_to image_tag("tutorial/53.png", :title => "Mix adjustments: bass level (after)"), "#", :class => "thumbnail" %></li>
+    <li class="span5"><%= link_to image_tag("tutorial/52.png", :title => "Mix adjustments: bass level (before)"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span5"><%= link_to image_tag("tutorial/53.png", :title => "Mix adjustments: bass level (after)"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
   </ul>
 
   <p>
     In the mastering suite, I turned on the Punch setting in which enables some soft clipping settings, then I increased the gain on the maximizer input.  During the course of mixing I learned the purpose of a maximizer is to increase the overall volume of the mix without any clipping or distortion, so that was a good find!
   </p>
   <ul class="thumbnails">
-    <li class="span3"><%= link_to image_tag("tutorial/54.png", :title => "Mix adjustments: Mastering suite (before)"), "#", :class => "thumbnail" %></li>
-    <li class="span3"><%= link_to image_tag("tutorial/55.png", :title => "Mix adjustments: Mastering suite with Punch enabled"), "#", :class => "thumbnail" %></li>
-    <li class="span3"><%= link_to image_tag("tutorial/56.png", :title => "Mix adjustments: Maximizer gain increased"), "#", :class => "thumbnail" %></li>
+    <li class="span3"><%= link_to image_tag("tutorial/54.png", :title => "Mix adjustments: Mastering suite (before)"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span3"><%= link_to image_tag("tutorial/55.png", :title => "Mix adjustments: Mastering suite with Punch enabled"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
+    <li class="span3"><%= link_to image_tag("tutorial/56.png", :title => "Mix adjustments: Maximizer gain increased"), "javascript:;", :class => "thumbnail", :"data-lightbox" => true %></li>
   </ul>
 
   <p>
     After making the final adjustments, I exported my Reason song as a WAV file and opened it in Audacity alongside an instrumental version of the original beat.  Through visual comparison between the Zion I track and my remake, you can see I was able to get a pretty close match to the original beat.  Everything sounded good so I'm finished!
   </p>
-  <%= image_tag "tutorial/57.png", :title => "Original beat (top) and my remake (bottom) side by side in Audacity" %>
+  <%= link_to image_tag("tutorial/57.png", :title => "Original beat (top) and my remake (bottom) side by side in Audacity"), "javascript:;", :"data-lightbox" => true %>
   
   <p>
     Thank you for reading/watching this tutorial!
@@ -505,4 +504,11 @@
   <p>
     - DJ Costanza
   </p>
+</div>
+
+<div id="tutorial-lightbox" class="lightbox hide fade"  tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="lightbox-content">
+    <img class="lightbox-image" />
+    <div class="lightbox-caption"></div>
+  </div>
 </div>

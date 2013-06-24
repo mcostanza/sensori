@@ -146,7 +146,10 @@
 			$image,
 			preloader,
 			originalWidth,
-			originalHeight;
+			originalHeight,
+			captionHeight,
+			captionPadTop,
+			captionPadBottom;
 		// Get the window width and height.
 		windowHeight = $(window).height();
 		windowWidth  = $(window).width();
@@ -156,6 +159,11 @@
 		padBottom = parseInt( that.$element.find('.lightbox-content').css('padding-bottom') , 10);
 		padLeft   = parseInt( that.$element.find('.lightbox-content').css('padding-left')   , 10);
 		padRight  = parseInt( that.$element.find('.lightbox-content').css('padding-right')  , 10);
+
+		// Get the caption height
+		that.$element.show();
+		captionHeight    = parseFloat(that.$element.find(".lightbox-caption").outerHeight());
+		that.$element.hide();
 
 		// Load the image, we have to do this because if the image isn't already loaded we get a bad size
 		$image    = that.$element.find('.lightbox-content').find('img:first');
@@ -186,15 +194,17 @@
 			that.$element.css({
 				'position': 'fixed',
 				'width': preloader.width + padLeft + padRight,
-				'height': preloader.height + padTop + padBottom,
+				'height': preloader.height + padTop + padBottom + captionHeight + captionPadTop + captionPadBottom,
 				'top' : (windowHeight / 2) - ( (preloader.height + padTop + padBottom) / 2),
 				'left' : '50%',
 				'margin-left' : -1 * (preloader.width + padLeft + padRight) / 2
 			});
 			that.$element.find('.lightbox-content').css({
 				'width': preloader.width,
-				'height': preloader.height
+				'height': preloader.height + captionHeight + captionPadTop + captionPadBottom
 			});
+
+			console.log("what it do", captionHeight, captionPadTop, captionPadBottom);
 
 			// We have everything sized!
 			callbacks.fire();
