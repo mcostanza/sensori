@@ -125,7 +125,7 @@
   </p>
 
   <p>
-    Next I’m going to add a groove template to clean up any inconsistencies with my playing.  I set each note lane to use Groove Mixer Channel A1, and load an MPC-3000 52% Swing template onto that channel.  These groove templates don't come with Reason, they were created by a guy named <%= link_to "Peff", "http://www.peff.com/", :target => "_blank" %>.  They're very useful for hip-hop style beats and I definitely recommend them (<%= link_to "download them here!", "http://www.peff.com/journal/?p=295", :target => "_blank" %>).  The swing percentage is a value between 50-75%, and it affects the timing of the off-beat 16th notes (in this beat the kicks and open hi-hats).  At 50% all 16th notes are evenly spaced, and I chose the 52% template because the 16th notes in the Zion I beat are very close to evenly spaced.
+    Next I’m going to add a groove template to clean up any inconsistencies with my playing.  I set each note lane to use Groove Mixer Channel A1, and loaded an MPC-3000 52% Swing template onto that channel.  These MPC groove templates don't come with Reason, they were created by a guy named Peff to recreate the timing of an <%= link_to "MPC-3000", "http://www.vintagesynth.com/akai/mpc3000.php" %>.  They're very useful for hip-hop style beats and I definitely recommend them (<%= link_to "download them here!", "http://www.peff.com/journal/?p=295", :target => "_blank" %>).  The swing percentage is a value between 50-75%, and it affects the timing of the off-beat 16th notes (in this beat the kicks and open hi-hats).  At 50% all 16th notes are evenly spaced, and I chose the 52% template because the 16th notes in the Zion I beat are very close to evenly spaced.
   </p>
 
   <p>
@@ -210,7 +210,7 @@
   </ul>
 
   <p>
-    Right now if I play these samples they're going to overlap.  This is not what I want, instead I want the samples set up so I can only play one at a time -- in other words, if I play one sample and then a second before the first finishes, the first sample should be cut off and I should only hear the second sample being played.
+    Right now if I play multiple samples they're going to overlap.  This is not what I want, instead I want the samples set up so I can only play one at a time -- in other words, if I play one sample and then a second before the first finishes, the first sample should be cut off and I should only hear the second sample being played.
   </p>
 
   <p>
@@ -248,7 +248,7 @@
   </p>
 
   <p>
-    The intro and outro patterns both end with the sample currently on pad 8 (loop-1.rx2 [7]).  The intro and outro need a short, gradual release that fades out, but the rest of the song would still be easier to play with a long release that does not fade out.  I still had one open pad out of the 16 pads on bank A, so I made a copy of the sample playing on pad 8.  Then I moved the zones that were originally on pads 9-15 up one note each to pads 10-16.  I moved the copy of pad 8 to pad 9, and decreased the Amp Envelope Release to 1.27 seconds.
+    The intro and outro patterns both end with the sample currently on pad 8 (loop-1.rx2 [7]).  The intro and outro need a short, gradual release that fades out, but the rest of the song would still be easier to play with a long release that does not fade out.  I still had one open pad out of the 16 pads on bank A, so I made a copy of the sample playing on pad 8.  Then I moved the zones that were originally on pads 9-15 up one note each to pads 10-16.  I moved the copy of pad 8 to pad 9, and decreased the Amp Envelope Release from 149 seconds to 1.27 seconds.
   </p>
 
   <ul class="thumbnails">
@@ -257,7 +257,7 @@
   </ul>
 
   <p>
-    Sometimes when you chop samples you can hear a pop or click right at the beginning. You can get rid of this by increasing the Amp Envelope Attack a bit so the sample fades in briefly instead of immediately playing at full volume (side note: Apollo Brown uses a similar technique <%= link_to "to great effect", "http://mellomusicgroup.bandcamp.com/track/options", :target => "_blank" %> <%= link_to "in a lot of", "http://mellomusicgroup.bandcamp.com/track/the-11th-hour", :target => "_blank" %> <%= link_to "his beats", "http://mellomusicgroup.bandcamp.com/track/never-in-a-million-years", :target => "_blank" %>).  I'm going to increase the Amp Envelope Attack on the orchestra samples from 0 to 34 milliseconds, just enough time so you'll be able to hear the samples fade in a little.
+    Sometimes when you replay chopped samples you can hear a pop or click right at the beginning. You can get rid of this by increasing the Amp Envelope Attack a bit so the sample fades in briefly instead of immediately playing at full volume (side note: Apollo Brown uses a similar technique <%= link_to "to great effect", "http://mellomusicgroup.bandcamp.com/track/options", :target => "_blank" %> <%= link_to "in a lot of", "http://mellomusicgroup.bandcamp.com/track/the-11th-hour", :target => "_blank" %> <%= link_to "his beats", "http://mellomusicgroup.bandcamp.com/track/never-in-a-million-years", :target => "_blank" %>).  I'm going to increase the Amp Envelope Attack on the orchestra samples from 0 to 34 milliseconds, just enough time so you'll be able to hear the samples fade in a little.
   </p>
 
   <%= link_to image_tag("tutorial/22.png", :title => "Increasing Amp Envelope Attack for all the orchestra samples from 0 to 34 millseconds"), "javascript:;", :"data-lightbox" => true %>
@@ -360,13 +360,13 @@
       I set the Pitch parameter to a negative value which means the sample will start playing at its original pitch, and as the LFO1 waveform increases the sample pitch will decrease.
     </li>
     <li>
-      I changed the waveform shape to the second option which is called "inverted sawtooth".  This waveform starts at its low value and increases at a linear rate until the end of the cycle when it reaches its high value (and when the second cycle starts it starts again from the low value).
+      I changed the waveform shape to the second option which is called "inverted sawtooth".  This waveform starts at its low value and increases at a linear rate until the end of the cycle when it reaches its high value (and when the second cycle starts it goes back to the low value).
     </li>
     <li>
       I enabled Key Sync, which means the waveform will always reset to the beginning when I play this sample.
     </li>
     <li>
-      I changed the LFO-1 waveform frequency, and because my hi-hat is a short sample I need this to be a high value, otherwise you won’t be able to hear any change while it plays.  I picked a tempo-synced 16th note.
+      I changed the LFO-1 waveform frequency, and because my hi-hat is a short sample this needs to be a high value, otherwise you won’t be able to hear any change while it plays.  I picked a tempo-synced 16th note.
     </li>
     <li>
       I added a slight delay so the LFO isn’t triggered immediately.
@@ -410,7 +410,7 @@
   </ul>
 
   <p>
-    Velocity is basically how hard you press a pad or key, so generally on a real instrument like a piano the more velocity you use the louder it plays.  On virtual instruments like the NN-XT, increased velocity can mean loudness, but it can also control other things like filter frequency (by default it does nothing).
+    Velocity is basically how hard you press a pad or key, so generally on a real instrument like a piano the more velocity you use the louder it plays.  On virtual instruments like the NN-XT, velocity can mean loudness, but it can also control other parameters like filter frequency (by default it does nothing).
   </p>
 
   <p>
