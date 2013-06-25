@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130615152706) do
+ActiveRecord::Schema.define(:version => 20130625010610) do
 
   create_table "members", :force => true do |t|
     t.integer  "soundcloud_id"
@@ -48,6 +48,18 @@ ActiveRecord::Schema.define(:version => 20130615152706) do
   add_index "tracks", ["member_id"], :name => "tracks_member_id_fk"
   add_index "tracks", ["posted_at"], :name => "index_tracks_on_posted_at"
   add_index "tracks", ["soundcloud_id"], :name => "index_tracks_on_soundcloud_id"
+
+  create_table "tutorials", :force => true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.text     "body"
+    t.string   "slug"
+    t.integer  "member_id"
+    t.string   "video_url"
+    t.string   "attachment_url"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
 
   add_foreign_key "tracks", "members", :name => "tracks_member_id_fk"
 
