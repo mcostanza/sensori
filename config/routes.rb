@@ -1,5 +1,9 @@
 Sensori::Application.routes.draw do
 
+  resources :discussions do
+    post 'respond', :on => :member
+  end
+
   match "beats" => "tracks#index", :via => "get"
 
   get "members/sign_in"

@@ -33,6 +33,17 @@ class Member < ActiveRecord::Base
     end
   end
 
+  def image(size = :large)
+    case size
+    when :small
+      image_url.gsub("t500x500", "t50x50")
+    when :medium
+      image_url.gsub("t500x500", "large")
+    else
+      image_url
+    end
+  end
+
   def self.sync_from_soundcloud(access_token)
     return unless access_token.present?
     soundcloud_profile = ::Soundcloud.new(:access_token => access_token).get("/me")

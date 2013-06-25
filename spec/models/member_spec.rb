@@ -205,4 +205,21 @@ describe Member do
     end
   end
 
+  describe "#image(size = :large)" do
+    it "should return the large image by default" do
+      @member.image.should == @member.image_url    
+    end
+    it "should allow passing a :large option" do
+      @member.image(:large).should == @member.image_url
+    end
+    it "should allow passing a :small option" do
+      @member.image(:small).should == @member.image_url.gsub('t500x500', 't50x50')
+    end
+    it "should allow passing a :medium option" do
+      @member.image(:medium).should == @member.image_url.gsub('t500x500', 'large')
+    end
+    it "should default to large when an unknown size is passed" do
+      @member.image(:unknown).should == @member.image_url
+    end
+  end
 end

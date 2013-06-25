@@ -16,7 +16,15 @@
           <li><a href="/about">About</a></li>
         </ul>
         <% if signed_in? %>
-          <%= link_to image_tag("http://connect.soundcloud.com/2/btn-disconnect-m.png", :class => "soundcloud-connect pull-right"), members_sign_out_path %>
+          <div class="member-header dropdown pull-right">
+            <a href="#" id="member-header-link" data-toggle="dropdown">
+              <%= image_tag(@member.image(:small)) %>
+              <span><%= @member.name %></span>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="member-header-link">
+              <li><%= link_to "Log Out", members_sign_out_path %></li>
+            </ul>
+          </div>
         <% else %>
           <%= link_to image_tag("http://connect.soundcloud.com/2/btn-connect-m.png", :class => 'soundcloud-connect pull-right'), members_sign_in_path %>
         <% end %>

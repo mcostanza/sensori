@@ -1,0 +1,17 @@
+<h3>Discussions</h3>
+<% @discussions.each do |discussion| %>
+  <div class="media discussion-preview">
+    <a class="pull-left" href="#">
+      <%= image_tag discussion.member.image(:small), :alt => discussion.member.name, :class => "media-object" %>
+    </a>
+    <div class="media-body">
+      <h5 class="media-heading"><%= discussion.subject %></h5>
+      <%= truncate(discussion.body, :length => 100) %><%= link_to "Join discussion", discussion, :class => "pull-right" %>
+    </div>
+  </div>
+<% end %>
+<div class="pagination pagination-right"><%= paginate @discussions %></div>
+<br />
+<% if signed_in? %>
+<%= link_to 'New discussion', new_discussion_path %>
+<% end %>
