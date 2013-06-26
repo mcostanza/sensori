@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130619032842) do
+ActiveRecord::Schema.define(:version => 20130626053508) do
 
   create_table "discussions", :force => true do |t|
     t.string   "subject",                         :null => false
@@ -58,6 +58,21 @@ ActiveRecord::Schema.define(:version => 20130619032842) do
   add_index "responses", ["discussion_id"], :name => "responses_discussion_id_fk"
   add_index "responses", ["member_id"], :name => "responses_member_id_fk"
 
+  create_table "sessions", :force => true do |t|
+    t.string   "title",             :null => false
+    t.text     "description",       :null => false
+    t.string   "image",             :null => false
+    t.datetime "end_date",          :null => false
+    t.string   "facebook_event_id"
+    t.string   "attachment"
+    t.string   "slug",              :null => false
+    t.integer  "member_id",         :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  add_index "sessions", ["member_id"], :name => "sessions_member_id_fk"
+
   create_table "tracks", :force => true do |t|
     t.integer  "soundcloud_id", :null => false
     t.integer  "member_id",     :null => false
@@ -78,6 +93,8 @@ ActiveRecord::Schema.define(:version => 20130619032842) do
 
   add_foreign_key "responses", "discussions", :name => "responses_discussion_id_fk"
   add_foreign_key "responses", "members", :name => "responses_member_id_fk"
+
+  add_foreign_key "sessions", "members", :name => "sessions_member_id_fk"
 
   add_foreign_key "tracks", "members", :name => "tracks_member_id_fk"
 

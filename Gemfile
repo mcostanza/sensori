@@ -61,3 +61,12 @@ gem "friendly_id", "~> 4.0.9"
 
 # AutoHTML plugin for html formatting discussions, responses, etc
 gem "auto_html"
+
+# File uploads (including s3)
+gem "carrierwave"
+
+# Image processing
+gem "rmagick"
+
+# S3 file uploads
+gem "fog"

@@ -1,0 +1,16 @@
+<%= form_for(@session, :html => { :multipart => true }) do |f| %>
+  <%= f.label :title %>
+  <%= f.text_field :title, :placeholder => "Title", :class => 'span6' %>
+  <%= f.label :description %>
+  <%= f.text_area :description, :placeholder => "Description", :rows => 10, :class => 'span6' %>
+  <%= f.label :image %>
+  <%= f.file_field :image %>
+  <%= f.label :facebook_event_id %>
+  <%= f.text_field :facebook_event_id, :placeholder => "Facebook Event ID", :class => 'span6' %>
+  <%= f.label :end_date %>
+  <%= f.date_select :end_date, {} , { :class => "span2" } %>
+  <%= f.label :attachment %>
+  <%= f.file_field :attachment %>
+  <button type="submit" class="btn btn-primary clearfix">Post</button>
+<% end %>
+

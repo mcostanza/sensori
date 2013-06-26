@@ -1,0 +1,6 @@
+<h3>Session</h3>
+<%= image_tag @session.image %>
+<%= @session.title %>
+<%= @session.description %>
+<%= link_to('Download', @session.attachment_url) if @session.attachment? %>
+<%= link_to 'Back', sessions_path %>

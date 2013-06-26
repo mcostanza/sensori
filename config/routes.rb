@@ -1,5 +1,7 @@
 Sensori::Application.routes.draw do
 
+  resources :sessions
+
   resources :discussions do
     post 'respond', :on => :member
   end
