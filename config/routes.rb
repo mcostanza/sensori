@@ -1,5 +1,7 @@
 Sensori::Application.routes.draw do
 
+  resources :tutorials, :except => :destroy
+  
   resources :discussions do
     post 'respond', :on => :member
   end
