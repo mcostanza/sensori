@@ -25,4 +25,8 @@ class ApplicationController < ActionController::Base
     redirect_to root_path unless signed_out?
   end
 
+  def ensure_admin
+    redirect_to root_path unless @member && @member.admin?
+  end
+
 end

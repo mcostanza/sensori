@@ -66,4 +66,21 @@ describe ApplicationController do
       controller.ensure_signed_out
     end
   end
+
+  describe "#ensure_admin" do
+    it "should redirect to the root path if @member is nil" do
+      controller.should_receive(:redirect_to).with(root_path)
+      controller.ensure_admin
+    end
+    it "should redirect to the root path if @member is set but not an admin" do
+      controller.instance_variable_set(:@member, mock(Member, :admin? => false))
+      controller.should_receive(:redirect_to).with(root_path)
+      controller.ensure_admin
+    end
+    it "should not redirect if @member is set to an admin" do
+      controller.instance_variable_set(:@member, mock(Member, :admin? => true))
+      controller.should_not_receive(:redirect_to)
+      controller.ensure_admin
+    end
+  end
 end
