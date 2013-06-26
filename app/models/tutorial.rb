@@ -3,7 +3,7 @@ class Tutorial < ActiveRecord::Base
 
   default_scope order('created_at DESC')
   
-  attr_accessible :attachment_url, :body, :description, :member_id, :slug, :title, :video_url
+  attr_accessible :attachment_url, :body, :description, :member_id, :member, :slug, :title, :video_url
 
   belongs_to :member
 

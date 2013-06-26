@@ -1,19 +1,39 @@
 // Place all the styles related to the tutorials controller here.
 // They will automatically be included in application.css.
 // You can use Less here: http://lesscss.org/
-.tutorial {
-  color: #000000;
-  font-family: arial;
-  text-transform: none;
-  background-color: #fff;
-  border-radius: 5px;
-  background-color: #fff;
+@font: arial;
 
-  img {
-    margin-bottom: 10px;
-    border: 1px solid #e3e3e3;
+.tutorials {
+
+  h3, h4, h5, h6 {
+    font-family: @font;
+    text-transform: none;
   }
 
+  .tutorial {
+    color: #000000;
+    font-family: @font;
+    text-transform: none;
+    background-color: #fff;
+    border-radius: 5px;
+    background-color: #fff;
+
+    img {
+      margin-bottom: 10px;
+      border: 1px solid #e3e3e3;
+    }
+
+  }
+
+  form {
+    textarea, input[type='text'] {
+      width: 100%; margin: auto;
+    }
+
+    .field {
+      margin-bottom: 10px;
+    }
+  }
 }
 
 #tutorial-lightbox {
