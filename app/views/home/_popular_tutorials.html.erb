@@ -1,0 +1,16 @@
+<div class="row">
+  <div class="span12">
+    <h3>Popular Tutorials</h3>
+    <ul class="thumbnails">
+      <% tutorials.each do |tutorial| %>
+        <li class="span4">
+          <div class="thumbnail">
+            <%= content_tag :iframe, nil, :type => "text/html", :width => "360", :height => "270", :src => tutorial.video_url, :frameborder => "0" %>
+            <p><%= link_to tutorial.description, tutorial %></p>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+    <%= link_to "View more...", tutorials_path, :class => "pull-right" %>
+  </div>
+</div>

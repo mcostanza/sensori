@@ -5,13 +5,13 @@ class HomeController < ApplicationController
 
   def index
     @latest_tracks = Track.includes(:member).latest(4)
+    @tutorials = Tutorial.includes(:member).limit(3)
   end
 
   def contact_us
   end
 
   def tutorial
-    
   end
 
   def send_feedback

@@ -1,35 +1,14 @@
-<h1>Listing tutorials</h1>
+<h3>Tutorials</h3>
 
-<table>
-  <tr>
-    <th>Title</th>
-    <th>Description</th>
-    <th>Body</th>
-    <th>Slug</th>
-    <th>Member</th>
-    <th>Video url</th>
-    <th>Attachment url</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+<ul class="thumbnails tutorials">
+  <% @tutorials.each do |tutorial| %>
+    <li class="span4">
+      <div class="thumbnail">
+        <%= content_tag :iframe, nil, :type => "text/html", :width => "360", :height => "270", :src => tutorial.video_url, :frameborder => "0" %>
+        <p><%= link_to tutorial.description, tutorial %></p>
+      </div>
+    </li>
+  <% end %>
+</ul>
 
-<% @tutorials.each do |tutorial| %>
-  <tr>
-    <td><%= tutorial.title %></td>
-    <td><%= tutorial.description %></td>
-    <td><%= tutorial.body %></td>
-    <td><%= tutorial.slug %></td>
-    <td><%= tutorial.member_id %></td>
-    <td><%= tutorial.video_url %></td>
-    <td><%= tutorial.attachment_url %></td>
-    <td><%= link_to 'Show', tutorial %></td>
-    <td><%= link_to 'Edit', edit_tutorial_path(tutorial) %></td>
-    <td><%= link_to 'Destroy', tutorial, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
-<% end %>
-</table>
-
-<br />
-
-<%= link_to 'New Tutorial', new_tutorial_path %>
+<div class="pagination pagination-right"><%= paginate @tutorials %></div>

@@ -27,9 +27,5 @@ describe TutorialsController do
       put("/tutorials/1").should route_to("tutorials#update", :id => "1")
     end
 
-    it "routes to #destroy" do
-      delete("/tutorials/1").should route_to("tutorials#destroy", :id => "1")
-    end
-
   end
 end

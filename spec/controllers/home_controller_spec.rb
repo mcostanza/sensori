@@ -5,8 +5,12 @@ describe HomeController do
   describe "GET 'index'" do
     before(:each) do
       @track = mock(Track)
-      @scope = mock('tracks with members', :latest => [@track])
-      Track.stub!(:includes).and_return(@scope)
+      @tracks_scope = mock('tracks with members', :latest => [@track])
+      Track.stub!(:includes).and_return(@tracks_scope)
+
+      @tutorial = mock(Tutorial)
+      @tutorials_scope = mock('tutorials with members', :limit => [@track])
+      Tutorial.stub!(:includes).and_return(@tutorials_scope)
     end
     it "should return http success" do
       get 'index'
@@ -17,8 +21,14 @@ describe HomeController do
       response.should render_template('home/index')
     end
     it "should load the latest 4 tracks with member association and assign to @latest_tracks" do
-      Track.should_receive(:includes).with(:member).and_return(@scope)
-      @scope.should_receive(:latest).with(4).and_return([@track])
+      Track.should_receive(:includes).with(:member).and_return(@tracks_scope)
+      @tracks_scope.should_receive(:latest).with(4).and_return([@track])
+      get 'index'
+      assigns[:latest_tracks].should == [@track]
+    end
+    it "should load the latest 3 tutorials with member association and assign to @tutorials" do
+      Tutorial.should_receive(:includes).with(:member).and_return(@tutorials_scope)
+      @tutorials_scope.should_receive(:limit).with(3).and_return([@tutorial])
       get 'index'
       assigns[:latest_tracks].should == [@track]
     end
