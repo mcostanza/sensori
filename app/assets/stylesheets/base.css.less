@@ -1,0 +1,132 @@
+@import "twitter/bootstrap/variables";
+@import "twitter/bootstrap/mixins";
+
+@font-face {
+	font-family: 'Orator';
+	src: url('/assets/oratorstd-webfont.woff');
+}
+
+h1, h2, h3, h4, h6 {
+  font-family: 'Orator';
+  text-transform: uppercase;
+}
+
+body {
+	width: 100%;
+	height: 100%;
+  background:image-url('text-transparent-bg.png') repeat scroll 0 0 transparent;
+	margin: 0;
+	padding: 0;
+	color: #000; 
+}
+
+.join-message {
+  font-size:18px;
+  text-align: center;
+  .soundcloud-connect {
+    margin-left: 10px;
+  }
+
+  @media (max-width: 767px) {
+    .soundcloud-connect {
+      margin-top: 5px;
+    }
+  }
+}
+
+.navbar {
+  .brand, .nav {
+    font-family: 'Orator';
+    text-transform: uppercase;
+  }
+  .navbar-inner {
+    .border-radius(0px 0px 4px 4px);
+  }
+  
+  .soundcloud-connect {
+    margin-top: 7px;
+  }
+
+  .member-header {
+    padding: 10px 0px 0px 0px;
+    > a {
+      color: #999999;
+      font-family: 'Orator';
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    }
+    > a:hover {
+      color: #ffffff;
+      text-decoration: none;
+    }
+    > a:focus {
+      color: #ffffff;
+      outline: none;
+      text-decoration: none;
+    }
+    span {
+      display: inline-block;
+      text-transform: none;
+      line-height: 25px;
+    }
+    img {
+      width: 25px;
+      height: 25px;
+    }
+  }
+}
+
+.thumbnails {
+  margin-bottom: 0px;
+
+  li {
+    margin-bottom: 5px;
+  }
+
+  .thumbnail {
+    background-color: #fff;
+
+    p {
+      margin-top: 10px;
+      margin-left: 5px;
+    }
+  }
+
+  .thumbnail > a > img {
+    display: block;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.media, .media .media {
+  margin-top: 0px;
+
+  .media-body {
+    padding-right:15px;
+  }
+}
+
+
+@media (max-width: 979px) {
+  .navbar {
+    .soundcloud-connect {
+      float: left;
+      margin: 0px 0px 15px 15px;
+    }
+    .member-header {
+      float: left;
+      padding: 0px 0px 10px 15px;
+    }
+    .nav-collapse .dropdown-menu a {
+      font-family: 'Orator';
+      text-transform: uppercase;
+    }
+  }
+}
+
+#footer {
+  background-color: #000;
+  margin-top: 30px;
+  padding: 20px 0px;
+}

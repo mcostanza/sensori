@@ -13,6 +13,19 @@
 
 ActiveRecord::Schema.define(:version => 20130625010610) do
 
+  create_table "discussions", :force => true do |t|
+    t.string   "subject",                         :null => false
+    t.text     "body",                            :null => false
+    t.text     "body_html",                       :null => false
+    t.string   "slug",                            :null => false
+    t.integer  "member_id",                       :null => false
+    t.boolean  "members_only", :default => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+  end
+
+  add_index "discussions", ["member_id"], :name => "discussions_member_id_fk"
+
   create_table "members", :force => true do |t|
     t.integer  "soundcloud_id"
     t.string   "name",                                       :null => false
@@ -32,6 +45,18 @@ ActiveRecord::Schema.define(:version => 20130625010610) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "responses", :force => true do |t|
+    t.integer  "discussion_id", :null => false
+    t.text     "body",          :null => false
+    t.text     "body_html",     :null => false
+    t.integer  "member_id",     :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "responses", ["discussion_id"], :name => "responses_discussion_id_fk"
+  add_index "responses", ["member_id"], :name => "responses_member_id_fk"
 
   create_table "tracks", :force => true do |t|
     t.integer  "soundcloud_id", :null => false
@@ -60,6 +85,11 @@ ActiveRecord::Schema.define(:version => 20130625010610) do
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
   end
+
+  add_foreign_key "discussions", "members", :name => "discussions_member_id_fk"
+
+  add_foreign_key "responses", "discussions", :name => "responses_discussion_id_fk"
+  add_foreign_key "responses", "members", :name => "responses_member_id_fk"
 
   add_foreign_key "tracks", "members", :name => "tracks_member_id_fk"
 

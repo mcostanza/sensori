@@ -12,7 +12,7 @@ FactoryGirl.define do
       "jones-#{n}"
     end
 
-    image_url "http://images.com/me.png"
+    image_url "http://images.com/t500x500.png"
     
     admin false
 

@@ -55,3 +55,9 @@ gem "foreigner"
 
 # pagination
 gem "kaminari"
+
+# FriendlyId for slug lookups
+gem "friendly_id", "~> 4.0.9"
+
+# AutoHTML plugin for html formatting discussions, responses, etc
+gem "auto_html"

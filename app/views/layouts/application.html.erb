@@ -7,7 +7,7 @@
   <%= javascript_include_tag "application" %>
   <script src="//connect.soundcloud.com/sdk.js"></script>
   <script>
-    SC.initialize({ client_id: "<%= Sensori::Soundcloud.client_id %>" });
+    SC.initialize(<%= { :client_id => Sensori::Soundcloud.client_id }.to_json.html_safe %>);
   </script>
   
   <%= csrf_meta_tags %>
@@ -16,9 +16,8 @@
   <%= content_tag :body, :class => controller.controller_name do %>
     <%= render 'shared/navbar' %>
     <div class="container">
-      <% if signed_in? %>
-        <div>You're signed in as <strong><%= @member.name %></strong></div>
-      <% else %>
+      <%= render 'layouts/messages' %>
+      <% if signed_out? %>
         <%= render 'shared/join_message' %>
       <% end %>
       <%= yield %>
