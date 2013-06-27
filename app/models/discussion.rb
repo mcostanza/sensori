@@ -2,7 +2,7 @@ class Discussion < ActiveRecord::Base
   extend FriendlyId
 
   attr_accessible :subject, :body, :member_id, :members_only
-  default_scope order('created_at DESC')
+  default_scope order('id DESC')
 
   belongs_to :member
   has_many :responses

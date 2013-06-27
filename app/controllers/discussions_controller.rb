@@ -23,9 +23,9 @@ class DiscussionsController < ApplicationController
     @discussion = Discussion.new(params[:discussion].merge(:member_id => @member.id))
 
     if @discussion.save
-      redirect_to @discussion, notice: 'Discussion was successfully created.'
+      redirect_to @discussion, :notice => 'Discussion was successfully created.'
     else
-      render action: "new"
+      render :action => "new"
     end
   end
 
