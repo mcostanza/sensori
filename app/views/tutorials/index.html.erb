@@ -3,10 +3,12 @@
 <ul class="thumbnails tutorials">
   <% @tutorials.each do |tutorial| %>
     <li class="span4">
+      <%= link_to tutorial do %>
       <div class="thumbnail">
-        <%= content_tag :iframe, nil, :type => "text/html", :width => "360", :height => "270", :src => tutorial.video_url, :frameborder => "0" %>
-        <p><%= link_to tutorial.description, tutorial %></p>
+        <%= image_tag tutorial.youtube_image_url %>
+        <p><%= tutorial.description %></p>
       </div>
+      <% end %>
     </li>
   <% end %>
 </ul>
