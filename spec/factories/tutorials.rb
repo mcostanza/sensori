@@ -17,8 +17,8 @@ FactoryGirl.define do
 
     association :member
 
-    sequence :video_url do |n|
-      "http://youtube.com/sensoricollective-tutorial-#{n}"
+    sequence :youtube_id do |n|
+      "youtube-#{n}"
     end
 
     sequence :attachment_url do |n|
