@@ -7,7 +7,7 @@ class CreateTutorials < ActiveRecord::Migration
       t.string :slug
       t.integer :member_id
       t.string :youtube_id
-      t.string :attachment_url
+      t.string :attachment
 
       t.timestamps
     end

@@ -211,7 +211,7 @@ describe TutorialsController do
         :title => "Tutorial",
         :description => "Show u how to do this",
         :body => "lots of text with some html",
-        :attachment_url => "http://s3.amazon.com/tutorial.zip",
+        :attachment => 'uploaded file',
         :video_url => "http://www.youtube.com/tutorial"
       }
       @tutorial = Tutorial.new

@@ -21,8 +21,7 @@ FactoryGirl.define do
       "youtube-#{n}"
     end
 
-    sequence :attachment_url do |n|
-      "http://s3.aws.com/sensoricollective-#{n}.zip"
-    end
+    attachment { fixture_file_upload(Rails.root.join('spec/data/beat-kit.zip'), 'application/zip') }
+
   end
 end

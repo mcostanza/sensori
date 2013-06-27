@@ -1,4 +1,4 @@
-<%= form_for(@tutorial) do |f| %>
+<%= form_for(@tutorial, :html => { :multipart => true }) do |f| %>
   <% if @tutorial.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@tutorial.errors.count, "error") %> prohibited this tutorial from being saved:</h2>
@@ -34,8 +34,8 @@
     <%= f.text_field :youtube_id %>
   </div>
   <div class="field">
-    <%= f.label :attachment_url %>
-    <%= f.text_field :attachment_url %>
+    <%= f.label :attachment %>
+    <%= f.file_field :attachment %>
   </div>
   <div class="actions">
     <%= f.submit %>

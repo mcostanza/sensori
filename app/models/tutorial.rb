@@ -3,7 +3,7 @@ class Tutorial < ActiveRecord::Base
 
   default_scope order('created_at DESC')
   
-  attr_accessible :attachment_url, :body, :description, :member_id, :member, :slug, :title, :youtube_id
+  attr_accessible :attachment, :body, :description, :member_id, :member, :slug, :title, :youtube_id
 
   belongs_to :member
 
@@ -13,6 +13,8 @@ class Tutorial < ActiveRecord::Base
   validates :body, :presence => true
 
   friendly_id :title, :use => :slugged
+
+  mount_uploader :attachment, FileUploader
 
   def youtube_image_url
     "http://img.youtube.com/vi/#{self.youtube_id}/0.jpg"
