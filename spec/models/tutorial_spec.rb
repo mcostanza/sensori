@@ -31,4 +31,23 @@ describe Tutorial do
     @tutorial.save
     @tutorial.slug.should == @tutorial.title.parameterize
   end
+
+  describe "#youtube_image_url" do
+    it "should return an image url based on self.youtube_id" do
+      @tutorial.youtube_image_url.should == "http://img.youtube.com/vi/#{@tutorial.youtube_id}/0.jpg"
+    end
+  end
+
+  describe "#youtube_embed_url" do
+    it "should return an embed url based on self.youtube_id" do
+      @tutorial.youtube_embed_url.should == "http://www.youtube.com/embed/#{@tutorial.youtube_id}"
+    end
+  end
+
+  describe "#youtube_video_url" do
+    it "should return a video url based on self.youtube_id" do
+      @tutorial.youtube_video_url.should == "http://www.youtube.com/watch?v=#{@tutorial.youtube_id}"
+    end
+  end
+
 end

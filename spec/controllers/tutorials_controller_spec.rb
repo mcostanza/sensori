@@ -102,7 +102,7 @@ describe TutorialsController do
         :description => "Show u how to do this",
         :body => "lots of text with some html",
         :attachment_url => "http://s3.amazon.com/tutorial.zip",
-        :video_url => "http://www.youtube.com/tutorial"
+        :youtube_id => "10110"
       }
       @tutorial = Tutorial.new
       @tutorial.stub!(:id).and_return(10)
@@ -211,7 +211,7 @@ describe TutorialsController do
         :title => "Tutorial",
         :description => "Show u how to do this",
         :body => "lots of text with some html",
-        :attachment_url => "http://s3.amazon.com/tutorial.zip",
+        :attachment => 'uploaded file',
         :video_url => "http://www.youtube.com/tutorial"
       }
       @tutorial = Tutorial.new

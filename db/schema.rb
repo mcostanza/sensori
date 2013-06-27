@@ -95,10 +95,10 @@ ActiveRecord::Schema.define(:version => 20130626053508) do
     t.text     "body"
     t.string   "slug"
     t.integer  "member_id"
-    t.string   "video_url"
-    t.string   "attachment_url"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.string   "youtube_id"
+    t.string   "attachment"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   add_foreign_key "discussions", "members", :name => "discussions_member_id_fk"
