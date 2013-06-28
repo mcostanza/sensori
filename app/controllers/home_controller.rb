@@ -1,8 +1,4 @@
 class HomeController < ApplicationController
-  def prelaunch
-    @prelaunch_signup = PrelaunchSignup.new
-  end
-
   def index
     @latest_tracks = Track.includes(:member).latest(4)
     @tutorials = Tutorial.includes(:member).limit(3)

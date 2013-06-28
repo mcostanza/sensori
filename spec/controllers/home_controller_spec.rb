@@ -34,23 +34,6 @@ describe HomeController do
     end
   end
 
-  describe "GET 'prelaunch'" do
-    it "should return http success" do
-      get 'prelaunch'
-      response.should be_success
-    end
-    it "should render the prelaunch template" do
-      get 'prelaunch'
-      response.should render_template("home/prelaunch")
-    end
-    it "should assign @prelaunch_signup to a new PrelaunchSignup model" do
-      get 'prelaunch'
-      prelaunch_signup = assigns[:prelaunch_signup]
-      prelaunch_signup.should be_an_instance_of(PrelaunchSignup)
-      prelaunch_signup.new_record?.should be_true
-    end
-  end
-
   describe "GET 'contact_us'" do
     it "should return http success" do
       get "contact_us"
