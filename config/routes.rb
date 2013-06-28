@@ -23,6 +23,8 @@ Sensori::Application.routes.draw do
   
   get "admin/prelaunch_signups(.:format)" => "admin/prelaunch_signups#index", :defaults => { :format => :csv }, :constraints => { :format => "csv" }
 
+  get '/post/*post_id' => "home#blog_post_redirect", :format => false
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

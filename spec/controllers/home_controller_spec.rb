@@ -107,4 +107,17 @@ describe HomeController do
     end
   end
 
+  describe "GET 'blog_post_redirect'" do
+    before(:each) do
+      @post_id = "53782176895/new-tracks-week-of-june-17th"
+    end
+    it "should be connected as '/post/*'" do
+      assert_generates "post/#{@post_id}", :controller => 'home', :action => 'blog_post_redirect', :post_id => @post_id
+    end
+    it "should redirect to the equivalent post path on blog.sensoricollective.com" do
+      get 'blog_post_redirect', :post_id => @post_id
+      response.should redirect_to(File.join("http://blog.sensoricollective.com/post", @post_id))
+    end
+  end
+
 end
