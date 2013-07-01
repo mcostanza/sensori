@@ -5,6 +5,8 @@ PARAM1=
 PARAM2=
 RAILS_SKIP_MIGRATIONS=false
 BUNDLE_WITHOUT=test:development
+SOUNDCLOUD_CLIENT_ID=fe87bb79a0bcbcb174a3d3fc6224c5
+SOUNDCLOUD_SECRET=812a7cb6360a1fee27997be3cc73e4
 
 [aws:rds:dbinstance]
 DBUser=ebroot
