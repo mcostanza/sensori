@@ -19,5 +19,5 @@ production:
     access_key_id: 'key'
     secret_access_key: 'secret'
   soundcloud:
-    client_id: 494e196d6f6ada1d6259cd7c3d0b9dee
-    secret: fbcc56d453ed700d9bedcdb24e8c58a9
+    client_id: fe87bb79a0bcbcb174a3d3fc6224c59d
+    secret: 812a7cb6360a1fee27997be3cc73e4f6
