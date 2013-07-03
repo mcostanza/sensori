@@ -29,6 +29,7 @@ $.extend(Sensori.Player.prototype, {
   playNext : function() {
     var track = this.tracks[this.current_track.position + 1];
     if(track != undefined) { this.play(track); }
+    else { this.stop(); }
   },
   pause : function() {
     this.current_track.pause();
