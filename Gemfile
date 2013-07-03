@@ -25,6 +25,11 @@ group :test, :development do
   gem 'factory_girl_rails'
 end
 
+group :test do
+  # For testing Sidekiq jobs
+  gem 'test_after_commit'
+end
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
@@ -70,3 +75,6 @@ gem "rmagick"
 
 # S3 file uploads
 gem "fog"
+
+# Background jobs
+gem "sidekiq"
