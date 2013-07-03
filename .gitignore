@@ -16,7 +16,7 @@
 
 
 *.swp
+*.DS_Store
 .rvmrc
-.elasticbeanstalk/
 config/application.yml
 config/database.yml

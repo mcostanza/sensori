@@ -1,0 +1,9 @@
+<li class="span3">
+  <%= content_tag :div, :class => "thumbnail", :data => { :track => track.stream_url, :artist => track.member.name, :title => track.title } do -%>
+    <div class="thumbnail-wrapper">
+      <%= image_tag track.artwork_url %>
+      <a href="javascript:;"></a>
+    </div>
+    <p><strong><%= track.member.name %></strong> - <%= track.title %></p>
+  <% end -%>
+</li>

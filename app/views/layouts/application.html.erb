@@ -24,13 +24,12 @@
     </div>
     <%= render 'shared/footer' %>
     <script type="text/javascript">
-    $("#play-button").click(function() {
-      SC.stream("https://api.soundcloud.com/tracks/89803799/stream", {
-        onbufferchange : function() { console.log(this.isBuffering); }
-      }, function(sound){
-        sound.play();
+      $(function() {
+        new Sensori.Player();
       });
-    });
+      $(window).load(function() {
+        $('.beats li').equalHeights();
+      });
     </script>
 
   <% end %>
