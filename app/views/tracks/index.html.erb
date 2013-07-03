@@ -1,12 +1,7 @@
 <h3>Beats</h3>
 <ul class="thumbnails beats">
   <% @tracks.each do |track| %>
-  <li class="span3">
-    <div class="thumbnail">
-      <%= image_tag track.artwork_url %>
-      <p><strong><%= track.member.name %></strong> - <%= track.title %></p>
-    </div>
-  </li>
+    <%= render :partial => 'shared/track', :object => track %>
   <% end %>
 </ul>
 <div class="pagination pagination-right"><%= paginate @tracks %></div>
