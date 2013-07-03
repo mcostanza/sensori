@@ -41,8 +41,11 @@ GEM
     carrierwave (0.8.0)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
+    celluloid (0.14.1)
+      timers (>= 1.0.0)
     columnize (0.3.6)
     commonjs (0.2.6)
+    connection_pool (1.1.0)
     debugger (1.5.0)
       columnize (>= 0.3.1)
       debugger-linecache (~> 1.2.0)
@@ -141,6 +144,9 @@ GEM
     rdoc (3.12.2)
       json (~> 1.4)
     redcarpet (2.3.0)
+    redis (3.0.4)
+    redis-namespace (1.3.0)
+      redis (~> 3.0.0)
     ref (1.0.4)
     rinku (1.5.1)
     rmagick (2.13.2)
@@ -156,6 +162,12 @@ GEM
       rspec-expectations (~> 2.13.0)
       rspec-mocks (~> 2.13.0)
     ruby-hmac (0.4.0)
+    sidekiq (2.12.4)
+      celluloid (>= 0.14.1)
+      connection_pool (>= 1.0.0)
+      json
+      redis (>= 3.0)
+      redis-namespace
     soundcloud (0.3.1)
       hashie
       httmultiparty (>= 0.3)
@@ -165,11 +177,13 @@ GEM
       multi_json (~> 1.0)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
+    test_after_commit (0.2.0)
     therubyracer (0.11.4)
       libv8 (~> 3.11.8.12)
       ref
     thor (0.18.1)
     tilt (1.3.6)
+    timers (1.1.0)
     treetop (1.4.12)
       polyglot
       polyglot (>= 0.3.1)
@@ -205,7 +219,9 @@ DEPENDENCIES
   rake
   rmagick
   rspec-rails (~> 2.0)
+  sidekiq
   soundcloud
+  test_after_commit
   therubyracer
   uglifier (>= 1.0.3)
   unicorn

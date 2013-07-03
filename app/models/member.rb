@@ -10,6 +10,8 @@ class Member < ActiveRecord::Base
   validates :image_url, :presence => true
   validates :soundcloud_access_token, :presence => true  
 
+  after_commit :sync_soundcloud_tracks_in_background, :on => :create
+
   attr_accessor :soundcloud_tracks
 
   def soundcloud_tracks(reload = false)
@@ -32,6 +34,10 @@ class Member < ActiveRecord::Base
         :posted_at => Time.parse(soundcloud_track.created_at)
       })
     end
+  end
+
+  def sync_soundcloud_tracks_in_background
+    MemberTrackSyncWorker.perform_async(self.id)
   end
 
   def image(size = :large)

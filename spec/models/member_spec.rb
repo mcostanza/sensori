@@ -46,6 +46,15 @@ describe Member do
     end
   end
 
+  describe "callbacks" do
+    describe "after_create" do
+      it "should call sync_soundcloud_tracks_in_background" do
+        @member.should_receive(:sync_soundcloud_tracks_in_background)
+        @member.save
+      end
+    end
+  end
+
   describe "#soundcloud_tracks(reload = false)" do
     before(:each) do
       @track = Hashie::Mash.new(:id => 123)
@@ -155,6 +164,17 @@ describe Member do
       end
     end
   end
+
+  describe "#sync_soundcloud_tracks_in_background" do
+    it "should sync soundcloud tracks in the background" do
+      @member.save
+      MemberTrackSyncWorker.jobs.clear
+      @member.sync_soundcloud_tracks_in_background
+      MemberTrackSyncWorker.jobs.size.should == 1
+      MemberTrackSyncWorker.jobs.first["args"].should == [@member.id]
+    end
+  end
+
 
   describe ".sync_from_soundcloud(access_token)" do
     before(:each) do
