@@ -1,0 +1,17 @@
+#sm start rvm
+PATH="/usr/local/rvm/gems/ruby-1.9.3-p429/bin:/usr/local/rvm/gems/ruby-1.9.3-p429@global/bin:/usr/local/rvm/rubies/ruby-1.9.3-p429/bin:/usr/local/rvm/bin:/usr/local/rvm/gems/ruby-1.9.3-p429/bin:/usr/local/rvm/gems/ruby-1.9.3-p429@global/bin:/usr/local/rvm/rubies/ruby-1.9.3-p429/bin:/usr/local/rvm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+rvm_env_string='ruby-1.9.3-p429'
+rvm_path='/usr/local/rvm'
+rvm_ruby_string='ruby-1.9.3-p429'
+RUBY_VERSION='ruby-1.9.3-p429'
+GEM_HOME='/usr/local/rvm/gems/ruby-1.9.3-p429'
+GEM_PATH='/usr/local/rvm/gems/ruby-1.9.3-p429:/usr/local/rvm/gems/ruby-1.9.3-p429@global'
+MY_RUBY_HOME='/usr/local/rvm/rubies/ruby-1.9.3-p429'
+IRBRC='/usr/local/rvm/rubies/ruby-1.9.3-p429/.irbrc'
+
+# After this runs, run "env - `cat ~/cronenv` /bin/sh" to simulate a cron environment
+# http://stackoverflow.com/questions/2135478
+#*/1 * * * * env > ~/cronenv
+
+# Sync new tracks from Soundcloud every 30 minutes
+*/30 * * * * cd /var/www/sensori && RAILS_ENV=production bundle exec rails runner 'SoundcloudTrackSync.run'
