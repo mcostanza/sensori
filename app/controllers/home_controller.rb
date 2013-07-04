@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
   def index
-    @latest_tracks = Track.includes(:member).latest(4)
+    @latest_tracks = Track.includes(:member).latest.limit(4)
     @tutorials = Tutorial.includes(:member).limit(3)
   end
 

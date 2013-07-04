@@ -5,7 +5,8 @@ describe HomeController do
   describe "GET 'index'" do
     before(:each) do
       @track = mock(Track)
-      @tracks_scope = mock('tracks with members', :latest => [@track])
+      @tracks_scope = mock('tracks with members', :limit => [@track])
+      @tracks_scope.stub!(:latest).and_return(@tracks_scope)
       Track.stub!(:includes).and_return(@tracks_scope)
 
       @tutorial = mock(Tutorial)
@@ -22,7 +23,8 @@ describe HomeController do
     end
     it "should load the latest 4 tracks with member association and assign to @latest_tracks" do
       Track.should_receive(:includes).with(:member).and_return(@tracks_scope)
-      @tracks_scope.should_receive(:latest).with(4).and_return([@track])
+      @tracks_scope.should_receive(:latest).and_return(@tracks_scope)
+      @tracks_scope.should_receive(:limit).with(4).and_return([@track])
       get 'index'
       assigns[:latest_tracks].should == [@track]
     end
