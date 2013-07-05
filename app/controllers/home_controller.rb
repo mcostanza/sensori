@@ -2,6 +2,7 @@ class HomeController < ApplicationController
   def index
     @latest_tracks = Track.includes(:member).latest.limit(4)
     @tutorials = Tutorial.includes(:member).limit(3)
+    @discussions = Discussion.includes(:member).limit(3)
   end
 
   def contact_us
