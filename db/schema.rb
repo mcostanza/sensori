@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130626053508) do
+ActiveRecord::Schema.define(:version => 20130707001325) do
 
   create_table "discussions", :force => true do |t|
     t.string   "subject",                         :null => false
@@ -97,8 +97,9 @@ ActiveRecord::Schema.define(:version => 20130626053508) do
     t.integer  "member_id"
     t.string   "youtube_id"
     t.string   "attachment"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+    t.boolean  "featured",    :default => false
   end
 
   add_foreign_key "discussions", "members", :name => "discussions_member_id_fk"

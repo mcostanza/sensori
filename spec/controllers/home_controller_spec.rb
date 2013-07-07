@@ -57,6 +57,17 @@ describe HomeController do
     end
   end
 
+  describe "GET 'about'" do
+    it "should return http success" do
+      get "about"
+      response.should be_success
+    end
+    it "should render the about template" do
+      get "about"
+      response.should render_template("home/about")
+    end
+  end
+
   describe "POST 'send_feedback'" do
     before(:each) do
       @email = mock('email', :deliver => true)

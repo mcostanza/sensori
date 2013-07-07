@@ -1,7 +1,7 @@
 class Tutorial < ActiveRecord::Base
   extend FriendlyId
 
-  default_scope order('created_at DESC')
+  default_scope order('featured DESC, created_at DESC')
   
   attr_accessible :attachment, :body, :description, :member_id, :member, :slug, :title, :youtube_id
 
