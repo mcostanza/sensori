@@ -1,18 +1,9 @@
-<h3>sessions</h3>
-<% @sessions.each do |session| %>
-  <div class="media session-preview">
-    <a class="pull-left" href="#">
-      <%= image_tag session.image_url, :alt => session.title, :class => "media-object" %>
-    </a>
-    <div class="media-body">
-      <h5 class="media-heading"><%= session.title %></h5>
-      <%= truncate(session.description, :length => 100) %><%= link_to "View session", session, :class => "pull-right" %>
-    </div>
-  </div>
-<% end %>
-<div class="pagination pagination-right"><%= paginate @sessions %></div>
-<br />
-<% if signed_in? %>
-<%= link_to 'New session', new_session_path %>
-<% end %>
+<h3>Sessions</h3>
 
+<ul class="thumbnails sessions">
+  <% @sessions.each do |session| %>
+    <%= render :partial => 'shared/session', :object => session %>
+  <% end %>
+</ul>
+
+<div class="pagination pagination-right"><%= paginate @sessions %></div>

@@ -3,14 +3,7 @@
     <h3>Popular Tutorials</h3>
     <ul class="thumbnails">
       <% tutorials.each do |tutorial| %>
-        <li class="span4">
-          <%= link_to tutorial do %>
-            <div class="thumbnail">
-              <%= image_tag tutorial.youtube_image_url %>
-              <p><%= link_to tutorial.description, tutorial %></p>
-            </div>
-          <% end %>
-        </li>
+        <%= render :partial => 'shared/tutorial', :object => tutorial %>
       <% end %>
     </ul>
     <%= link_to "View more...", tutorials_path, :class => "pull-right" %>

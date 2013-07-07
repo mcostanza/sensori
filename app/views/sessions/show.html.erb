@@ -1,6 +1,10 @@
-<h3>Session</h3>
-<%= image_tag @session.image %>
-<%= @session.title %>
-<%= @session.description %>
-<%= link_to('Download', @session.attachment_url) if @session.attachment? %>
-<%= link_to 'Back', sessions_path %>
+<div class="row">
+  <div class="span8">
+    <%= image_tag @session.image_url %>
+  </div>
+  <div class="span4">
+    <h3><%= @session.title %></h3>
+    <p><%= simple_format(@session.description) %></p>
+    <%= link_to("Download", @session.attachment_url, :class => "btn btn-primary") if @session.attachment? %>
+  </div>
+</div>
