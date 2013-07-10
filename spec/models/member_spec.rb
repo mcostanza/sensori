@@ -245,4 +245,10 @@ describe Member do
       @member.image(:unknown).should == @member.image_url
     end
   end
+
+  describe "#profile_url" do
+    it "should return the member's soundcloud profile url" do
+      @member.profile_url.should == File.join("https://soundcloud.com", @member.slug)
+    end
+  end
 end

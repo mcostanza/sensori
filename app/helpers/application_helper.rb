@@ -13,5 +13,9 @@ module ApplicationHelper
   def is_mobile_device?
     request.user_agent.to_s.match(MOBILE_USER_AGENT_REGEX)
   end
+
+  def admin?
+    @member && @member.admin?
+  end
   
 end

@@ -1,41 +1,13 @@
 <%= form_for(@tutorial, :html => { :multipart => true }) do |f| %>
-  <% if @tutorial.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@tutorial.errors.count, "error") %> prohibited this tutorial from being saved:</h2>
-
-      <ul>
-      <% @tutorial.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :title %>
-    <%= f.text_field :title %>
-  </div>
-  <div class="field">
-    <%= f.label :description %>
-    <%= f.text_area :description, rows: 5 %>
-  </div>
-  <div class="field">
-    <%= f.label :body %>
-    <%= f.text_area :body %>
-  </div>
-  <% if !@tutorial.new_record? %>
-  <div class="field">
-    <%= f.label :slug %>
-    <%= f.text_field :slug %>
-  </div>
-  <% end %>
-  <div class="field">
-    <%= f.label :youtube_id, "YouTube Video ID" %>
-    <%= f.text_field :youtube_id %>
-  </div>
-  <div class="field">
-    <%= f.label :attachment %>
-    <%= f.file_field :attachment %>
-  </div>
+  <%= f.label :title %>
+  <%= f.text_field :title, :placeholder => "Title", :class => 'span6' %>
+  <%= f.label :description %>
+  <%= f.text_area :description, :placeholder => "Description", :rows => 5, :class => 'span6' %>
+  <%= f.label :body %>
+  <%= f.text_area :body, :placeholder => "Body", :rows => 10, :class => 'span6' %>
+  <%= f.label :youtube_id, "YouTube Video ID" %>
+  <%= f.text_field :youtube_id, :placeholder => "YouTube Video ID", :class => 'span6' %>
+  <%= f.label :attachment %>
+  <%= f.file_field :attachment %>
   <button type="submit" class="btn btn-primary clearfix">Post</button>
 <% end %>

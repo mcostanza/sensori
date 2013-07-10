@@ -2,10 +2,10 @@
   <div class="span8">
     <div class="flex-video widescreen"><%= content_tag :iframe, nil, :type => "text/html", :src => @tutorial.youtube_embed_url, :frameborder => "0" %></div>
   </div>
-  <div class="span4">
+  <div class="span4 tutorial-sidebar">
     <h3><%= @tutorial.title %></h3>
     <h4>by <%= @tutorial.member.name %></h4>
-    <p><%= @tutorial.description %></p>
+    <p><%= simple_format(@tutorial.description) %></p>
     <%= link_to "Download Samples", @tutorial.attachment_url, :class => "btn btn-primary" %>
   </div>
 </div>

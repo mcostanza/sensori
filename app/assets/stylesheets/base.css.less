@@ -104,11 +104,19 @@ body {
   border: 1px solid #ddd;
   padding: 5px;
   margin-bottom: 5px;
+  margin-top: 0px;
   .border-radius(4px);
   .box-shadow(0 1px 3px rgba(0,0,0,0.055));
   .media-body {
     padding-right: 15px;
   }
+  .media-heading {
+    a { color: #000; }
+  }
+}
+
+.new-button {
+  margin-top: 10px;
 }
 
 .beats { 
@@ -116,6 +124,9 @@ body {
     position: relative;
   }
   a {
+    color: #000;
+  }
+  a.overlay {
     position: absolute;
     display: block;
     top: 0px;
@@ -127,7 +138,7 @@ body {
     -o-background-size: cover;
     background-size: cover;
   }
-  a:hover {
+  a.overlay:hover {
     background: image-url('play-dim.png') no-repeat center center;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -135,7 +146,7 @@ body {
     background-size: cover;
   }
   .playing {
-    a {
+    a.overlay {
       background: image-url('pause-dim.png') no-repeat center center;
       -webkit-background-size: cover;
       -moz-background-size: cover;

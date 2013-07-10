@@ -1,8 +1,8 @@
 <h3>Topic</h3>
 <div class="media discussion">
-  <a class="pull-left" href="#">
+  <%= link_to @discussion.member.profile_url, :title => @discussion.member.name, :class => 'pull-left' do %>
     <%= image_tag @discussion.member.image(:small), :alt => @discussion.member.name %>
-  </a>
+  <% end %>
   <div class="media-body">
     <h5 class="media-heading"><%= @discussion.subject %></h5>
     <%= @discussion.body_html %>
@@ -11,9 +11,9 @@
 <h3>Responses</h3>
 <% @responses.each do |response| %>
 <div class="media discussion">
-  <a class="pull-left" href="#">
+  <%= link_to response.member.profile_url, :title => response.member.name, :class => 'pull-left' do %>
     <%= image_tag response.member.image(:small), :alt => response.member.name %>
-  </a>
+  <% end %>
   <div class="media-body">
     <%= response.body_html %> 
   </div>
@@ -22,9 +22,9 @@
 <% if signed_in? %>
   <%= form_for(Response.new, :url => respond_discussion_path(@discussion)) do |f| %>
     <div class="media discussion">
-      <a class="pull-left" href="#">
+      <%= link_to @member.profile_url, :title => @member.name, :class => 'pull-left' do %>
         <%= image_tag @member.image(:small), :alt => @member.name %>
-      </a>
+      <% end %>
       <div class="media-body">
         <%= f.text_area :body, :placeholder => "Add a comment...", :rows => 2 %>
       </div>

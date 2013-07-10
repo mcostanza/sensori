@@ -6,6 +6,6 @@
         <%= render :partial => 'shared/track', :object => track %>
       <% end %>
     </ul>
-    <a href="/beats" class="pull-right">View more...</a>
+    <%= link_to "View more...", beats_path, :class => "btn btn-inverse btn-mini pull-right" %>
   </div>
 </div>

@@ -4,6 +4,6 @@
     <% discussions.each do |discussion| %>
       <%= render :partial => 'shared/discussion', :object => discussion %>
     <% end %>
-    <a href="/discussions" class="pull-right">View more...</a>
+    <%= link_to "View more...", discussions_path, :class => "btn btn-inverse btn-mini pull-right" %>
   </div>
 </div>

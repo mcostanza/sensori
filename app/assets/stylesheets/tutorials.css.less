@@ -1,50 +1,38 @@
 // Place all the styles related to the tutorials controller here.
 // They will automatically be included in application.css.
 // You can use Less here: http://lesscss.org/
-@font: arial;
+
+@import "twitter/bootstrap/variables";
+@import "twitter/bootstrap/mixins";
 
 .tutorials {
-
-  h3, h4, h5, h6 {
-    font-family: @font;
-    text-transform: none;
+  .tutorial-sidebar {
+    h1, h2, h3, h4, h5, h6 {
+      font-family: @baseFontFamily;
+      text-transform: none;
+    }
   }
-
   .tutorial {
-    color: #000000;
-    font-family: @font;
-    text-transform: none;
-    background-color: #fff;
-    border-radius: 5px;
+    .border-radius(5px);
     background-color: #fff;
 
+    h1, h2, h3, h4, h5, h6 {
+      font-family: @baseFontFamily;
+      text-transform: none;
+    }
     img {
       margin-bottom: 10px;
       border: 1px solid #e3e3e3;
     }
-
   }
 
   form {
-    textarea, input[type='text'] {
-      width: 100%; margin: auto;
-    }
-
-    .field {
-      margin-bottom: 10px;
-    }
-    .button {
+    button {
       display: block;
       margin-top: 20px;
     }
   }
 }
-
-#tutorial-lightbox {
-  font-family: arial;
-  text-transform: none;
-}
-
 
 .flex-video {
   position: relative;

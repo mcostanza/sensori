@@ -51,6 +51,10 @@ class Member < ActiveRecord::Base
     end
   end
 
+  def profile_url
+    "https://soundcloud.com/#{self.slug}"
+  end
+
   def self.sync_from_soundcloud(access_token)
     return unless access_token.present?
     soundcloud_profile = ::Soundcloud.new(:access_token => access_token).get("/me")

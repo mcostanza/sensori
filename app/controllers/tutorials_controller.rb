@@ -1,6 +1,4 @@
 class TutorialsController < ApplicationController
-
-  before_filter :load_member_if_signed_in
   before_filter :ensure_admin, :only => [:new, :create, :edit, :update]
 
   # GET /tutorials

@@ -1,5 +1,5 @@
 class SessionsController < ApplicationController
-  before_filter :ensure_signed_in, :except => [:index, :show]
+  before_filter :ensure_admin, :except => [:index, :show]
 
   # GET /sessions
   def index

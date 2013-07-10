@@ -2,8 +2,7 @@
 <% @discussions.each do |discussion| %>
   <%= render :partial => 'shared/discussion', :object => discussion %>
 <% end %>
-<div class="pagination pagination-right"><%= paginate @discussions %></div>
-<br />
 <% if signed_in? %>
-<%= link_to 'New discussion', new_discussion_path %>
+  <%= link_to 'New Discussion', new_discussion_path, :class => "btn btn-primary btn-mini new-button" %>
 <% end %>
+<div class="pagination pagination-right"><%= paginate @discussions %></div>

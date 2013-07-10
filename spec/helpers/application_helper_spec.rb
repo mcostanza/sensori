@@ -28,5 +28,22 @@ describe ApplicationHelper do
       helper.is_mobile_device?.should be_false
     end
   end
+
+  describe "#admin?" do
+    before do
+      @member = mock(Member, :admin? => true)
+    end
+    it "should return true when @member is set and @member.admin is true" do
+      helper.admin?.should be_true
+    end
+    it "should return false when @member is set and @member.admin if false" do
+      @member.stub!(:admin?).and_return(false)
+      helper.admin?.should be_false
+    end
+    it "should return false when @member is not set" do
+      @member = nil
+      helper.admin?.should be_false
+    end
+  end
   
 end

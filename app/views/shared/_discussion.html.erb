@@ -1,9 +1,10 @@
 <div class="media discussion-preview">
-  <a class="pull-left" href="#">
+  <%= link_to discussion, :class => 'pull-left', :title => discussion.member.name do %>
     <%= image_tag discussion.member.image(:small), :alt => discussion.member.name, :class => "media-object" %>
+  <% end %>
   </a>
   <div class="media-body">
-    <h5 class="media-heading"><%= discussion.subject %></h5>
+    <h5 class="media-heading"><%= link_to discussion.subject, discussion %></h5>
     <%= truncate(discussion.body, :length => 100) %><%= link_to "Join discussion", discussion, :class => "pull-right" %>
   </div>
 </div>

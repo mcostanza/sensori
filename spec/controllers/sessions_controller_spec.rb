@@ -49,12 +49,12 @@ describe SessionsController do
 
   describe "GET 'new'" do
     before do
-      controller.stub!(:ensure_signed_in)
+      controller.stub!(:ensure_admin)
     end
 
     describe "before filters" do
-      it "should have the ensure_signed_in before filter" do
-        controller.should_receive(:ensure_signed_in)
+      it "should have the ensure_admin before filter" do
+        controller.should_receive(:ensure_admin)
         get 'new'
       end
     end
@@ -69,7 +69,7 @@ describe SessionsController do
 
   describe "POST 'create'" do
     before do
-      controller.stub!(:ensure_signed_in)
+      controller.stub!(:ensure_admin)
       @member = mock(Member, :id => 41)
       controller.instance_variable_set(:@member, @member)
       @params = { :session => { :title => "Title", :description => "Desc" } }
@@ -80,8 +80,8 @@ describe SessionsController do
     end
 
     describe "before filters" do
-      it "should have the ensure_signed_in before filter" do
-        controller.should_receive(:ensure_signed_in)
+      it "Should have the ensure_admin before filter" do
+        controller.should_receive(:ensure_admin)
         post 'create', @params
       end
     end

@@ -12,7 +12,7 @@ Sensori.Track = function(element, position, player) {
   this.player = player;
   this.status = 'stopped';
   
-  this.element.on('click', $.proxy(this.click, this));
+  this.element.on('click', '.overlay', $.proxy(this.click, this));
 }
 
 $.extend(Sensori.Track.prototype, {
@@ -30,7 +30,7 @@ $.extend(Sensori.Track.prototype, {
     this.sound.stop();
     this.updateStatus('stopped');
   },
-  click : function() {
+  click : function(event) {
     if(this.status == 'playing') { this.player.pause(); }
     else { this.player.play(this); }
   },
