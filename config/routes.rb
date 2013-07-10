@@ -15,6 +15,7 @@ Sensori::Application.routes.draw do
   get "members/soundcloud_connect"
 
   get "home/index"
+  get "home/about"
   get "home/kickstarter"
   match "contact_us" => "home#contact_us", :via => "get"
   match "send_feedback"   => "home#send_feedback",   :via => "post"

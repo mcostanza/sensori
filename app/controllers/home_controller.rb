@@ -8,6 +8,9 @@ class HomeController < ApplicationController
   def contact_us
   end
 
+  def about
+  end
+
   # GET /post/* 
   def blog_post_redirect
     redirect_to File.join("http://blog.sensoricollective.com/post", params[:post_id])
