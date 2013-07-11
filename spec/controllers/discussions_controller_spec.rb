@@ -155,4 +155,118 @@ describe DiscussionsController do
       flash[:alert].should == 'Sorry something went wrong, please try again.'
     end
   end
+
+  describe "DELETE 'destroy'" do
+    before do
+      controller.stub!(:ensure_signed_in)
+      @discussion = Discussion.new
+      @discussion.stub!(:id).and_return(10)
+      @discussion.stub!(:destroy).and_return(true)
+      @discussion.stub!(:editable?).and_return(true)
+      Discussion.stub!(:find).and_return(@discussion)
+      @params = { :id => '10' }
+    end
+
+    describe "before filters" do
+      it "should have the ensure_signed_in before filter" do
+        controller.should_receive(:ensure_signed_in)
+        delete 'destroy', @params
+      end
+    end
+
+    it "should find a discussion and destroy it" do
+      Discussion.should_receive(:find).with(@params[:id]).and_return(@discussion)
+      @discussion.should_receive(:destroy)
+      delete 'destroy', @params
+    end
+    it "should redirect to the discussions index" do
+      delete 'destroy', @params
+      response.should redirect_to(discussions_url)
+      flash[:notice].should == 'Discussion was successfully deleted.'
+    end
+    it "should not destroy the discussion if it is not editable" do
+      @discussion.stub!(:editable?).and_return(false)
+      @discussion.should_not_receive(:destroy)
+      delete 'destroy', @params  
+    end
+    it "should redirect to the discussion with an alert message if it is not editable" do
+      @discussion.stub!(:editable?).and_return(false)
+      delete 'destroy', @params  
+      response.should redirect_to(@discussion)
+      flash[:alert].should == 'Discussion is no longer editable.'
+    end
+  end
+
+  describe "GET 'edit'" do
+    before do
+      controller.stub!(:ensure_signed_in)
+      @discussion = Discussion.new
+      @discussion.stub!(:id).and_return(10)
+      @discussion.stub!(:destroy).and_return(true)
+      @discussion.stub!(:editable?).and_return(true)
+      Discussion.stub!(:find).and_return(@discussion)
+      @params = { :id => '10' }
+    end
+
+    describe "before filters" do
+      it "should have the ensure_signed_in before filter" do
+        controller.should_receive(:ensure_signed_in)
+        get 'edit', @params
+      end
+    end
+
+    it "should find a discussion" do
+      Discussion.should_receive(:find).with(@params[:id]).and_return(@discussion)
+      get 'edit', @params
+    end
+    it "should redirect to the discussion with an alert message if it is not editable" do
+      @discussion.stub!(:editable?).and_return(false)
+      get 'edit', @params
+      response.should redirect_to(@discussion)
+      flash[:alert].should == 'Discussion is no longer editable.'
+    end
+  end
+
+  describe "PUT 'update'" do
+    before do
+      controller.stub!(:ensure_signed_in)
+      @discussion = Discussion.new
+      @discussion.stub!(:id).and_return(10)
+      @discussion.stub!(:update_attributes).and_return(true)
+      @discussion.stub!(:editable?).and_return(true)
+      Discussion.stub!(:find).and_return(@discussion)
+      @params = { :id => '10', :discussion => { :title => 'test' } }
+    end
+
+    describe "before filters" do
+      it "should have the ensure_signed_in before filter" do
+        controller.should_receive(:ensure_signed_in)
+        put 'update', @params
+      end
+    end
+
+    it "should find a discussion" do
+      Discussion.should_receive(:find).with(@params[:id]).and_return(@discussion)
+      put 'update', @params
+    end
+    it "should redirect to the discussion with an success message" do
+      put 'update', @params
+      response.should redirect_to(@discussion)
+      flash[:notice].should == 'Discussion was successfully updated.'
+    end
+    it "should redirect to the discussion with an alert message if the update fails" do
+      @discussion.stub!(:update_attributes).and_return(false)
+      put 'update', @params
+      response.should render_template("edit")
+      flash[:alert].should == 'Sorry something went wrong, please try again.'
+    end
+    it "should not update and should redirect to the discussion with an alert message if the discussion is not editable" do
+      @discussion.stub!(:editable?).and_return(false)
+      @discussion.should_not_receive(:update_attributes)
+      put 'update', @params
+      response.should redirect_to(@discussion)
+      flash[:alert].should == 'Discussion is no longer editable.'
+    end
+    
+  end
 end

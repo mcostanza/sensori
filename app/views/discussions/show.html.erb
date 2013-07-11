@@ -1,6 +1,9 @@
+<% if @discussion.editable?(@member) %>
+  <%= render :partial => 'shared/action_buttons', :locals => { :object => @discussion } %>
+<% end %>
 <h3>Topic</h3>
 <div class="media discussion">
-  <%= link_to @discussion.member.profile_url, :title => @discussion.member.name, :class => 'pull-left' do %>
+  <%= link_to @discussion.member.profile_url, :title => @discussion.member.name, :class => 'pull-left', :target => :_blank do %>
     <%= image_tag @discussion.member.image(:small), :alt => @discussion.member.name %>
   <% end %>
   <div class="media-body">
@@ -11,7 +14,7 @@
 <h3>Responses</h3>
 <% @responses.each do |response| %>
 <div class="media discussion">
-  <%= link_to response.member.profile_url, :title => response.member.name, :class => 'pull-left' do %>
+  <%= link_to response.member.profile_url, :title => response.member.name, :class => 'pull-left', :target => :_blank do %>
     <%= image_tag response.member.image(:small), :alt => response.member.name %>
   <% end %>
   <div class="media-body">
@@ -22,7 +25,7 @@
 <% if signed_in? %>
   <%= form_for(Response.new, :url => respond_discussion_path(@discussion)) do |f| %>
     <div class="media discussion">
-      <%= link_to @member.profile_url, :title => @member.name, :class => 'pull-left' do %>
+      <%= link_to @member.profile_url, :title => @member.name, :class => 'pull-left', :target => :_blank do %>
         <%= image_tag @member.image(:small), :alt => @member.name %>
       <% end %>
       <div class="media-body">

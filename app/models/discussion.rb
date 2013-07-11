@@ -22,4 +22,10 @@ class Discussion < ActiveRecord::Base
     link :target => "_blank", :rel => "nofollow"
     simple_format
   end
+
+  def editable?(member)
+    return false if member.blank?
+    return true if member.admin?
+    self.responses.blank? && self.member == member
+  end
 end

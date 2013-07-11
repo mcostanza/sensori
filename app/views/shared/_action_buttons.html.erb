@@ -1,0 +1,8 @@
+<div class="action-buttons pull-right">
+  <%= link_to url_for([:edit, object]), :class => "btn btn-small" do %>
+    <i class="icon-pencil"></i>
+  <% end %>
+  <%= link_to url_for(@object), :method => :delete, :class => 'btn btn-small', :data => { :confirm => 'Are you sure?' } do %>
+    <i class="icon-trash"></i>
+  <% end %>
+</div>
