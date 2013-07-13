@@ -18,4 +18,6 @@ $(function() {
 
   });
 
+  $("img[data-src]").unveil();
+
 });
