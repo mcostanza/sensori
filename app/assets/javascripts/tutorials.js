@@ -18,6 +18,8 @@ $(function() {
 
   });
 
+  $("img[data-src]").unveil();
+
   $('#fileupload').fileupload({
     add: function(e, data) { data.submit(); },
     progress: function(e, data) { },
