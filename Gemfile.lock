@@ -1,3 +1,10 @@
+GIT
+  remote: https://sensoricollective@bitbucket.org/sensoricollective/bootstrap-wysihtml5-rails.git
+  revision: 09217d8f5bcc4bddf4cc4f70a9780538fa342f11
+  specs:
+    bootstrap-wysihtml5-rails (0.3.1.21)
+      railties (>= 3.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -226,6 +233,7 @@ PLATFORMS
 DEPENDENCIES
   auto_html
   aws-ses
+  bootstrap-wysihtml5-rails!
   carrierwave
   debugger
   factory_girl_rails

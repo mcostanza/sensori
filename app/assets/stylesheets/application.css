@@ -11,6 +11,7 @@
  *= require_self
  *= require twitter/bootstrap
  *= require twitter/bootstrap-responsive
+ *= require bootstrap-wysihtml5
  *= require base
  *= require_tree .
  */

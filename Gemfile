@@ -82,3 +82,7 @@ gem "sidekiq"
 
 # JQuery File Upload
 gem "jquery-fileupload-rails"
+
+# Editor for tutorials, etc
+# Forked version using wysihtml5 version 0.4.0pre
+gem "bootstrap-wysihtml5-rails", :git => "https://sensoricollective@bitbucket.org/sensoricollective/bootstrap-wysihtml5-rails.git"
