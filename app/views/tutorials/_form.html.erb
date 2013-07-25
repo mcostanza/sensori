@@ -11,3 +11,17 @@
   <%= f.file_field :attachment %>
   <button type="submit" class="btn btn-primary clearfix">Post</button>
 <% end %>
+
+<ul class="thumbnails">
+</ul>
+<%= s3_uploader_form do %>
+  <%= file_field_tag :file, :multiple => true %>
+<% end %>
+
+<script id="uploaded-image" type="text/x-tmpl">
+<li class="span2">
+  <a href="javascript:;" class="thumbnail" data-lightbox="true">
+    <img src="{%=o.imageURL%}" />
+  </a>
+</li>
+</script>

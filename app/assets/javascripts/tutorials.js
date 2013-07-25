@@ -18,4 +18,18 @@ $(function() {
 
   });
 
+  $('#fileupload').fileupload({
+    add: function(e, data) { data.submit(); },
+    progress: function(e, data) { },
+    done: function(e, data) { 
+      var file = data.files[0];
+      var domain = $('#fileupload').attr('action');
+      var path = $('#fileupload input[name=key]').val().replace('${filename}', file.name);
+      var form = $(data.form.context);
+      var uploaded_image = $.parseHTML(tmpl("uploaded-image", { imageURL: domain + path }));
+      form.prev('.thumbnails').append(uploaded_image);
+    },
+    fail: function(e, data) { console.debug('fail'); console.debug(data); }
+  });
+
 });

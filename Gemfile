@@ -78,3 +78,6 @@ gem "fog"
 
 # Background jobs
 gem "sidekiq"
+
+# JQuery File Upload
+gem "jquery-fileupload-rails"
