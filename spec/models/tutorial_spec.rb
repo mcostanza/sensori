@@ -21,8 +21,12 @@ describe Tutorial do
       @tutorial.member = nil
       @tutorial.should_not be_valid
     end
-    it "should be invalid without a body" do
-      @tutorial.body = nil
+    it "should be invalid without body_html" do
+      @tutorial.body_html = nil
+      @tutorial.should_not be_valid
+    end
+    it "should be invalid without body_components" do
+      @tutorial.body_components = nil
       @tutorial.should_not be_valid
     end
   end

@@ -3,14 +3,15 @@ class Tutorial < ActiveRecord::Base
 
   default_scope order('featured DESC, created_at DESC')
   
-  attr_accessible :attachment, :body, :description, :member_id, :member, :slug, :title, :youtube_id
+  attr_accessible :attachment, :body_html, :body_components, :description, :member_id, :member, :slug, :title, :youtube_id
 
   belongs_to :member
 
   validates :title, :presence => true
   validates :description, :presence => true
   validates :member, :presence => true
-  validates :body, :presence => true
+  validates :body_html, :presence => true
+  validates :body_components, :presence => true
 
   friendly_id :title, :use => :slugged
 

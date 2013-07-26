@@ -9,7 +9,8 @@ FactoryGirl.define do
 
     description "This is some text"
 
-    body "tutorial body (html)"
+    body_html "<h3>Overview</h3><p>This is my tutorial.</p>"
+    body_components [{ type: "text", content: "<h3>Overview</h3><p>This is my tutorial.</p>" }].to_json
 
     sequence :slug do |n|
       "tutorial-title--#{n}"
@@ -20,6 +21,8 @@ FactoryGirl.define do
     sequence :youtube_id do |n|
       "youtube-#{n}"
     end
+
+    published true
 
     attachment { fixture_file_upload(Rails.root.join('spec/data/beat-kit.zip'), 'application/zip') }
 
