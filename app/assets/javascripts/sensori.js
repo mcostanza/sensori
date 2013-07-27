@@ -1,0 +1,4 @@
+window.Sensori = {
+  Models: {},
+  Views: {}
+};

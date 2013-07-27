@@ -52,6 +52,10 @@ GEM
       timers (>= 1.0.0)
     childprocess (0.3.9)
       ffi (~> 1.0, >= 1.0.11)
+    coffee-script (2.2.0)
+      coffee-script-source
+      execjs
+    coffee-script-source (1.6.3)
     columnize (0.3.6)
     commonjs (0.2.6)
     connection_pool (1.1.0)
@@ -62,6 +66,7 @@ GEM
     debugger-linecache (1.2.0)
     debugger-ruby_core_source (1.2.0)
     diff-lcs (1.2.1)
+    ejs (1.0.0)
     erubis (2.7.0)
     excon (0.23.0)
     execjs (1.4.0)
@@ -151,6 +156,10 @@ GEM
       activesupport (= 3.2.12)
       bundler (~> 1.0)
       railties (= 3.2.12)
+    rails-backbone (0.7.2)
+      coffee-script (~> 2.2.0)
+      ejs (~> 1.0.0)
+      railties (>= 3.1.0)
     railties (3.2.12)
       actionpack (= 3.2.12)
       activesupport (= 3.2.12)
@@ -249,6 +258,7 @@ DEPENDENCIES
   minitest
   mysql2
   rails (= 3.2.12)
+  rails-backbone
   rake
   rmagick
   rspec-rails (~> 2.0)
