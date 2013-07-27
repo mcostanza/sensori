@@ -31,6 +31,15 @@ describe Tutorial do
     end
   end
 
+  describe "callbacks" do
+    describe "before_save" do
+      it "should call format_table_of_contents" do
+        @tutorial.should_receive(:format_table_of_contents)
+        @tutorial.save
+      end
+    end
+  end
+
   it "should set slug from the title when saving" do
     @tutorial.save
     @tutorial.slug.should == @tutorial.title.parameterize
@@ -54,4 +63,13 @@ describe Tutorial do
     end
   end
 
+  describe "#format_table_of_contents" do
+    it "should process the tutorial with a table of contents formatter and set the body_html from the result" do
+      formatter = mock(Formatters::Tutorial::TableOfContents)
+      Formatters::Tutorial::TableOfContents.should_receive(:new).with(@tutorial).and_return(formatter)
+      formatter.should_receive(:format).and_return("processed content")
+      @tutorial.format_table_of_contents
+      @tutorial.body_html.should == "processed content"
+    end
+  end
 end

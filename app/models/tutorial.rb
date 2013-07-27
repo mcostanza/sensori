@@ -17,6 +17,8 @@ class Tutorial < ActiveRecord::Base
 
   mount_uploader :attachment, FileUploader
 
+  before_save :format_table_of_contents
+
   def youtube_image_url
     "http://img.youtube.com/vi/#{self.youtube_id}/0.jpg"
   end
@@ -27,5 +29,9 @@ class Tutorial < ActiveRecord::Base
 
   def youtube_video_url
     "http://www.youtube.com/watch?v=#{self.youtube_id}"
+  end
+
+  def format_table_of_contents
+    self.body_html = Formatters::Tutorial::TableOfContents.new(self).format
   end
 end
