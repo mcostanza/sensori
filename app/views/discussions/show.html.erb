@@ -7,6 +7,9 @@
     <%= image_tag @discussion.member.image(:small), :alt => @discussion.member.name %>
   <% end %>
   <div class="media-body">
+    <div class="media-timestamp">
+      Posted by <%= link_to @discussion.member.name, @discussion.member.profile_url, :title => @discussion.member.name, :target => :_blank %> <%= time_ago_in_words(@discussion.created_at)%> ago
+    </div>
     <h5 class="media-heading"><%= @discussion.subject %></h5>
     <%= @discussion.body_html %>
   </div>
@@ -18,7 +21,11 @@
     <%= image_tag response.member.image(:small), :alt => response.member.name %>
   <% end %>
   <div class="media-body">
-    <%= response.body_html %> 
+    <div class="media-timestamp">
+      <%= time_ago_in_words(response.created_at)%> ago
+    </div>
+    <%= link_to response.member.name, response.member.profile_url, :title => response.member.name, :target => :_blank %>
+    <%= response.body_html %>
   </div>
 </div>
 <% end %>

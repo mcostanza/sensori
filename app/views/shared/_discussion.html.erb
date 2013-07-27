@@ -4,7 +4,11 @@
   <% end %>
   </a>
   <div class="media-body">
+    <div class="media-timestamp">
+      Posted by <%= link_to discussion.member.name, discussion.member.profile_url, :title => discussion.member.name, :target => :_blank %> <%= time_ago_in_words(discussion.created_at)%> ago
+    </div>
+    <%= link_to "Join discussion", discussion, :class => "link-right" %>
     <h5 class="media-heading"><%= link_to discussion.subject, discussion %></h5>
-    <%= truncate(discussion.body, :length => 100) %><%= link_to "Join discussion", discussion, :class => "pull-right" %>
+    <%= truncate(discussion.body, :length => 100) %>
   </div>
 </div>
