@@ -32,8 +32,24 @@ describe Response do
     end
   end
 
+  describe "callbacks" do
+    describe "after_create" do
+      it "should call deliver_discussion_notifications" do
+        @response.should_receive(:deliver_discussion_notifications)
+        @response.save
+      end
+    end
+  end
+
   it "should store an html version of the body text when set" do
     @response = Response.new(:body => 'test')
     @response.body_html.should_not be_blank
+  end
+
+  describe "#deliver_discussion_notifications" do
+    it "should create a worker to deliver the notifications" do
+      DiscussionNotificationWorker.should_receive(:perform_async).with(@response.id)
+      @response.deliver_discussion_notifications
+    end
   end
 end

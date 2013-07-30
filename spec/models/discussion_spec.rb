@@ -30,6 +30,9 @@ describe Discussion do
     it "should have a responses association" do
       @discussion.should respond_to(:responses)
     end
+    it "should have a notifications association" do
+      @discussion.should respond_to(:notifications)
+    end
   end
 
   it "should set slug from the subject when saving" do

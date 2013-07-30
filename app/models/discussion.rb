@@ -5,7 +5,8 @@ class Discussion < ActiveRecord::Base
   default_scope order('id DESC')
 
   belongs_to :member
-  has_many :responses
+  has_many :responses, :include => :member
+  has_many :notifications, :class_name => "DiscussionNotification", :include => :member
 
   validates :member, :presence => true
   validates :subject, :presence => true

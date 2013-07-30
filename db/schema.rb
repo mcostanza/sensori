@@ -11,7 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130707001325) do
+ActiveRecord::Schema.define(:version => 20130730042101) do
+
+  create_table "discussion_notifications", :force => true do |t|
+    t.integer  "discussion_id", :null => false
+    t.integer  "member_id",     :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "discussion_notifications", ["discussion_id"], :name => "discussion_notifications_discussion_id_fk"
+  add_index "discussion_notifications", ["member_id"], :name => "discussion_notifications_member_id_fk"
 
   create_table "discussions", :force => true do |t|
     t.string   "subject",                         :null => false
@@ -101,6 +111,9 @@ ActiveRecord::Schema.define(:version => 20130707001325) do
     t.datetime "updated_at",                     :null => false
     t.boolean  "featured",    :default => false
   end
+
+  add_foreign_key "discussion_notifications", "discussions", :name => "discussion_notifications_discussion_id_fk"
+  add_foreign_key "discussion_notifications", "members", :name => "discussion_notifications_member_id_fk"
 
   add_foreign_key "discussions", "members", :name => "discussions_member_id_fk"
 
