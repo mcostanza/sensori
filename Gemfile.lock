@@ -206,6 +206,8 @@ GEM
       json
       redis (>= 3.0)
       redis-namespace
+    sinon-rails (1.7.3)
+      railties (>= 3.1)
     soundcloud (0.3.1)
       hashie
       httmultiparty (>= 0.3)
@@ -263,6 +265,7 @@ DEPENDENCIES
   rmagick
   rspec-rails (~> 2.0)
   sidekiq
+  sinon-rails
   soundcloud
   test_after_commit
   therubyracer

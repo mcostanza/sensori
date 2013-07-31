@@ -23,7 +23,11 @@ gem 'jquery-rails'
 group :test, :development do
   gem 'rspec-rails', '~> 2.0'
   gem 'factory_girl_rails'
+
+  # Javascript unit tests
   gem 'jasmine'
+  # Javascript mocking library
+  gem "sinon-rails"
 end
 
 group :test do
