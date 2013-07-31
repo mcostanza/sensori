@@ -10,14 +10,16 @@ describe DiscussionNotificationWorker do
       @discussion = mock(Discussion, :notifications => @notifications)
       @response = mock(Response, :discussion => @discussion)
       Response.stub!(:find).and_return(@response)
-      DiscussionNotificationMailer.stub!(:deliver)
+      @email = mock('email', :deliver => true)
+      NotificationMailer.stub!(:discussion_notification).and_return(@email)
     end
     it "should find the Response from response_id" do
       Response.should_receive(:find).with(@response_id).and_return(@response)
       DiscussionNotificationWorker.new.perform(@response_id)
     end
     it "should deliver the notifications" do
-      DiscussionNotificationMailer.should_receive(:deliver).with(@member, @response)
+      NotificationMailer.should_receive(:discussion_notification).with(:member => @member, :response => @response).and_return(@email)
+      @email.should_receive(:deliver)
       DiscussionNotificationWorker.new.perform(@member_id)
     end
     it "should have an async method" do
