@@ -48,7 +48,8 @@ Sensori.Views.ImageEditor = Backbone.View.extend({
     this.$el.popover({ 
       html: true,
       content: JST["backbone/templates/tutorials/thumbnail_popover"](),
-      container: this.$el
+      container: this.$el,
+      trigger: 'manual'
     });
 
     return this;

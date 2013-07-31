@@ -123,7 +123,8 @@ describe("Sensori.Views.ImageEditor", function() {
       expect(view.$el.popover.calledWith({
         html: true,
         content: JST["backbone/templates/tutorials/thumbnail_popover"](),
-        container: view.$el
+        container: view.$el,
+        trigger: 'manual'
       })).toEqual(true);
     });
     it("should return itself", function() {
