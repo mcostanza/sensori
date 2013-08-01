@@ -1,0 +1,20 @@
+<div class="btn-group">
+  <button class="btn" data-trigger="add-image">
+    <i class="icon-plus"></i>Add Image
+  </button>
+</div>
+<ul class="thumbnails"></ul>
+
+<div class="modal fade image-uploader-modal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <h4 class="modal-title">Upload Image</h4>
+  </div>
+  <div class="modal-body">
+    <%= imageUploaderForm %>
+  </div>
+  <div class="modal-footer">
+    <a href="javascript:;" class="btn" data-dismiss="modal">Cancel</a>
+    <a href="javascript:;" class="btn btn-primary">Upload</a>
+  </div>
+</div>
