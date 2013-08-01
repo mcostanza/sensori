@@ -26,12 +26,11 @@ Sensori.Views.ImageEditor = Backbone.View.extend({
 
   removeImage: function() {
     this.$el.popover("hide");
-    this.remove();
-    this.galleryView.trigger("removeItem", this);
+    this.galleryView.removeImage(this);
   },
 
   getHTMLValue: function() {
-    return "<img src=\"/assets/loader.gif\" data-src=\"" + this.model.src + "\" title=\"" + this.model.title + "\" />";
+    return JST["backbone/templates/tutorials/image_show"](this.model);
   },
 
   getJSONValue: function() {
@@ -43,7 +42,7 @@ Sensori.Views.ImageEditor = Backbone.View.extend({
   },
 
   render: function() {
-    this.$el.html(JST["backbone/templates/tutorials/thumbnail"](this.model));
+    this.$el.html(JST["backbone/templates/tutorials/image_editor"](this.model));
 
     this.$el.popover({ 
       html: true,

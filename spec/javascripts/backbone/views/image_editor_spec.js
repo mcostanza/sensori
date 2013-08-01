@@ -4,10 +4,7 @@ describe("Sensori.Views.ImageEditor", function() {
       parentView;
 
   beforeEach(function() {
-    // TODO: replace with Sensori.Views.Gallery instance when implemented
-    parentView = {
-      trigger: sinon.spy()
-    };
+    parentView = new Sensori.Views.GalleryEditor()
 
     imageModel = {
       type: "image",
@@ -71,28 +68,23 @@ describe("Sensori.Views.ImageEditor", function() {
     beforeEach(function() {
       view.render();
       sinon.stub(view.$el, "popover");
-      sinon.stub(view, "remove");
+      sinon.stub(parentView, "removeImage");
     });
     it("should hide the element's popover", function() {
       view.removeImage();
       expect(view.$el.popover.callCount).toEqual(1);
       expect(view.$el.popover.calledWith('hide')).toEqual(true);
     });
-    it("should remove the view", function() {
+    it("should call removeImage on the parent view", function() {
       view.removeImage();
-      expect(view.remove.callCount).toEqual(1);
-    });
-    it("should trigger a 'removeItem' event on the gallery view", function() {
-      view.removeImage();
-      expect(parentView.trigger.callCount).toEqual(1);
-      expect(parentView.trigger.calledWith('removeItem', view)).toEqual(true);
+      expect(parentView.removeImage.callCount).toEqual(1);
+      expect(parentView.removeImage.calledWith(view)).toEqual(true);
     });
   });
 
   describe(".getHTMLValue()", function() {
-    it("should return an image tag with model attributes", function() {
-      var expected = "<img src=\"/assets/loader.gif\" data-src=\"http://s3.amazon.com/sensori/pictures/1.jpg\" title=\"Rat near a trash can\" />";
-      expect(view.getHTMLValue()).toEqual(expected);
+    it("should return the tutorials/image_show template with model attributes", function() {
+      expect(view.getHTMLValue()).toEqual(JST["backbone/templates/tutorials/image_show"](imageModel));
     });
   });
 
@@ -111,7 +103,7 @@ describe("Sensori.Views.ImageEditor", function() {
     beforeEach(function() {
       sinon.spy(view.$el, "popover");
     });
-    it("should set the element content from the tutorials/thumbnail template", function() {
+    it("should set the element content from the tutorials/image_editor template", function() {
       view.render();
       expect(view.$("span[data-trigger='edit-image']").length).toEqual(1);
       expect(view.$("img").prop("src")).toEqual(imageModel.src);
