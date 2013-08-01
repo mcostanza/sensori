@@ -106,8 +106,9 @@ describe("Sensori.Views.ImageEditor", function() {
     it("should set the element content from the tutorials/image_editor template", function() {
       view.render();
       expect(view.$("span[data-trigger='edit-image']").length).toEqual(1);
-      expect(view.$("img").prop("src")).toEqual(imageModel.src);
+      expect(view.$("img").prop("src")).toContain("/assets/loader.gif");
       expect(view.$("img").prop("title")).toEqual(imageModel.title);
+      expect(view.$("img").attr("data-src")).toEqual(imageModel.src);
     });
     it("should initialize a popover on the element with content from the tutorials/thumbnail_popover template", function() {
       view.render();
