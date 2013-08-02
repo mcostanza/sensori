@@ -42,9 +42,9 @@ describe("Sensori.Views.GalleryEditor", function() {
   });
 
   describe(".$el", function() {
-    it("should be a div with classes 'gallery-editor' and 'well'", function() {
+    it("should be a div with class 'gallery-editor'", function() {
       expect(view.$el.prop("tagName")).toEqual("DIV");
-      expect(view.$el.hasClass("gallery-editor well")).toEqual(true);
+      expect(view.$el.hasClass("gallery-editor")).toEqual(true);
     });
   });
 

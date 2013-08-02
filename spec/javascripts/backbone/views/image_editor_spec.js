@@ -117,7 +117,8 @@ describe("Sensori.Views.ImageEditor", function() {
         html: true,
         content: JST["backbone/templates/tutorials/thumbnail_popover"](),
         container: view.$el,
-        trigger: 'manual'
+        trigger: 'manual',
+        placement: 'top'
       })).toEqual(true);
     });
     it("should return itself", function() {

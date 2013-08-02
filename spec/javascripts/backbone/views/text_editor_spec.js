@@ -6,9 +6,10 @@ describe("Sensori.Views.TextEditor", function() {
   });
 
   describe(".$el", function() {
-    it("should be a textarea with class 'wysihtml5'", function() {
+    it("should be a textarea with class 'wysihtml5' and a placeholder", function() {
       expect(view.$el.prop("tagName")).toEqual("TEXTAREA");
       expect(view.$el.hasClass("wysihtml5")).toEqual(true);
+      expect(view.$el.prop("placeholder")).toEqual("Enter text...");
     });
   });
 

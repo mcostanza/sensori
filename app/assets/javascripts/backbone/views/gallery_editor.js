@@ -7,7 +7,7 @@ Sensori.Views.GalleryEditor = Backbone.View.extend({
 
   tagName: "div",
 
-  className: "gallery-editor well",
+  className: "gallery-editor",
 
   events: {
     "click [data-trigger='add-image']": "showImageUploader"
