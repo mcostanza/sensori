@@ -85,8 +85,10 @@ module Formatters
         end
 
         # Add "Table of Contents" h3 and ul as the first elements of the parser body
-        @parser.at("body").children.first.before(node(:h3, "Table of Contents"))
-        @parser.at("body").children.first.after(toc)
+        if toc.children.size > 0
+          @parser.at("body").children.first.before(node(:h3, "Table of Contents"))
+          @parser.at("body").children.first.after(toc)
+        end
 
         # Return a string containing modified tutorial content
         @parser.at("body").inner_html

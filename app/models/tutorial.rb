@@ -17,6 +17,8 @@ class Tutorial < ActiveRecord::Base
 
   mount_uploader :attachment, FileUploader
 
+  serialize :body_components, JSON
+
   before_save :format_table_of_contents
 
   def youtube_image_url
@@ -33,5 +35,9 @@ class Tutorial < ActiveRecord::Base
 
   def format_table_of_contents
     self.body_html = Formatters::Tutorial::TableOfContents.new(self).format
+  end
+
+  def body_components
+    attributes["body_components"] || []
   end
 end

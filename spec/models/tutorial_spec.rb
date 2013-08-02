@@ -72,4 +72,11 @@ describe Tutorial do
       @tutorial.body_html.should == "processed content"
     end
   end
+
+  describe "#body_components" do
+    it "should return an empty array if the body_components attribute is nil" do
+      @tutorial.body_components = nil
+      @tutorial.body_components.should == []
+    end
+  end
 end

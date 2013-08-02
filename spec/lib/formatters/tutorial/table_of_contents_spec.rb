@@ -102,6 +102,13 @@ describe Formatters::Tutorial::TableOfContents do
       actual = @formatter.format.gsub("\n", "").gsub("\r", "")
       assert_dom_equal(expected, actual)
     end
+    it "should return a string containing tutorial.body_html unmodified if there are no headings/subheadings" do
+      @tutorial.body_html = File.read(File.join(Rails.root, "spec/data/tutorial_body_no_headings.html"))
+      formatter = Formatters::Tutorial::TableOfContents.new(@tutorial)
+      actual = formatter.format.gsub("\n", "").gsub("\r", "")
+      expected = @tutorial.body_html.gsub("\n", "").gsub("\r", "")
+      assert_dom_equal(expected, actual)
+    end
   end
 
 end
