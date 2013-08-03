@@ -23,3 +23,7 @@
 //= require backbone_datalink
 //= require sensori
 //= require_tree .
+
+$(function() {
+  $('[data-tooltip]').tooltip();
+});
