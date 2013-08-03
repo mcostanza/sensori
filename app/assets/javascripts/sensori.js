@@ -1,4 +1,7 @@
 window.Sensori = {
   Models: {},
-  Views: {}
+  Views: {},
+  redirect: function(url) {
+    window.location.href = url;
+  }
 };
