@@ -1,4 +1,6 @@
 class TutorialsController < ApplicationController
+  respond_to :html, :json
+
   before_filter :ensure_admin, :only => [:new, :create, :edit, :update]
 
   # GET /tutorials
@@ -14,18 +16,18 @@ class TutorialsController < ApplicationController
 
   # GET /tutorials/new
   def new
-    @tutorial = Tutorial.new
+    @tutorial = Tutorial.new(member: @member)
   end
 
   # POST /tutorials
   def create
     @tutorial = Tutorial.new(params[:tutorial].merge(member: @member))
     if @tutorial.save
-      redirect_to @tutorial, notice: "Tutorial was successfully created."
+      flash[:notice] = "Tutorial was successfully created."
     else
       flash[:error] = "Tutorial could not be created."
-      render action: "new"
     end
+    respond_with @tutorial
   end
 
   # GET /tutorials/1/edit
@@ -37,10 +39,10 @@ class TutorialsController < ApplicationController
   def update
     @tutorial = Tutorial.find(params[:id])
     if @tutorial.update_attributes(params[:tutorial])
-      redirect_to @tutorial, notice: "Tutorial was successfully updated."
+      flash[:notice] = "Tutorial was successfully updated."
     else
       flash[:error] = "Tutorial could not be updated."
-      render action: "edit"
     end
+    respond_with @tutorial
   end
 end

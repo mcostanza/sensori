@@ -73,7 +73,7 @@ describe TutorialsController do
       end
       it "should initialize a Tutorial and assign to @tutorial" do
         tutorial = mock(Tutorial)
-        Tutorial.should_receive(:new).with(no_args).and_return(tutorial)
+        Tutorial.should_receive(:new).with(member: @member).and_return(tutorial)
         get 'new'
         assigns[:tutorial].should == tutorial
       end
@@ -132,6 +132,10 @@ describe TutorialsController do
       describe "invalid params given" do
         before(:each) do
           @tutorial.stub!(:save).and_return(false)
+
+          # Not called directly but needed for correct test behavior when using respond_with
+          @tutorial.stub!(:valid?).and_return(false)
+          @tutorial.stub!(:errors).and_return('errors!')
         end
         it "should render the new template with a flash error" do
           post 'create', :tutorial => @tutorial_params
@@ -241,6 +245,10 @@ describe TutorialsController do
       describe "invalid params given" do
         before(:each) do
           @tutorial.stub!(:update_attributes).and_return(false)
+
+          # Not called directly but needed for correct test behavior when using respond_with
+          @tutorial.stub!(:valid).and_return(false)
+          @tutorial.stub!(:errors).and_return('errors')
         end
         it "should render the edit template with a flash error" do
           put 'update', :id => '123', :tutorial => @tutorial_params
