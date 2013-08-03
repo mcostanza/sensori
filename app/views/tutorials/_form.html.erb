@@ -1,27 +1,39 @@
-<%= form_for(@tutorial, :html => { :multipart => true }) do |f| %>
-  <%= f.label :title %>
-  <%= f.text_field :title, :placeholder => "Title", :class => 'span6' %>
-  <%= f.label :description %>
-  <%= f.text_area :description, :placeholder => "Description", :rows => 5, :class => 'span6' %>
-  <%= f.label :body %>
-  <%= f.text_area :body, :placeholder => "Body", :rows => 10, :class => 'span6' %>
-  <%= f.label :youtube_id, "YouTube Video ID" %>
-  <%= f.text_field :youtube_id, :placeholder => "YouTube Video ID", :class => 'span6' %>
-  <%= f.label :attachment %>
-  <%= f.file_field :attachment %>
-  <button type="submit" class="btn btn-primary clearfix">Post</button>
-<% end %>
+<%
+  tutorial_data = {
+    id: @tutorial.id,
+    title: @tutorial.title,
+    description: @tutorial.description,
+    youtube_id: @tutorial.youtube_id,
+    body_components: @tutorial.body_components,
+    member_id: @tutorial.member_id
+  }
+%>
+<div id="tutorial-form-container" class="container">
+  <%= form_for(@tutorial, :html => { :multipart => true }) do |f| %>
+    <%= f.label :title %>
+    <%= f.text_field :title, :placeholder => "Title", :class => 'span6' %>
 
-<ul class="thumbnails">
-</ul>
-<%= s3_uploader_form do %>
-  <%= file_field_tag :file, :multiple => true %>
-<% end %>
+    <%= f.label :description %>
+    <%= f.text_area :description, :placeholder => "Description", :rows => 5, :class => 'span6' %>
 
-<script id="uploaded-image" type="text/x-tmpl">
-<li class="span2">
-  <a href="javascript:;" class="thumbnail" data-lightbox="true">
-    <img src="{%=o.imageURL%}" />
-  </a>
-</li>
+    <%= f.label :youtube_id, "YouTube Video ID" %>
+    <%= f.text_field :youtube_id, :placeholder => "YouTube Video ID", :class => 'span6' %>
+
+    <%= f.label :attachment %>
+    <%= f.file_field :attachment %>
+  <% end %>  
+
+  <div class="editor well"><%= image_tag "loader.gif" %></div>
+
+  <button class="btn btn-primary" data-trigger="add-more">Add More</button>
+  <button class="btn btn-primary" data-trigger="save-tutorial">Save</button>
+</div>
+
+<%= render 's3_uploader_form_jst' %>
+<script type="text/javascript">
+Sensori.Tutorial = new Sensori.Models.Tutorial(<%= raw tutorial_data.to_json %>);
+Sensori.TutorialView = new Sensori.Views.Tutorial({
+  model: Sensori.Tutorial,
+  el: $("#tutorial-form-container")
+}).render();
 </script>
