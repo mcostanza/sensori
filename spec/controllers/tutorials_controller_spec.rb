@@ -100,7 +100,8 @@ describe TutorialsController do
       @tutorial_params = {
         :title => "Tutorial",
         :description => "Show u how to do this",
-        :body => "lots of text with some html",
+        :body_html => "lots of text with some html",
+        :body_components => [{ "type" => "text", "content" => "lots of text with some html" }],
         :attachment_url => "http://s3.amazon.com/tutorial.zip",
         :youtube_id => "10110"
       }
@@ -214,8 +215,9 @@ describe TutorialsController do
       @tutorial_params = {
         :title => "Tutorial",
         :description => "Show u how to do this",
-        :body => "lots of text with some html",
-        :attachment => 'uploaded file',
+        :body_html => "lots of text with some html",
+        :body_components => [{ "type" => "text", "content" => "lots of text with some html" }],
+        :attachment_url => "http://s3.amazon.com/tutorial.zip",
         :video_url => "http://www.youtube.com/tutorial"
       }
       @tutorial = Tutorial.new

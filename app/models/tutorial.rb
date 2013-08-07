@@ -3,7 +3,7 @@ class Tutorial < ActiveRecord::Base
 
   default_scope order('featured DESC, created_at DESC')
   
-  attr_accessible :attachment, :body_html, :body_components, :description, :member_id, :member, :slug, :title, :youtube_id
+  attr_accessible :attachment_url, :body_html, :body_components, :description, :member_id, :member, :slug, :title, :youtube_id
 
   belongs_to :member
 
@@ -12,10 +12,9 @@ class Tutorial < ActiveRecord::Base
   validates :member, :presence => true
   validates :body_html, :presence => true
   validates :body_components, :presence => true
+  validates :attachment_url, :presence => true
 
   friendly_id :title, :use => :slugged
-
-  mount_uploader :attachment, FileUploader
 
   serialize :body_components, JSON
 
@@ -38,6 +37,6 @@ class Tutorial < ActiveRecord::Base
   end
 
   def body_components
-    attributes["body_components"] || []
+    attributes["body_components"] || [{ "type" => "text", "content" => "" }]
   end
 end

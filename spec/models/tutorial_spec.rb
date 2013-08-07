@@ -9,6 +9,10 @@ describe Tutorial do
     it "should be valid given valid attributes" do
       @tutorial.should be_valid
     end
+    it "should be invalid without an attachment_url" do
+      @tutorial.attachment_url = nil
+      @tutorial.should_not be_valid
+    end
     it "should be invalid without a title" do
       @tutorial.title = nil
       @tutorial.should_not be_valid
@@ -23,10 +27,6 @@ describe Tutorial do
     end
     it "should be invalid without body_html" do
       @tutorial.body_html = nil
-      @tutorial.should_not be_valid
-    end
-    it "should be invalid without body_components" do
-      @tutorial.body_components = nil
       @tutorial.should_not be_valid
     end
   end
@@ -74,9 +74,9 @@ describe Tutorial do
   end
 
   describe "#body_components" do
-    it "should return an empty array if the body_components attribute is nil" do
+    it "should return a formatted array if nil" do
       @tutorial.body_components = nil
-      @tutorial.body_components.should == []
+      @tutorial.body_components.should == [{ "type" => "text", "content" => "" }]
     end
   end
 end

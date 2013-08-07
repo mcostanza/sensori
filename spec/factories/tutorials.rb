@@ -24,7 +24,7 @@ FactoryGirl.define do
 
     published true
 
-    attachment { fixture_file_upload(Rails.root.join('spec/data/beat-kit.zip'), 'application/zip') }
+    attachment_url "http://s3.amazon.com/sensori/attachments/tutorial.zip"
 
   end
 end
