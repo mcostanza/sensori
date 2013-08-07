@@ -9,6 +9,8 @@ describe("Sensori.Views.Tutorial", function() {
     element = $([
       "<div>",
         "<div class='editor'><img src='/assets/loader.gif' /></div>",
+        "<a href='javascript:;' class='btn attachment-button'>Download Samples</a>",
+        "<div class='attachment-container'></div>",
         "<button data-trigger='save-tutorial'>Save</button>",
         "<button data-trigger='add-more'>Add More</button>",
       "</div>"
@@ -222,9 +224,63 @@ describe("Sensori.Views.Tutorial", function() {
     });
   });
 
+  describe(".disableAttachmentButton()", function() {
+    it("should disable the attachment button", function() {
+      view.disableAttachmentButton();
+      expect(view.$(".attachment-button").hasClass("disabled")).toBe(true);
+    });
+  });
+
+  describe(".enableAttachmentButton()", function() {
+    it("should the attachment button and set the href from the model's attachment_url", function() {
+      view.$(".attachment-button").addClass("disabled");
+      model.set("attachment_url", "http://s3.amazon.com/download.zip");
+      view.enableAttachmentButton();
+      expect(view.$(".attachment-button").hasClass("disabled")).toBe(false);
+      expect(view.$(".attachment-button").attr("href")).toEqual("http://s3.amazon.com/download.zip");
+    });
+  });
+
+  describe(".renderAttachmentUploader()", function() {
+    beforeEach(function() {
+      mockSubview = {
+        on: sinon.stub(),
+        render: sinon.stub()
+      };
+      mockSubview.render.returns(mockSubview);
+      sinon.stub(Sensori.Views, "AttachmentUploader").returns(mockSubview);
+      model.on = sinon.stub();
+    });
+    afterEach(function() {
+      Sensori.Views.AttachmentUploader.restore();
+    });
+    it("should set this.attachmentUploader to an attachment uploader view", function() {
+      view.renderAttachmentUploader();
+
+      expect(Sensori.Views.AttachmentUploader.callCount).toEqual(1);
+      expect(Sensori.Views.AttachmentUploader.calledWith({
+        model: view.model,
+        el: view.$(".attachment-container")
+      })).toBe(true);
+
+      expect(mockSubview.render.callCount).toEqual(1);
+    });
+    it("should bind this.disableAttachmentButton to run when an 'upload:add' event is triggered", function() {
+      view.renderAttachmentUploader();
+      expect(mockSubview.on.callCount).toEqual(1);
+      expect(mockSubview.on.calledWith("upload:add", view.disableAttachmentButton, view)).toBe(true);
+    });
+    it("should bind this.enableAttachmentButton to run when the model's attachment_url is changed", function() {
+      view.renderAttachmentUploader();
+      expect(model.on.callCount).toEqual(1);
+      expect(model.on.calledWith("change:attachment_url", view.enableAttachmentButton, view)).toBe(true);
+    });
+  });
+
   describe(".render()", function() {
     beforeEach(function() {
       sinon.stub(view, "addComponent");
+      sinon.stub(view, "renderAttachmentUploader");
       model.set("body_components", [{ type: "text", content: "<p>This is how I think?</p>" }]);
     });
     it("should set this.editor to the '.editor' element", function() {
@@ -235,6 +291,10 @@ describe("Sensori.Views.Tutorial", function() {
       view.render();
       expect(view.addComponent.callCount).toEqual(1);
       expect(view.addComponent.calledWith({ type: "text", content: "<p>This is how I think?</p>" })).toBe(true);
+    });
+    it("should render an attachment uploader", function() {
+      view.render();
+      expect(view.renderAttachmentUploader.callCount).toEqual(1);
     });
     it("should return itself", function() {
       expect(view.render()).toEqual(view);

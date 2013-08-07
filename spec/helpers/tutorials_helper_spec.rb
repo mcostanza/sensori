@@ -1,14 +1,26 @@
 require 'spec_helper'
 
-# Specs in this file have access to a helper object that includes
-# the TutorialsHelper. For example:
-#
-# describe TutorialsHelper do
-#   describe "string concat" do
-#     it "concats two strings with spaces" do
-#       helper.concat_strings("this","that").should == "this that"
-#     end
-#   end
-# end
 describe TutorialsHelper do
+	describe "#download_attachment_button(tutorial)" do
+		before(:each) do
+			@tutorial = FactoryGirl.build(:tutorial)
+		end
+		it "should return a button to download samples if the attachment_url is present" do
+			expected = [
+				"<a href=\"#{@tutorial.attachment_url}\" class=\"btn btn-primary attachment-button\">",
+					"<i class=\"icon-white icon-download-alt\"></i> Download Samples",
+				"</a>"
+			].join
+			assert_dom_equal(helper.download_attachment_button(@tutorial), expected)
+		end
+		it "should return a disabled button if the attachment_url is blank" do
+			@tutorial.attachment_url = nil
+			expected = [
+				"<a href=\"javascript:;\" class=\"btn btn-primary attachment-button disabled\">",
+					"<i class=\"icon-white icon-download-alt\"></i> Download Samples",
+				"</a>"
+			].join
+			assert_dom_equal(helper.download_attachment_button(@tutorial), expected)
+		end
+	end
 end

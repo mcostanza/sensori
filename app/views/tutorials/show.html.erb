@@ -11,9 +11,7 @@
     <h3><%= @tutorial.title %></h3>
     <h4>by <%= @tutorial.member.name %></h4>
     <p><%= simple_format(@tutorial.description) %></p>
-    <%= link_to @tutorial.attachment_url, :class => "btn btn-primary" do %>
-      <i class="icon-white icon-download-alt"></i> Download Samples
-    <% end if @tutorial.attachment? %>
+    <%= download_attachment_button(@tutorial) %>
   </div>
 </div>
 

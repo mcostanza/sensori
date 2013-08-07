@@ -5,11 +5,12 @@
     description: @tutorial.description,
     youtube_id: @tutorial.youtube_id,
     body_components: @tutorial.body_components,
-    member_id: @tutorial.member_id
+    member_id: @tutorial.member_id,
+    attachment_url: @tutorial.attachment_url
   }
 %>
 <div id="tutorial-form-container" class="container">
-  <%= form_for(@tutorial, :html => { :multipart => true }) do |f| %>
+  <%= form_for(@tutorial) do |f| %>
     <%= f.label :title %>
     <%= f.text_field :title, :placeholder => "Title", :class => 'span6' %>
 
@@ -18,11 +19,12 @@
 
     <%= f.label :youtube_id, "YouTube Video ID" %>
     <%= f.text_field :youtube_id, :placeholder => "YouTube Video ID", :class => 'span6' %>
+  <% end %>
 
-    <%= f.label :attachment %>
-    <%= f.file_field :attachment %>
-  <% end %>  
-
+  <label>Attachment:</label>
+  <div class="attachment-container"></div>
+  <%= download_attachment_button(@tutorial) %>
+  
   <div class="editor well"><%= image_tag "loader.gif" %></div>
 
   <button class="btn btn-primary" data-trigger="add-more">Add More</button>
