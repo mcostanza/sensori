@@ -9,6 +9,7 @@ Sensori.Views.Tutorial = Backbone.View.extend({
 
   events: {
     "click [data-trigger='save-tutorial']": "save",
+    "click [data-trigger='publish-tutorial']": "publish",
     "click [data-trigger='add-more']": "addMore"
   },
 
@@ -59,6 +60,14 @@ Sensori.Views.Tutorial = Backbone.View.extend({
     });
   },
 
+  publish: function() {
+    this.model.set("published", true);
+    this.model.save(null, {
+      success: _.bind(this.publishSuccess, this),
+      error: _.bind(this.publishError, this)
+    });
+  },
+
   getHTMLValue: function() {
     return _.invoke(this.subviews, "getHTMLValue").join("\n");
   },
@@ -73,6 +82,14 @@ Sensori.Views.Tutorial = Backbone.View.extend({
 
   saveError: function() {
     console.log("save error!");
+  },
+
+  publishSuccess: function() {
+    console.log("publish success!", arguments);
+  },
+
+  publishError: function() {
+    console.log("publish error!");
   },
 
   redirectToEditURL: function() {

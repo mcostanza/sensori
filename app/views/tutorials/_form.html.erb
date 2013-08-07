@@ -29,6 +29,10 @@
 
   <button class="btn btn-primary" data-trigger="add-more">Add More</button>
   <button class="btn btn-primary" data-trigger="save-tutorial">Save</button>
+  
+  <% if !@tutorial.new_record? && !@tutorial.published? %>
+  <button class="btn btn-primary" data-trigger="publish-tutorial">Publish</button>
+  <% end %>
 </div>
 
 <%= render 's3_uploader_form_jst' %>

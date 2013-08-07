@@ -174,6 +174,30 @@ describe("Sensori.Views.Tutorial", function() {
     });
   });
 
+  describe(".publish()", function() {
+    beforeEach(function() {
+      sinon.stub(model, "save");
+      sinon.stub(view, "publishSuccess");
+      sinon.stub(view, "publishError");
+    });
+    it("should set publish and save the tutorial", function() {
+      view.publish();
+
+      expect(view.model.get("published")).toBe(true);
+      expect(model.save.callCount).toEqual(1);
+
+      var publishCall = model.save.getCall(0);
+      expect(publishCall.args[0]).toEqual(null);
+      
+      publishCall.yieldTo("success");
+      expect(view.publishSuccess.callCount).toEqual(1);
+
+      publishCall.yieldTo("error");
+      expect(view.publishError.callCount).toEqual(1);
+    });
+  });
+
+
   describe(".getHTMLValue()", function() {
     it("should return the HTML value of each subview joined together", function() {
       var subview1 = { getHTMLValue: sinon.stub().returns("<p>content 1</p>") },
