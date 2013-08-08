@@ -33,7 +33,7 @@ class Tutorial < ActiveRecord::Base
   end
 
   def format_table_of_contents
-    self.body_html = Formatters::Tutorial::TableOfContents.new(self).format
+    self.body_html = Formatters::Tutorial::TableOfContents.new(self).format if self.body_html_changed?
   end
 
   def body_components

@@ -37,9 +37,7 @@
 
   <div class="btn-group-container">
     <div class="btn-group"><%= button_tag "Save Changes", :class => "btn btn-primary", :"data-trigger" => "save-tutorial" %></div>
-    <!--
     <div class="btn-group"><%= button_tag "Preview Changes", :class => "btn btn-info", :"data-trigger" => "preview-tutorial", :style => (@tutorial.new_record? ? "display:none;" : "") %></div>
-    -->
     <div class="btn-group"><%= button_tag "View Tutorial", :class => "btn btn-info", :"data-trigger" => "view-tutorial", :style => (@tutorial.new_record? ? "display:none;" : "") %></div>
     <div class="btn-group"><%= button_tag "Publish", :class => "btn btn-info", :"data-trigger" => "publish-tutorial", :style => (@tutorial.new_record? || @tutorial.published? ? "display:none;" : "") %></div>
   </div>

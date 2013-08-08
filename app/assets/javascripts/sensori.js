@@ -12,3 +12,7 @@ window.Sensori = {
     window.location.href = url;
   }
 };
+
+$(function() {
+  Sensori.authenticityToken = $('meta[name="csrf-token"]').attr('content');
+});

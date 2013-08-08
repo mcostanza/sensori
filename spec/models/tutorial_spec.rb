@@ -71,6 +71,12 @@ describe Tutorial do
       @tutorial.format_table_of_contents
       @tutorial.body_html.should == "processed content"
     end
+    it "should not do anything if body_html did not change" do
+      @tutorial.stub!(:body_html_changed?).and_return(false)
+      Formatters::Tutorial::TableOfContents.should_not_receive(:new)
+      @tutorial.should_not_receive(:body_html=)
+      @tutorial.format_table_of_contents
+    end
   end
 
   describe "#body_components" do

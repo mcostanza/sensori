@@ -63,8 +63,7 @@ Sensori.Views.Tutorial = Backbone.View.extend({
   },
 
   publish: function() {
-    this.model.set("published", true);
-    this.model.save(null, {
+    this.model.publish({
       success: _.bind(this.publishSuccess, this),
       error: _.bind(this.publishError, this)
     });
@@ -94,8 +93,9 @@ Sensori.Views.Tutorial = Backbone.View.extend({
   },
 
   publishSuccess: function() {
-    this.$("[data-trigger='publish-tutorial']").fadeOut();
-    this.$("[data-trigger='view-tutorial']").fadeIn();
+    this.$("[data-trigger='publish-tutorial']").fadeOut("fast", _.bind(function() {
+      this.$("[data-trigger='view-tutorial']").fadeIn();
+    }, this));
     this.$el.notice({ text: "Tutorial published!" });
   },
 
@@ -127,10 +127,10 @@ Sensori.Views.Tutorial = Backbone.View.extend({
 
   preview: function() {
     var formData = _.extend(this.model.toJSON(), {
-      body_html: this.getHTMLValue()
+      body_html: this.getHTMLValue(),
+      token: Sensori.authenticityToken
     });
-    var form = $(JST["backbone/templates/tutorials/preview_form"](formData));
-    form.submit();
+    $(JST["backbone/templates/tutorials/preview_form"](formData)).submit();
   },
 
   show: function() {
@@ -146,7 +146,7 @@ Sensori.Views.Tutorial = Backbone.View.extend({
     }, this));
 
     this.renderAttachmentUploader();
-    
+
     return this;
   }
 

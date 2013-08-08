@@ -178,18 +178,16 @@ describe("Sensori.Views.Tutorial", function() {
 
   describe(".publish()", function() {
     beforeEach(function() {
-      sinon.stub(model, "save");
+      sinon.stub(model, "publish");
       sinon.stub(view, "publishSuccess");
       sinon.stub(view, "publishError");
     });
-    it("should set publish and save the tutorial", function() {
+    it("should publish", function() {
       view.publish();
 
-      expect(view.model.get("published")).toBe(true);
-      expect(model.save.callCount).toEqual(1);
+      expect(model.publish.callCount).toEqual(1);
 
-      var publishCall = model.save.getCall(0);
-      expect(publishCall.args[0]).toEqual(null);
+      var publishCall = model.publish.getCall(0);
       
       publishCall.yieldTo("success");
       expect(view.publishSuccess.callCount).toEqual(1);
@@ -289,13 +287,12 @@ describe("Sensori.Views.Tutorial", function() {
       $.fn.fadeOut.restore()
       $.fn.notice.restore()
     });
-    it("should hide the publish tutorial button", function() {
+    it("should hide the publish tutorial button and show the view tutorial button", function() {
       view.publishSuccess()
       expect($.fn.fadeOut.callCount).toEqual(1);
       expect($.fn.fadeOut.getCall(0).thisValue.selector).toEqual("[data-trigger='publish-tutorial']");
-    });
-    it("should show the view tutorial button", function() {
-      view.publishSuccess()
+
+      $.fn.fadeOut.yield();
       expect($.fn.fadeIn.callCount).toEqual(1);
       expect($.fn.fadeIn.getCall(0).thisValue.selector).toEqual("[data-trigger='view-tutorial']");
     });
@@ -403,7 +400,7 @@ describe("Sensori.Views.Tutorial", function() {
       expect(form.find("input#tutorial_youtube_id").val()).toEqual(model.get("youtube_id"));
       expect(form.find("input#tutorial_attachment_url").val()).toEqual(model.get("attachment_url"));
       expect(form.find("input#tutorial_body_html").val()).toEqual("body html");
-
+      
       expect(view.getHTMLValue.callCount).toEqual(1);
     });
   });
