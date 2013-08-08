@@ -37,6 +37,8 @@ Sensori.Views.TextEditor = Backbone.View.extend({
     parserRules: {
       // The following tags are allowed when initialized with pre-existing content
       tags: {
+        h3: {},
+        h4: {},
         b:  {},
         i:  {},
         u:  {},
