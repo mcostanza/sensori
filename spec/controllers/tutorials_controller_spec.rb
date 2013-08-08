@@ -8,6 +8,7 @@ describe TutorialsController do
     before(:each) do
       @tutorial = mock(Tutorial)
       @scope = mock('paginated Tutorials', :per => [@tutorial])
+      @scope.stub!(:where).and_return(@scope)
       Tutorial.stub!(:page).and_return(@scope)
     end
     it "should return http success" do
@@ -18,20 +19,23 @@ describe TutorialsController do
       get 'index'
       response.should render_template("tutorials/index")
     end
-    it "should load 6 tutorials and assign them to @tutorials" do
-      Tutorial.should_receive(:page).with(1).and_return(@scope)
+    it "should load 6 published tutorials and assign them to @tutorials" do
+      Tutorial.should_receive(:where).with(published: true).and_return(@scope)
+      @scope.should_receive(:page).with(1).and_return(@scope)
       @scope.should_receive(:per).with(6).and_return([@tutorial])
       get 'index'
       assigns[:tutorials].should == [@tutorial]
     end
     it "should load 6 tutorials with pagination" do
-      Tutorial.should_receive(:page).with(2).and_return(@scope)
+      Tutorial.should_receive(:where).with(published: true).and_return(@scope)
+      @scope.should_receive(:page).with(2).and_return(@scope)
       @scope.should_receive(:per).with(6).and_return([@tutorial])
       get 'index', :page => 2
       assigns[:tutorials].should == [@tutorial]
     end
     it "should not allow a page less than 1" do
-      Tutorial.should_receive(:page).with(1).and_return(@scope)
+      Tutorial.should_receive(:where).with(published: true).and_return(@scope)
+      @scope.should_receive(:page).with(1).and_return(@scope)
       @scope.should_receive(:per).with(6).and_return([@tutorial])
       get 'index', :page => 0
       assigns[:tutorials].should == [@tutorial]
@@ -40,21 +44,42 @@ describe TutorialsController do
 
   describe "GET 'show'" do
     before(:each) do
-      @tutorial = mock(Tutorial)
+      @tutorial = FactoryGirl.create(:tutorial)
       Tutorial.stub!(:find).and_return(@tutorial)
     end
-    it "should return http success" do
-      get 'show', :id => '123'
-      response.should be_success
+    describe "tutorial is published" do
+      it "should return http success" do
+        get 'show', :id => '123'
+        response.should be_success
+      end
+      it "should render the show template" do
+        get 'show', :id => '123'
+        response.should render_template("tutorials/show")
+      end
+      it "should find the tutorial from params[:id] and assign to @tutorial" do
+        Tutorial.should_receive(:find).with('123').and_return(@tutorial)
+        get 'show', id: '123'
+        assigns[:tutorial].should == @tutorial
+      end
     end
-    it "should render the show template" do
-      get 'show', :id => '123'
-      response.should render_template("tutorials/show")
-    end
-    it "should find the tutorial from params[:id] and assign to @tutorial" do
-      Tutorial.should_receive(:find).with('123').and_return(@tutorial)
-      get 'show', id: '123'
-      assigns[:tutorial].should == @tutorial
+    describe "tutorial is not published" do
+      before(:each) do
+        @tutorial.published = false
+      end
+      it "should redirect to the edit path if logged in as an admin" do
+        login_user(:admin => true)
+        get 'show', id: '123'
+        response.should redirect_to("http://test.host/tutorials/#{@tutorial.slug}/edit")
+      end
+      it "should redirect to the tutorials path if logged in as a non-admin" do
+        login_user
+        get 'show', id: '123'
+        response.should redirect_to("http://test.host/tutorials")
+      end
+      it "should redirect to the tutorials path if not logged in" do
+        get 'show', id: '123'
+        response.should redirect_to("http://test.host/tutorials")
+      end
     end
   end
 
@@ -124,10 +149,9 @@ describe TutorialsController do
         post 'create', :tutorial => @tutorial_params
       end
       describe "valid params given" do
-        it "should redirect to the tutorial with a flash notice" do
+        it "should redirect to the tutorial" do
           post 'create', :tutorial => @tutorial_params
           response.should redirect_to(@tutorial)
-          flash[:notice].should_not be_nil 
         end
       end
       describe "invalid params given" do
@@ -138,10 +162,9 @@ describe TutorialsController do
           @tutorial.stub!(:valid?).and_return(false)
           @tutorial.stub!(:errors).and_return('errors!')
         end
-        it "should render the new template with a flash error" do
+        it "should render the new template" do
           post 'create', :tutorial => @tutorial_params
           response.should render_template("tutorials/new")
-          flash[:error].should_not be_nil 
         end
       end
     end
@@ -238,10 +261,9 @@ describe TutorialsController do
         put 'update', :id => '123', :tutorial => @tutorial_params
       end
       describe "valid params given" do
-        it "should redirect to the tutorial with a flash notice" do
+        it "should redirect to the tutorial" do
           put 'update', :id => '123', :tutorial => @tutorial_params
           response.should redirect_to(@tutorial)
-          flash[:notice].should_not be_nil 
         end
       end
       describe "invalid params given" do
@@ -252,10 +274,9 @@ describe TutorialsController do
           @tutorial.stub!(:valid).and_return(false)
           @tutorial.stub!(:errors).and_return('errors')
         end
-        it "should render the edit template with a flash error" do
+        it "should render the edit template" do
           put 'update', :id => '123', :tutorial => @tutorial_params
           response.should render_template("tutorials/edit")
-          flash[:error].should_not be_nil 
         end
       end
     end

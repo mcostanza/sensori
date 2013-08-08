@@ -6,12 +6,15 @@ class TutorialsController < ApplicationController
   # GET /tutorials
   def index
     page = [1, params[:page].to_i].max
-    @tutorials = Tutorial.page(page).per(6)
+    @tutorials = Tutorial.where(published: true).page(page).per(6)
   end
 
   # GET /tutorials/1
   def show
     @tutorial = Tutorial.find(params[:id])
+    if !@tutorial.published?
+      redirect_to(@member && @member.admin? ? edit_tutorial_path(@tutorial) : tutorials_path)
+    end
   end
 
   # GET /tutorials/new
@@ -22,11 +25,7 @@ class TutorialsController < ApplicationController
   # POST /tutorials
   def create
     @tutorial = Tutorial.new(params[:tutorial].merge(member: @member))
-    if @tutorial.save
-      flash[:notice] = "Tutorial was successfully created."
-    else
-      flash[:error] = "Tutorial could not be created."
-    end
+    @tutorial.save
     respond_with @tutorial
   end
 
@@ -38,11 +37,7 @@ class TutorialsController < ApplicationController
   # PUT /tutorials/1
   def update
     @tutorial = Tutorial.find(params[:id])
-    if @tutorial.update_attributes(params[:tutorial])
-      flash[:notice] = "Tutorial was successfully updated."
-    else
-      flash[:error] = "Tutorial could not be updated."
-    end
+    @tutorial.update_attributes(params[:tutorial])
     respond_with @tutorial
   end
 end
