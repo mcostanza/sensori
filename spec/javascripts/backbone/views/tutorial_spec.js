@@ -235,41 +235,74 @@ describe("Sensori.Views.Tutorial", function() {
     beforeEach(function(){ 
       view.render();
       sinon.stub($.fn, "fadeIn");
+      sinon.stub($.fn, "notice");
     });
     afterEach(function() {
+      $.fn.notice.restore()
       $.fn.fadeIn.restore()
     });
-    it("should show the preview tutorial button", function() {
+    it("should show the preview and publish tutorial buttons if the tutorial is not published yet", function() {
       view.saveSuccess()
+      expect($.fn.fadeIn.callCount).toEqual(2);
+      expect($.fn.fadeIn.getCall(0).thisValue.selector).toEqual("[data-trigger='publish-tutorial']")
       expect($.fn.fadeIn.getCall(1).thisValue.selector).toEqual("[data-trigger='preview-tutorial']")
     });
-    it("should show the publish tutorial button if the tutorial is not published", function() {
-      view.saveSuccess()
-      expect($.fn.fadeIn.getCall(0).thisValue.selector).toEqual("[data-trigger='publish-tutorial']")
-    });
-    it("should not show the publish tutorial button if the tutorial is already published", function() {
+    it("should show the preview and view tutorial buttons if the tutorial is already published", function() {
       view.model.set("published", true);
       view.saveSuccess()
-      expect($.fn.fadeIn.callCount).toEqual(1);
-      expect($.fn.fadeIn.getCall(0).thisValue.selector).toEqual("[data-trigger='preview-tutorial']")
+      expect($.fn.fadeIn.callCount).toEqual(2);
+      expect($.fn.fadeIn.getCall(0).thisValue.selector).toEqual("[data-trigger='view-tutorial']")
+      expect($.fn.fadeIn.getCall(1).thisValue.selector).toEqual("[data-trigger='preview-tutorial']")
+    });
+    it("should render a success notice", function() {
+      view.saveSuccess();
+      expect($.fn.notice.callCount).toEqual(1);
+      expect($.fn.notice.getCall(0).thisValue.selector).toEqual(view.$el.selector);
     });
   });
 
   describe(".saveError()", function() {
+    beforeEach(function(){ 
+      view.render();
+      sinon.stub($.fn, "notice");
+    });
+    afterEach(function() {
+      $.fn.notice.restore()
+    });
+    it("should render an error notice", function() {
+      view.saveError();
+      expect($.fn.notice.callCount).toEqual(1);
+      expect($.fn.notice.getCall(0).thisValue.selector).toEqual(view.$el.selector);
+      expect($.fn.notice.getCall(0).args[0].type).toEqual("error");
+    });
   });
 
   describe(".publishSuccess()", function() {
     beforeEach(function() {
       view.render();
       sinon.stub($.fn, "fadeOut");
+      sinon.stub($.fn, "fadeIn");
+      sinon.stub($.fn, "notice");
     });
     afterEach(function() {
+      $.fn.fadeIn.restore()
       $.fn.fadeOut.restore()
+      $.fn.notice.restore()
     });
-    it("should fade out the publish tutorial button", function() {
+    it("should hide the publish tutorial button", function() {
       view.publishSuccess()
       expect($.fn.fadeOut.callCount).toEqual(1);
       expect($.fn.fadeOut.getCall(0).thisValue.selector).toEqual("[data-trigger='publish-tutorial']");
+    });
+    it("should show the view tutorial button", function() {
+      view.publishSuccess()
+      expect($.fn.fadeIn.callCount).toEqual(1);
+      expect($.fn.fadeIn.getCall(0).thisValue.selector).toEqual("[data-trigger='view-tutorial']");
+    });
+    it("should render a success notice", function() {
+      view.saveSuccess();
+      expect($.fn.notice.callCount).toEqual(1);
+      expect($.fn.notice.getCall(0).thisValue.selector).toEqual(view.$el.selector);
     });
   });
 

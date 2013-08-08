@@ -79,18 +79,24 @@ Sensori.Views.Tutorial = Backbone.View.extend({
   },
 
   saveSuccess: function() {
-    if (!this.model.get("published")) {
+    if (this.model.get("published")) {
+      this.$("[data-trigger='view-tutorial']").fadeIn();
+    } else {
       this.$("[data-trigger='publish-tutorial']").fadeIn();
     }
     this.$("[data-trigger='preview-tutorial']").fadeIn();
+
+    this.$el.notice({ text: "Tutorial saved successfully!" });
   },
 
   saveError: function() {
-    console.log("save error!");
+    this.$el.notice({ text: "Tutorial could not be saved!", type: "error" });
   },
 
   publishSuccess: function() {
     this.$("[data-trigger='publish-tutorial']").fadeOut();
+    this.$("[data-trigger='view-tutorial']").fadeIn();
+    this.$el.notice({ text: "Tutorial published!" });
   },
 
   publishError: function() {

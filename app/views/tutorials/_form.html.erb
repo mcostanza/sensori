@@ -7,7 +7,8 @@
     body_components: @tutorial.body_components,
     member_id: @tutorial.member_id,
     attachment_url: @tutorial.attachment_url,
-    slug: @tutorial.slug
+    slug: @tutorial.slug,
+    published: @tutorial.published
   }
 %>
 <div id="tutorial-form-container" class="container">
@@ -24,17 +25,24 @@
 
   <label>Attachment:</label>
   <div class="attachment-container"></div>
-  <%= download_attachment_button(@tutorial) %>
+  <div class="btn-group-container">
+    <%= download_attachment_button(@tutorial) %>
+  </div>
   
   <div class="editor well"><%= image_tag "loader.gif" %></div>
 
-  <button class="btn btn-primary" data-trigger="add-more">Add More</button>
+  <div clas="btn-group-container">
+    <button class="btn btn-primary" data-trigger="add-more">Add More</button>
+  </div>
 
-  
-  <div class="btn-group"><%= button_tag "Save Changes", :class => "btn btn-primary", :"data-trigger" => "save-tutorial" %></div>
-  <div class="btn-group"><%= button_tag "Preview Changes", :class => "btn btn-info", :"data-trigger" => "preview-tutorial", :style => (@tutorial.new_record? ? "display:none;" : "") %></div>
-  <div class="btn-group"><%= button_tag "View Tutorial", :class => "btn btn-info", :"data-trigger" => "view-tutorial", :style => (@tutorial.new_record? ? "display:none;" : "") %></div>
-  <div class="btn-group"><%= button_tag "Publish", :class => "btn btn-info", :"data-trigger" => "publish-tutorial", :style => (@tutorial.new_record? || @tutorial.published? ? "display:none;" : "") %></div>
+  <div class="btn-group-container">
+    <div class="btn-group"><%= button_tag "Save Changes", :class => "btn btn-primary", :"data-trigger" => "save-tutorial" %></div>
+    <!--
+    <div class="btn-group"><%= button_tag "Preview Changes", :class => "btn btn-info", :"data-trigger" => "preview-tutorial", :style => (@tutorial.new_record? ? "display:none;" : "") %></div>
+    -->
+    <div class="btn-group"><%= button_tag "View Tutorial", :class => "btn btn-info", :"data-trigger" => "view-tutorial", :style => (@tutorial.new_record? ? "display:none;" : "") %></div>
+    <div class="btn-group"><%= button_tag "Publish", :class => "btn btn-info", :"data-trigger" => "publish-tutorial", :style => (@tutorial.new_record? || @tutorial.published? ? "display:none;" : "") %></div>
+  </div>
 </div>
 
 <%= render 's3_uploader_form_jst' %>
