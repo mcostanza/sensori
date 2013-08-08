@@ -39,4 +39,11 @@ class Tutorial < ActiveRecord::Base
   def body_components
     attributes["body_components"] || [{ "type" => "text", "content" => "" }]
   end
+
+  def prepare_preview(params)
+    [:title, :description, :body_html, :youtube_id, :attachment_url].each do |attribute|
+      self.send("#{attribute}=", params[attribute])
+    end
+    format_table_of_contents
+  end
 end

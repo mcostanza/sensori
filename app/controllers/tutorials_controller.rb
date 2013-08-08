@@ -1,7 +1,7 @@
 class TutorialsController < ApplicationController
   respond_to :html, :json
 
-  before_filter :ensure_admin, :only => [:new, :create, :edit, :update]
+  before_filter :ensure_admin, :only => [:new, :create, :edit, :update, :preview]
 
   # GET /tutorials
   def index
@@ -39,5 +39,12 @@ class TutorialsController < ApplicationController
     @tutorial = Tutorial.find(params[:id])
     @tutorial.update_attributes(params[:tutorial])
     respond_with @tutorial
+  end
+
+  # POST /tutorials/1/preview
+  def preview
+    @tutorial = Tutorial.find(params[:id])
+    @tutorial.prepare_preview(params[:tutorial])
+    render :template => "tutorials/show"
   end
 end

@@ -10,6 +10,8 @@ Sensori.Views.Tutorial = Backbone.View.extend({
   events: {
     "click [data-trigger='save-tutorial']": "save",
     "click [data-trigger='publish-tutorial']": "publish",
+    "click [data-trigger='preview-tutorial']": "preview",
+    "click [data-trigger='view-tutorial']": "show",
     "click [data-trigger='add-more']": "addMore"
   },
 
@@ -115,6 +117,18 @@ Sensori.Views.Tutorial = Backbone.View.extend({
 
     this.attachmentUploader.on("upload:add", this.disableAttachmentButton, this);
     this.model.on("change:attachment_url", this.enableAttachmentButton, this)
+  },
+
+  preview: function() {
+    var formData = _.extend(this.model.toJSON(), {
+      body_html: this.getHTMLValue()
+    });
+    var form = $(JST["backbone/templates/tutorials/preview_form"](formData));
+    form.submit();
+  },
+
+  show: function() {
+    Sensori.redirect("/tutorials/" + this.model.get("slug"));
   },
 
   render: function() {

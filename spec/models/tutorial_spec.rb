@@ -79,4 +79,39 @@ describe Tutorial do
       @tutorial.body_components.should == [{ "type" => "text", "content" => "" }]
     end
   end
+
+  describe "#prepare_preview(params)" do
+    before(:each) do
+      @params = {
+        :title => "new title",
+        :description => "this is it",
+        :body_html => "new body html",
+        :youtube_id => "123123",
+        :attachment_url => "http://s3.amazon.com/samples.zip"
+      }
+      @tutorial = FactoryGirl.build(:tutorial)
+      @tutorial.stub!(:format_table_of_contents)
+    end
+    it "should set title, description, body_html, youtube_id, and attachment_url" do
+      @tutorial.prepare_preview(@params)
+      @tutorial.title.should == @params[:title]
+      @tutorial.description.should == @params[:description]
+      @tutorial.youtube_id.should == @params[:youtube_id]
+      @tutorial.body_html.should == @params[:body_html]
+      @tutorial.attachment_url.should == @params[:attachment_url]
+    end
+    it "should not set other attributes" do
+      @tutorial.prepare_preview(@params.merge(id: 123, body_components: "oops"))
+      @tutorial.id.should_not == 123
+      @tutorial.body_components.should_not == "oops"
+    end
+    it "should format the table of contents" do
+      @tutorial.should_receive(:format_table_of_contents)
+      @tutorial.prepare_preview(@params)
+    end
+    it "should not save the tutorial" do
+      @tutorial.should_not_receive(:save)
+      @tutorial.prepare_preview(@params)
+    end
+  end
 end

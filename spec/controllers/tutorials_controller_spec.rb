@@ -304,4 +304,59 @@ describe TutorialsController do
       end
     end
   end
+
+  describe "POST 'preview'" do
+    before(:each) do
+      @tutorial_params = {
+        :title => "Tutorial",
+        :description => "Show u how to do this",
+        :body_html => "lots of text with some html",
+        :attachment_url => "http://s3.amazon.com/tutorial.zip",
+        :youtube_id => "10110"
+      }
+      @tutorial = Tutorial.new
+      Tutorial.stub!(:find).and_return(@tutorial)
+    end
+    describe "when logged in as an admin" do
+      before(:each) do 
+        login_user(:admin => true)
+      end
+      it "should find the tutorial and prepare a preview" do
+        Tutorial.should_receive(:find).with("123").and_return(@tutorial)
+        @tutorial.should_receive(:prepare_preview).with(@tutorial_params.stringify_keys)
+        post 'preview', :id => "123", :tutorial => @tutorial_params
+      end
+      it "should not save the tutorial" do
+        @tutorial.should_not_receive(:save)
+        post 'preview', :id => "123", :tutorial => @tutorial_params
+      end
+      it "should render the show template" do
+        post 'preview', :id => "123", :tutorial => @tutorial_params
+        response.should render_template("tutorials/show")
+      end
+    end
+    describe "when logged in as a non-admin" do
+      before(:each) do
+        login_user
+      end 
+      it "should not find a tutorial" do
+        Tutorial.should_not_receive(:find)
+        post 'preview', :id => "123", :tutorial => @tutorial_params
+      end
+      it "should redirect to the root path" do
+        post 'preview', :id => "123", :tutorial => @tutorial_params
+        response.should redirect_to(root_path)
+      end
+    end
+    describe "when not logged in" do
+      it "should not find a tutorial" do
+        Tutorial.should_not_receive(:find)
+        post 'preview', :id => "123", :tutorial => @tutorial_params
+      end
+      it "should redirect to the root path" do
+        post 'preview', :id => "123", :tutorial => @tutorial_params
+        response.should redirect_to(root_path)
+      end
+    end
+  end
 end

@@ -339,6 +339,57 @@ describe("Sensori.Views.Tutorial", function() {
     });
   });
 
+  describe(".preview()", function() {
+    beforeEach(function() {
+      sinon.stub($.fn, "submit");
+      sinon.stub(view, "getHTMLValue").returns("body html");
+      model.set({
+        title: "wah effect",
+        description: "how to make one",
+        youtube_id: "123",
+        attachment_url: "http://s3.amazon.com/wah.zip",
+        slug: "wah-effect--123"
+      });
+    });
+    afterEach(function() {
+      $.fn.submit.restore()
+    });
+    it("should render and submit a preview form based on tutorial data", function() {
+      view.preview();
+      
+      expect($.fn.submit.callCount).toEqual(1);
+
+      var form = $.fn.submit.getCall(0).thisValue;
+
+      expect(form.attr("action")).toEqual("/tutorials/wah-effect--123/preview");
+      expect(form.attr("method")).toEqual("POST");
+      expect(form.attr("target")).toEqual("_blank");
+
+      expect(form.find("input#tutorial_title").val()).toEqual(model.get("title"));
+      expect(form.find("input#tutorial_description").val()).toEqual(model.get("description"));
+      expect(form.find("input#tutorial_youtube_id").val()).toEqual(model.get("youtube_id"));
+      expect(form.find("input#tutorial_attachment_url").val()).toEqual(model.get("attachment_url"));
+      expect(form.find("input#tutorial_body_html").val()).toEqual("body html");
+
+      expect(view.getHTMLValue.callCount).toEqual(1);
+    });
+  });
+
+  describe(".show()", function() {
+    beforeEach(function() {
+      sinon.stub(Sensori, "redirect");
+    });
+    afterEach(function() {
+      Sensori.redirect.restore();
+    });
+    it("should redirect to the tutorial show url", function() {
+      model.set("slug", "title--123");
+      view.show();
+      expect(Sensori.redirect.callCount).toEqual(1);
+      expect(Sensori.redirect.calledWith("/tutorials/title--123")).toBe(true);
+    });
+  });
+
   describe(".render()", function() {
     beforeEach(function() {
       sinon.stub(view, "addComponent");
