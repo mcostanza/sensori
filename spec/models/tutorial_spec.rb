@@ -76,7 +76,7 @@ describe Tutorial do
   describe "#body_components" do
     it "should return a formatted array if nil" do
       @tutorial.body_components = nil
-      @tutorial.body_components.should == [{ "type" => "text", "content" => "" }]
+      @tutorial.body_components.should == [{ "type" => "text", "content" => "" }, { "type" => "gallery", "content" => [] }]
     end
   end
 

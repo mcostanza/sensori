@@ -37,7 +37,7 @@ class Tutorial < ActiveRecord::Base
   end
 
   def body_components
-    attributes["body_components"] || [{ "type" => "text", "content" => "" }]
+    attributes["body_components"] || [{ "type" => "text", "content" => "" }, { "type" => "gallery", "content" => [] }]
   end
 
   def prepare_preview(params)
