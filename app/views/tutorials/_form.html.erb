@@ -28,11 +28,12 @@
   <div class="editor well"><%= image_tag "loader.gif" %></div>
 
   <button class="btn btn-primary" data-trigger="add-more">Add More</button>
-  <button class="btn btn-primary" data-trigger="save-tutorial">Save</button>
+
   
-  <% if !@tutorial.new_record? && !@tutorial.published? %>
-  <button class="btn btn-primary" data-trigger="publish-tutorial">Publish</button>
-  <% end %>
+  <div class="btn-group"><%= button_tag "Save Changes", :class => "btn btn-primary", :"data-trigger" => "save-tutorial" %></div>
+  <div class="btn-group"><%= button_tag "Preview Changes", :class => "btn btn-info", :"data-trigger" => "preview-tutorial", :style => (@tutorial.new_record? ? "display:none;" : "") %></div>
+  <div class="btn-group"><%= button_tag "View Tutorial", :class => "btn btn-info", :"data-trigger" => "preview-tutorial", :style => (@tutorial.new_record? ? "display:none;" : "") %></div>
+  <div class="btn-group"><%= button_tag "Publish", :class => "btn btn-info", :"data-trigger" => "publish-tutorial", :style => (@tutorial.new_record? || @tutorial.published? ? "display:none;" : "") %></div>
 </div>
 
 <%= render 's3_uploader_form_jst' %>
