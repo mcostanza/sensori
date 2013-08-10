@@ -3,8 +3,7 @@ Sensori.Views.Tutorial = Backbone.View.extend({
   initialize: function() {
     this.subviews = [];
 
-    this.model.on("change:id", this.redirectToEditURL, this);
-    this.model.on("change:attachment_url", this.renderAttachmentDownloadButton, this);
+    this.model.on("change:id", this.redirectToEditURL, this)
   },
 
   events: {
@@ -107,22 +106,11 @@ Sensori.Views.Tutorial = Backbone.View.extend({
     Sensori.pushState(this.model.get("slug") + "/edit");
   },
 
-  disableAttachmentButton: function() {
-    this.$(".attachment-button").addClass("disabled");
-  },
-
-  enableAttachmentButton: function() {
-    this.$(".attachment-button").removeClass("disabled").attr("href", this.model.get("attachment_url"));
-  },
-
   renderAttachmentUploader: function() {
     this.attachmentUploader = new Sensori.Views.AttachmentUploader({
       model: this.model,
-      el: this.$(".attachment-container")
+      el: this.$("#tutorial-attachment-container")
     }).render();
-
-    this.attachmentUploader.on("upload:add", this.disableAttachmentButton, this);
-    this.model.on("change:attachment_url", this.enableAttachmentButton, this)
   },
 
   preview: function() {

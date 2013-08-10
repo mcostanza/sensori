@@ -1,7 +1,16 @@
 Sensori.Views.AttachmentUploader = Backbone.View.extend({
 
+	events: {
+		"click .disabled": "preventDefault"
+	},
+
+	preventDefault: function(event) {
+		event.preventDefault();
+	},
+
 	onAdd: function(event, data) {
 		this.trigger("upload:add");
+		this.$(".download-button").addClass("disabled");
 		this.$(".progress").fadeIn();
 		this.$(".progress-bar").css({ width: "0%" });
 		data.submit();
@@ -23,6 +32,9 @@ Sensori.Views.AttachmentUploader = Backbone.View.extend({
         path   = this.$('input[name=key]').val().replace('${filename}', file.name);
         
     this.model.set("attachment_url", domain + path);
+    this.$(".download-button")
+    	.removeClass("disabled")
+    	.attr("href", this.model.get("attachment_url"));
   },
 
   onFail: function(e, data) {
@@ -30,13 +42,10 @@ Sensori.Views.AttachmentUploader = Backbone.View.extend({
   },
 	
 	render: function() {
-		this.$el.html(JST["backbone/templates/tutorials/s3_uploader_form"]());
-
-		this.$el.append([
-			"<div class=\"progress progress-striped active\" style=\"display:none\">",
-  			"<div class=\"bar progress-bar\"></div>",
-			"</div>"
-		].join(""));
+		this.$el.html(JST["backbone/templates/tutorials/attachment_uploader"]({
+			attachmentUrl: this.model.get("attachment_url"),
+			uploadForm: JST["backbone/templates/tutorials/s3_uploader_form"]()
+		}));
 
 		this.$("form").fileupload({
       add:      _.bind(this.onAdd, this),

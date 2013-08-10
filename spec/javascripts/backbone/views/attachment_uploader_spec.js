@@ -38,6 +38,10 @@ describe("Sensori.Views.AttachmentUploader", function() {
   		view.onAdd(event, data);
   		expect(data.submit.callCount).toEqual(1);
   	});
+    it("should disable the download button", function() {
+      view.onAdd(event, data);
+      expect(view.$(".download-button").hasClass("disabled")).toBe(true);
+    });
   });
 
   describe(".onProgress(event, data", function() {
@@ -70,6 +74,13 @@ describe("Sensori.Views.AttachmentUploader", function() {
   		view.onDone(event, data);
   		expect(model.get("attachment_url")).toEqual(expected);
   	})
+    it("should enable the download button and set the href to the attachment url", function() {
+      var expected = "https://sensori-dev.s3.amazonaws.com/uploads/id/samples.zip";
+      view.$(".download-button").addClass("disabled");
+      view.onDone(event, data);
+      expect(view.$(".download-button").hasClass("disabled")).toBe(false);
+      expect(view.$(".download-button").attr("href")).toEqual(expected);
+    });
   });
 
   describe(".onFail(event, data)", function() {

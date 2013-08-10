@@ -12,23 +12,24 @@
   }
 %>
 <div id="tutorial-form-container" class="container">
-  <%= form_for(@tutorial) do |f| %>
-    <%= f.label :title %>
-    <%= f.text_field :title, :placeholder => "Title", :class => 'span6' %>
 
-    <%= f.label :description %>
-    <%= f.text_area :description, :placeholder => "Description", :rows => 5, :class => 'span6' %>
+    <div class="row">
+      <div class="span8">
+        <%= label :tutorial, :youtube_id, :class => "flex-video widescreen youtube-placeholder" do %>
+          <%= text_field :tutorial, :youtube_id, :placeholder => "Paste YouTube video url", :class => "span5" %>
+        <% end %>
+      </div>
+      <div class="span4 tutorial-sidebar">
+        <h3><%= text_field :tutorial, :title, :placeholder => "Tutorial Title", :class => "span4" %></h3>
+        <h4>by <%= @tutorial.member.name %></h4>
+        <p><%= text_field :tutorial, :description, :placeholder => "One-line description", :class => "span4" %></p>
+        
+        <div class="btn-group-container" id="tutorial-attachment-container">
+          <%= image_tag "loader.gif" %>
+        </div>
+      </div>
+    </div>  
 
-    <%= f.label :youtube_id, "YouTube Video ID" %>
-    <%= f.text_field :youtube_id, :placeholder => "YouTube Video ID", :class => 'span6' %>
-  <% end %>
-
-  <label>Attachment:</label>
-  <div class="attachment-container"></div>
-  <div class="btn-group-container">
-    <%= download_attachment_button(@tutorial) %>
-  </div>
-  
   <div class="editor well"><%= image_tag "loader.gif" %></div>
 
   <div clas="btn-group-container">
