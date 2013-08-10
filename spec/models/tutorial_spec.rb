@@ -9,10 +9,6 @@ describe Tutorial do
     it "should be valid given valid attributes" do
       @tutorial.should be_valid
     end
-    it "should be invalid without an attachment_url" do
-      @tutorial.attachment_url = nil
-      @tutorial.should_not be_valid
-    end
     it "should be invalid without a title" do
       @tutorial.title = nil
       @tutorial.should_not be_valid

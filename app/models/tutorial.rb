@@ -12,7 +12,6 @@ class Tutorial < ActiveRecord::Base
   validates :member, :presence => true
   validates :body_html, :presence => true
   validates :body_components, :presence => true
-  validates :attachment_url, :presence => true
 
   friendly_id :title, :use => :slugged
 
