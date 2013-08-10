@@ -11,7 +11,8 @@ Sensori.Views.Tutorial = Backbone.View.extend({
     "click [data-trigger='publish-tutorial']": "publish",
     "click [data-trigger='preview-tutorial']": "preview",
     "click [data-trigger='view-tutorial']": "show",
-    "click [data-trigger='add-more']": "addMore"
+    "click [data-trigger='add-more']": "addMore",
+    "change #tutorial_youtube_video_url": "updateYoutubeId"
   },
 
   addMore: function() {
@@ -50,7 +51,6 @@ Sensori.Views.Tutorial = Backbone.View.extend({
     this.model.set({
       title:           this.$("#tutorial_title").val(),
       description:     this.$("#tutorial_description").val(),
-      youtube_id:      this.$("#tutorial_youtube_id").val(),
       body_html:       this.getHTMLValue(),
       body_components: this.getJSONValue()
     });
@@ -59,6 +59,38 @@ Sensori.Views.Tutorial = Backbone.View.extend({
       success: _.bind(this.saveSuccess, this),
       error: _.bind(this.saveError, this)
     });
+  },
+
+  parseYoutubeId: function() {
+    var videoUrl = this.$("#tutorial_youtube_video_url").val(),
+        matchData = videoUrl.match(/v=(\w+)/);
+    return matchData ? matchData[1] : null;
+  },
+
+  updateYoutubeId: function() {
+    var youtubeId = this.parseYoutubeId(),
+        previewEl = this.$(".flex-video"),
+        currentPreview = previewEl.find(".flex-video-content"),
+        newPreview;
+
+    if (youtubeId) {
+      this.model.set("youtube_id", youtubeId);
+
+      newPreview = $("<iframe>")
+        .attr("type", "text/html")
+        .attr("frameborder", "0")
+        .attr("src", "http://www.youtube.com/embed/" + youtubeId);
+    } else {
+      this.model.unset("youtube_id");
+
+      newPreview = $("<label>")
+        .attr("for", "tutorial_youtube_video_url");
+      newPreview.html("<img src='/assets/youtube-placeholder.png' />");
+    }
+
+    newPreview.addClass("flex-video-content");
+
+    currentPreview.fadeOut("fast", function() { previewEl.html(newPreview); });
   },
 
   publish: function() {

@@ -15,14 +15,22 @@
 
     <div class="row">
       <div class="span8">
-        <%= label :tutorial, :youtube_id, :class => "flex-video widescreen youtube-placeholder" do %>
-          <%= text_field :tutorial, :youtube_id, :placeholder => "Paste YouTube video url", :class => "span5" %>
-        <% end %>
+        <div class="flex-video widescreen">
+          <% if @tutorial.youtube_id.present? %>
+            <%= content_tag :iframe, nil, :type => "text/html", :src => @tutorial.youtube_embed_url, :frameborder => "0", :class => "flex-video-content" %>
+          <% else %>
+            <%= label :tutorial, :youtube_video_url, :class => "flex-video-content" do %>
+              <%= image_tag "youtube-placeholder.png" %>
+            <% end %>
+          <% end %>
+        </div>    
+        <%= label :tutorial, :youtube_video_url, "Youtube Video URL" %>    
+        <%= text_field_tag "tutorial[youtube_video_url]", @tutorial.youtube_video_url, :placeholder => "Paste YouTube Video URL", :class => "span8" %>
       </div>
       <div class="span4 tutorial-sidebar">
-        <h3><%= text_field :tutorial, :title, :placeholder => "Tutorial Title", :class => "span4" %></h3>
+        <h3><%= text_field :tutorial, :title, :placeholder => "Enter tutorial title", :class => "span4" %></h3>
         <h4>by <%= @tutorial.member.name %></h4>
-        <p><%= text_field :tutorial, :description, :placeholder => "One-line description", :class => "span4" %></p>
+        <p><%= text_area :tutorial, :description, :placeholder => "Short description of this tutorial", :class => "span4", :rows => 2 %></p>
         
         <div class="btn-group-container" id="tutorial-attachment-container">
           <%= image_tag "loader.gif" %>

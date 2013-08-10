@@ -2,7 +2,8 @@ describe("Sensori.Views.Tutorial", function() {
   var view,
       element,
       model,
-      mockSubview;
+      mockSubview,
+      youtubeId = "xot5GaY5VPw";
 
   beforeEach(function() {
 
@@ -11,6 +12,7 @@ describe("Sensori.Views.Tutorial", function() {
         "<div class='editor'><img src='/assets/loader.gif' /></div>",
         "<a href='javascript:;' class='btn attachment-button'>Download Samples</a>",
         "<div id='tutorial-attachment-container'></div>",
+        "<div class='flex-video widescreen'><label class='flex-video-content'>placeholder image</label></div>",
         "<button data-trigger='add-more'>Add More</button>",
         "<button data-trigger='save-tutorial'>Save</button>",
         "<button data-trigger='publish-tutorial'>Publish</button>",
@@ -149,14 +151,13 @@ describe("Sensori.Views.Tutorial", function() {
       view.$el.append([
         "<input type='text' value='title' id='tutorial_title' />",
         "<input type='text' value='description' id='tutorial_description' />",
-        "<input type='text' value='youtube_id' id='tutorial_youtube_id' />",
+        "<input type='text' value='youtube_video_url' id='tutorial_youtube_video_url' />",
       ].join(""));
     });
     it("should set model attributes from input and component values", function() {
       view.save();
       expect(view.model.get("title")).toEqual("title");
       expect(view.model.get("description")).toEqual("description");
-      expect(view.model.get("youtube_id")).toEqual("youtube_id");
       expect(view.getHTMLValue.callCount).toEqual(1);
       expect(view.getJSONValue.callCount).toEqual(1);
       expect(view.model.get("body_html")).toEqual("html value");
@@ -174,6 +175,63 @@ describe("Sensori.Views.Tutorial", function() {
       saveCall.yieldTo("error");
       expect(view.saveError.callCount).toEqual(1);
     });
+  });
+
+  describe(".parseYoutubeId()", function() {
+    it("should return the youtube video id from the youtube video url input", function() {
+      view.$el.append("<input id='tutorial_youtube_video_url' value='http://www.youtube.com/watch?v=abc123&more=shit' />");
+
+      expect(view.parseYoutubeId()).toEqual("abc123");
+    });
+  });
+
+  describe(".updateYoutubeId", function() {
+    beforeEach(function() {
+      view.render();
+      sinon.stub($.fn, "fadeOut");
+    });
+    afterEach(function() {
+      $.fn.fadeOut.restore();
+    });
+    describe("valid youtube id entered", function() {
+      beforeEach(function() {
+        sinon.stub(view, "parseYoutubeId").returns(youtubeId);
+      });
+      it("should remove the current youtube preview and insert an iframe with the entered youtube id", function() {
+        view.updateYoutubeId();
+        expect($.fn.fadeOut.callCount).toEqual(1);
+        expect($.fn.fadeOut.getCall(0).thisValue.selector).toEqual(".flex-video .flex-video-content");
+        
+        $.fn.fadeOut.yield()
+        var iframe = view.$(".flex-video iframe");
+        expect(iframe.length).toEqual(1);
+        expect(iframe.attr("src")).toEqual("http://www.youtube.com/embed/" + youtubeId);
+      });
+      it("should set the model's youtube_id attribute", function() {
+        view.updateYoutubeId();
+        expect(model.get("youtube_id")).toEqual(youtubeId);
+      });
+    });
+    describe("empty/invalid youtube id entered", function() {
+      beforeEach(function() {
+        sinon.stub(view, "parseYoutubeId").returns(null);
+      });
+      it("should remove the current youtube preview and insert a youtube video placeholder image", function() {
+        view.updateYoutubeId();
+        expect($.fn.fadeOut.callCount).toEqual(1);
+        expect($.fn.fadeOut.getCall(0).thisValue.selector).toEqual(".flex-video .flex-video-content");
+        
+        $.fn.fadeOut.yield()
+        var label = view.$(".flex-video label");
+        expect(label.length).toEqual(1);
+        expect(label.attr("for")).toEqual("tutorial_youtube_video_url");
+        expect(label.find("img").attr("src")).toEqual("/assets/youtube-placeholder.png");
+      });
+      it("should unset the model's youtube_id attribute", function() {
+        view.updateYoutubeId();
+        expect(model.get("youtube_id")).toBe(undefined);
+      });
+    }); 
   });
 
   describe(".publish()", function() {

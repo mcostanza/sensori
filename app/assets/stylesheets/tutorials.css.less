@@ -61,6 +61,10 @@
     }
   }
 
+  textarea {
+    resize: none;
+  }
+
 }
 
 .flex-video {
@@ -73,18 +77,11 @@
 
   &.widescreen { padding-bottom: 57.25%; }
   &.vimeo { padding-top: 0; }
-  &.youtube-placeholder {
-    background: image-url("youtube-placeholder.png") no-repeat 0 0;
-    text-align: center;
-    margin: 0px auto;
-    input {
-      margin-top: 170px;
-    }
-  }
-
+  
   iframe,
   object,
-  embed {
+  embed,
+  img {
     position: absolute;
     top: 0;
     left: 0;
