@@ -146,11 +146,12 @@ Sensori.Views.Tutorial = Backbone.View.extend({
   },
 
   preview: function() {
-    var formData = _.extend(this.model.toJSON(), {
-      body_html: this.getHTMLValue(),
-      token: Sensori.authenticityToken
-    });
-    $(JST["backbone/templates/tutorials/preview_form"](formData)).submit();
+    var formData = _.extend(this.model.toJSON(), { token: Sensori.authenticityToken }),
+        form = $(JST["backbone/templates/tutorials/preview_form"](formData));
+
+    form.find("#tutorial_body_html").val(this.getHTMLValue());
+
+    form.submit();
   },
 
   show: function() {
