@@ -27,5 +27,9 @@ describe TutorialsController do
       put("/tutorials/1").should route_to("tutorials#update", :id => "1")
     end
 
+    it "routes to #preview" do
+      post("/tutorials/1/preview").should route_to("tutorials#preview", :id => "1")
+    end
+
   end
 end

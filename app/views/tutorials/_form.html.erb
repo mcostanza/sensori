@@ -1,27 +1,62 @@
-<%= form_for(@tutorial, :html => { :multipart => true }) do |f| %>
-  <%= f.label :title %>
-  <%= f.text_field :title, :placeholder => "Title", :class => 'span6' %>
-  <%= f.label :description %>
-  <%= f.text_area :description, :placeholder => "Description", :rows => 5, :class => 'span6' %>
-  <%= f.label :body %>
-  <%= f.text_area :body, :placeholder => "Body", :rows => 10, :class => 'span6' %>
-  <%= f.label :youtube_id, "YouTube Video ID" %>
-  <%= f.text_field :youtube_id, :placeholder => "YouTube Video ID", :class => 'span6' %>
-  <%= f.label :attachment %>
-  <%= f.file_field :attachment %>
-  <button type="submit" class="btn btn-primary clearfix">Post</button>
-<% end %>
+<%
+  tutorial_data = {
+    id: @tutorial.id,
+    title: @tutorial.title,
+    description: @tutorial.description,
+    youtube_id: @tutorial.youtube_id,
+    body_components: @tutorial.body_components,
+    member_id: @tutorial.member_id,
+    attachment_url: @tutorial.attachment_url,
+    slug: @tutorial.slug,
+    published: @tutorial.published
+  }
+%>
+<div id="tutorial-form-container" class="container">
 
-<ul class="thumbnails">
-</ul>
-<%= s3_uploader_form do %>
-  <%= file_field_tag :file, :multiple => true %>
-<% end %>
+    <div class="row">
+      <div class="span8">
+        <div class="flex-video widescreen">
+          <% if @tutorial.youtube_id.present? %>
+            <%= content_tag :iframe, nil, :type => "text/html", :src => @tutorial.youtube_embed_url, :frameborder => "0", :class => "flex-video-content" %>
+          <% else %>
+            <%= label :tutorial, :youtube_video_url, :class => "flex-video-content" do %>
+              <%= image_tag "youtube-placeholder.png" %>
+            <% end %>
+          <% end %>
+        </div>    
+        <%= label :tutorial, :youtube_video_url, "Youtube Video URL" %>    
+        <%= text_field_tag "tutorial[youtube_video_url]", (@tutorial.youtube_id.present? ? @tutorial.youtube_video_url : nil), :placeholder => "Paste YouTube Video URL", :class => "span8" %>
+      </div>
+      <div class="span4 tutorial-sidebar">
+        <h3><%= text_field :tutorial, :title, :placeholder => "Enter tutorial title", :class => "span4" %></h3>
+        <h4>by <%= @tutorial.member.name %></h4>
+        <p><%= text_area :tutorial, :description, :placeholder => "Short description of this tutorial", :class => "span4", :rows => 2 %></p>
+        
+        <div class="btn-group-container" id="tutorial-attachment-container">
+          <%= image_tag "loader.gif" %>
+        </div>
+      </div>
+    </div>  
 
-<script id="uploaded-image" type="text/x-tmpl">
-<li class="span2">
-  <a href="javascript:;" class="thumbnail" data-lightbox="true">
-    <img src="{%=o.imageURL%}" />
-  </a>
-</li>
+  <div class="editor well"><%= image_tag "loader.gif" %></div>
+
+  <div clas="btn-group-container">
+    <button class="btn btn-primary" data-trigger="add-more">Add More</button>
+  </div>
+
+  <div class="btn-group-container">
+    <div class="btn-group"><%= button_tag "Save Changes", :class => "btn btn-primary", :"data-trigger" => "save-tutorial" %></div>
+    <div class="btn-group"><%= button_tag "Preview Changes", :class => "btn btn-info", :"data-trigger" => "preview-tutorial", :style => (@tutorial.new_record? ? "display:none;" : "") %></div>
+    <div class="btn-group"><%= button_tag "View Tutorial", :class => "btn btn-info", :"data-trigger" => "view-tutorial", :style => (@tutorial.new_record? ? "display:none;" : "") %></div>
+    <div class="btn-group"><%= button_tag "Publish", :class => "btn btn-info", :"data-trigger" => "publish-tutorial", :style => (@tutorial.new_record? || @tutorial.published? ? "display:none;" : "") %></div>
+  </div>
+</div>
+
+<%= render 's3_uploader_form_jst' %>
+<script type="text/javascript">
+Sensori.Tutorial = new Sensori.Models.Tutorial(<%= raw tutorial_data.to_json %>);
+Sensori.TutorialView = new Sensori.Views.Tutorial({
+  model: Sensori.Tutorial,
+  el: $("#tutorial-form-container")
+}).render();
 </script>

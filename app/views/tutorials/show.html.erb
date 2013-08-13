@@ -11,14 +11,14 @@
     <h3><%= @tutorial.title %></h3>
     <h4>by <%= @tutorial.member.name %></h4>
     <p><%= simple_format(@tutorial.description) %></p>
-    <%= link_to @tutorial.attachment_url, :class => "btn btn-primary" do %>
-      <i class="icon-white icon-download-alt"></i> Download Samples
-    <% end if @tutorial.attachment? %>
+    <% if @tutorial.attachment_url.present? %>
+      <%= link_to raw("<i class=\"icon-white icon-download-alt\"></i> Download Samples"), @tutorial.attachment_url, :class => "btn btn-primary attachment-button" %>
+    <% end %>
   </div>
 </div>
 
 <div class="tutorial well">
-  <%= @tutorial.body.html_safe %>
+  <%= @tutorial.body_html.html_safe %>
 </div>
 
 <div id="tutorial-lightbox" class="lightbox hide fade"  tabindex="-1" role="dialog" aria-hidden="true">

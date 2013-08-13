@@ -1,0 +1,14 @@
+<script type="text/template" id="s3-uploader-form-template">
+<%= s3_uploader_form do %>
+  <%= file_field_tag :file %>
+<% end %>
+</script>
+
+<script type="text/javascript">
+(function() {
+  this.JST || (this.JST = {});
+  this.JST["backbone/templates/tutorials/s3_uploader_form"] = function() {
+    return $("#s3-uploader-form-template").html();
+  };
+}).call(this);
+</script>

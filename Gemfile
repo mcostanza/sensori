@@ -23,6 +23,11 @@ gem 'jquery-rails'
 group :test, :development do
   gem 'rspec-rails', '~> 2.0'
   gem 'factory_girl_rails'
+
+  # Javascript unit tests
+  gem 'jasmine'
+  # Javascript mocking library
+  gem "sinon-rails"
 end
 
 group :test do
@@ -81,3 +86,10 @@ gem "sidekiq"
 
 # JQuery File Upload
 gem "jquery-fileupload-rails"
+
+# Editor for tutorials, etc
+# Forked version using wysihtml5 version 0.4.0pre
+gem "bootstrap-wysihtml5-rails", :git => "https://sensoricollective@bitbucket.org/sensoricollective/bootstrap-wysihtml5-rails.git"
+
+# Backbone JS library
+gem "rails-backbone"

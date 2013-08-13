@@ -11,6 +11,7 @@ describe HomeController do
 
       @tutorial = mock(Tutorial)
       @tutorials_scope = mock('tutorials with members', :limit => [@track])
+      @tutorials_scope.stub!(:where).and_return(@tutorials_scope)
       Tutorial.stub!(:includes).and_return(@tutorials_scope)
 
       @discussion = mock(Discussion)
@@ -32,8 +33,9 @@ describe HomeController do
       get 'index'
       assigns[:latest_tracks].should == [@track]
     end
-    it "should load the latest 3 tutorials with member association and assign to @tutorials" do
+    it "should load the latest 3 published tutorials with member association and assign to @tutorials" do
       Tutorial.should_receive(:includes).with(:member).and_return(@tutorials_scope)
+      @tutorials_scope.should_receive(:where).with(published: true).and_return(@tutorials_scope)
       @tutorials_scope.should_receive(:limit).with(3).and_return([@tutorial])
       get 'index'
       assigns[:tutorials].should == [@tutorial]

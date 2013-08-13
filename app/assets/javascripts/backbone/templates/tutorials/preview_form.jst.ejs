@@ -1,0 +1,9 @@
+<form action="/tutorials/<%= slug %>/preview" method="POST" target="_blank">
+  <input type="hidden" name="utf8" value="&#x2713;" />
+	<input type="hidden" name="authenticity_token" value="<%= token %>" />
+	<input type="hidden" id="tutorial_title" name="tutorial[title]" value="<%= title %>" />
+	<input type="hidden" id="tutorial_description" name="tutorial[description]" value="<%= description %>" />
+	<input type="hidden" id="tutorial_youtube_id" name="tutorial[youtube_id]" value="<%= youtube_id %>" />
+	<input type="hidden" id="tutorial_attachment_url" name="tutorial[attachment_url]" value="<%= attachment_url %>" />
+	<input type="hidden" id="tutorial_body_html" name="tutorial[body_html]" value="" />
+</form>

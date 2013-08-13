@@ -13,9 +13,15 @@
 //= require jquery
 //= require jquery_ujs
 //= require twitter/bootstrap
+//= require bootstrap-wysihtml5
 //= require jquery.equalheights
 //= require jquery-fileupload/basic
 //= require jquery-fileupload/vendor/tmpl
+//= require underscore
+//= require backbone
+//= require backbone_rails_sync
+//= require backbone_datalink
+//= require sensori
 //= require_tree .
 
 $(function() {

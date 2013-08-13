@@ -1,6 +1,8 @@
 Sensori::Application.routes.draw do
 
-  resources :tutorials, :except => :destroy
+  resources :tutorials, :except => :destroy do
+    post "preview", :on => :member
+  end
   
   resources :sessions
 

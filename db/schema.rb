@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130730042101) do
+ActiveRecord::Schema.define(:version => 20130807004705) do
 
   create_table "discussion_notifications", :force => true do |t|
     t.integer  "discussion_id", :null => false
@@ -102,14 +102,16 @@ ActiveRecord::Schema.define(:version => 20130730042101) do
   create_table "tutorials", :force => true do |t|
     t.string   "title"
     t.text     "description"
-    t.text     "body"
+    t.text     "body_html"
     t.string   "slug"
     t.integer  "member_id"
     t.string   "youtube_id"
-    t.string   "attachment"
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
-    t.boolean  "featured",    :default => false
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
+    t.boolean  "featured",        :default => false
+    t.text     "body_components"
+    t.boolean  "published",       :default => false
+    t.string   "attachment_url"
   end
 
   add_foreign_key "discussion_notifications", "discussions", :name => "discussion_notifications_discussion_id_fk"
