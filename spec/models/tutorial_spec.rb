@@ -67,8 +67,8 @@ describe Tutorial do
       @tutorial.format_table_of_contents
       @tutorial.body_html.should == "processed content"
     end
-    it "should not do anything if body_html did not change" do
-      @tutorial.stub!(:body_html_changed?).and_return(false)
+    it "should not do anything if include_table_of_contents is false" do
+      @tutorial.include_table_of_contents = false
       Formatters::Tutorial::TableOfContents.should_not_receive(:new)
       @tutorial.should_not_receive(:body_html=)
       @tutorial.format_table_of_contents
@@ -89,7 +89,8 @@ describe Tutorial do
         :description => "this is it",
         :body_html => "new body html",
         :youtube_id => "123123",
-        :attachment_url => "http://s3.amazon.com/samples.zip"
+        :attachment_url => "http://s3.amazon.com/samples.zip",
+        :include_table_of_contents => "true"
       }
       @tutorial = FactoryGirl.build(:tutorial)
       @tutorial.stub!(:format_table_of_contents)
@@ -107,8 +108,13 @@ describe Tutorial do
       @tutorial.id.should_not == 123
       @tutorial.body_components.should_not == "oops"
     end
-    it "should format the table of contents" do
+    it "should format the table of contents if params[:include_table_of_contents].to_s is 'true'" do
       @tutorial.should_receive(:format_table_of_contents)
+      @tutorial.prepare_preview(@params)
+    end
+    it "should not format the table of contents if params[:include_table_of_contents] is not true" do
+      @params[:include_table_of_contents] = "false"
+      @tutorial.should_not_receive(:format_table_of_contents)
       @tutorial.prepare_preview(@params)
     end
     it "should not save the tutorial" do

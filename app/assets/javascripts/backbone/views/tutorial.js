@@ -12,6 +12,7 @@ Sensori.Views.Tutorial = Backbone.View.extend({
     "click [data-trigger='preview-tutorial']": "preview",
     "click [data-trigger='view-tutorial']": "show",
     "click [data-trigger='add-more']": "addMore",
+    "click #tutorial_include_table_of_contents": "updateIncludeTableOfContents",
     "change #tutorial_youtube_video_url": "updateYoutubeId"
   },
 
@@ -91,6 +92,10 @@ Sensori.Views.Tutorial = Backbone.View.extend({
     newPreview.addClass("flex-video-content");
 
     currentPreview.fadeOut("fast", function() { previewEl.html(newPreview); });
+  },
+
+  updateIncludeTableOfContents: function() {
+    this.model.set("include_table_of_contents", this.$("#tutorial_include_table_of_contents").is(":checked"));
   },
 
   publish: function() {

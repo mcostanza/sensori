@@ -26,5 +26,7 @@ FactoryGirl.define do
 
     attachment_url "http://s3.amazon.com/sensori/attachments/tutorial.zip"
 
+    include_table_of_contents true
+
   end
 end
