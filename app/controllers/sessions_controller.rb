@@ -20,6 +20,11 @@ class SessionsController < ApplicationController
     @session = Session.new
   end
 
+  # GET /sessions/:id/edit
+  def edit
+    @session = Session.find(params[:id])
+  end
+
   # POST /sessions
   def create
     @session = Session.new(params[:session].merge(:member_id => @member.id))
@@ -40,5 +45,13 @@ class SessionsController < ApplicationController
     else
       render :action => "edit"
     end
+  end
+
+  # DELETE /sessions/:id
+  def destroy
+    @session = Session.find(params[:id])
+    @session.destroy
+    flash[:notice] = "Session was successfully deleted."
+    redirect_to :sessions
   end
 end

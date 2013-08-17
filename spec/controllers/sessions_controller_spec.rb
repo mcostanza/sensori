@@ -145,4 +145,36 @@ describe SessionsController do
       response.should render_template(:edit)
     end
   end
+
+  describe "DELETE 'destroy'" do
+    before do
+      login_user(:admin => true)
+      @params = { :id => 10 }
+      @session = Session.new
+      @session.id = 10
+      @session.stub!(:destroy)
+      Session.stub!(:find).and_return(@session)
+    end
+
+    describe "before filters" do
+      it "should have the ensure_admin before filter" do
+        controller.should_receive(:ensure_admin)
+        delete 'destroy', @params
+      end
+    end
+
+    it "should find the session from params[:id]" do
+      Session.should_receive(:find).with("10").and_return(@session)
+      delete 'destroy', @params
+    end
+    it "should destroy the session" do
+      @session.should_receive(:destroy)
+      delete 'destroy', @params
+    end
+    it "should redirect to the index with a success notice" do
+      delete 'destroy', @params
+      response.should redirect_to(:sessions)
+      flash[:notice].should == 'Session was successfully deleted.'
+    end
+  end
 end
