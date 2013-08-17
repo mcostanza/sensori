@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130815030226) do
+ActiveRecord::Schema.define(:version => 20130817180150) do
 
   create_table "discussions", :force => true do |t|
     t.string   "subject",                         :null => false
@@ -64,11 +64,11 @@ ActiveRecord::Schema.define(:version => 20130815030226) do
     t.string   "image",             :null => false
     t.datetime "end_date",          :null => false
     t.string   "facebook_event_id"
-    t.string   "attachment"
     t.string   "slug",              :null => false
     t.integer  "member_id",         :null => false
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+    t.string   "attachment_url"
   end
 
   add_index "sessions", ["member_id"], :name => "sessions_member_id_fk"

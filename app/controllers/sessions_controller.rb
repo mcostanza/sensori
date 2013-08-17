@@ -30,4 +30,15 @@ class SessionsController < ApplicationController
       render :action => "new"
     end
   end
+
+  # PUT /sessions/:id
+  def update
+    @session = Session.find(params[:id])
+
+    if @session.update_attributes(params[:session])
+      redirect_to @session, :notice => 'Session was successfully updated.'
+    else
+      render :action => "edit"
+    end
+  end
 end
