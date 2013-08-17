@@ -5,7 +5,6 @@ Sensori.Views.Session = Backbone.View.extend({
   },
 
   submitForm: function() {
-    debugger;
     if (this.saveButton.hasClass("disabled")) { return; }
     this.$("#session_attachment_url").val(this.model.get("attachment_url"));
     this.$("#session-form").submit();
