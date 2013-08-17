@@ -44,6 +44,9 @@ describe Member do
     it "should have a tutorials association" do
       @member.should respond_to(:tutorials)
     end
+    it "should have a submissions association" do
+      @member.should respond_to(:submissions)
+    end
   end
 
   describe "callbacks" do

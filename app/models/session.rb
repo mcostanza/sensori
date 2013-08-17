@@ -6,6 +6,8 @@ class Session < ActiveRecord::Base
 
   belongs_to :member
 
+  has_many :submissions
+
   validates :member, :presence => true
   validates :title, :presence => true
   validates :description, :presence => true

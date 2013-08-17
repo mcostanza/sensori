@@ -10,6 +10,9 @@ class SessionsController < ApplicationController
   # GET /sessions/1
   def show
     @session = Session.find(params[:id])
+    if signed_in?
+      @submission = @member.submissions.find_or_initialize_by_session_id(@session.id)
+    end
   end
 
   # GET /sessions/new

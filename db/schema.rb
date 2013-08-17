@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130814030854) do
+ActiveRecord::Schema.define(:version => 20130815030226) do
 
   create_table "discussions", :force => true do |t|
     t.string   "subject",                         :null => false
@@ -73,6 +73,17 @@ ActiveRecord::Schema.define(:version => 20130814030854) do
 
   add_index "sessions", ["member_id"], :name => "sessions_member_id_fk"
 
+  create_table "submissions", :force => true do |t|
+    t.integer  "session_id",     :null => false
+    t.string   "title",          :null => false
+    t.integer  "member_id",      :null => false
+    t.string   "attachment_url", :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "submissions", ["member_id"], :name => "submissions_member_id_fk"
+
   create_table "tracks", :force => true do |t|
     t.integer  "soundcloud_id", :null => false
     t.integer  "member_id",     :null => false
@@ -111,6 +122,8 @@ ActiveRecord::Schema.define(:version => 20130814030854) do
   add_foreign_key "responses", "members", :name => "responses_member_id_fk"
 
   add_foreign_key "sessions", "members", :name => "sessions_member_id_fk"
+
+  add_foreign_key "submissions", "members", :name => "submissions_member_id_fk"
 
   add_foreign_key "tracks", "members", :name => "tracks_member_id_fk"
 

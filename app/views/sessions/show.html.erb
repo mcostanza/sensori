@@ -8,3 +8,12 @@
     <%= link_to("Download", @session.attachment_url, :class => "btn btn-primary") if @session.attachment? %>
   </div>
 </div>
+
+<% if signed_in? %>
+<%= render @submission.new_record? ? 'new_submission' : 'edit_submission' %>
+<% else %>
+<div class="row">
+	Sign in to submit a beat for this session!
+	<%= link_to image_tag("http://connect.soundcloud.com/2/btn-connect-m.png", :class => 'soundcloud-connect'), members_sign_in_path %>
+</div>
+<% end %>

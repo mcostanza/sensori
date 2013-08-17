@@ -1,0 +1,29 @@
+<div class="row" id="submission-container">
+	<h4>Your beat</h4>
+
+	<h5><%= @submission.title %></h5>
+	<%= content_tag :audio, :src => @submission.attachment_url, :controls => true %>
+
+	<%= label :submission, :title %>
+	<%= text_field :submission, :title, :placeholder => "Enter song title..." %>
+
+	<div class="attachment-buttons">
+		<span class="btn btn-success fileinput-button">
+			<i class="icon-white icon-upload"></i> Upload Your Beat
+			<%= s3_uploader_form do %>
+			  <%= file_field_tag :file %>
+			<% end %>
+		</span>
+	</div>
+	<div class="progress progress-striped active" style="display:none">
+		<div class="bar progress-bar"></div>
+	</div>
+
+</div>
+<script type="text/javascript">
+Sensori.Submission = new Sensori.Models.Submission(<%= raw @submission.to_json %>);
+Sensori.SubmissionView = new Sensori.Views.Submission({
+	el: $("#submission-container"),
+	model: Sensori.Submission
+}).render();
+</script>

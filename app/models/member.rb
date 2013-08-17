@@ -3,6 +3,7 @@ class Member < ActiveRecord::Base
 
   has_many :tracks, :dependent => :destroy
   has_many :tutorials, :dependent => :destroy
+  has_many :submissions, :dependent => :destroy
 
   validates :soundcloud_id, :presence => true, :uniqueness => true
   validates :name, :presence => true
