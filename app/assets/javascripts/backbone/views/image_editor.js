@@ -20,7 +20,7 @@ Sensori.Views.ImageEditor = Backbone.View.extend({
   },
 
   setAttributes: function() {
-    this.model.title = this.$(".image-title").val();
+    this.model.title = _.escape(this.$(".image-title").val());
     this.$el.popover("hide");
   },
 
