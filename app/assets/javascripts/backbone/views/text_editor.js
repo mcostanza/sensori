@@ -24,9 +24,12 @@ Sensori.Views.TextEditor = Backbone.View.extend({
             "<li><a data-wysihtml5-command='formatBlock' data-wysihtml5-command-value='h3' tabindex='-1'>Heading</a></li>" +
             "<li><a data-wysihtml5-command='formatBlock' data-wysihtml5-command-value='h4' tabindex='-1'>Sub-heading</a></li>" +
           "</ul>" +
-        "</li>";
+        "</li>"
       }
     },
+
+    // Allow option to directly edit html if necessary
+    html: true,
 
     // Do not allow inline images (use gallery instead)
     image: false,
