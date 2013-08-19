@@ -6,9 +6,11 @@ Sensori::Application.routes.draw do
   
   resources :sessions
 
-  resources :discussions do
-    post 'respond', :on => :member
-  end
+  resources :discussions
+
+  resources :responses, :only => [:create, :update, :destroy]
+
+  resources :members, :only => [:update]
 
   match "beats" => "tracks#index", :via => "get"
 

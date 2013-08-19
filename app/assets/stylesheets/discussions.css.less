@@ -6,14 +6,32 @@
 @import "twitter/bootstrap/mixins";
 
 .discussions {
+  .response {
+    textarea {
+      width: 100%;
+      margin-bottom: 5px;
+    }
+  }
+
   .discussion, .discussion-preview {
     textarea, input {
       width: 100%;
       margin-bottom: 5px;
     }
-    textarea {
-      margin: 0px;
+    input[type="checkbox"] {
+      width: auto;
+    }
+    input[type="file"] {
+      line-height: normal;
       height: auto;
+      width: auto;
+      margin-left: 5px;
+    }
+    textarea {
+      height: auto;
+    }
+    .last {
+      margin-bottom: 0px;
     }
   }
   .login-to-reply {

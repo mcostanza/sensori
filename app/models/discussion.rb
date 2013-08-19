@@ -1,7 +1,7 @@
 class Discussion < ActiveRecord::Base
   extend FriendlyId
 
-  attr_accessible :subject, :body, :member_id, :members_only
+  attr_accessible :subject, :body, :member_id, :member, :members_only
   default_scope order('id DESC')
 
   belongs_to :member

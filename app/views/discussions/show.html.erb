@@ -15,32 +15,37 @@
   </div>
 </div>
 <h3>Responses</h3>
+<div class="responses">
 <% @responses.each do |response| %>
-<div class="media discussion">
-  <%= link_to response.member.profile_url, :title => response.member.name, :class => 'pull-left', :target => :_blank do %>
-    <%= image_tag response.member.image(:small), :alt => response.member.name %>
-  <% end %>
-  <div class="media-body">
-    <div class="media-timestamp">
-      <%= time_ago_in_words(response.created_at)%> ago
-    </div>
-    <%= link_to response.member.name, response.member.profile_url, :title => response.member.name, :target => :_blank %>
-    <%= response.body_html %>
-  </div>
-</div>
-<% end %>
-<% if signed_in? %>
-  <%= form_for(Response.new, :url => respond_discussion_path(@discussion)) do |f| %>
-    <div class="media discussion">
-      <%= link_to @member.profile_url, :title => @member.name, :class => 'pull-left', :target => :_blank do %>
-        <%= image_tag @member.image(:small), :alt => @member.name %>
-      <% end %>
-      <div class="media-body">
-        <%= f.text_area :body, :placeholder => "Add a comment...", :rows => 2 %>
+  <div class="media response">
+    <%= link_to response.member.profile_url, :title => response.member.name, :class => 'pull-left', :target => :_blank do %>
+      <%= image_tag response.member.image(:small), :alt => response.member.name %>
+    <% end %>
+    <div class="media-body">
+      <div class="media-timestamp">
+        <%= time_ago_in_words(response.created_at) %> ago
       </div>
+      <%= link_to response.member.name, response.member.profile_url, :title => response.member.name, :target => :_blank %>
+      <%= response.body_html %>
     </div>
-    <button type="submit" class="btn btn-primary pull-right">Post</button>
-  <% end %>
+  </div>
+<% end %>
+</div>
+<% if signed_in? %>
+  <div class="media response">
+    <%= link_to @member.profile_url, :title => @member.name, :class => 'pull-left', :target => :_blank do %>
+      <%= image_tag @member.image(:small), :alt => @member.name %>
+    <% end %>
+    <div class="media-body">
+      <%= text_area :response, :body, :placeholder => "Add a comment...", :rows => 2 %>
+    </div>
+  </div>
+  <div class="pull-right">
+    <label class="checkbox">
+      <input type="checkbox" id="discussion_notifications" checked="true"> Notify me on responses
+    </label>
+    <button data-trigger="post" type="submit" class="btn btn-primary pull-right">Post</button>
+  </div>
 <% else %>
   <div class="login-to-reply">
     Log In to Reply 
@@ -48,3 +53,12 @@
   </div>
 <% end %>
 <%= link_to 'Back', @discussion %>
+<script type="text/javascript">
+$(function() {
+  Sensori.DiscussionResponseView = new Sensori.Views.DiscussionResponse({
+    model: new Sensori.Models.Discussion(<%= raw @discussion.to_json %>),
+    collection: new Sensori.Collections.Responses(<%= raw @discussion.responses.to_json %>),
+    el: $('.discussions-container')
+  });
+});
+</script>

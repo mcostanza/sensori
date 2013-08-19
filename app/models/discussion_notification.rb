@@ -1,5 +1,5 @@
 class DiscussionNotification < ActiveRecord::Base
-  attr_accessible :member_id, :discussion_id
+  attr_accessible :member_id, :member, :discussion_id, :discussion
 
   belongs_to :member
   belongs_to :discussion

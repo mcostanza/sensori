@@ -21,7 +21,7 @@ class DiscussionsController < ApplicationController
 
   # POST /discussions
   def create
-    @discussion = Discussion.new(params[:discussion].merge(:member_id => @member.id))
+    @discussion = Discussion.new(params[:discussion].merge(:member => @member))
 
     if @discussion.save
       redirect_to @discussion, :notice => 'Discussion was successfully created.'

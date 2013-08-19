@@ -13,35 +13,23 @@
       <%= image_tag @member.image(:small), :alt => @member.name %>
     </a>
     <div class="media-body">
+      <%= hidden_field_tag(:email, @member.email) %>
       <%= f.text_field :subject, :placeholder => "Topic" %>
       <%= f.text_area :body, :placeholder => "Message", :rows => 10 %>
-      <%= hidden_field_tag(:email, @member.email) %>
+      <%= f.label :attachment do %>
+        Attachment:
+        <%= f.file_field :attachment, :class => 'inline' %>
+      <% end %>
+      <%= f.label :members_only, :class => "checkbox last" do %>
+        <%= f.check_box :members_only %>
+        Members only
+      <% end %>
     </div>
   </div>
   <div class="pull-right">
-    <div class="control-group">
-      <div class="controls">
-        <label class="checkbox">
-          <input type="checkbox" id="discussion-notifications" name="discussion_notifications" checked="true"> Notify me on responses
-        </label>
-        <button type="submit" class="btn btn-primary pull-right">Post</button>
-      </div>
-    </div>
+    <label class="checkbox">
+      <input type="checkbox" id="discussion-notifications" name="discussion_notifications" checked="true"> Notify me on responses
+    </label>
+    <button type="submit" class="btn btn-primary pull-right">Post</button>
   </div>
 <% end %>
-
-<!-- Modal -->
-<div id="discussion-notification-modal" class="modal hide fade" tabindex="-1" role="dialog">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3>Enter email address</h3>
-  </div>
-  <div class="modal-body">
-    <p>Email address to send response notifications:</p><input id="modal-email" type="text" placeholder="Email Address" />
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal">Cancel</button>
-    <button id="modal-post" class="btn btn-primary">Post</button>
-  </div>
-</div>
-

@@ -22,6 +22,7 @@
 //= require backbone_rails_sync
 //= require backbone_datalink
 //= require sensori
+//= require_tree ./backbone/models
 //= require_tree .
 
 $(function() {
