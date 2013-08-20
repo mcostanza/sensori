@@ -8,10 +8,10 @@ Sensori.Views.EmailPrompt = Backbone.View.extend({
 
   save: function() {
     var view = this;
-    this.model.save({ email: this.$("#email-modal-input").val() }, {
+    this.model.save({ email: this.emailInput.val() }, {
       success: function() { 
         view.trigger("email:saved");
-        view.emailModal.modal('hide');
+        view.hide();
       },
       error: function() { alert('error'); }
     });
@@ -22,16 +22,23 @@ Sensori.Views.EmailPrompt = Backbone.View.extend({
   },
 
   render: function() {
-    var view = this;
     if(!this.emailModal) {
-      this.$el.append(this.template({
-        message: this.options.message
-      }));
+      this.$el.append(this.template({ message: this.options.message }));
+
       this.emailModal = this.$("#email-modal");
+      this.emailInput = this.$("#email-modal-input");
+
+      var view = this;
       this.emailModal.on("hide", function() { view.trigger("hide"); });
-      this.emailModal.on("shown", function() { view.$("#email-modal-input").focus(); });
+      this.emailModal.on("hidden", function() { view.trigger("hidden"); });
+      this.emailModal.on("show", function() { view.trigger("show"); });
+      this.emailModal.on("shown", function() { view.trigger("shown"); });
+      this.emailModal.on("shown", function() { view.emailInput.focus(); });
     }
-    this.emailModal.modal('show');
     return this;
-  }
+  },
+
+  show: function() { this.emailModal.modal('show'); },
+  
+  hide: function() { this.emailModal.modal('hide'); },
 });

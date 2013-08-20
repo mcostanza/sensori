@@ -1,7 +1,7 @@
 Sensori.Views.DiscussionResponse = Backbone.View.extend({
 
   initialize: function() {
-    this.collection.on("add", this.addResponse, this);
+    this.listenTo(this.collection, "add", this.renderResponse);
     this.postButton = this.$("[data-trigger='post']");
     this.responseInput = this.$("#response_body");
   },
@@ -12,12 +12,12 @@ Sensori.Views.DiscussionResponse = Backbone.View.extend({
 
   processResponse: function(event) {
     var view = this;
-    this.postButton.prop('disabled', true);
+    this.disablePostButton();
 
     if(this.notificationsEnabled() && !Sensori.Member.has('email')) {
       this.promptForEmail();
-    } else {
-      this.saveResponse()
+    } else { 
+      this.saveResponse();
     }
   },
 
@@ -32,13 +32,13 @@ Sensori.Views.DiscussionResponse = Backbone.View.extend({
       success: function() {
         view.collection.add(response);
         view.responseInput.val("");
-        view.postButton.prop('disabled', false);
+        view.enablePostButton();
       },
       error: function(e) { console.log(e); }
     });
   },
 
-  addResponse: function(response) {
+  renderResponse: function(response) {
     this.$('.responses').append(JST["backbone/templates/discussions/response"]({
       member: Sensori.Member,
       response: response
@@ -50,11 +50,19 @@ Sensori.Views.DiscussionResponse = Backbone.View.extend({
   },
 
   promptForEmail: function() {
-    this.emailPrompt = this.emailPrompt || new Sensori.Views.EmailPrompt({ el: this.el, model: Sensori.Member, message: "Email address to send response notifications:" });
-    this.emailPrompt.on("email:saved", this.processResponse, this);
-    this.emailPrompt.on("hide", function() { 
-      this.postButton.prop('disabled', false);
-    }, this);
-    this.emailPrompt.render();
-  }
+    if(!this.emailPrompt) {
+      this.emailPrompt = new Sensori.Views.EmailPrompt({ 
+        model: Sensori.Member,
+        message: "Email address to send response notifications:"
+      });
+      this.listenTo(this.emailPrompt, "email:saved", this.processResponse);
+      this.listenTo(this.emailPrompt, "hide", this.enablePostButton);
+      this.$el.append(this.emailPrompt.render().el);
+    }
+    this.emailPrompt.show();
+  },
+
+  enablePostButton: function() { this.postButton.prop('disabled', false); },
+
+  disablePostButton: function() { this.postButton.prop('disabled', true); }
 });
