@@ -13,3 +13,40 @@
     <%= link_to("Download", @session.attachment_url, :class => "btn btn-primary") if @session.attachment_url? %>
   </div>
 </div>
+
+<% if signed_in? %>
+<div class="submission-container media">
+  <h4>Upload A Beat For This Session</h4>
+  <%= text_field_tag :submission_title, nil, :placeholder => "Enter the title of your beat...", :class => "input-xlarge" %>
+
+  <div class="attachment-container">
+    <div class="attachment-buttons">
+      <span class="btn btn-success fileinput-button">
+        <i class="icon-white icon-upload"></i> Upload Beat
+        <%= s3_uploader_form do %>
+          <%= file_field_tag :file %>
+        <% end %>
+      </span>
+    </div>
+
+    <div class="progress progress-striped active" style="display:none">
+      <div class="bar progress-bar"></div>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" data-trigger="save-submission">Save</button>
+</div>
+<script type="text/javascript">
+Sensori.Submission = new Sensori.Models.Submission(<%= raw @submission.to_json %>);
+Sensori.SubmissionView = new Sensori.Views.Submission({
+  el: $(".submission-container"),
+  model: Sensori.Submission,
+  sessionTitle: <%= raw @session.title.to_json %>
+}).render();
+</script>
+<% else %>
+<div class="well well-small join-message submission-container">
+	<span><strong>Make beats?</strong> Join the community and submit a beat for this session!</span>
+	<%= link_to image_tag("http://connect.soundcloud.com/2/btn-connect-m.png", :class => 'soundcloud-connect'), members_sign_in_path %>
+</div>
+<% end %>
