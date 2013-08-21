@@ -4,6 +4,9 @@ Sensori.Views.DiscussionResponse = Backbone.View.extend({
     this.listenTo(this.collection, "add", this.renderResponse);
     this.postButton = this.$("[data-trigger='post']");
     this.responseInput = this.$("#response_body");
+    this.responseInput.on("focus", _.bind(function(e) {
+      this.responseInput.closest(".control-group").removeClass("error");
+    }, this));
   },
 
   events: {
@@ -11,6 +14,7 @@ Sensori.Views.DiscussionResponse = Backbone.View.extend({
   },
 
   processResponse: function(event) {
+    if(!this.validate()) { return; }
     var view = this;
     this.disablePostButton();
 
@@ -60,6 +64,16 @@ Sensori.Views.DiscussionResponse = Backbone.View.extend({
       this.$el.append(this.emailPrompt.render().el);
     }
     this.emailPrompt.show();
+  },
+
+  validate: function() {
+    if(_.isEmpty($.trim(this.responseInput.val()))) {
+      this.responseInput.closest(".control-group").addClass("error");
+      return false;
+    } else {
+      this.responseInput.closest(".control-group").removeClass("error");
+      return true;
+    }
   },
 
   enablePostButton: function() { this.postButton.prop('disabled', false); },
