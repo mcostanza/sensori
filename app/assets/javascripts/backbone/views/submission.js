@@ -1,12 +1,47 @@
 Sensori.Views.Submission = Backbone.View.extend({
 	events: {
-		"click [data-trigger='save-submission']": "saveSubmission"
+		"click [data-trigger='save-submission']": "saveSubmission",
+    "click [data-trigger='change-submission']": "showForm",
+    "keyup #submission_title": "changeSubmissionTitle"
 	},
+
+  validate: function() {
+    var errors = {};
+    if (_.isEmpty(this.model.get("title"))) { errors.title = true; }
+    if (_.isEmpty(this.model.get("attachment_url"))) { errors.attachment_url = true; }
+    this.renderErrors(errors);
+    return _.isEmpty(errors);
+  },
+
+  renderErrors: function(errors) {
+    var titleControlGroup = this.$("#submission_title").closest(".control-group");  
+    if (errors.title) {
+      titleControlGroup.addClass("error");
+      titleControlGroup.find(".help-inline").fadeIn();
+    } else {
+      titleControlGroup.removeClass("error");
+      titleControlGroup.find(".help-inline").fadeOut();
+    }
+
+    var attachmentUrlControlGroup = this.$(".fileinput-button").closest(".control-group");  
+    if (errors.attachment_url) {
+      attachmentUrlControlGroup.addClass("error");
+      attachmentUrlControlGroup.find(".help-inline").fadeIn();
+    } else {
+      attachmentUrlControlGroup.removeClass("error");
+      attachmentUrlControlGroup.find(".help-inline").fadeOut();
+    }
+  },
+
+  changeSubmissionTitle: function() {
+    this.model.set("title", this.$("#submission_title").val());
+    this.validate();
+  },
 
 	saveSubmission: function() {
     if (this.saveButton.hasClass("disabled")) { return; }
 
-		this.model.set("title", this.$("#submission_title").val());
+    if (!this.validate()) { return; }
 
     this.model.save(null, {
       success: _.bind(this.saveSuccess, this),
@@ -16,15 +51,12 @@ Sensori.Views.Submission = Backbone.View.extend({
 
   saveSuccess: function() {
     this.saveButton.removeClass("disabled");
-    this.renderSubmissionNotice();
+    this.showAlert();
   },
 
   saveError: function() {
     this.saveButton.removeClass("disabled");
-    this.$(".alert")
-      .fadeOut()
-      .delay()
-      .remove();
+    this.$(".alert").fadeOut().delay().remove();
 
     var notice = $("<div>")
       .hide()
@@ -37,23 +69,27 @@ Sensori.Views.Submission = Backbone.View.extend({
 
 	onAdd: function(event, data) {
     var acceptedFileTypes = /\.(?:mp3|wav)$/i,
-        fileName = data.files[0].name;
+        fileName = data.files[0].name,
+        attachmentUrlControlGroup = this.$(".fileinput-button").closest(".control-group");
 
-    this.$(".text-error").remove();
-		this.saveButton.addClass("disabled");
+    attachmentUrlControlGroup.find(".submission-link").remove();
+    this.saveButton.addClass("disabled");
 
     if (acceptedFileTypes.test(fileName)) {
+      attachmentUrlControlGroup.removeClass("error");
+      attachmentUrlControlGroup.find(".help-inline").fadeOut();
+
       this.$(".progress").fadeIn();
       this.$(".progress-bar").css({ width: "0%" });
       data.submit();
     } else {
-      this.$(".fileinput-button").after("<span class='text-error'>Please submit an mp3 or wav file</span>");
-      this.saveButton.addClass("disabled");
+      this.saveButton.removeClass("disabled");
+      attachmentUrlControlGroup.addClass("error");
+      attachmentUrlControlGroup.find(".help-inline").fadeIn();
     }
 	},
 
 	onProgress: function(event, data) {
-		this.trigger("upload:progress");
 		// Calculate the completion percentage of the upload
     var progress = parseInt(data.loaded / data.total * 100, 10);
     this.$(".progress-bar").css({ width: progress + "%" });
@@ -85,36 +121,49 @@ Sensori.Views.Submission = Backbone.View.extend({
     return submissionLink;
   },
 
-  renderSubmissionNotice: function() {
-  	this.$(".alert")
-  		.fadeOut()
-  		.delay()
-  		.remove();
+  showForm: function() {
+    this.model.unset("title");
+    this.model.unset("attachment_url");
 
-  	var notice = $("<div>")
-  		.hide()
-  		.addClass("alert alert-success")
-  		.html("Your submitted beat for " + this.options.sessionTitle + " is ")
-  		.append(this.submissionLink());
+    this.$(".submission-link").remove();
 
-  	this.$el.prepend(notice);
-  	notice.fadeIn();
+    this.$(".change-submission").hide();
+    this.$(".new-submission").fadeIn();
   },
-	
-	render: function() {
-    this.saveButton = this.$("[data-trigger='save-submission']");
 
-		this.$("form").fileupload({
+  showAlert: function() {
+    this.$(".alert").fadeOut().delay().remove();
+
+    this.$(".new-submission").hide();
+    this.$(".change-submission").fadeIn();
+
+    var notice = $("<div>")
+      .hide()
+      .addClass("alert alert-success")
+      .html("Your submitted beat for " + this.options.sessionTitle + " is ")
+      .append(this.submissionLink());
+
+    this.$el.prepend(notice);
+    notice.fadeIn();
+  },
+
+	render: function() {
+    this.$el.html(JST["backbone/templates/sessions/submission"]({
+      uploadForm: JST["backbone/templates/shared/s3_uploader_form"]()
+    }));
+
+    this.saveButton = this.$("[data-trigger='save-submission']");
+    this.$("form").fileupload({
       add:      _.bind(this.onAdd, this),
       progress: _.bind(this.onProgress, this),
       done:     _.bind(this.onDone, this),
       fail:     _.bind(this.onFail, this)
     });
 
-		if (this.model.get("attachment_url")) {
-			this.renderSubmissionNotice();
-		} else {
-    	this.saveButton.addClass("disabled");
+    if (this.model.isNew()) {
+      this.showForm();
+    } else {
+      this.showAlert();
     }
 
 		return this;

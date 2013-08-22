@@ -1,0 +1,28 @@
+<div class="change-submission">
+  <button class="btn btn-link" data-trigger="change-submission">Change your submitted beat</button>
+</div>
+  
+<div class="new-submission">
+  <h4>Upload A Beat For This Session</h4>
+    
+  <div class="submission-title control-group">
+    <input type="text" id="submission_title" name="submission_title" placeholder="Enter the title of your beat..." class="input-xlarge" />
+    <span class="help-inline" style="display:none;">Please enter a title for your beat</span>
+  </div>
+
+  <div class="attachment-container">
+    <div class="attachment-buttons control-group">
+      <span class="btn btn-success fileinput-button">
+        <i class="icon-white icon-upload"></i> Upload Beat
+        <%= uploadForm %>
+      </span>
+      <span class="help-inline" style="display:none;">Please submit an mp3 or wav file</span>
+    </div>
+
+    <div class="progress progress-striped active" style="display:none">
+      <div class="bar progress-bar"></div>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" data-trigger="save-submission">Save</button>
+</div>
