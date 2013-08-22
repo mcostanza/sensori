@@ -92,4 +92,4 @@ gem "jquery-fileupload-rails"
 gem "bootstrap-wysihtml5-rails", :git => "https://sensoricollective@bitbucket.org/sensoricollective/bootstrap-wysihtml5-rails.git"
 
 # Backbone JS library
-gem "rails-backbone"
+gem "rails-backbone", '>= 0.9.10'
