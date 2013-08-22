@@ -6,9 +6,9 @@ describe SessionsController do
 
   describe "GET 'index'" do
     before do
-      @session = mock(Session)
-      @scope = mock('paginated sessions', :per => [@session])
-      Session.stub!(:page).and_return(@scope)
+      @session = double(Session)
+      @scope = double('paginated sessions', :per => [@session])
+      Session.stub(:page).and_return(@scope)
     end
     it "should return http success" do
       get 'index'
@@ -36,8 +36,8 @@ describe SessionsController do
 
   describe "GET 'show'" do
     before do
-      @session = mock(Session)
-      Session.stub!(:find).and_return(@session)
+      @session = double(Session)
+      Session.stub(:find).and_return(@session)
     end
     it "should return http success" do
       get 'show', :id => 1
@@ -52,7 +52,7 @@ describe SessionsController do
 
   describe "GET 'new'" do
     before do
-      controller.stub!(:ensure_admin)
+      controller.stub(:ensure_admin)
     end
 
     describe "before filters" do
@@ -75,9 +75,9 @@ describe SessionsController do
       login_user(:admin => true)
       @params = { :session => { :title => "Title", :description => "Desc" } }
       @session = Session.new
-      @session.stub!(:id).and_return(10)
-      @session.stub!(:save).and_return(true)
-      Session.stub!(:new).and_return(@session)
+      @session.stub(:id).and_return(10)
+      @session.stub(:save).and_return(true)
+      Session.stub(:new).and_return(@session)
     end
 
     describe "before filters" do
@@ -102,7 +102,7 @@ describe SessionsController do
       flash[:notice].should == 'Session was successfully created.'
     end
     it "should render the new action if the session fails to save" do
-      @session.stub!(:save).and_return(false)
+      @session.stub(:save).and_return(false)
       post 'create', @params
       response.should render_template(:new)
     end
@@ -114,8 +114,8 @@ describe SessionsController do
       @params = { :id => 10, :session => { :title => "Title", :description => "Desc" } }
       @session = Session.new
       @session.id = 10
-      @session.stub!(:update_attributes).and_return(true)
-      Session.stub!(:find).and_return(@session)
+      @session.stub(:update_attributes).and_return(true)
+      Session.stub(:find).and_return(@session)
     end
 
     describe "before filters" do
@@ -140,7 +140,7 @@ describe SessionsController do
       flash[:notice].should == 'Session was successfully updated.'
     end
     it "should render the edit action if the session fails to save" do
-      @session.stub!(:update_attributes).and_return(false)
+      @session.stub(:update_attributes).and_return(false)
       put 'update', @params
       response.should render_template(:edit)
     end
@@ -152,8 +152,8 @@ describe SessionsController do
       @params = { :id => 10 }
       @session = Session.new
       @session.id = 10
-      @session.stub!(:destroy)
-      Session.stub!(:find).and_return(@session)
+      @session.stub(:destroy)
+      Session.stub(:find).and_return(@session)
     end
 
     describe "before filters" do

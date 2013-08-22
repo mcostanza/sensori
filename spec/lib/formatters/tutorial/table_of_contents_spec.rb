@@ -27,7 +27,7 @@ describe Formatters::Tutorial::TableOfContents do
       @formatter.tutorial.should == @tutorial
     end
     it "should set @parser to a Nokogiri parser from @tutorial.body_html" do
-      parser = mock(Nokogiri::HTML::Document)
+      parser = double(Nokogiri::HTML::Document)
       Nokogiri.should_receive(:HTML).with(@tutorial.body_html).and_return(parser)
       Formatters::Tutorial::TableOfContents.new(@tutorial).parser.should == parser
     end

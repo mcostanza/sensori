@@ -4,19 +4,19 @@ describe HomeController do
 
   describe "GET 'index'" do
     before(:each) do
-      @track = mock(Track)
-      @tracks_scope = mock('tracks with members', :limit => [@track])
-      @tracks_scope.stub!(:latest).and_return(@tracks_scope)
-      Track.stub!(:includes).and_return(@tracks_scope)
+      @track = double(Track)
+      @tracks_scope = double('tracks with members', :limit => [@track])
+      @tracks_scope.stub(:latest).and_return(@tracks_scope)
+      Track.stub(:includes).and_return(@tracks_scope)
 
-      @tutorial = mock(Tutorial)
-      @tutorials_scope = mock('tutorials with members', :limit => [@track])
-      @tutorials_scope.stub!(:where).and_return(@tutorials_scope)
-      Tutorial.stub!(:includes).and_return(@tutorials_scope)
+      @tutorial = double(Tutorial)
+      @tutorials_scope = double('tutorials with members', :limit => [@track])
+      @tutorials_scope.stub(:where).and_return(@tutorials_scope)
+      Tutorial.stub(:includes).and_return(@tutorials_scope)
 
-      @discussion = mock(Discussion)
-      @discussions_scope = mock('discussions with members', :limit => [@discussion])
-      Discussion.stub!(:includes).and_return(@discussions_scope)
+      @discussion = double(Discussion)
+      @discussions_scope = double('discussions with members', :limit => [@discussion])
+      Discussion.stub(:includes).and_return(@discussions_scope)
     end
     it "should return http success" do
       get 'index'
@@ -72,8 +72,8 @@ describe HomeController do
 
   describe "POST 'send_feedback'" do
     before(:each) do
-      @email = mock('email', :deliver => true)
-      SensoriMailer.stub!(:contact_us).and_return(@email)
+      @email = double('email', :deliver => true)
+      SensoriMailer.stub(:contact_us).and_return(@email)
     end
     describe "with valid params" do
       before(:each) do

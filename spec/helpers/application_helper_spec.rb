@@ -11,19 +11,19 @@ describe ApplicationHelper do
   
   describe "#is_mobile_device?" do
     it "should return true if the user agent matches a mobile device" do
-      helper.stub!(:request).and_return(mock('request', :user_agent => "iphone"))
+      helper.stub(:request).and_return(double('request', :user_agent => "iphone"))
       helper.is_mobile_device?.should be_true
     end
     it "should return true if the user agent matches a mobile device (case insensitive)" do
-      helper.stub!(:request).and_return(mock('request', :user_agent => "Android"))
+      helper.stub(:request).and_return(double('request', :user_agent => "Android"))
       helper.is_mobile_device?.should be_true
     end
     it "should return false if the user agent does not match a mobile device" do
-      helper.stub!(:request).and_return(mock('request', :user_agent => "Firefox"))
+      helper.stub(:request).and_return(double('request', :user_agent => "Firefox"))
       helper.is_mobile_device?.should be_false
     end
     it "should not shit if there is no user agent" do
-      helper.stub!(:request).and_return(mock('request', :user_agent => nil))
+      helper.stub(:request).and_return(double('request', :user_agent => nil))
       lambda { helper.is_mobile_device? }.should_not raise_error
       helper.is_mobile_device?.should be_false
     end
@@ -31,13 +31,13 @@ describe ApplicationHelper do
 
   describe "#admin?" do
     before do
-      @member = mock(Member, :admin? => true)
+      @member = double(Member, :admin? => true)
     end
     it "should return true when @member is set and @member.admin is true" do
       helper.admin?.should be_true
     end
     it "should return false when @member is set and @member.admin if false" do
-      @member.stub!(:admin?).and_return(false)
+      @member.stub(:admin?).and_return(false)
       helper.admin?.should be_false
     end
     it "should return false when @member is not set" do

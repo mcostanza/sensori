@@ -4,8 +4,8 @@ describe MembersController do
 
   describe "GET '/members/sign_in'" do
     before(:each) do
-      @soundcloud = mock(::Soundcloud, :authorize_url => "soundcloud authorize url")
-      controller.stub!(:soundcloud_app_client).and_return(@soundcloud)
+      @soundcloud = double(::Soundcloud, :authorize_url => "soundcloud authorize url")
+      controller.stub(:soundcloud_app_client).and_return(@soundcloud)
     end
     it "should redirect to the Soundcloud authorizorization url" do
       get 'sign_in'
@@ -31,16 +31,16 @@ describe MembersController do
 
   describe "GET 'soundcloud_connect'" do
     before(:each) do
-      @soundcloud_app_client = mock(::Soundcloud)
-      controller.stub!(:soundcloud_app_client).and_return(@soundcloud_app_client)
-      @member = mock(Member, :valid? => true, :soundcloud_id => '123')
-      Member.stub!(:sync_from_soundcloud).and_return(@member)
+      @soundcloud_app_client = double(::Soundcloud)
+      controller.stub(:soundcloud_app_client).and_return(@soundcloud_app_client)
+      @member = double(Member, :valid? => true, :soundcloud_id => '123')
+      Member.stub(:sync_from_soundcloud).and_return(@member)
     end
     describe "soundcloud code is present" do
       before(:each) do
         @code = 'soundcayode'
         @exchange_response = ::Soundcloud::HashResponseWrapper.new({ :access_token => 'soundtokez' })
-        @soundcloud_app_client.stub!(:exchange_token).and_return(@exchange_response)
+        @soundcloud_app_client.stub(:exchange_token).and_return(@exchange_response)
       end
       it "should sync Member data from soundcloud" do
         @soundcloud_app_client.should_receive(:exchange_token).with(:code => @code).and_return(@exchange_response)
@@ -60,7 +60,7 @@ describe MembersController do
       end
       describe "valid Member not successfully found/created" do
         before(:each) do
-          @member.stub!(:valid?).and_return(false)
+          @member.stub(:valid?).and_return(false)
         end
         it "should not set session data" do
           get 'soundcloud_connect', :code => @code
@@ -92,12 +92,12 @@ describe MembersController do
 
   describe "#soundcloud_app_client" do
     before(:each) do
-      Sensori::Soundcloud.stub!(:client_id).and_return('123')
-      Sensori::Soundcloud.stub!(:secret).and_return('secret')
+      Sensori::Soundcloud.stub(:client_id).and_return('123')
+      Sensori::Soundcloud.stub(:secret).and_return('secret')
     end
     it "should return a ::Soundcloud instance initialized with the Sensori client_id, secret, and redirect url" do
       soundcloud_app_client = controller.soundcloud_app_client
-      soundcloud_app_client.should be_an_instance_of(::Soundcloud)
+      soundcloud_app_client.should be_an_instance_of(::Soundcloud::Client)
       soundcloud_app_client.client_id.should == '123'
       soundcloud_app_client.client_secret.should == 'secret'
       soundcloud_app_client.redirect_uri.should == members_soundcloud_connect_url

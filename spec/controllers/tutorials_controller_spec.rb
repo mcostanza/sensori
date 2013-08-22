@@ -6,10 +6,10 @@ describe TutorialsController do
 
   describe "GET 'index'" do
     before(:each) do
-      @tutorial = mock(Tutorial)
-      @scope = mock('paginated Tutorials', :per => [@tutorial])
-      @scope.stub!(:where).and_return(@scope)
-      Tutorial.stub!(:page).and_return(@scope)
+      @tutorial = double(Tutorial)
+      @scope = double('paginated Tutorials', :per => [@tutorial])
+      @scope.stub(:where).and_return(@scope)
+      Tutorial.stub(:page).and_return(@scope)
     end
     it "should return http success" do
       get 'index'
@@ -45,7 +45,7 @@ describe TutorialsController do
   describe "GET 'show'" do
     before(:each) do
       @tutorial = FactoryGirl.create(:tutorial)
-      Tutorial.stub!(:find).and_return(@tutorial)
+      Tutorial.stub(:find).and_return(@tutorial)
     end
     describe "tutorial is published" do
       it "should return http success" do
@@ -97,7 +97,7 @@ describe TutorialsController do
         response.should render_template("tutorials/new")
       end
       it "should initialize a Tutorial and assign to @tutorial" do
-        tutorial = mock(Tutorial)
+        tutorial = double(Tutorial)
         Tutorial.should_receive(:new).with(member: @member).and_return(tutorial)
         get 'new'
         assigns[:tutorial].should == tutorial
@@ -131,9 +131,9 @@ describe TutorialsController do
         :youtube_id => "10110"
       }
       @tutorial = Tutorial.new
-      @tutorial.stub!(:id).and_return(10)
-      @tutorial.stub!(:save).and_return(true)
-      Tutorial.stub!(:new).and_return(@tutorial)
+      @tutorial.stub(:id).and_return(10)
+      @tutorial.stub(:save).and_return(true)
+      Tutorial.stub(:new).and_return(@tutorial)
     end
     describe "when logged in as an admin" do
       before(:each) do 
@@ -156,11 +156,11 @@ describe TutorialsController do
       end
       describe "invalid params given" do
         before(:each) do
-          @tutorial.stub!(:save).and_return(false)
+          @tutorial.stub(:save).and_return(false)
 
           # Not called directly but needed for correct test behavior when using respond_with
-          @tutorial.stub!(:valid?).and_return(false)
-          @tutorial.stub!(:errors).and_return('errors!')
+          @tutorial.stub(:valid?).and_return(false)
+          @tutorial.stub(:errors).and_return('errors!')
         end
         it "should render the new template" do
           post 'create', :tutorial => @tutorial_params
@@ -195,8 +195,8 @@ describe TutorialsController do
 
   describe "GET 'edit'" do
     before(:each) do
-      @tutorial = mock(Tutorial)
-      Tutorial.stub!(:find).and_return(@tutorial)
+      @tutorial = double(Tutorial)
+      Tutorial.stub(:find).and_return(@tutorial)
     end
     describe "when logged in as an admin" do
       before(:each) do
@@ -244,9 +244,9 @@ describe TutorialsController do
         :video_url => "http://www.youtube.com/tutorial"
       }
       @tutorial = Tutorial.new
-      @tutorial.stub!(:id).and_return(123)
-      @tutorial.stub!(:update_attributes).and_return(true)
-      Tutorial.stub!(:find).and_return(@tutorial)
+      @tutorial.stub(:id).and_return(123)
+      @tutorial.stub(:update_attributes).and_return(true)
+      Tutorial.stub(:find).and_return(@tutorial)
     end
     describe "when logged in as an admin" do
       before(:each) do 
@@ -268,11 +268,11 @@ describe TutorialsController do
       end
       describe "invalid params given" do
         before(:each) do
-          @tutorial.stub!(:update_attributes).and_return(false)
+          @tutorial.stub(:update_attributes).and_return(false)
 
           # Not called directly but needed for correct test behavior when using respond_with
-          @tutorial.stub!(:valid).and_return(false)
-          @tutorial.stub!(:errors).and_return('errors')
+          @tutorial.stub(:valid).and_return(false)
+          @tutorial.stub(:errors).and_return('errors')
         end
         it "should render the edit template" do
           put 'update', :id => '123', :tutorial => @tutorial_params
@@ -315,7 +315,7 @@ describe TutorialsController do
         :youtube_id => "10110"
       }
       @tutorial = Tutorial.new
-      Tutorial.stub!(:find).and_return(@tutorial)
+      Tutorial.stub(:find).and_return(@tutorial)
     end
     describe "when logged in as an admin" do
       before(:each) do 

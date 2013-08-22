@@ -5,8 +5,8 @@ describe MemberTrackSyncWorker do
   describe "#perform(member_id)" do
     before(:each) do
       @member_id = 1
-      @member = mock(Member, :sync_soundcloud_tracks => true)
-      Member.stub!(:find).and_return(@member)
+      @member = double(Member, :sync_soundcloud_tracks => true)
+      Member.stub(:find).and_return(@member)
     end
     it "should find the Member from member_id" do
       Member.should_receive(:find).with(@member_id).and_return(@member)

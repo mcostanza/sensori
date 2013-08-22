@@ -61,7 +61,7 @@ describe Tutorial do
 
   describe "#format_table_of_contents" do
     it "should process the tutorial with a table of contents formatter and set the body_html from the result" do
-      formatter = mock(Formatters::Tutorial::TableOfContents)
+      formatter = double(Formatters::Tutorial::TableOfContents)
       Formatters::Tutorial::TableOfContents.should_receive(:new).with(@tutorial).and_return(formatter)
       formatter.should_receive(:format).and_return("processed content")
       @tutorial.format_table_of_contents
@@ -93,7 +93,7 @@ describe Tutorial do
         :include_table_of_contents => "true"
       }
       @tutorial = FactoryGirl.build(:tutorial)
-      @tutorial.stub!(:format_table_of_contents)
+      @tutorial.stub(:format_table_of_contents)
     end
     it "should set title, description, body_html, youtube_id, and attachment_url" do
       @tutorial.prepare_preview(@params)

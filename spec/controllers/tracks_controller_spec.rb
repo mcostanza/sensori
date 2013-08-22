@@ -4,11 +4,11 @@ describe TracksController do
 
   describe "GET 'index'" do
     before(:each) do
-      @track = mock(Track)
-      @scope = mock('tracks scope', :per => [@track])
-      @scope.stub!(:page).and_return(@scope)
-      @scope.stub!(:latest).and_return(@scope)
-      Track.stub!(:includes).and_return(@scope)
+      @track = double(Track)
+      @scope = double('tracks scope', :per => [@track])
+      @scope.stub(:page).and_return(@scope)
+      @scope.stub(:latest).and_return(@scope)
+      Track.stub(:includes).and_return(@scope)
     end
     it "should return http success" do
       get 'index'
