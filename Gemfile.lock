@@ -124,7 +124,7 @@ GEM
     less-rails (2.3.3)
       actionpack (>= 3.1)
       less (~> 2.3.1)
-    less-rails-bootstrap (3.0.0.1)
+    less-rails-bootstrap (2.3.2)
       less-rails (~> 2.3.1)
     libv8 (3.16.14.3)
     mail (2.4.4)
@@ -259,7 +259,7 @@ DEPENDENCIES
   jquery-rails
   kaminari
   less-rails
-  less-rails-bootstrap
+  less-rails-bootstrap (~> 2.3)
   minitest
   mysql2
   rails (= 3.2.12)

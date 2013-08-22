@@ -5,7 +5,7 @@ gem 'rails', '3.2.12'
 gem 'mysql2'
 
 gem 'less-rails'
-gem 'less-rails-bootstrap'
+gem 'less-rails-bootstrap', "~> 2.3"
 
 # Gems used only for assets and not required
 # in production environments by default.
