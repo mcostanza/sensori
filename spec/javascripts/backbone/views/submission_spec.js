@@ -17,32 +17,28 @@ describe("Sensori.Views.Submission", function() {
 
 	describe(".validate()", function() {
 		beforeEach(function() {
-			sinon.stub(view, "renderErrors");
-			model.set({
-				"title": "My Beat",
-				"attachment_url": "http://s3.amazon.com/sensori/beat.mp3"
-			});
+			sinon.stub(view, "validateAttachmentUrl").returns(true);
+			sinon.stub(view, "validateTitle").returns(true);
 		});
-		it("should return true if the model has title and attachment_url", function() {
-			expect(view.validate()).toBe(true);
+		it("should validate the title and attachment url", function() {
+			view.validate()
+			expect(view.validateAttachmentUrl.callCount).toEqual(1);
+			expect(view.validateTitle.callCount).toEqual(1);
 		});
-		it("should return false if the model is missing title", function() {
-			model.set("title", "");
-			expect(view.validate()).toBe(false);
+		it("should return true if there are no errors", function() {
+		  expect(view.validate()).toBe(true);
 		});
-		it("should return false if the model is missing attachment_url", function() {
-			model.set("attachment_url", "");
-			expect(view.validate()).toBe(false);
+		it("should return false if the title validation fails", function() {
+		  view.validateTitle.returns(false);
+		  expect(view.validate()).toBe(false);
 		});
-		it("should render the validation errors", function() {
-			model.set("title", "");
-			view.validate();
-			expect(view.renderErrors.callCount).toEqual(1);
-			expect(view.renderErrors.calledWith({ title: true })).toBe(true);
+		it("should return false if the attachment url validation fails", function() {
+		  view.validateAttachmentUrl.returns(false);
+		  expect(view.validate()).toBe(false);
 		});
 	});
 
-	describe(".renderErrors(errors)", function() {
+	describe(".validateTitle(errors)", function() {
 		beforeEach(function() {
 			view.render();
 			sinon.stub($.fn, "fadeOut");
@@ -52,32 +48,50 @@ describe("Sensori.Views.Submission", function() {
 			$.fn.fadeOut.restore();
 			$.fn.fadeIn.restore();
 		});
-		it("should add error status to the title input if errors.title is true", function() {
-			view.renderErrors({ title: true });
+		it("should add error status to the title input and return false if the model's title is empty", function() {
+			model.set("title", "");
+
+			expect(view.validateTitle()).toBe(false);
 			var controlGroup = view.$("#submission_title").closest(".control-group");
 			expect(controlGroup.hasClass("error")).toBe(true);
 			expect($.fn.fadeIn.getCall(0).thisValue.selector).toEqual("#submission_title.closest(.control-group) .help-inline");
 		});
-		it("should add error status to the attachment_url element if errors.attachment_url is true", function() {
-			view.renderErrors({ attachment_url: true });
-			var controlGroup = view.$(".fileinput-button").closest(".control-group");
-			expect(controlGroup.hasClass("error")).toBe(true);
-			expect($.fn.fadeIn.getCall(0).thisValue.selector).toEqual(".fileinput-button.closest(.control-group) .help-inline");
-		});		
-		it("should remove error status from the title input if errors.title is not true", function() {
+		it("should remove error status from the title input and return true if the model has a title", function() {
+			model.set("title", "beat");
+
 			var controlGroup = view.$("#submission_title").closest(".control-group");
 			controlGroup.addClass("error");
 
-			view.renderErrors({ attachment_url: true });
+			expect(view.validateTitle()).toBe(true);
 
 			expect(controlGroup.hasClass("error")).toBe(false);
 			expect($.fn.fadeOut.getCall(0).thisValue.selector).toEqual("#submission_title.closest(.control-group) .help-inline");
 		});
-		it("should remove error status from the title input if errors.title is not true", function() {
+	});
+
+	describe(".validateAttachmentUrl()", function() {
+		beforeEach(function() {
+			view.render();
+			sinon.stub($.fn, "fadeOut");
+			sinon.stub($.fn, "fadeIn");
+		});
+		afterEach(function() {
+			$.fn.fadeOut.restore();
+			$.fn.fadeIn.restore();
+		});
+		it("should add error status to the attachment_url element and return false if the model does not have an attachment_url", function() {
+			expect(view.validateAttachmentUrl()).toBe(false);
+
+			var controlGroup = view.$(".fileinput-button").closest(".control-group");
+			expect(controlGroup.hasClass("error")).toBe(true);
+			expect($.fn.fadeIn.getCall(0).thisValue.selector).toEqual(".fileinput-button.closest(.control-group) .help-inline");
+		});		
+		it("should remove error status from the attachment button and return true if the model has an attachment_url", function() {
+			model.set("attachment_url", "http://s3.amazon.com/sensori/beat.mp3");
 			var controlGroup = view.$(".fileinput-button").closest(".control-group");
 			controlGroup.addClass("error");
 
-			view.renderErrors({ title: true });
+			expect(view.validateAttachmentUrl()).toBe(true);
 
 			expect(controlGroup.hasClass("error")).toBe(false);
 			expect($.fn.fadeOut.getCall(0).thisValue.selector).toEqual(".fileinput-button.closest(.control-group) .help-inline");
@@ -87,16 +101,16 @@ describe("Sensori.Views.Submission", function() {
 	describe(".changeSubmissionTitle()", function() {
 		beforeEach(function() {
 			view.render();
-			sinon.stub(view, "validate");
+			sinon.stub(view, "validateTitle");
 		});
 		it("should set the model's submission_title from the #submission_title input value", function() {
 			view.$("#submission_title").val("my neat beat!");
 			view.changeSubmissionTitle();
 			expect(model.get("title")).toEqual("my neat beat!");
 		});
-		it("should validate the view", function() {
+		it("should validate the title", function() {
 			view.changeSubmissionTitle()
-			expect(view.validate.callCount).toEqual(1);
+			expect(view.validateTitle.callCount).toEqual(1);
 		});
 	});
 

@@ -6,36 +6,45 @@ Sensori.Views.Submission = Backbone.View.extend({
 	},
 
   validate: function() {
-    var errors = {};
-    if (_.isEmpty(this.model.get("title"))) { errors.title = true; }
-    if (_.isEmpty(this.model.get("attachment_url"))) { errors.attachment_url = true; }
-    this.renderErrors(errors);
-    return _.isEmpty(errors);
+    var validations = [
+      this.validateTitle(),
+      this.validateAttachmentUrl()
+    ];
+    
+    return _.all(validations);
   },
 
-  renderErrors: function(errors) {
-    var titleControlGroup = this.$("#submission_title").closest(".control-group");  
-    if (errors.title) {
-      titleControlGroup.addClass("error");
-      titleControlGroup.find(".help-inline").fadeIn();
-    } else {
-      titleControlGroup.removeClass("error");
-      titleControlGroup.find(".help-inline").fadeOut();
-    }
+  validateTitle: function() {
+    var controlGroup = this.$("#submission_title").closest(".control-group");  
 
-    var attachmentUrlControlGroup = this.$(".fileinput-button").closest(".control-group");  
-    if (errors.attachment_url) {
-      attachmentUrlControlGroup.addClass("error");
-      attachmentUrlControlGroup.find(".help-inline").fadeIn();
+    if (_.isEmpty(this.model.get("title"))) {
+      controlGroup.addClass("error");
+      controlGroup.find(".help-inline").fadeIn();
+      return false;
     } else {
-      attachmentUrlControlGroup.removeClass("error");
-      attachmentUrlControlGroup.find(".help-inline").fadeOut();
+      controlGroup.removeClass("error");
+      controlGroup.find(".help-inline").fadeOut();
+      return true; 
+    }
+  },
+
+  validateAttachmentUrl: function() {
+    var controlGroup = this.$(".fileinput-button").closest(".control-group");  
+
+    if (_.isEmpty(this.model.get("attachment_url"))) {
+      controlGroup.addClass("error");
+      controlGroup.find(".help-inline").fadeIn();
+      return false;
+    } else {
+      controlGroup.removeClass("error");
+      controlGroup.find(".help-inline").fadeOut();
+      return true;
     }
   },
 
   changeSubmissionTitle: function() {
     this.model.set("title", this.$("#submission_title").val());
-    this.validate();
+    this.validateTitle();
   },
 
 	saveSubmission: function() {
