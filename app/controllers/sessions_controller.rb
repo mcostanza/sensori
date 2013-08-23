@@ -54,4 +54,10 @@ class SessionsController < ApplicationController
     flash[:notice] = "Session was successfully deleted."
     redirect_to :sessions
   end
+
+  # GET /sessions/:id/submissions
+  def submissions
+    @session = Session.find(params[:id])
+    @submissions = @session.submissions
+  end
 end

@@ -177,4 +177,33 @@ describe SessionsController do
       flash[:notice].should == 'Session was successfully deleted.'
     end
   end
+
+  describe "GET 'submissions'" do
+    before do
+      @submissions = [double(Submission)]
+      @session = double(Session, :submissions => @submissions)
+      Session.stub(:find).and_return(@session)
+      @session_id = "1"
+      login_user(:admin => true)
+    end
+
+    describe "before filters" do
+      it "should have the ensure_admin before filter" do
+        controller.should_receive(:ensure_admin)
+        get 'submissions', :id => @session_id
+      end
+    end
+
+    it "should return http success" do
+      get 'submissions', :id => @session_id
+      response.should be_success
+    end
+    it "should load and assign @session and @submissions" do
+      Session.should_receive(:find).with(@session_id).and_return(@session)
+      @session.should_receive(:submissions).and_return(@submissions)
+      get 'submissions', :id => @session_id
+      assigns[:session].should == @session
+      assigns[:submissions].should == @submissions
+    end
+  end
 end
