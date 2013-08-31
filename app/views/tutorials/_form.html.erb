@@ -8,7 +8,8 @@
     member_id: @tutorial.member_id,
     attachment_url: @tutorial.attachment_url,
     slug: @tutorial.slug,
-    published: @tutorial.published
+    published: @tutorial.published,
+    include_table_of_contents: @tutorial.include_table_of_contents
   }
 %>
 <div id="tutorial-form-container" class="container">
@@ -38,6 +39,9 @@
       </div>
     </div>  
 
+  <%= label :tutorial, :include_table_of_contents, :class => "checkbox" do %>
+    <%= check_box :tutorial, :include_table_of_contents %> Include table of contents (recommended for long tutorials)
+  <% end %>
   <div class="editor well"><%= image_tag "loader.gif" %></div>
 
   <div clas="btn-group-container">
@@ -52,7 +56,7 @@
   </div>
 </div>
 
-<%= render 's3_uploader_form_jst' %>
+<%= render '/shared/s3_uploader_form_jst' %>
 <script type="text/javascript">
 Sensori.Tutorial = new Sensori.Models.Tutorial(<%= raw tutorial_data.to_json %>);
 Sensori.TutorialView = new Sensori.Views.Tutorial({

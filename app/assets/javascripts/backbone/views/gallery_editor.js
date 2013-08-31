@@ -124,7 +124,7 @@ Sensori.Views.GalleryEditor = Backbone.View.extend({
 
   render: function() {
     this.$el.html(JST["backbone/templates/tutorials/gallery_editor"]({
-      imageUploaderForm: JST["backbone/templates/tutorials/s3_uploader_form"]()
+      imageUploaderForm: JST["backbone/templates/shared/s3_uploader_form"]()
     }));
 
     this.imageUploaderModal = this.$(".image-uploader-modal");

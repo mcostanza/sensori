@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130807004705) do
+ActiveRecord::Schema.define(:version => 20130817180150) do
 
   create_table "discussion_notifications", :force => true do |t|
     t.integer  "discussion_id", :null => false
@@ -74,14 +74,25 @@ ActiveRecord::Schema.define(:version => 20130807004705) do
     t.string   "image",             :null => false
     t.datetime "end_date",          :null => false
     t.string   "facebook_event_id"
-    t.string   "attachment"
     t.string   "slug",              :null => false
     t.integer  "member_id",         :null => false
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+    t.string   "attachment_url"
   end
 
   add_index "sessions", ["member_id"], :name => "sessions_member_id_fk"
+
+  create_table "submissions", :force => true do |t|
+    t.integer  "session_id",     :null => false
+    t.string   "title",          :null => false
+    t.integer  "member_id",      :null => false
+    t.string   "attachment_url", :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "submissions", ["member_id"], :name => "submissions_member_id_fk"
 
   create_table "tracks", :force => true do |t|
     t.integer  "soundcloud_id", :null => false
@@ -106,12 +117,13 @@ ActiveRecord::Schema.define(:version => 20130807004705) do
     t.string   "slug"
     t.integer  "member_id"
     t.string   "youtube_id"
-    t.datetime "created_at",                         :null => false
-    t.datetime "updated_at",                         :null => false
-    t.boolean  "featured",        :default => false
+    t.datetime "created_at",                                   :null => false
+    t.datetime "updated_at",                                   :null => false
+    t.boolean  "featured",                  :default => false
     t.text     "body_components"
-    t.boolean  "published",       :default => false
+    t.boolean  "published",                 :default => false
     t.string   "attachment_url"
+    t.boolean  "include_table_of_contents", :default => false
   end
 
   add_foreign_key "discussion_notifications", "discussions", :name => "discussion_notifications_discussion_id_fk"
@@ -123,6 +135,8 @@ ActiveRecord::Schema.define(:version => 20130807004705) do
   add_foreign_key "responses", "members", :name => "responses_member_id_fk"
 
   add_foreign_key "sessions", "members", :name => "sessions_member_id_fk"
+
+  add_foreign_key "submissions", "members", :name => "submissions_member_id_fk"
 
   add_foreign_key "tracks", "members", :name => "tracks_member_id_fk"
 

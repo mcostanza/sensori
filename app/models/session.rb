@@ -1,10 +1,12 @@
 class Session < ActiveRecord::Base
   extend FriendlyId
 
-  attr_accessible :title, :description, :image, :member_id, :facebook_event_id, :end_date, :attachment
+  attr_accessible :title, :description, :image, :member_id, :facebook_event_id, :end_date, :attachment_url
   default_scope order('id DESC')
 
   belongs_to :member
+
+  has_many :submissions
 
   validates :member, :presence => true
   validates :title, :presence => true
@@ -15,5 +17,4 @@ class Session < ActiveRecord::Base
   friendly_id :title, :use => :slugged
 
   mount_uploader :image, ImageUploader
-  mount_uploader :attachment, FileUploader
 end

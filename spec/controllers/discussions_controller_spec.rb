@@ -3,9 +3,9 @@ require 'spec_helper'
 describe DiscussionsController do
   describe "GET 'index'" do
     before do
-      @discussion = mock(Discussion)
-      @scope = mock('paginated discussions', :per => [@discussion])
-      Discussion.stub!(:page).and_return(@scope)
+      @discussion = double(Discussion)
+      @scope = double('paginated discussions', :per => [@discussion])
+      Discussion.stub(:page).and_return(@scope)
     end
     it "should return http success" do
       get 'index'
@@ -33,9 +33,9 @@ describe DiscussionsController do
 
   describe "GET 'show'" do
     before do
-      @responses = [mock(Response)]
-      @discussion = mock(Discussion, :responses => @responses)
-      Discussion.stub!(:find).and_return(@discussion)
+      @responses = [double(Response)]
+      @discussion = double(Discussion, :responses => @responses)
+      Discussion.stub(:find).and_return(@discussion)
     end
     it "should return http success" do
       get 'show', :id => 1
@@ -55,7 +55,7 @@ describe DiscussionsController do
 
   describe "GET 'new'" do
     before do
-      controller.stub!(:ensure_signed_in)
+      controller.stub(:ensure_signed_in)
     end
 
     describe "before filters" do
@@ -75,14 +75,14 @@ describe DiscussionsController do
 
   describe "POST 'create'" do
     before do
-      controller.stub!(:ensure_signed_in)
-      @member = mock(Member, :id => 41)
+      controller.stub(:ensure_signed_in)
+      @member = double(Member, :id => 41)
       controller.instance_variable_set(:@member, @member)
       @params = { :discussion => { :subject => "hello", :body => "body" } }
       @discussion = Discussion.new
-      @discussion.stub!(:id).and_return(10)
-      @discussion.stub!(:save).and_return(true)
-      Discussion.stub!(:new).and_return(@discussion)
+      @discussion.stub(:id).and_return(10)
+      @discussion.stub(:save).and_return(true)
+      Discussion.stub(:new).and_return(@discussion)
     end
 
     describe "before filters" do
@@ -107,7 +107,7 @@ describe DiscussionsController do
       flash[:notice].should == 'Discussion was successfully created.'
     end
     it "should render the new action if the discussion fails to save" do
-      @discussion.stub!(:save).and_return(false)
+      @discussion.stub(:save).and_return(false)
       post 'create', @params
       response.should render_template(:new)
     end
@@ -115,15 +115,15 @@ describe DiscussionsController do
 
   describe "POST 'response'" do
     before do
-      controller.stub!(:ensure_signed_in)
-      @member = mock(Member, :id => 41)
+      controller.stub(:ensure_signed_in)
+      @member = double(Member, :id => 41)
       controller.instance_variable_set(:@member, @member)
-      @resp = mock('response', :valid? => true)
-      @responses = mock('responses', :create => @resp)
+      @resp = double('response', :valid? => true)
+      @responses = double('responses', :create => @resp)
       @discussion = Discussion.new
-      @discussion.stub!(:id).and_return(41)
-      @discussion.stub!(:responses).and_return(@responses)
-      Discussion.stub!(:find).and_return(@discussion)
+      @discussion.stub(:id).and_return(41)
+      @discussion.stub(:responses).and_return(@responses)
+      Discussion.stub(:find).and_return(@discussion)
       @params = { :id => 41, :response => { :body => 'body' } }
     end
 
@@ -149,7 +149,7 @@ describe DiscussionsController do
       flash[:alert].should be_blank
     end
     it "should redirect back to the discussion with an alert message if the response was not created" do
-      @resp.stub!(:valid?).and_return(false)
+      @resp.stub(:valid?).and_return(false)
       post 'respond', @params
       response.should redirect_to(@discussion)
       flash[:alert].should == 'Sorry something went wrong, please try again.'
@@ -158,12 +158,12 @@ describe DiscussionsController do
 
   describe "DELETE 'destroy'" do
     before do
-      controller.stub!(:ensure_signed_in)
+      controller.stub(:ensure_signed_in)
       @discussion = Discussion.new
-      @discussion.stub!(:id).and_return(10)
-      @discussion.stub!(:destroy).and_return(true)
-      @discussion.stub!(:editable?).and_return(true)
-      Discussion.stub!(:find).and_return(@discussion)
+      @discussion.stub(:id).and_return(10)
+      @discussion.stub(:destroy).and_return(true)
+      @discussion.stub(:editable?).and_return(true)
+      Discussion.stub(:find).and_return(@discussion)
       @params = { :id => '10' }
     end
 
@@ -185,12 +185,12 @@ describe DiscussionsController do
       flash[:notice].should == 'Discussion was successfully deleted.'
     end
     it "should not destroy the discussion if it is not editable" do
-      @discussion.stub!(:editable?).and_return(false)
+      @discussion.stub(:editable?).and_return(false)
       @discussion.should_not_receive(:destroy)
       delete 'destroy', @params  
     end
     it "should redirect to the discussion with an alert message if it is not editable" do
-      @discussion.stub!(:editable?).and_return(false)
+      @discussion.stub(:editable?).and_return(false)
       delete 'destroy', @params  
       response.should redirect_to(@discussion)
       flash[:alert].should == 'Discussion is no longer editable.'
@@ -199,12 +199,12 @@ describe DiscussionsController do
 
   describe "GET 'edit'" do
     before do
-      controller.stub!(:ensure_signed_in)
+      controller.stub(:ensure_signed_in)
       @discussion = Discussion.new
-      @discussion.stub!(:id).and_return(10)
-      @discussion.stub!(:destroy).and_return(true)
-      @discussion.stub!(:editable?).and_return(true)
-      Discussion.stub!(:find).and_return(@discussion)
+      @discussion.stub(:id).and_return(10)
+      @discussion.stub(:destroy).and_return(true)
+      @discussion.stub(:editable?).and_return(true)
+      Discussion.stub(:find).and_return(@discussion)
       @params = { :id => '10' }
     end
 
@@ -220,7 +220,7 @@ describe DiscussionsController do
       get 'edit', @params
     end
     it "should redirect to the discussion with an alert message if it is not editable" do
-      @discussion.stub!(:editable?).and_return(false)
+      @discussion.stub(:editable?).and_return(false)
       get 'edit', @params
       response.should redirect_to(@discussion)
       flash[:alert].should == 'Discussion is no longer editable.'
@@ -229,12 +229,12 @@ describe DiscussionsController do
 
   describe "PUT 'update'" do
     before do
-      controller.stub!(:ensure_signed_in)
+      controller.stub(:ensure_signed_in)
       @discussion = Discussion.new
-      @discussion.stub!(:id).and_return(10)
-      @discussion.stub!(:update_attributes).and_return(true)
-      @discussion.stub!(:editable?).and_return(true)
-      Discussion.stub!(:find).and_return(@discussion)
+      @discussion.stub(:id).and_return(10)
+      @discussion.stub(:update_attributes).and_return(true)
+      @discussion.stub(:editable?).and_return(true)
+      Discussion.stub(:find).and_return(@discussion)
       @params = { :id => '10', :discussion => { :title => 'test' } }
     end
 
@@ -255,13 +255,13 @@ describe DiscussionsController do
       flash[:notice].should == 'Discussion was successfully updated.'
     end
     it "should redirect to the discussion with an alert message if the update fails" do
-      @discussion.stub!(:update_attributes).and_return(false)
+      @discussion.stub(:update_attributes).and_return(false)
       put 'update', @params
       response.should render_template("edit")
       flash[:alert].should == 'Sorry something went wrong, please try again.'
     end
     it "should not update and should redirect to the discussion with an alert message if the discussion is not editable" do
-      @discussion.stub!(:editable?).and_return(false)
+      @discussion.stub(:editable?).and_return(false)
       @discussion.should_not_receive(:update_attributes)
       put 'update', @params
       response.should redirect_to(@discussion)

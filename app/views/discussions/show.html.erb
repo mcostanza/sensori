@@ -21,7 +21,7 @@
 <% if signed_in? %>
   <%= render :partial => 'response_form' %>
 <% else %>
-  <div class="login-to-reply">
+  <div class="login-prompt">
     Log In to Reply 
     <%= link_to image_tag("http://connect.soundcloud.com/2/btn-connect-m.png", :class => 'soundcloud-connect'), members_sign_in_path %>
   </div>

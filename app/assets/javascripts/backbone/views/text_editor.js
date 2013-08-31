@@ -20,13 +20,16 @@ Sensori.Views.TextEditor = Backbone.View.extend({
             "<i class='icon-font'></i>&nbsp;<span class='current-font'>" + locale.font_styles.normal + "</span>&nbsp;<b class='caret'></b>" +
           "</a>" +
           "<ul class='dropdown-menu'>" +
-            "<li><a data-wysihtml5-command='formatBlock' data-wysihtml5-command-value='div' tabindex='-1'>" + locale.font_styles.normal + "</a></li>" +
+            "<li><a data-wysihtml5-command='formatBlock' data-wysihtml5-command-value='p' tabindex='-1'>" + locale.font_styles.normal + "</a></li>" +
             "<li><a data-wysihtml5-command='formatBlock' data-wysihtml5-command-value='h3' tabindex='-1'>Heading</a></li>" +
             "<li><a data-wysihtml5-command='formatBlock' data-wysihtml5-command-value='h4' tabindex='-1'>Sub-heading</a></li>" +
           "</ul>" +
-        "</li>";
+        "</li>"
       }
     },
+
+    // Allow option to directly edit html if necessary
+    html: true,
 
     // Do not allow inline images (use gallery instead)
     image: false,
@@ -37,16 +40,17 @@ Sensori.Views.TextEditor = Backbone.View.extend({
     parserRules: {
       // The following tags are allowed when initialized with pre-existing content
       tags: {
-        h3: {},
-        h4: {},
-        b:  {},
-        i:  {},
-        u:  {},
-        p:  {},
-        ul: {},
-        ol: {},
-        li: {},
-        a:  {
+        h3:  {},
+        h4:  {},
+        b:   {},
+        i:   {},
+        u:   {},
+        p:   {},
+        div: {},
+        ul:  {},
+        ol:  {},
+        li:  {},
+        a:   {
           set_attributes: {
             target: "_blank",
             rel:    "nofollow"

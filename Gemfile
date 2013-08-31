@@ -5,7 +5,7 @@ gem 'rails', '3.2.12'
 gem 'mysql2'
 
 gem 'less-rails'
-gem 'less-rails-bootstrap'
+gem 'less-rails-bootstrap', "~> 2.3"
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -92,4 +92,4 @@ gem "jquery-fileupload-rails"
 gem "bootstrap-wysihtml5-rails", :git => "https://sensoricollective@bitbucket.org/sensoricollective/bootstrap-wysihtml5-rails.git"
 
 # Backbone JS library
-gem "rails-backbone"
+gem "rails-backbone", '>= 0.9.10'

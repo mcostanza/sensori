@@ -8,8 +8,8 @@ describe SoundcloudTrackSync do
 
   describe ".run" do
     before(:each) do
-      @member = mock(Member, :sync_soundcloud_tracks => true)
-      Member.stub!(:find_each).and_yield(@member)
+      @member = double(Member, :sync_soundcloud_tracks => true)
+      Member.stub(:find_each).and_yield(@member)
     end
     it "should batch find each Member" do
       Member.should_receive(:find_each)

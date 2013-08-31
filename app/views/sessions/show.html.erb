@@ -1,3 +1,8 @@
+<% if admin? %>
+<div class="row">
+<%= render :partial => 'shared/action_buttons', :locals => { :object => @session } %>
+</div>
+<% end %>
 <div class="row">
   <div class="span8">
     <%= image_tag @session.image_url %>
@@ -5,6 +10,24 @@
   <div class="span4">
     <h3><%= @session.title %></h3>
     <p><%= simple_format(@session.description) %></p>
-    <%= link_to("Download", @session.attachment_url, :class => "btn btn-primary") if @session.attachment? %>
+    <%= link_to("Download", @session.attachment_url, :class => "btn btn-primary") if @session.attachment_url? %>
   </div>
 </div>
+
+<% if signed_in? %>
+  <%= render '/shared/s3_uploader_form_jst' %>
+  <div class="submission-container media form-horizontal"><%= image_tag "loader.gif" %></div>
+  <script type="text/javascript">
+    Sensori.Submission = new Sensori.Models.Submission(<%= raw @submission.to_json %>);
+    Sensori.SubmissionView = new Sensori.Views.Submission({
+      el: $(".submission-container"),
+      model: Sensori.Submission,
+      sessionTitle: <%= raw @session.title.to_json %>
+    }).render();
+  </script>
+<% else %>
+  <div class="login-prompt">
+    Log In to Submit a Beat
+    <%= link_to image_tag("http://connect.soundcloud.com/2/btn-connect-m.png", :class => 'soundcloud-connect'), members_sign_in_path %>
+  </div>
+<% end %>

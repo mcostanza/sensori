@@ -3,7 +3,7 @@ class Tutorial < ActiveRecord::Base
 
   default_scope order('featured DESC, created_at DESC')
   
-  attr_accessible :attachment_url, :body_html, :body_components, :description, :member_id, :member, :published, :slug, :title, :youtube_id
+  attr_accessible :attachment_url, :body_html, :body_components, :description, :include_table_of_contents, :member_id, :member, :published, :slug, :title, :youtube_id
 
   belongs_to :member
 
@@ -32,7 +32,7 @@ class Tutorial < ActiveRecord::Base
   end
 
   def format_table_of_contents
-    self.body_html = Formatters::Tutorial::TableOfContents.new(self).format if self.body_html_changed?
+    self.body_html = Formatters::Tutorial::TableOfContents.new(self).format if self.include_table_of_contents?
   end
 
   def body_components
@@ -43,6 +43,6 @@ class Tutorial < ActiveRecord::Base
     [:title, :description, :body_html, :youtube_id, :attachment_url].each do |attribute|
       self.send("#{attribute}=", params[attribute])
     end
-    format_table_of_contents
+    format_table_of_contents if params[:include_table_of_contents].to_s == "true"
   end
 end

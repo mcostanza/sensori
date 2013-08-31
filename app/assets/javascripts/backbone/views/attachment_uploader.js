@@ -42,9 +42,9 @@ Sensori.Views.AttachmentUploader = Backbone.View.extend({
   },
 	
 	render: function() {
-		this.$el.html(JST["backbone/templates/tutorials/attachment_uploader"]({
+		this.$el.html(JST["backbone/templates/shared/attachment_uploader"]({
 			attachmentUrl: this.model.get("attachment_url"),
-			uploadForm: JST["backbone/templates/tutorials/s3_uploader_form"]()
+			uploadForm: JST["backbone/templates/shared/s3_uploader_form"]()
 		}));
 
 		this.$("form").fileupload({

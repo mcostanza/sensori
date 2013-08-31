@@ -44,6 +44,9 @@ describe Member do
     it "should have a tutorials association" do
       @member.should respond_to(:tutorials)
     end
+    it "should have a submissions association" do
+      @member.should respond_to(:submissions)
+    end
   end
 
   describe "callbacks" do
@@ -58,8 +61,8 @@ describe Member do
   describe "#soundcloud_tracks(reload = false)" do
     before(:each) do
       @track = Hashie::Mash.new(:id => 123)
-      @app_client = mock(::Soundcloud, :get => [@track])
-      Sensori::Soundcloud.stub!(:app_client).and_return(@app_client)
+      @app_client = double(::Soundcloud, :get => [@track])
+      Sensori::Soundcloud.stub(:app_client).and_return(@app_client)
     end
     it "should load the member's tracks from the Soundcloud API" do
       @app_client.should_receive(:get).with("/users/#{@member.soundcloud_id}/tracks").and_return([@track])
@@ -132,10 +135,11 @@ describe Member do
         "comment_count"=>1, 
         "attachments_uri"=>"http://api.soundcloud.com/tracks/96520157/attachments"
       })
-      @member.stub!(:soundcloud_tracks).and_return([@soundcloud_track])
+      @member.stub(:soundcloud_tracks).and_return([@soundcloud_track])
 
-      @track = mock(Track, :update_attributes => true)
-      @member.tracks.stub!(:find_or_initialize_by_soundcloud_id).and_return(@track)
+      @track = double(Track, :update_attributes => true)
+      @tracks = double('tracks', :find_or_initialize_by_soundcloud_id => @track)
+      @member.stub(:tracks).and_return(@tracks)
     end
     it "should load the member's soundcloud tracks" do
       @member.should_receive(:soundcloud_tracks).with(:reload).and_return([@soundcloud_track])
@@ -188,11 +192,11 @@ describe Member do
         "permalink_url" => "http://soundcloud.com/dj-costanza", 
         "avatar_url" => "https://i1.sndcdn.com/avatars-000039096498-86ivun-large.jpg?0c5f27c"
       })
-      @soundcloud_client = mock(::Soundcloud, :get => @member_profile)
-      ::Soundcloud.stub!(:new).and_return(@soundcloud_client)
+      @soundcloud_client = double(::Soundcloud, :get => @member_profile)
+      ::Soundcloud.stub(:new).and_return(@soundcloud_client)
 
-      @member = mock(Member, :save => true, :valid? => true, :soundcloud_id => @member_profile.soundcloud_id)
-      Member.stub!(:find_or_initialize_by_soundcloud_id).and_return(@member)
+      @member = double(Member, :save => true, :valid? => true, :soundcloud_id => @member_profile.soundcloud_id)
+      Member.stub(:find_or_initialize_by_soundcloud_id).and_return(@member)
     end
     describe "access token is present" do
       it "should load the soundcloud user's profile" do

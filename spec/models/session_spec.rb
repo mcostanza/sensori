@@ -35,6 +35,9 @@ describe Session do
     it "should have a member association" do
       @session.should respond_to(:member)
     end
+    it "should have a submissions association" do
+      @session.should respond_to(:submissions)
+    end
   end
   
   it "should set a slug from the title when saving" do

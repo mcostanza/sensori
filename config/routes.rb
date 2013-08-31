@@ -4,7 +4,10 @@ Sensori::Application.routes.draw do
     post "preview", :on => :member
   end
   
-  resources :sessions
+  resources :sessions do
+    resources :submissions, :only => [:create, :update, :destroy]
+  end
+  get "sessions/:id/submissions", :to => "sessions#submissions", :as => "session_submissions"
 
   resources :discussions
 

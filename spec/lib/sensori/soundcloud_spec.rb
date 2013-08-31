@@ -19,13 +19,13 @@ describe Sensori::Soundcloud do
 
   describe ".app_client" do
     before(:each) do
-      Sensori::Soundcloud.stub!(:client_id).and_return(123)
-      Sensori::Soundcloud.stub!(:secret).and_return('secret')
+      Sensori::Soundcloud.stub(:client_id).and_return(123)
+      Sensori::Soundcloud.stub(:secret).and_return('secret')
       Sensori::Soundcloud.app_client = nil
     end
     it "should return a ::Soundcloud instance initialized with client id and secret" do
       app_client = Sensori::Soundcloud.app_client
-      app_client.should be_an_instance_of(::Soundcloud)
+      app_client.should be_an_instance_of(::Soundcloud::Client)
       app_client.client_id.should == 123
       app_client.client_secret.should == 'secret'
     end

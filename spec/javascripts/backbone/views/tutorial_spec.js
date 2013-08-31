@@ -13,6 +13,7 @@ describe("Sensori.Views.Tutorial", function() {
         "<a href='javascript:;' class='btn attachment-button'>Download Samples</a>",
         "<div id='tutorial-attachment-container'></div>",
         "<div class='flex-video widescreen'><label class='flex-video-content'>placeholder image</label></div>",
+        "<input type='checkbox' id='tutorial_include_table_of_contents' value='1' />",
         "<button data-trigger='add-more'>Add More</button>",
         "<button data-trigger='save-tutorial'>Save</button>",
         "<button data-trigger='publish-tutorial'>Publish</button>",
@@ -234,6 +235,21 @@ describe("Sensori.Views.Tutorial", function() {
     }); 
   });
 
+  describe(".updateIncludeTableOfContents()", function() {
+    it("should set the model's include_table_of_contents attribute to true if the matching input is checked", function() {
+      view.$("#tutorial_include_table_of_contents").attr("checked", true);
+      view.model.unset("include_table_of_contents")
+      view.updateIncludeTableOfContents()
+      expect(view.model.get("include_table_of_contents")).toBe(true);
+    });
+    it("should set the model's include_table_of_contents attribute to false if the matching input is unchecked", function() {
+      view.$("#tutorial_include_table_of_contents").attr("checked", false);
+      view.model.unset("include_table_of_contents")
+      view.updateIncludeTableOfContents()
+      expect(view.model.get("include_table_of_contents")).toBe(false);
+    });
+  });
+
   describe(".publish()", function() {
     beforeEach(function() {
       sinon.stub(model, "publish");
@@ -409,7 +425,8 @@ describe("Sensori.Views.Tutorial", function() {
         description: "how to make one",
         youtube_id: "123",
         attachment_url: "http://s3.amazon.com/wah.zip",
-        slug: "wah-effect--123"
+        slug: "wah-effect--123",
+        include_table_of_contents: true
       });
     });
     afterEach(function() {
@@ -431,6 +448,7 @@ describe("Sensori.Views.Tutorial", function() {
       expect(form.find("input#tutorial_youtube_id").val()).toEqual(model.get("youtube_id"));
       expect(form.find("input#tutorial_attachment_url").val()).toEqual(model.get("attachment_url"));
       expect(form.find("input#tutorial_body_html").val()).toEqual("body html");
+      expect(form.find("input#tutorial_include_table_of_contents").val()).toEqual("true");
       
       expect(view.getHTMLValue.callCount).toEqual(1);
     });

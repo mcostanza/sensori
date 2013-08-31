@@ -62,6 +62,11 @@ describe("Sensori.Views.ImageEditor", function() {
       expect(view.$el.popover.callCount).toEqual(1);
       expect(view.$el.popover.calledWith('hide')).toEqual(true);
     });
+    it("should set the title to an html-escaped value", function() {
+      view.$(".image-title").val('This "Has Some Quotes" And Shit');
+      view.setAttributes()
+      expect(imageModel.title).toEqual("This &quot;Has Some Quotes&quot; And Shit");
+    });
   });
 
   describe(".removeImage()", function() {

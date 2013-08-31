@@ -1,0 +1,16 @@
+<h1>Submissions for <%= @session.title %></h1>
+
+<div class="submissions-container">
+	<% @submissions.each do |submission| %>
+		<div class="media">
+		  <%= link_to submission.member.profile_url, :title => submission.member.name, :class => 'pull-left', :target => :_blank do %>
+		    <%= image_tag submission.member.image(:small), :alt => submission.member.name %>
+		  <% end %>
+		  <div class="media-body">
+    		<h4 class="media-heading"><%= link_to submission.title, submission.attachment_url %></h4>
+    		<div>by <%= link_to submission.member.name, submission.member.profile_url, :target => :_blank %></div>
+    		<%= tag :audio, :src => submission.attachment_url, :controls => true %>
+    	</div>
+		</div>
+	<% end %>
+</div>
