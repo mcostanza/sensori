@@ -2,13 +2,13 @@ require 'spec_helper'
 
 describe DiscussionNotificationWorker do
   
-  describe "#perform(member_id)" do
+  describe "#perform(response_id)" do
     before(:each) do
       @response_id = 1
       @member = double(Member)
       @notifications = [double(DiscussionNotification, :member => @member)]
       @discussion = double(Discussion, :notifications => @notifications)
-      @response = double(Response, :discussion => @discussion)
+      @response = double(Response, :discussion => @discussion, :member => double(Member))
       Response.stub(:find).and_return(@response)
       @email = double('email', :deliver => true)
       NotificationMailer.stub(:discussion_notification).and_return(@email)
@@ -20,7 +20,12 @@ describe DiscussionNotificationWorker do
     it "should deliver the notifications" do
       NotificationMailer.should_receive(:discussion_notification).with(:member => @member, :response => @response).and_return(@email)
       @email.should_receive(:deliver)
-      DiscussionNotificationWorker.new.perform(@member_id)
+      DiscussionNotificationWorker.new.perform(@response_id)
+    end
+    it "should not send a notification to the member responding" do
+      @response.stub(:member).and_return(@member)
+      NotificationMailer.should_not_receive(:discussion_notification)
+      DiscussionNotificationWorker.new.perform(@response_id)
     end
     it "should have an async method" do
       DiscussionNotificationWorker.should respond_to(:perform_async)

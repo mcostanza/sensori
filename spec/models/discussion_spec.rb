@@ -35,6 +35,13 @@ describe Discussion do
     end
   end
 
+  describe "callbacks" do
+    it "should call setup_discussion_notification" do
+      @discussion.should_receive(:setup_discussion_notification)
+      @discussion.save
+    end
+  end
+
   it "should set slug from the subject when saving" do
     @discussion.slug.should be_nil
     @discussion.save
@@ -73,6 +80,17 @@ describe Discussion do
     end
     it "should return false if the passed member is nil" do
       @discussion.editable?(nil).should be_false
+    end
+  end
+
+  describe "#setup_discussion_notification" do
+    before do
+      @notifications = double('notifications')
+      @discussion.stub(:notifications).and_return(@notifications)
+    end
+    it "should find or create a discussion notification for the member creating the discussion" do
+      @discussion.notifications.should_receive(:create).with({ :member => @discussion.member })
+      @discussion.setup_discussion_notification
     end
   end
 end

@@ -12,6 +12,8 @@ class Discussion < ActiveRecord::Base
   validates :subject, :presence => true
   validates :body, :presence => true
 
+  after_commit :setup_discussion_notification, :on => :create
+
   friendly_id :subject, :use => :slugged
 
   auto_html_for :body do
@@ -28,5 +30,9 @@ class Discussion < ActiveRecord::Base
     return false if member.blank?
     return true if member.admin?
     self.responses.blank? && self.member == member
+  end
+
+  def setup_discussion_notification
+    self.notifications.create(:member => self.member)
   end
 end
