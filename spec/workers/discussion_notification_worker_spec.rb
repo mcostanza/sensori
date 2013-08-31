@@ -5,13 +5,13 @@ describe DiscussionNotificationWorker do
   describe "#perform(member_id)" do
     before(:each) do
       @response_id = 1
-      @member = mock(Member)
-      @notifications = [mock(DiscussionNotification, :member => @member)]
-      @discussion = mock(Discussion, :notifications => @notifications)
-      @response = mock(Response, :discussion => @discussion)
-      Response.stub!(:find).and_return(@response)
-      @email = mock('email', :deliver => true)
-      NotificationMailer.stub!(:discussion_notification).and_return(@email)
+      @member = double(Member)
+      @notifications = [double(DiscussionNotification, :member => @member)]
+      @discussion = double(Discussion, :notifications => @notifications)
+      @response = double(Response, :discussion => @discussion)
+      Response.stub(:find).and_return(@response)
+      @email = double('email', :deliver => true)
+      NotificationMailer.stub(:discussion_notification).and_return(@email)
     end
     it "should find the Response from response_id" do
       Response.should_receive(:find).with(@response_id).and_return(@response)

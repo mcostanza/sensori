@@ -47,16 +47,6 @@ class DiscussionsController < ApplicationController
     redirect_to discussions_url, :notice => 'Discussion was successfully deleted.'
   end
 
-  # POST /discussions/1/respond
-  def respond
-    @discussion = Discussion.find(params[:id])
-    if @discussion.responses.create(:body => params[:response][:body], :member_id => @member.id).valid?
-      redirect_to @discussion
-    else
-      redirect_to @discussion, :alert => 'Sorry something went wrong, please try again.'
-    end
-  end
-
   private
 
   def ensure_editable

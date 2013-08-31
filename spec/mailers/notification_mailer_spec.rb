@@ -10,8 +10,8 @@ describe NotificationMailer do
 
   describe "#discussion_notification(params = {})" do
     it "should send an email to the member passed with the correct subject" do
-      @member = mock(Member, :email => "phil@mail.com", :name => "Slim James")
-      @response = mock(Response, :member => mock(Member, :name => "Five05"), :body => "just checking in bud", :body_html => "<p>just checking in bud</p>")
+      @member = double(Member, :email => "phil@mail.com", :name => "Slim James")
+      @response = double(Response, :member => double(Member, :name => "Five05"), :body => "just checking in bud", :body_html => "<p>just checking in bud</p>")
       params = { :member => @member, :response => @response }
 
       email = NotificationMailer.discussion_notification(params).deliver

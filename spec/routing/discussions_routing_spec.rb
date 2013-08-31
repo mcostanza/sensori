@@ -31,9 +31,5 @@ describe DiscussionsController do
       delete("/discussions/1").should route_to("discussions#destroy", :id => "1")
     end
 
-    it "routes to #respond" do
-      post("/discussions/1/respond").should route_to("discussions#respond", :id => "1")
-    end
-
   end
 end
