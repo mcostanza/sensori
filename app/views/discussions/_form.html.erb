@@ -1,35 +1,32 @@
-<%= form_for(@discussion) do |f| %>
-  <% if @discussion.errors.any? %>
-    <div id="error_explanation">
-      <ul>
-      <% @discussion.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
+<div class="media discussion">
+  <a class="pull-left" href="#">
+    <%= image_tag @member.image(:small), :alt => @member.name %>
+  </a>
+  <div class="media-body">
+    <div class="control-group">
+    <%= text_field :discussion, :subject, :placeholder => "Topic" %>
     </div>
-  <% end %>
-  <div class="media discussion">
-    <a class="pull-left" href="#">
-      <%= image_tag @member.image(:small), :alt => @member.name %>
-    </a>
-    <div class="media-body">
-      <%= hidden_field_tag(:email, @member.email) %>
-      <%= f.text_field :subject, :placeholder => "Topic" %>
-      <%= f.text_area :body, :placeholder => "Message", :rows => 10 %>
-      <%= f.label :attachment do %>
-        Attachment:
-        <%= f.file_field :attachment, :class => 'inline' %>
-      <% end %>
-      <%= f.label :members_only, :class => "checkbox last" do %>
-        <%= f.check_box :members_only %>
-        Members only
-      <% end %>
+    <div class="control-group">
+    <%= text_area :discussion, :body, :placeholder => "Message", :rows => 10 %>
     </div>
+    <%= label :discussion, :attachment do %>
+      Attachment:
+      <%= file_field :discussion, :attachment, :class => 'inline' %>
+    <% end %>
+    <%= label :discussion, :members_only, :class => "checkbox last" do %>
+      <%= check_box :discussion, :members_only %>
+      Members only
+    <% end %>
   </div>
-  <div class="pull-right">
-    <label class="checkbox">
-      <input type="checkbox" id="discussion-notifications" name="discussion_notifications" checked="true"> Notify me on responses
-    </label>
-    <button type="submit" class="btn btn-primary pull-right">Post</button>
-  </div>
-<% end %>
+</div>
+<div class="pull-right">
+  <button data-trigger="post" type="submit" class="btn btn-primary pull-right">Post</button>
+</div>
+<script type="text/javascript">
+$(function() {
+  Sensori.DiscussionView = new Sensori.Views.Discussion({
+    model: new Sensori.Models.Discussion(<%= raw @discussion.to_json %>),
+    el: $('.discussions-container')
+  });
+});
+</script>

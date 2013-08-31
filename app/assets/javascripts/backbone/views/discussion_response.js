@@ -1,12 +1,11 @@
 Sensori.Views.DiscussionResponse = Backbone.View.extend({
+  template: JST["backbone/templates/discussions/response"],
 
   initialize: function() {
     this.listenTo(this.collection, "add", this.renderResponse);
     this.postButton = this.$("[data-trigger='post']");
     this.responseInput = this.$("#response_body");
-    this.responseInput.on("focus", _.bind(function(e) {
-      this.responseInput.closest(".control-group").removeClass("error");
-    }, this));
+    this.validatesPresenceOf(this.responseInput);
   },
 
   events: {
@@ -18,10 +17,10 @@ Sensori.Views.DiscussionResponse = Backbone.View.extend({
     var view = this;
     this.disablePostButton();
 
-    if(this.notificationsEnabled() && !Sensori.Member.has('email')) {
-      this.promptForEmail();
-    } else { 
+    if(Sensori.Member.has('email')) {
       this.saveResponse();
+    } else { 
+      this.promptForEmail();
     }
   },
 
@@ -29,8 +28,7 @@ Sensori.Views.DiscussionResponse = Backbone.View.extend({
     var view = this;
     var response = new Sensori.Models.Response({
       body: this.responseInput.val(),
-      discussion_id: this.model.get("id"),
-      notifications: this.notificationsEnabled()
+      discussion_id: this.model.get("id")
     });
     response.save(null, {
       success: function() {
@@ -43,16 +41,12 @@ Sensori.Views.DiscussionResponse = Backbone.View.extend({
   },
 
   renderResponse: function(response) {
-    this.$('.responses').append(JST["backbone/templates/discussions/response"]({
+    this.$('.responses').append(this.template({
       member: Sensori.Member,
       response: response
     }));
   },
   
-  notificationsEnabled: function() {
-    return this.$("#discussion_notifications").prop('checked');
-  },
-
   promptForEmail: function() {
     if(!this.emailPrompt) {
       this.emailPrompt = new Sensori.Views.EmailPrompt({ 
@@ -66,17 +60,9 @@ Sensori.Views.DiscussionResponse = Backbone.View.extend({
     this.emailPrompt.show();
   },
 
-  validate: function() {
-    if(_.isEmpty($.trim(this.responseInput.val()))) {
-      this.responseInput.closest(".control-group").addClass("error");
-      return false;
-    } else {
-      this.responseInput.closest(".control-group").removeClass("error");
-      return true;
-    }
-  },
-
   enablePostButton: function() { this.postButton.prop('disabled', false); },
 
   disablePostButton: function() { this.postButton.prop('disabled', true); }
 });
+
+_.extend(Sensori.Views.DiscussionResponse.prototype, Sensori.Mixins.Validations);

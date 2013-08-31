@@ -29,4 +29,10 @@ class ApplicationController < ActionController::Base
     redirect_to root_path unless @member && @member.admin?
   end
 
+  protected
+
+  def self.responder
+    BasicResponder
+  end
+
 end

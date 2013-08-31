@@ -14,7 +14,7 @@ Sensori.Views.EmailPrompt = Backbone.View.extend({
         view.trigger("email:saved");
         view.hide();
       },
-      error: function() { alert('error'); }
+      error: function(e) { console.log(e); }
     });
   },
 
@@ -35,23 +35,15 @@ Sensori.Views.EmailPrompt = Backbone.View.extend({
       this.emailModal.on("show", function() { view.trigger("show"); });
       this.emailModal.on("shown", function() { view.trigger("shown"); });
       this.emailModal.on("shown", function() { view.emailInput.focus(); });
-      this.emailInput.on("focus", function() { view.emailInput.closest(".control-group").removeClass("error"); });
 
+      this.validatesFormatOf(this.emailInput, "email");
     }
     return this;
-  },
-
-  validate: function() {
-    if(_.isNull(this.emailInput.val().match(Sensori.Validations.email))) {
-      this.emailInput.closest(".control-group").addClass("error");
-      return false;
-    } else {
-      this.emailInput.closest(".control-group").removeClass("error");
-      return true;
-    }
   },
 
   show: function() { this.emailModal.modal('show'); },
   
   hide: function() { this.emailModal.modal('hide'); },
 });
+
+_.extend(Sensori.Views.EmailPrompt.prototype, Sensori.Mixins.Validations);

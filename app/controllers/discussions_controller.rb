@@ -1,4 +1,6 @@
 class DiscussionsController < ApplicationController
+  respond_to :html, :json
+
   before_filter :ensure_signed_in, :except => [:index, :show]
   before_filter :ensure_editable, :only => [:edit, :update, :destroy]
 
@@ -22,12 +24,8 @@ class DiscussionsController < ApplicationController
   # POST /discussions
   def create
     @discussion = Discussion.new(params[:discussion].merge(:member => @member))
-
-    if @discussion.save
-      redirect_to @discussion, :notice => 'Discussion was successfully created.'
-    else
-      render :action => "new"
-    end
+    @discussion.save
+    respond_with @discussion
   end
 
   # GET /discussions/1/edit
@@ -38,12 +36,8 @@ class DiscussionsController < ApplicationController
   # PUT /discussions/1
   def update
     # @discussion is loaded in the ensure_editable before filter
-    if @discussion.update_attributes(params[:discussion])
-      redirect_to @discussion, :notice => 'Discussion was successfully updated.'
-    else
-      flash.now[:alert] = 'Sorry something went wrong, please try again.'
-      render :action => "edit"
-    end
+    @discussion.update_attributes(params[:discussion])
+    respond_with @discussion
   end
 
   # DELETE /discussions/1
