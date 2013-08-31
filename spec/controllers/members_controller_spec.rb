@@ -104,4 +104,26 @@ describe MembersController do
     end
   end
 
+  describe "PUT 'update'" do
+    before do
+      @params = {
+        :id => 41,
+        :member => { 'email' => 'test@gmail.com' },
+        :format => 'json'
+      }
+      @member = Member.new
+      controller.instance_variable_set(:@member, @member)
+      @member.stub(:update_attributes).and_return(true)
+    end
+    it "should update attributes" do
+      @member.should_receive(:update_attributes).with(@params[:member]).and_return(true)
+      put 'update', @params
+      response.should be_success
+    end
+    it "should return 400 when there are errors" do
+      @member.stub(:errors).and_return({ :error => true })
+      put 'update', @params
+      response.status.should == 422
+    end
+  end
 end

@@ -38,6 +38,10 @@ describe Response do
         @response.should_receive(:deliver_discussion_notifications)
         @response.save
       end
+      it "should call setup_discussion_notification" do
+        @response.should_receive(:setup_discussion_notification)
+        @response.save
+      end
     end
   end
 
@@ -50,6 +54,16 @@ describe Response do
     it "should create a worker to deliver the notifications" do
       DiscussionNotificationWorker.should_receive(:perform_async).with(@response.id)
       @response.deliver_discussion_notifications
+    end
+  end
+
+  describe "#setup_discussion_notification" do
+    it "should find or create a discussion notification for the member responding" do
+      DiscussionNotification.should_receive(:find_or_create_by_member_id_and_discussion_id).with({
+        :member_id => @response.member_id,
+        :discussion_id => @response.discussion_id
+      })
+      @response.setup_discussion_notification
     end
   end
 end
