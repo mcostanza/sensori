@@ -11,7 +11,7 @@ Sensori::Application.routes.draw do
 
   resources :discussions
 
-  resources :responses, :only => [:create]
+  resources :responses, :only => [:create, :update, :destroy]
 
   resources :members, :only => [:update]
 
