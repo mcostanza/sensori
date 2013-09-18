@@ -24,9 +24,10 @@
 </div>
 <script type="text/javascript">
 $(function() {
+  Sensori.Discussion = new Sensori.Models.Discussion(<%= raw @discussion.to_json %>);
   Sensori.DiscussionView = new Sensori.Views.Discussion({
-    model: new Sensori.Models.Discussion(<%= raw @discussion.to_json %>),
+    model: Sensori.Discussion,
     el: $('.discussions-container')
-  });
+  }).render();
 });
 </script>

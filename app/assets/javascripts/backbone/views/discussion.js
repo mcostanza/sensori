@@ -6,7 +6,6 @@ Sensori.Views.Discussion = Backbone.View.extend({
     this.membersOnlyCheckbox = this.$("#discussion_members_only");
     this.validatesPresenceOf(this.subjectInput);
     this.validatesPresenceOf(this.bodyInput);
-    this.render();
   },
 
   events: {
@@ -44,6 +43,8 @@ Sensori.Views.Discussion = Backbone.View.extend({
     this.subjectInput.val(this.model.get("subject"));
     this.bodyInput.val(this.model.get("body"));
     this.membersOnlyCheckbox.prop("checked", this.model.get("members_only"));
+
+    return this;
   },
 
   promptForEmail: function() {
