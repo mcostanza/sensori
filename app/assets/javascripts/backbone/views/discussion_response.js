@@ -5,6 +5,7 @@ Sensori.Views.DiscussionResponse = Backbone.View.extend({
     this.listenTo(this.collection, "add", this.renderResponse);
     this.postButton = this.$("[data-trigger='post']");
     this.responseInput = this.$("#response_body");
+    this.responsesElement = this.$(".responses");
     this.validatesPresenceOf(this.responseInput);
   },
 
@@ -41,7 +42,7 @@ Sensori.Views.DiscussionResponse = Backbone.View.extend({
   },
 
   renderResponse: function(response) {
-    this.$('.responses').append(this.template({
+    this.responsesElement.append(this.template({
       member: Sensori.Member,
       response: response
     }));
