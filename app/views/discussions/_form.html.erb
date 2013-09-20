@@ -9,10 +9,9 @@
     <div class="control-group">
     <%= text_area :discussion, :body, :placeholder => "Message", :rows => 10 %>
     </div>
-    <%= label :discussion, :attachment do %>
-      Attachment:
-      <%= file_field :discussion, :attachment, :class => 'inline' %>
-    <% end %>
+    
+    <div class="attachment-container"></div>
+
     <%= label :discussion, :members_only, :class => "checkbox last" do %>
       <%= check_box :discussion, :members_only %>
       Members only
@@ -22,6 +21,9 @@
 <div class="pull-right">
   <button data-trigger="post" type="submit" class="btn btn-primary pull-right">Post</button>
 </div>
+
+<%= render '/shared/s3_uploader_form_jst' %>
+
 <script type="text/javascript">
 $(function() {
   Sensori.Discussion = new Sensori.Models.Discussion(<%= raw @discussion.to_json %>);

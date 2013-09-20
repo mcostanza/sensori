@@ -1,7 +1,8 @@
 describe("Sensori.Views.Discussion", function() {
 	var view,
 	    model,
-      mockEmailPrompt;
+      mockEmailPrompt,
+      mockAttachmentUploader;
 
 	beforeEach(function() {
 		model = new Sensori.Models.Discussion();
@@ -12,7 +13,8 @@ describe("Sensori.Views.Discussion", function() {
         "<textarea cols='40' id='discussion_body' name='discussion[body]' placeholder='Message' rows='10'></textarea>",
         "<input class='inline' id='discussion_attachment' name='discussion[attachment]' type='file' />",
         "<input id='discussion_members_only' name='discussion[members_only]' type='checkbox' value='1' />",
-        "<button data-trigger='post' type='submit' class='btn btn-primary pull-right'>Post</button>"
+        "<button data-trigger='post' type='submit' class='btn btn-primary pull-right'>Post</button>",
+        "<div class='attachment-container'></div>"
 			].join(""))
 		});
 	});
@@ -119,14 +121,42 @@ describe("Sensori.Views.Discussion", function() {
     });
   });
 
-  describe("render", function() {
+  describe(".renderAudioLink()", function() {
+    beforeEach(function() {
+      model.set({
+        attachment_url: "http://s3.amazon.com/sensori/audio.wav",
+        attachment_name: "audio.wav"
+      });
+      view.render();
+    });
+    it("should render a link to the attachment url in the .attachment-container element", function() {
+      view.$(".attachment-container .link-container").html("<a href='http://google.com'>googs</a>");
+      view.renderAudioLink();
+      expect(view.$(".attachment-container .link-container a").length).toEqual(1);
+      expect(view.$(".attachment-container .link-container a").text()).toEqual("audio.wav");
+      expect(view.$(".attachment-container .link-container a").attr("href")).toEqual("http://s3.amazon.com/sensori/audio.wav");
+    });
+  });
+
+  describe(".render()", function() {
     beforeEach(function() {
       view.model = new Sensori.Models.Discussion({
         subject: 'subject',
         body: 'body',
         members_only: true
       });
+
+      mockAttachmentUploader = {
+        on: sinon.stub(),
+        render: sinon.stub()
+      };
+      mockAttachmentUploader.render.returns(mockAttachmentUploader);
+      sinon.stub(Sensori.Views, "AttachmentUploader").returns(mockAttachmentUploader);
+
       view.render();
+    });
+    afterEach(function() {
+      Sensori.Views.AttachmentUploader.restore();
     });
     it("should set the subject input value to the model's subject", function() {
       expect(view.subjectInput.val()).toEqual("subject");
@@ -136,6 +166,20 @@ describe("Sensori.Views.Discussion", function() {
     });
     it("should set the members only checkbox state the the model's members_only property", function() {
       expect(view.membersOnlyCheckbox.prop("checked")).toBe(true);
+    });
+    it("should render an AttachmentUploader subview", function() {
+      expect(Sensori.Views.AttachmentUploader.callCount).toEqual(1);
+      expect(Sensori.Views.AttachmentUploader.calledWith({
+        model: view.model,
+        el: view.$(".attachment-container"),
+        template: "backbone/templates/discussions/attachment_uploader"
+      })).toBe(true);
+      
+      expect(mockAttachmentUploader.render.callCount).toEqual(1);
+
+      expect(mockAttachmentUploader.on.calledWith("upload:add", view.disablePostButton, view)).toBe(true);
+      expect(mockAttachmentUploader.on.calledWith("upload:done", view.enablePostButton, view)).toBe(true);
+      expect(mockAttachmentUploader.on.calledWith("upload:done", view.renderAudioLink, view)).toBe(true);
     });
     it("should return the view", function() {
       expect(view.render()).toBe(view);

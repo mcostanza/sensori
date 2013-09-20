@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130817180150) do
+ActiveRecord::Schema.define(:version => 20130920012859) do
 
   create_table "discussion_notifications", :force => true do |t|
     t.integer  "discussion_id", :null => false
@@ -24,14 +24,15 @@ ActiveRecord::Schema.define(:version => 20130817180150) do
   add_index "discussion_notifications", ["member_id"], :name => "discussion_notifications_member_id_fk"
 
   create_table "discussions", :force => true do |t|
-    t.string   "subject",                         :null => false
-    t.text     "body",                            :null => false
-    t.text     "body_html",                       :null => false
-    t.string   "slug",                            :null => false
-    t.integer  "member_id",                       :null => false
-    t.boolean  "members_only", :default => false
-    t.datetime "created_at",                      :null => false
-    t.datetime "updated_at",                      :null => false
+    t.string   "subject",                           :null => false
+    t.text     "body",                              :null => false
+    t.text     "body_html",                         :null => false
+    t.string   "slug",                              :null => false
+    t.integer  "member_id",                         :null => false
+    t.boolean  "members_only",   :default => false
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+    t.string   "attachment_url"
   end
 
   add_index "discussions", ["member_id"], :name => "discussions_member_id_fk"

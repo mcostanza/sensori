@@ -11,7 +11,14 @@
       Posted by <%= link_to @discussion.member.name, @discussion.member.profile_url, :title => @discussion.member.name, :target => :_blank %> <%= time_ago_in_words(@discussion.created_at)%> ago
     </div>
     <h5 class="media-heading"><%= @discussion.subject %></h5>
+    
     <%= @discussion.body_html %>
+
+    <% if @discussion.attachment_url.present? %>
+      <div class="link-container">
+        <%= link_to @discussion.attachment_name, @discussion.attachment_url %>
+      </div>
+    <% end %>
   </div>
 </div>
 <h3>Responses</h3>

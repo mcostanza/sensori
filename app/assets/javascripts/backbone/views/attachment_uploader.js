@@ -1,5 +1,9 @@
 Sensori.Views.AttachmentUploader = Backbone.View.extend({
 
+	initialize: function() {
+		this.template = this.options.template || "backbone/templates/shared/attachment_uploader";
+	},
+
 	events: {
 		"click .disabled": "preventDefault"
 	},
@@ -24,17 +28,22 @@ Sensori.Views.AttachmentUploader = Backbone.View.extend({
 	},
 
   onDone: function(e, data) {
-  	this.trigger("upload:done");
   	this.$(".progress").fadeOut();
 
     var file   = data.files[0],
         domain = this.$("form").attr('action'),
         path   = this.$('input[name=key]').val().replace('${filename}', file.name);
         
-    this.model.set("attachment_url", domain + path);
+    this.model.set({
+    	"attachment_url": domain + path,
+    	"attachment_name": file.name
+    });
+
     this.$(".download-button")
     	.removeClass("disabled")
     	.attr("href", this.model.get("attachment_url"));
+
+    this.trigger("upload:done");
   },
 
   onFail: function(e, data) {
@@ -42,8 +51,9 @@ Sensori.Views.AttachmentUploader = Backbone.View.extend({
   },
 	
 	render: function() {
-		this.$el.html(JST["backbone/templates/shared/attachment_uploader"]({
+		this.$el.html(JST[this.template]({
 			attachmentUrl: this.model.get("attachment_url"),
+			attachmentName: this.model.get("attachment_name"),
 			uploadForm: JST["backbone/templates/shared/s3_uploader_form"]()
 		}));
 

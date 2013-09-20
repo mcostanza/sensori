@@ -16,6 +16,16 @@ describe("Sensori.Views.AttachmentUploader", function() {
   	sinon.spy(view, "trigger");
   });
 
+  describe(".initialize()", function() {
+    it("should set this.template to backbone/templates/shared/attachment_uploader by default", function() {
+      expect(view.template).toEqual("backbone/templates/shared/attachment_uploader");
+    });
+    it("should set this.template to options.template", function() {
+      view = new Sensori.Views.AttachmentUploader({ template: "another/template" });
+      expect(view.template).toEqual("another/template");
+    });
+  });
+
   describe(".onAdd(event, data)", function() {
   	beforeEach(function() {
   		data.submit = sinon.spy()
@@ -69,10 +79,11 @@ describe("Sensori.Views.AttachmentUploader", function() {
   		expect(view.trigger.callCount).toEqual(1);
   		expect(view.trigger.calledWith("upload:done")).toBe(true);
   	});
-  	it("should set the model's attachment_url", function() {
+  	it("should set the model's attachment_url and attachment_name", function() {
   		var expected = "https://sensori-dev.s3.amazonaws.com/uploads/id/samples.zip";
   		view.onDone(event, data);
   		expect(model.get("attachment_url")).toEqual(expected);
+      expect(model.get("attachment_name")).toEqual("samples.zip");
   	})
     it("should enable the download button and set the href to the attachment url", function() {
       var expected = "https://sensori-dev.s3.amazonaws.com/uploads/id/samples.zip";

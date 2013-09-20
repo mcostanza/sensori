@@ -39,14 +39,6 @@ Sensori.Views.Discussion = Backbone.View.extend({
     });
   },
 
-  render: function() {
-    this.subjectInput.val(this.model.get("subject"));
-    this.bodyInput.val(this.model.get("body"));
-    this.membersOnlyCheckbox.prop("checked", this.model.get("members_only"));
-
-    return this;
-  },
-
   promptForEmail: function() {
     if(!this.emailPrompt) {
       this.emailPrompt = new Sensori.Views.EmailPrompt({ 
@@ -62,7 +54,33 @@ Sensori.Views.Discussion = Backbone.View.extend({
 
   enablePostButton: function() { this.postButton.prop('disabled', false); },
 
-  disablePostButton: function() { this.postButton.prop('disabled', true); }
+  disablePostButton: function() { this.postButton.prop('disabled', true); },
+
+  renderAudioLink: function() {
+    var a = $("<a>")
+      .attr("href", this.model.get("attachment_url"))
+      .attr("target", "_blank")
+      .text(this.model.get("attachment_name"));
+
+    this.$(".attachment-container .link-container").html(a)
+  },
+
+  render: function() {
+    this.subjectInput.val(this.model.get("subject"));
+    this.bodyInput.val(this.model.get("body"));
+    this.membersOnlyCheckbox.prop("checked", this.model.get("members_only"));
+
+    this.attachmentUploader = new Sensori.Views.AttachmentUploader({
+      model: this.model,
+      el: this.$(".attachment-container"),
+      template: "backbone/templates/discussions/attachment_uploader"
+    }).render();
+    this.attachmentUploader.on("upload:add", this.disablePostButton, this);
+    this.attachmentUploader.on("upload:done", this.enablePostButton, this);
+    this.attachmentUploader.on("upload:done", this.renderAudioLink, this);
+
+    return this;
+  }
 
 });
 

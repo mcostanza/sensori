@@ -93,4 +93,16 @@ describe Discussion do
       @discussion.setup_discussion_notification
     end
   end
+
+  describe "#attachment_name" do
+    it "should return the filename of the attachment_url" do
+      @discussion.attachment_url = "http://s3.amazon.com/sensori/uploads/audio.wav"
+      @discussion.attachment_name.should == "audio.wav"
+    end
+    it "should return nil without shitting if attachment_url is nil" do
+      @discussion.attachment_url = nil
+      lambda { @discussion.attachment_name }.should_not raise_error
+      @discussion.attachment_name.should be_nil
+    end
+  end
 end

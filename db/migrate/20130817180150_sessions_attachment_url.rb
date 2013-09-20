@@ -6,6 +6,6 @@ class SessionsAttachmentUrl < ActiveRecord::Migration
 
   def down
     remove_column :sessions, :attachment_url
-    add_column :sessions, :attachment, :string
+    add_column :sessions, :attachment
   end
 end

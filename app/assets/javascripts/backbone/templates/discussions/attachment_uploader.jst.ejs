@@ -1,0 +1,16 @@
+<div class="attachment-buttons">
+	<span class="btn btn-success fileinput-button">
+		<i class="icon-white icon-upload"></i> Upload Audio
+		<%= uploadForm %>
+	</span>
+</div>
+
+<div class="link-container">
+	<% if (attachmentUrl) { %>
+		<a href="<%= attachmentUrl %>" target="_blank"><%= attachmentName %></a>
+	<% } %>
+</div>
+
+<div class="progress progress-striped active" style="display:none">
+	<div class="bar progress-bar"></div>
+</div>

@@ -1,7 +1,7 @@
 class Discussion < ActiveRecord::Base
   extend FriendlyId
 
-  attr_accessible :subject, :body, :member_id, :member, :members_only
+  attr_accessible :subject, :body, :member_id, :member, :members_only, :attachment_url
   default_scope order('id DESC')
 
   belongs_to :member
@@ -34,5 +34,9 @@ class Discussion < ActiveRecord::Base
 
   def setup_discussion_notification
     self.notifications.create(:member => self.member)
+  end
+
+  def attachment_name
+    self.attachment_url.to_s.split("/").last
   end
 end
