@@ -11,7 +11,7 @@ describe NotificationMailer do
   describe "#discussion_notification(params = {})" do
     it "should send an email to the member passed with the correct subject" do
       @member = double(Member, :email => "phil@mail.com", :name => "Slim James")
-      @response = double(Response, :member => double(Member, :name => "Five05"), :body => "just checking in bud", :body_html => "<p>just checking in bud</p>")
+      @response = double(Response, :member => double(Member, :name => "Five05"), :discussion => double(Discussion, :subject => "check out my neat beat"))
       params = { :member => @member, :response => @response }
 
       email = NotificationMailer.discussion_notification(params).deliver
@@ -20,8 +20,7 @@ describe NotificationMailer do
 
       email.to.should == [@member.email]
       email.subject.should == "Five05 posted in a discussion on Sensori"
-      email.encoded.should include("Five05 wrote:")
-      email.encoded.should include("just checking in bud")
+      email.encoded.should include("Hey Slim James, Five05 just commented on your post titled \"check out my neat beat\" in Discussions.")
     end
   end
 

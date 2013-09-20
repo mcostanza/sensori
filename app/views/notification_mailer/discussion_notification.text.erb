@@ -1,2 +1,5 @@
-<%= @response.member.name %> wrote: "<%= @response.body %>"
+Hey <%= @member.name %>, <%= @response.member.name %> just commented on your post titled "<%= @response.discussion.subject %>" in Discussions.
 
+Check it out!
+
+<%= discussion_url(@response.discussion) %>
