@@ -2,6 +2,11 @@ Sensori.Views.AttachmentUploader = Backbone.View.extend({
 
 	initialize: function() {
 		this.template = this.options.template || "backbone/templates/shared/attachment_uploader";
+		
+		var acceptedFileTypes = this.options.acceptedFileTypes;
+		if (_.isArray(acceptedFileTypes) && acceptedFileTypes.length > 0) {
+			this.acceptedFileTypesRegex = new RegExp("\\.(?:" + acceptedFileTypes.join("|") + ")$", "i");
+		}
 	},
 
 	events: {
@@ -12,12 +17,28 @@ Sensori.Views.AttachmentUploader = Backbone.View.extend({
 		event.preventDefault();
 	},
 
+	isValidAttachment: function(file) {
+		if (!this.acceptedFileTypesRegex) { return true; }
+
+		return this.acceptedFileTypesRegex.test(file.name);
+	},
+
 	onAdd: function(event, data) {
-		this.trigger("upload:add");
-		this.$(".download-button").addClass("disabled");
-		this.$(".progress").fadeIn();
-		this.$(".progress-bar").css({ width: "0%" });
-		data.submit();
+    if (this.isValidAttachment(data.files[0])) {
+			this.trigger("upload:add");
+			this.$(".download-button").addClass("disabled");
+
+      this.$(".control-group").removeClass("error");
+      this.$(".control-group").find(".help-inline").fadeOut();
+
+      this.$(".progress").fadeIn();
+      this.$(".progress-bar").css({ width: "0%" });
+
+      data.submit();
+    } else {
+      this.$(".control-group").addClass("error");
+      this.$(".control-group").find(".help-inline").fadeIn();
+    }
 	},
 
 	onProgress: function(event, data) {
@@ -28,7 +49,11 @@ Sensori.Views.AttachmentUploader = Backbone.View.extend({
 	},
 
   onDone: function(e, data) {
-  	this.$(".progress").fadeOut();
+  	this.$(".progress").fadeOut({
+  		complete: _.bind(function() {
+  			this.$(".progress-bar").css({ width: "0%" });
+  		}, this)
+  	});
 
     var file   = data.files[0],
         domain = this.$("form").attr('action'),

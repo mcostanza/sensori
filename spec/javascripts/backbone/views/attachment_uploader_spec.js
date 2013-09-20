@@ -12,7 +12,9 @@ describe("Sensori.Views.AttachmentUploader", function() {
   	}).render();
 
   	event = "event!";
-  	data = {};
+  	data = {
+      files: [{ name: "audio.wav" }]
+    };
   	sinon.spy(view, "trigger");
   });
 
@@ -24,33 +26,86 @@ describe("Sensori.Views.AttachmentUploader", function() {
       view = new Sensori.Views.AttachmentUploader({ template: "another/template" });
       expect(view.template).toEqual("another/template");
     });
+    it("should set this.acceptedFileTypesRegex from options when given as an array", function() {
+      view = new Sensori.Views.AttachmentUploader({ acceptedFileTypes: ["wav", "mp3"] });
+      expect(view.acceptedFileTypesRegex).toEqual(/\.(?:wav|mp3)$/i);
+    });
+    it("should not set this.acceptedFileTypesRegex if not given", function() {
+      expect(view.acceptedFileTypesRegex).toBe(undefined);
+    });
+  });
+
+  describe(".isValidAttachment(file)", function() {
+    it("should return true if this.acceptedFileTypesRegex is not set", function() {
+      expect(view.isValidAttachment(data.files[0])).toBe(true);
+    });
+    it("should return true if this.acceptedFileTypesRegex is set and the file matches an accepted type", function() {
+      view.acceptedFileTypesRegex = /\.(?:wav)$/
+      expect(view.isValidAttachment(data.files[0])).toBe(true);
+    });
+    it("should return false if this.acceptedFileTypesRegex is set and the file does not match an accepted type", function() {
+      view.acceptedFileTypesRegex = /\.(?:gif|jpg)$/
+      expect(view.isValidAttachment(data.files[0])).toBe(false);
+    });
   });
 
   describe(".onAdd(event, data)", function() {
   	beforeEach(function() {
   		data.submit = sinon.spy()
+      sinon.stub(view, "isValidAttachment");
+      sinon.stub(jQuery.fn, "fadeOut");
+      sinon.stub(jQuery.fn, "fadeIn");
+      view.$el.append("<div class='control-group'><span class='help-inline' style='display:none;'>must be a valid file</span></div>");
   	});
-  	it("should trigger an 'upload:add' event", function() {
-  		view.onAdd(event, data);
-  		expect(view.trigger.callCount).toEqual(1);
-  		expect(view.trigger.calledWith("upload:add")).toBe(true);
-  	});
-  	 it("should show the progress bar with 0% progress", function() {
-  		$("body").append(view.$el);
-
-  		view.onAdd(event, data);
-  		expect(view.$(".progress").is(":visible")).toBe(true);
-  		expect(view.$(".progress-bar").width()).toEqual(0);
-
-  		view.$el.remove();
-  	});
-  	it("should submit the attachment data", function() {
-  		view.onAdd(event, data);
-  		expect(data.submit.callCount).toEqual(1);
-  	});
-    it("should disable the download button", function() {
+    afterEach(function() {
+      jQuery.fn.fadeOut.restore();
+      jQuery.fn.fadeIn.restore();
+    });
+    it("should verify the attached file is valid", function() {
       view.onAdd(event, data);
-      expect(view.$(".download-button").hasClass("disabled")).toBe(true);
+      expect(view.isValidAttachment.calledWith(data.files[0])).toBe(true);
+    });
+    describe("with a valid attachment", function() {
+      beforeEach(function() {
+        view.isValidAttachment.returns(true);
+      });
+      it("should trigger an 'upload:add' event", function() {
+    		view.onAdd(event, data);
+    		expect(view.trigger.callCount).toEqual(1);
+    		expect(view.trigger.calledWith("upload:add")).toBe(true);
+    	});
+    	 it("should show the progress bar with 0% progress", function() {
+    		view.onAdd(event, data);
+        expect(jQuery.fn.fadeIn.getCall(0).thisValue.selector).toEqual(".progress");
+    		expect(view.$(".progress-bar").width()).toEqual(0);
+    	});
+    	it("should submit the attachment data", function() {
+    		view.onAdd(event, data);
+    		expect(data.submit.callCount).toEqual(1);
+    	});
+      it("should disable the download button", function() {
+        view.onAdd(event, data);
+        expect(view.$(".download-button").hasClass("disabled")).toBe(true);
+      });
+      it("should remove error status from the .control-group element", function() {
+        view.$(".control-group").addClass("error");
+        view.onAdd(event, data);
+        expect(view.$(".control-group.error").length).toEqual(0);
+      });
+      it("should hide the .help-inline message", function() {
+        view.onAdd(event, data);
+        expect(jQuery.fn.fadeOut.getCall(0).thisValue.selector).toEqual(".control-group .help-inline");
+      });
+    });
+    describe("with an invalid attachment", function() {
+      beforeEach(function() {
+        view.isValidAttachment.returns(false);
+      });
+      it("should add error status to the .control-group element", function() {
+        view.onAdd(event, data);
+        expect(view.$(".control-group.error").length).toEqual(1);
+        expect(jQuery.fn.fadeIn.getCall(0).thisValue.selector).toEqual(".control-group .help-inline");
+      });
     });
   });
 

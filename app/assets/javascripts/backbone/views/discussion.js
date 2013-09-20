@@ -73,7 +73,8 @@ Sensori.Views.Discussion = Backbone.View.extend({
     this.attachmentUploader = new Sensori.Views.AttachmentUploader({
       model: this.model,
       el: this.$(".attachment-container"),
-      template: "backbone/templates/discussions/attachment_uploader"
+      template: "backbone/templates/discussions/attachment_uploader",
+      acceptedFileTypes: ["mp3", "wav"]
     }).render();
     this.attachmentUploader.on("upload:add", this.disablePostButton, this);
     this.attachmentUploader.on("upload:done", this.enablePostButton, this);

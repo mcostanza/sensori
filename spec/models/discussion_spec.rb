@@ -105,4 +105,11 @@ describe Discussion do
       @discussion.attachment_name.should be_nil
     end
   end
+
+  describe "#to_json(options = {})" do
+    it "should return a JSON object with attributes and attachment_name" do
+      expected = @discussion.attributes.merge("attachment_name" => @discussion.attachment_url)
+      JSON.parse(@discussion.to_json).should == expected
+    end
+  end
 end

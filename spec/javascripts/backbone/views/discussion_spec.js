@@ -172,7 +172,8 @@ describe("Sensori.Views.Discussion", function() {
       expect(Sensori.Views.AttachmentUploader.calledWith({
         model: view.model,
         el: view.$(".attachment-container"),
-        template: "backbone/templates/discussions/attachment_uploader"
+        template: "backbone/templates/discussions/attachment_uploader",
+        acceptedFileTypes: ["mp3", "wav"]
       })).toBe(true);
       
       expect(mockAttachmentUploader.render.callCount).toEqual(1);

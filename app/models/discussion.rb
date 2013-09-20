@@ -39,4 +39,8 @@ class Discussion < ActiveRecord::Base
   def attachment_name
     self.attachment_url.to_s.split("/").last
   end
+
+  def to_json(options = {})
+    self.attributes.merge("attachment_name" => self.attachment_name).to_json
+  end
 end
