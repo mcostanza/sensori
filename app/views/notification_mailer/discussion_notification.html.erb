@@ -5,7 +5,7 @@
 </head>
 <body style="width: 600px; font-size: 11px;">
 
-	<%= link_to image_tag("discussion_notifications/header.png", :alt => "Sensori Collective", :title => "Sensori Collective", :style => "width: 600px; margin-bottom: 10px;"), root_url %>
+	<%= link_to image_tag("discussion_notifications/header.png", :alt => "Sensori Collective", :title => "Sensori Collective", :style => "width: 600px; margin-bottom: 10px;"), discussion_url(@response.discussion) %>
 	
 	<div style="width: 400px; margin: 0px 100px 10px 100px;">
 		Hey <%= @member.name %>, <%= @response.member.name %> just commented on <%= discussion_owner(@response.discussion.member, @response.member, @member) %> post titled "<%= @response.discussion.subject %>" in Discussions.
@@ -15,7 +15,7 @@
 		<%= link_to "Check it out!", discussion_url(@response.discussion) %>
 	</div>
 	
-	<%= link_to image_tag("discussion_notifications/footer.png", :alt => "San Diego, CA", :title => "San Diego, CA", :style => "width: 600px;"), root_url %>
+	<%= link_to image_tag("discussion_notifications/footer.png", :alt => "San Diego, CA", :title => "San Diego, CA", :style => "width: 600px;"), discussion_url(@response.discussion) %>
 </body>
 </html>
 
