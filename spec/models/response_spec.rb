@@ -42,6 +42,10 @@ describe Response do
         @response.should_receive(:setup_discussion_notification)
         @response.save
       end
+      it "should call update_discussion_stats" do
+        @response.should_receive(:update_discussion_stats)
+        @response.save
+      end
     end
   end
 
@@ -64,6 +68,22 @@ describe Response do
         :discussion_id => @response.discussion_id
       })
       @response.setup_discussion_notification
+    end
+  end
+
+  describe "#update_discussion_stats" do
+    before(:each) do
+      @response.save
+      @discussion = @response.discussion
+      @discussion.response_count = 0
+      @discussion.last_response_at = nil
+      @discussion.save
+    end
+    it "should update the discussion with an incremented response_count and last_response_at set to self.created_at" do
+      @response.update_discussion_stats
+      @discussion.reload
+      @discussion.response_count.should == 1
+      @discussion.last_response_at.to_s.should == @response.created_at.to_s
     end
   end
 end

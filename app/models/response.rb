@@ -8,7 +8,7 @@ class Response < ActiveRecord::Base
   validates :body, :presence => true
   validates :member, :presence => true
 
-  after_commit :setup_discussion_notification, :deliver_discussion_notifications, :on => :create
+  after_commit :setup_discussion_notification, :deliver_discussion_notifications, :update_discussion_stats, :on => :create
 
   auto_html_for :body do
     html_escape
@@ -27,5 +27,12 @@ class Response < ActiveRecord::Base
   def setup_discussion_notification
     conditions = { :member_id => self.member_id, :discussion_id => self.discussion_id }
     DiscussionNotification.find_or_create_by_member_id_and_discussion_id(conditions)
+  end
+
+  def update_discussion_stats
+    discussion = self.discussion
+    discussion.increment(:response_count)
+    discussion.last_response_at = self.created_at
+    discussion.save
   end
 end
