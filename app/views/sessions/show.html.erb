@@ -8,7 +8,7 @@
     <%= image_tag @session.image_url %>
   </div>
   <div class="span4">
-    <h3><%= @session.title %></h3>
+    <h2><%= @session.title %></h2>
     <p><%= simple_format(@session.description) %></p>
     <%= link_to("Download", @session.attachment_url, :class => "btn btn-primary") if @session.attachment_url? %>
   </div>
