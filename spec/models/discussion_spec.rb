@@ -36,9 +36,15 @@ describe Discussion do
   end
 
   describe "callbacks" do
-    it "should call setup_discussion_notification" do
+    it "should call setup_discussion_notification on create" do
       @discussion.should_receive(:setup_discussion_notification)
       @discussion.save
+    end
+    it "should set last_post_at to now on create" do
+      @now = Time.now
+      Time.stub(:now).and_return(@now)
+      @discussion.save
+      @discussion.last_post_at.should == @now
     end
   end
 

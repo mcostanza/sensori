@@ -2,7 +2,7 @@ class Discussion < ActiveRecord::Base
   extend FriendlyId
 
   attr_accessible :subject, :body, :member_id, :member, :members_only, :attachment_url
-  default_scope order('id DESC')
+  default_scope order('last_post_at DESC')
 
   belongs_to :member
   has_many :responses, :include => :member, :dependent => :destroy
@@ -11,6 +11,8 @@ class Discussion < ActiveRecord::Base
   validates :member, :presence => true
   validates :subject, :presence => true
   validates :body, :presence => true
+
+  before_create { |discussion| discussion.last_post_at = Time.now }
 
   after_commit :setup_discussion_notification, :on => :create
 

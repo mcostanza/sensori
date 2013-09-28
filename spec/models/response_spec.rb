@@ -76,14 +76,14 @@ describe Response do
       @response.save
       @discussion = @response.discussion
       @discussion.response_count = 0
-      @discussion.last_response_at = nil
+      @discussion.last_post_at = nil
       @discussion.save
     end
-    it "should update the discussion with an incremented response_count and last_response_at set to self.created_at" do
+    it "should update the discussion with an incremented response_count and last_post_at set to self.created_at" do
       @response.update_discussion_stats
       @discussion.reload
       @discussion.response_count.should == 1
-      @discussion.last_response_at.to_s.should == @response.created_at.to_s
+      @discussion.last_post_at.to_s.should == @response.created_at.to_s
     end
   end
 end

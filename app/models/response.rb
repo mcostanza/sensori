@@ -32,7 +32,7 @@ class Response < ActiveRecord::Base
   def update_discussion_stats
     discussion = self.discussion
     discussion.increment(:response_count)
-    discussion.last_response_at = self.created_at
+    discussion.last_post_at = self.created_at
     discussion.save
   end
 end
