@@ -1,4 +1,6 @@
 class DiscussionsController < ApplicationController
+  respond_to :html, :json
+
   before_filter :ensure_signed_in, :except => [:index, :show]
   before_filter :ensure_editable, :only => [:edit, :update, :destroy]
 
@@ -21,13 +23,9 @@ class DiscussionsController < ApplicationController
 
   # POST /discussions
   def create
-    @discussion = Discussion.new(params[:discussion].merge(:member_id => @member.id))
-
-    if @discussion.save
-      redirect_to @discussion, :notice => 'Discussion was successfully created.'
-    else
-      render :action => "new"
-    end
+    @discussion = Discussion.new(params[:discussion].merge(:member => @member))
+    @discussion.save
+    respond_with @discussion
   end
 
   # GET /discussions/1/edit
@@ -38,12 +36,8 @@ class DiscussionsController < ApplicationController
   # PUT /discussions/1
   def update
     # @discussion is loaded in the ensure_editable before filter
-    if @discussion.update_attributes(params[:discussion])
-      redirect_to @discussion, :notice => 'Discussion was successfully updated.'
-    else
-      flash.now[:alert] = 'Sorry something went wrong, please try again.'
-      render :action => "edit"
-    end
+    @discussion.update_attributes(params[:discussion])
+    respond_with @discussion
   end
 
   # DELETE /discussions/1
@@ -51,16 +45,6 @@ class DiscussionsController < ApplicationController
     # @discussion is loaded in the ensure_editable before filter
     @discussion.destroy
     redirect_to discussions_url, :notice => 'Discussion was successfully deleted.'
-  end
-
-  # POST /discussions/1/respond
-  def respond
-    @discussion = Discussion.find(params[:id])
-    if @discussion.responses.create(:body => params[:response][:body], :member_id => @member.id).valid?
-      redirect_to @discussion
-    else
-      redirect_to @discussion, :alert => 'Sorry something went wrong, please try again.'
-    end
   end
 
   private

@@ -1,46 +1,31 @@
 <% if @discussion.editable?(@member) %>
   <%= render :partial => 'shared/action_buttons', :locals => { :object => @discussion } %>
 <% end %>
-<h3>Topic</h3>
+<h2><%= @discussion.subject %></h2>
 <div class="media discussion">
   <%= link_to @discussion.member.profile_url, :title => @discussion.member.name, :class => 'pull-left', :target => :_blank do %>
     <%= image_tag @discussion.member.image(:small), :alt => @discussion.member.name %>
   <% end %>
   <div class="media-body">
     <div class="media-timestamp">
-      Posted by <%= link_to @discussion.member.name, @discussion.member.profile_url, :title => @discussion.member.name, :target => :_blank %> <%= time_ago_in_words(@discussion.created_at)%> ago
+      <%= time_ago_in_words(@discussion.created_at)%> ago
     </div>
-    <h5 class="media-heading"><%= @discussion.subject %></h5>
+    <%= link_to @discussion.member.name, @discussion.member.profile_url, :title => @discussion.member.name, :target => :_blank %>
     <%= @discussion.body_html %>
-  </div>
-</div>
-<h3>Responses</h3>
-<% @responses.each do |response| %>
-<div class="media discussion">
-  <%= link_to response.member.profile_url, :title => response.member.name, :class => 'pull-left', :target => :_blank do %>
-    <%= image_tag response.member.image(:small), :alt => response.member.name %>
-  <% end %>
-  <div class="media-body">
-    <div class="media-timestamp">
-      <%= time_ago_in_words(response.created_at)%> ago
-    </div>
-    <%= link_to response.member.name, response.member.profile_url, :title => response.member.name, :target => :_blank %>
-    <%= response.body_html %>
-  </div>
-</div>
-<% end %>
-<% if signed_in? %>
-  <%= form_for(Response.new, :url => respond_discussion_path(@discussion)) do |f| %>
-    <div class="media discussion">
-      <%= link_to @member.profile_url, :title => @member.name, :class => 'pull-left', :target => :_blank do %>
-        <%= image_tag @member.image(:small), :alt => @member.name %>
-      <% end %>
-      <div class="media-body">
-        <%= f.text_area :body, :placeholder => "Add a comment...", :rows => 2 %>
+
+    <% if @discussion.attachment_url.present? %>
+      <div class="link-container">
+        <%= link_to @discussion.attachment_name, @discussion.attachment_url %>
       </div>
-    </div>
-    <button type="submit" class="btn btn-primary pull-right">Post</button>
-  <% end %>
+    <% end %>
+  </div>
+</div>
+<h4>Responses</h4>
+<div class="responses">
+  <%= render :partial => 'response', :collection => @responses %>
+</div>
+<% if signed_in? %>
+  <%= render :partial => 'response_form' %>
 <% else %>
   <div class="login-prompt">
     Log In to Reply 
@@ -48,3 +33,12 @@
   </div>
 <% end %>
 <%= link_to 'Back', @discussion %>
+<script type="text/javascript">
+$(function() {
+  Sensori.DiscussionResponseView = new Sensori.Views.DiscussionResponse({
+    model: new Sensori.Models.Discussion(<%= raw @discussion.to_json %>),
+    collection: new Sensori.Collections.Responses(<%= raw @discussion.responses.to_json %>),
+    el: $('.discussions-container')
+  });
+});
+</script>

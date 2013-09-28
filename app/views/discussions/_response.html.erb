@@ -1,0 +1,12 @@
+<div class="media response">
+  <%= link_to response.member.profile_url, :title => response.member.name, :class => 'pull-left', :target => :_blank do %>
+    <%= image_tag response.member.image(:small), :alt => response.member.name %>
+  <% end %>
+  <div class="media-body">
+    <div class="media-timestamp">
+      <%= time_ago_in_words(response.created_at) %> ago
+    </div>
+    <%= link_to response.member.name, response.member.profile_url, :title => response.member.name, :target => :_blank %>
+    <%= response.body_html %>
+  </div>
+</div>

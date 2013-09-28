@@ -83,4 +83,10 @@ describe ApplicationController do
       controller.ensure_admin
     end
   end
+
+  describe ".responder" do
+    it "should return BasicResponder" do
+      ApplicationController.send(:responder).should == BasicResponder    
+    end
+  end
 end

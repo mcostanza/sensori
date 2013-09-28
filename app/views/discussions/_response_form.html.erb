@@ -1,0 +1,11 @@
+<div class="media response">
+  <%= link_to @member.profile_url, :title => @member.name, :class => 'pull-left', :target => :_blank do %>
+    <%= image_tag @member.image(:small), :alt => @member.name %>
+  <% end %>
+  <div class="media-body control-group">
+    <%= text_area :response, :body, :placeholder => "Add a comment...", :rows => 2 %>
+  </div>
+</div>
+<div class="pull-right">
+  <button data-trigger="post" type="submit" class="btn btn-primary pull-right">Post</button>
+</div>

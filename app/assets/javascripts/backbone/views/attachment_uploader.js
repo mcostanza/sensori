@@ -1,5 +1,14 @@
 Sensori.Views.AttachmentUploader = Backbone.View.extend({
 
+	initialize: function() {
+		this.template = this.options.template || "backbone/templates/shared/attachment_uploader";
+		
+		var acceptedFileTypes = this.options.acceptedFileTypes;
+		if (_.isArray(acceptedFileTypes) && acceptedFileTypes.length > 0) {
+			this.acceptedFileTypesRegex = new RegExp("\\.(?:" + acceptedFileTypes.join("|") + ")$", "i");
+		}
+	},
+
 	events: {
 		"click .disabled": "preventDefault"
 	},
@@ -8,12 +17,28 @@ Sensori.Views.AttachmentUploader = Backbone.View.extend({
 		event.preventDefault();
 	},
 
+	isValidAttachment: function(file) {
+		if (!this.acceptedFileTypesRegex) { return true; }
+
+		return this.acceptedFileTypesRegex.test(file.name);
+	},
+
 	onAdd: function(event, data) {
-		this.trigger("upload:add");
-		this.$(".download-button").addClass("disabled");
-		this.$(".progress").fadeIn();
-		this.$(".progress-bar").css({ width: "0%" });
-		data.submit();
+    if (this.isValidAttachment(data.files[0])) {
+			this.trigger("upload:add");
+			this.$(".download-button").addClass("disabled");
+
+      this.$(".control-group").removeClass("error");
+      this.$(".control-group").find(".help-inline").fadeOut();
+
+      this.$(".progress").fadeIn();
+      this.$(".progress-bar").css({ width: "0%" });
+
+      data.submit();
+    } else {
+      this.$(".control-group").addClass("error");
+      this.$(".control-group").find(".help-inline").fadeIn();
+    }
 	},
 
 	onProgress: function(event, data) {
@@ -24,17 +49,26 @@ Sensori.Views.AttachmentUploader = Backbone.View.extend({
 	},
 
   onDone: function(e, data) {
-  	this.trigger("upload:done");
-  	this.$(".progress").fadeOut();
+  	this.$(".progress").fadeOut({
+  		complete: _.bind(function() {
+  			this.$(".progress-bar").css({ width: "0%" });
+  		}, this)
+  	});
 
     var file   = data.files[0],
         domain = this.$("form").attr('action'),
         path   = this.$('input[name=key]').val().replace('${filename}', file.name);
         
-    this.model.set("attachment_url", domain + path);
+    this.model.set({
+    	"attachment_url": domain + path,
+    	"attachment_name": file.name
+    });
+
     this.$(".download-button")
     	.removeClass("disabled")
     	.attr("href", this.model.get("attachment_url"));
+
+    this.trigger("upload:done");
   },
 
   onFail: function(e, data) {
@@ -42,8 +76,9 @@ Sensori.Views.AttachmentUploader = Backbone.View.extend({
   },
 	
 	render: function() {
-		this.$el.html(JST["backbone/templates/shared/attachment_uploader"]({
+		this.$el.html(JST[this.template]({
 			attachmentUrl: this.model.get("attachment_url"),
+			attachmentName: this.model.get("attachment_name"),
 			uploadForm: JST["backbone/templates/shared/s3_uploader_form"]()
 		}));
 

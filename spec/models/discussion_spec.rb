@@ -30,6 +30,22 @@ describe Discussion do
     it "should have a responses association" do
       @discussion.should respond_to(:responses)
     end
+    it "should have a notifications association" do
+      @discussion.should respond_to(:notifications)
+    end
+  end
+
+  describe "callbacks" do
+    it "should call setup_discussion_notification on create" do
+      @discussion.should_receive(:setup_discussion_notification)
+      @discussion.save
+    end
+    it "should set last_post_at to now on create" do
+      @now = Time.now
+      Time.stub(:now).and_return(@now)
+      @discussion.save
+      @discussion.last_post_at.should == @now
+    end
   end
 
   it "should set slug from the subject when saving" do
@@ -70,6 +86,36 @@ describe Discussion do
     end
     it "should return false if the passed member is nil" do
       @discussion.editable?(nil).should be_false
+    end
+  end
+
+  describe "#setup_discussion_notification" do
+    before do
+      @notifications = double('notifications')
+      @discussion.stub(:notifications).and_return(@notifications)
+    end
+    it "should find or create a discussion notification for the member creating the discussion" do
+      @discussion.notifications.should_receive(:create).with({ :member => @discussion.member })
+      @discussion.setup_discussion_notification
+    end
+  end
+
+  describe "#attachment_name" do
+    it "should return the filename of the attachment_url" do
+      @discussion.attachment_url = "http://s3.amazon.com/sensori/uploads/audio.wav"
+      @discussion.attachment_name.should == "audio.wav"
+    end
+    it "should return nil without shitting if attachment_url is nil" do
+      @discussion.attachment_url = nil
+      lambda { @discussion.attachment_name }.should_not raise_error
+      @discussion.attachment_name.should be_nil
+    end
+  end
+
+  describe "#to_json(options = {})" do
+    it "should return a JSON object with attributes and attachment_name" do
+      expected = @discussion.attributes.merge("attachment_name" => @discussion.attachment_url)
+      JSON.parse(@discussion.to_json).should == expected
     end
   end
 end

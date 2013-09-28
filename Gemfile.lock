@@ -124,7 +124,7 @@ GEM
     less-rails (2.3.3)
       actionpack (>= 3.1)
       less (~> 2.3.1)
-    less-rails-bootstrap (2.3.2)
+    less-rails-bootstrap (2.3.3)
       less-rails (~> 2.3.1)
     libv8 (3.16.14.3)
     mail (2.4.4)
@@ -133,7 +133,7 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.24)
     mini_portile (0.5.1)
-    minitest (5.0.6)
+    minitest (4.7.5)
     multi_json (1.7.9)
     multi_xml (0.5.5)
     multipart-post (1.2.0)
@@ -260,7 +260,7 @@ DEPENDENCIES
   kaminari
   less-rails
   less-rails-bootstrap (~> 2.3)
-  minitest
+  minitest (~> 4.7.5)
   mysql2
   rails (= 3.2.12)
   rails-backbone (>= 0.9.10)

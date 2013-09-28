@@ -9,9 +9,11 @@ Sensori::Application.routes.draw do
   end
   get "sessions/:id/submissions", :to => "sessions#submissions", :as => "session_submissions"
 
-  resources :discussions do
-    post 'respond', :on => :member
-  end
+  resources :discussions
+
+  resources :responses, :only => [:create, :update, :destroy]
+
+  resources :members, :only => [:update]
 
   match "beats" => "tracks#index", :via => "get"
 

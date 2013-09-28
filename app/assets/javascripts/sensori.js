@@ -1,6 +1,8 @@
 window.Sensori = {
   Models: {},
   Views: {},
+  Collections: {},
+  Mixins: {},
   pushState: function(path, data) {
   	try {
   		window.history.pushState(data, "Sensori Collective", path);

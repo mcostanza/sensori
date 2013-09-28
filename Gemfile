@@ -51,7 +51,7 @@ gem 'unicorn'
 gem 'debugger'
 
 # Cannot run `rails console` from AWS elastic beanstalk without this, probably a rails bug: https://github.com/rails/rails/issues/9256
-gem 'minitest'
+gem 'minitest', "~> 4.7.5"
 
 # AWS Email
 gem "aws-ses"

@@ -1,4 +1,5 @@
 class MembersController < ApplicationController
+  respond_to :html, :json
   
   before_filter :ensure_signed_out, :only => [:sign_in]
 
@@ -26,6 +27,12 @@ class MembersController < ApplicationController
     end
 
     redirect_to root_url
+  end
+
+  # PUT /members/id
+  def update
+    @member.update_attributes(params[:member])
+    respond_with @member
   end
 
   def soundcloud_app_client
