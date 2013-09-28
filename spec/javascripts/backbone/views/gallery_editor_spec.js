@@ -115,18 +115,23 @@ describe("Sensori.Views.GalleryEditor", function() {
     });
   });
 
-  describe(".showImageUploader()", function() {
-    beforeEach(function() {
-      view.render();
-      sinon.stub($.fn, "modal");
+  describe(".isImage(file)", function() {
+    it("should return true if the file is a jpg/jpeg image", function() {
+      expect(view.isImage({ type: "image/jpg" })).toBe(true);
+      expect(view.isImage({ type: "image/jpeg" })).toBe(true);
+      expect(view.isImage({ type: "IMAGE/JPG" })).toBe(true);
     });
-    afterEach(function() {
-      $.fn.modal.restore();
+    it("should return true if the file is a gif image", function() {
+      expect(view.isImage({ type: "image/gif" })).toBe(true);
+      expect(view.isImage({ type: "IMAGE/GIF" })).toBe(true);
     });
-    it("should show the image uploader modal", function() {
-      view.showImageUploader();
-      expect(view.imageUploaderModal.modal.callCount).toEqual(1);
-      expect(view.imageUploaderModal.modal.calledWith("show")).toEqual(true);
+    it("should return true if the file is a png image", function() {
+      expect(view.isImage({ type: "image/png" })).toBe(true);
+      expect(view.isImage({ type: "IMAGE/PNG" })).toBe(true);
+    });
+    it("should return false if the file is any other type", function() {
+      expect(view.isImage({ type: "application/pdf" })).toBe(false);
+      expect(view.isImage({ type: "application/wav" })).toBe(false);
     });
   });
 
@@ -165,34 +170,92 @@ describe("Sensori.Views.GalleryEditor", function() {
   });
 
   describe(".uploaderOnAdd(e, data)", function() {
-    it("should submit the data", function() {
-      var data = { submit: sinon.spy() };
-      view.uploaderOnAdd('event', data);
-      expect(data.submit.callCount).toEqual(1);
+    beforeEach(function() {
+      view.render();
+      sinon.stub(jQuery.fn, "fadeIn");
+      sinon.stub(jQuery.fn, "fadeOut");
+    });
+    afterEach(function() {
+      jQuery.fn.fadeIn.restore();
+      jQuery.fn.fadeOut.restore();
+    });
+    describe("when an image is uploaded", function() {
+      beforeEach(function() {
+        sinon.stub(view, "isImage").returns(true);
+        data = {
+          submit: sinon.spy(),
+          files: [
+            { type: "image/png", name: "test.png" }
+          ]
+        }
+      });
+      it("should submit the data", function() {
+        view.uploaderOnAdd('event', data);
+        expect(data.submit.callCount).toEqual(1);
+      });
+      it("should remove error status from the upload button", function() {
+        view.$(".control-group").addClass("error")
+        view.uploaderOnAdd("event", data);
+        expect(view.$(".control-group").hasClass("error")).toBe(false);
+        expect(jQuery.fn.fadeOut.getCall(0).thisValue.selector).toEqual(".control-group .help-inline");
+      });
+      it("should show the upload progress bar", function() {
+        view.uploaderOnAdd("event", data);
+        expect(jQuery.fn.fadeIn.getCall(0).thisValue.selector).toEqual(".progress");
+      });
+    });
+    describe("when a non-image is uploaded", function() {
+      beforeEach(function() {
+        sinon.stub(view, "isImage").returns(false);
+        data = {
+          submit: sinon.spy(),
+          files: [
+            { type: "application/pdf", name: "test.pdf" }
+          ]
+        };
+      });
+      it("should add error status to the upload button", function() {
+        view.uploaderOnAdd("event", data);
+        expect(view.$(".control-group").hasClass("error")).toBe(true);
+        expect(jQuery.fn.fadeIn.getCall(0).thisValue.selector).toEqual(".control-group .help-inline");
+      });
+      it("should not submit the data", function() {
+        view.uploaderOnAdd("event", data);
+        expect(data.submit.callCount).toEqual(0);
+      });
     });
   });
 
   describe(".uploaderOnProgress(e, data)", function() {
+    beforeEach(function() {
+      view.render()
+      data = {
+        loaded: 10,
+        total: 100
+      }
+    });
+    it("should update the progress bar", function() {
+      view.uploaderOnProgress(event, data);
+      expect(view.$(".progress-bar").width() > 0).toBe(true);
+    });
   });
 
   describe(".uploaderOnDone(e, data)", function() {
     beforeEach(function() {
       view.render();
-
-      view.imageUploaderModal = { modal: sinon.spy() };
-      data = { files: [{ name: "picture.jpg" }] };
-
+      data = { 
+        files: [
+         { name: "picture.jpg" }
+        ] 
+      };
       sinon.stub(view, "addImage");
       sinon.stub(view, "createImageEditorView").returns("image editor view");
+      sinon.stub(jQuery.fn, "fadeOut");
     });
     afterEach(function() {
       view.addImage.restore();
       view.createImageEditorView.restore();
-    });
-    it("should hide the image uploader modal", function() {
-      view.uploaderOnDone('event', data);
-      expect(view.imageUploaderModal.modal.callCount).toEqual(1);
-      expect(view.imageUploaderModal.modal.calledWith('hide')).toEqual(true);
+      jQuery.fn.fadeOut.restore();
     });
     it("should create an image editor view with an imageModel based on the uploaded file", function() {
       view.uploaderOnDone('event', data);
@@ -203,6 +266,10 @@ describe("Sensori.Views.GalleryEditor", function() {
       view.uploaderOnDone("event", data);
       expect(view.addImage.callCount).toEqual(1);
       expect(view.addImage.calledWith("image editor view")).toEqual(true);
+    });
+    it("should hide the progress bar", function() {
+      view.uploaderOnDone("event", data);
+      expect(jQuery.fn.fadeOut.getCall(0).thisValue.selector).toEqual(".progress");
     });
   });
 
@@ -328,27 +395,17 @@ describe("Sensori.Views.GalleryEditor", function() {
 
   describe(".render()", function() {
     beforeEach(function() {
-      sinon.stub($.fn, "modal");
       sinon.stub(view, "setupImageUploaderForm");
       sinon.stub(view, "renderImages");
     });
-    afterEach(function() {
-      $.fn.modal.restore();
-    });
     it("should set the view content to the gallery_editor template with nested s3_uploader_form template", function() {
       view.render();
-      expect(view.$("[data-trigger='add-image']").length).toEqual(1);
       expect(view.$("form[action='https://sensori-dev.s3.amazonaws.com/']").length).toEqual(1);
       expect(view.$("ul.thumbnails").length).toEqual(1);
     });
-    it("should initialize an image uploader modal and form", function() {
+    it("should initialize an image uploader form", function() {
       view.render();
       
-      expect(view.imageUploaderModal).toEqual(view.$(".image-uploader-modal"));
-      expect($.fn.modal.callCount).toEqual(1);
-      expect($.fn.modal.getCall(0).thisValue.selector).toEqual(".image-uploader-modal");
-      expect($.fn.modal.calledWith({ show: false })).toBe(true);
-
       expect(view.setupImageUploaderForm.callCount).toEqual(1);
     });
     it("should render the gallery", function() {
