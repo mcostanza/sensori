@@ -29,7 +29,7 @@
         <%= text_field_tag "tutorial[youtube_video_url]", (@tutorial.youtube_id.present? ? @tutorial.youtube_video_url : nil), :placeholder => "Paste YouTube Video URL", :class => "span8" %>
       </div>
       <div class="span4 tutorial-sidebar">
-        <h3><%= text_field :tutorial, :title, :placeholder => "Enter tutorial title", :class => "span4" %></h3>
+        <h2><%= text_field :tutorial, :title, :placeholder => "Enter tutorial title", :class => "span4" %></h2>
         <h4>by <%= @tutorial.member.name %></h4>
         <p><%= text_area :tutorial, :description, :placeholder => "Short description of this tutorial", :class => "span4", :rows => 2 %></p>
         
