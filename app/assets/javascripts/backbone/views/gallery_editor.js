@@ -9,10 +9,6 @@ Sensori.Views.GalleryEditor = Backbone.View.extend({
 
   className: "gallery-editor",
 
-  events: {
-    "click [data-trigger='add-image']": "showImageUploader"
-  },
-
   resizeThumbnails: function() {
     $(_.pluck(this.imageViews, 'el'))
       .removeClass("span11 span5 span3 span2")
@@ -38,8 +34,8 @@ Sensori.Views.GalleryEditor = Backbone.View.extend({
     this.unveilImages();
   },
 
-  showImageUploader: function() {
-    this.imageUploaderModal.modal('show');
+  isImage: function(file) {
+    return _.include(["image/png", "image/jpeg", "image/jpg", "image/gif"], file.type.toLowerCase());
   },
 
   setupImageUploaderForm: function() {
@@ -51,17 +47,27 @@ Sensori.Views.GalleryEditor = Backbone.View.extend({
     });
   },
 
-  uploaderOnAdd: function(e, data) {
-    data.submit();
+  uploaderOnAdd: function(event, data) {
+    if (this.isImage(data.files[0])) {
+      this.$(".control-group").removeClass("error");
+      this.$(".control-group").find(".help-inline").fadeOut();
+
+      this.$(".progress").fadeIn();
+      this.$(".progress-bar").css({ width: "0%" });
+
+      data.submit();
+    } else {
+      this.$(".control-group").addClass("error");
+      this.$(".control-group").find(".help-inline").fadeIn();
+    }
   },
 
   uploaderOnProgress: function(e, data) {
-    console.log("progress...", e, data);
+    var progress = parseInt(data.loaded / data.total * 100, 10);
+    this.$(".progress-bar").css({ width: progress + "%" });
   },
 
   uploaderOnDone: function(e, data) {
-    this.imageUploaderModal.modal('hide');
-
     var file       = data.files[0],
         domain     = this.$("form").attr('action'),
         path       = this.$('input[name=key]').val().replace('${filename}', file.name),
@@ -72,6 +78,13 @@ Sensori.Views.GalleryEditor = Backbone.View.extend({
         };
 
     this.addImage(this.createImageEditorView(imageModel));
+
+
+    this.$(".progress").fadeOut({
+      complete: _.bind(function() {
+        this.$(".progress-bar").css({ width: "0%" });
+      }, this)
+    });
   },
 
   uploaderOnFail: function(e, data) {
@@ -126,11 +139,6 @@ Sensori.Views.GalleryEditor = Backbone.View.extend({
     this.$el.html(JST["backbone/templates/tutorials/gallery_editor"]({
       imageUploaderForm: JST["backbone/templates/shared/s3_uploader_form"]()
     }));
-
-    this.imageUploaderModal = this.$(".image-uploader-modal");
-    this.imageUploaderModal.modal({ 
-      show: false 
-    });
 
     this.setupImageUploaderForm();
   
