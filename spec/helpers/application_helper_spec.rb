@@ -45,5 +45,15 @@ describe ApplicationHelper do
       helper.admin?.should be_false
     end
   end
+
+  describe "#active_if(condition)" do
+    it "should return 'active' if the condition is true" do
+      helper.active_if(true).should == 'active'
+    end
+    it "should return nil otherwise" do
+      helper.active_if(false).should == nil
+      helper.active_if(nil).should == nil
+    end
+  end
   
 end

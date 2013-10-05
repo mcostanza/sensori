@@ -29,6 +29,12 @@ class ApplicationController < ActionController::Base
     redirect_to root_path unless @member && @member.admin?
   end
 
+  def paginated_respond_with(resource)
+    respond_with(resource) do |format|
+      format.json { render :json => { :models => resource, :total_pages => resource.total_pages, :page => resource.current_page } }
+    end
+  end
+
   protected
 
   def self.responder

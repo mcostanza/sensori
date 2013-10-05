@@ -13,6 +13,7 @@ describe("Sensori.Views.Discussion", function() {
         "<textarea cols='40' id='discussion_body' name='discussion[body]' placeholder='Message' rows='10'></textarea>",
         "<input class='inline' id='discussion_attachment' name='discussion[attachment]' type='file' />",
         "<input id='discussion_members_only' name='discussion[members_only]' type='checkbox' value='1' />",
+        "<select id='discussion_category' name='discussion[category]'><option value='music-recs'>Music Recs</option></select>",
         "<button data-trigger='post' type='submit' class='btn btn-primary pull-right'>Post</button>",
         "<div class='attachment-container'></div>"
 			].join(""))
@@ -32,8 +33,11 @@ describe("Sensori.Views.Discussion", function() {
     it("should set bodyInput to the body input in the page", function() {
       expect(view.bodyInput).toEqual(view.$("#discussion_body"));
     });
-    it("should set membersOnlyCheckbox to the members only checkbox in the page", function() {
-      expect(view.membersOnlyCheckbox).toEqual(view.$("#discussion_members_only"));
+    it("should set membersOnlyInput to the members only checkbox in the page", function() {
+      expect(view.membersOnlyInput).toEqual(view.$("#discussion_members_only"));
+    });
+    it("should set categoryInput to the category drop down in the page", function() {
+      expect(view.categoryInput).toEqual(view.$("#discussion_category"));
     });
     it("should setup a validation for the subject input", function() {
       var validatedInputs = _.map(view.validations, function(validation) { return validation.input; });
@@ -42,6 +46,10 @@ describe("Sensori.Views.Discussion", function() {
     it("should setup a validation for the body input", function() {
       var validatedInputs = _.map(view.validations, function(validation) { return validation.input; });
       expect(validatedInputs).toContain(view.bodyInput);
+    });
+    it("should setup a validation for the category input", function() {
+      var validatedInputs = _.map(view.validations, function(validation) { return validation.input; });
+      expect(validatedInputs).toContain(view.categoryInput);
     });
   });
 
@@ -93,7 +101,8 @@ describe("Sensori.Views.Discussion", function() {
     beforeEach(function() {
       sinon.stub(view.subjectInput, 'val').returns('subject');
       sinon.stub(view.bodyInput, 'val').returns('body');
-      sinon.stub(view.membersOnlyCheckbox, 'prop').returns('checked');
+      sinon.stub(view.categoryInput, 'val').returns('general');
+      sinon.stub(view.membersOnlyInput, 'prop').returns('checked');
       view.model = { save: sinon.stub(), url: sinon.stub() };
       sinon.stub(Sensori, "redirect");
     });
@@ -107,6 +116,7 @@ describe("Sensori.Views.Discussion", function() {
       expect(saveCall.args[0]).toEqual({
         subject: 'subject',
         body: 'body',
+        category: 'general',
         members_only: 'checked'
       });
     });
@@ -165,7 +175,7 @@ describe("Sensori.Views.Discussion", function() {
       expect(view.bodyInput.val()).toEqual("body");
     });
     it("should set the members only checkbox state the the model's members_only property", function() {
-      expect(view.membersOnlyCheckbox.prop("checked")).toBe(true);
+      expect(view.membersOnlyInput.prop("checked")).toBe(true);
     });
     it("should render an AttachmentUploader subview", function() {
       expect(Sensori.Views.AttachmentUploader.callCount).toEqual(1);

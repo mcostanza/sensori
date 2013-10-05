@@ -14,13 +14,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
   <%= content_tag :body, :class => controller.controller_name do %>
-    <%= render 'shared/navbar' %>
-    <div class="container <%= controller.controller_name %>-container">
-      <%= render 'layouts/messages' %>
-      <% if signed_out? %>
-        <%= render 'shared/join_message' %>
-      <% end %>
-      <%= yield %>
+    <div id="wrap">
+      <%= render 'shared/navbar' %>
+      <div class="container <%= controller.controller_name %>-container">
+        <%= render 'layouts/messages' %>
+        <% if signed_out? %>
+          <%= render 'shared/join_message' %>
+        <% end %>
+        <%= yield %>
+      </div>
+      <div id="push"></div>
     </div>
     <%= render 'shared/footer' %>
     <script type="text/javascript">

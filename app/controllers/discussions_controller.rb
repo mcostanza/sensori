@@ -7,7 +7,9 @@ class DiscussionsController < ApplicationController
   # GET /discussions
   def index
     page = [1, params[:page].to_i].max
-    @discussions = Discussion.page(page).per(10)
+    filter_options = { :category => params[:category] }.reject { |k, v| v.blank? }
+    @discussions = Discussion.where(filter_options).includes(:member).page(page).per(10)
+    paginated_respond_with(@discussions)
   end
 
   # GET /discussions/1

@@ -6,15 +6,14 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-      <a class="brand" href="/">Sensori</a>
+      <a class="brand" href="/"></a>
       <div class="nav-collapse collapse">
         <ul class="nav">
-          <%= content_tag :li, link_to("Home", root_path), :class => current_page?(root_path) ? "active" : "" %>
-          <%= content_tag :li, link_to("Beats", beats_path), :class => current_page?(beats_path) ? "active" : "" %>
-          <li><a href="/discussions">Discussions</a></li>
-          <li><a href="/tutorials">Tips/Tutorials</a></li>
-          <li><a href="/sessions">Sessions</a></li>
-          <li><a href="/about">About</a></li>
+          <%= content_tag :li, link_to("Home", root_path), :class => active_if(current_page?(root_path)) %>
+          <%= content_tag :li, link_to("Beats", beats_path), :class => active_if(current_page?(controller: "tracks", action: "index")) %>
+          <%= content_tag :li, link_to("Discussions", discussions_path), :class => active_if(current_page?(controller: "discussions", action: "index")) %>
+          <%= content_tag :li, link_to("Tips/Tutorials", tutorials_path), :class => active_if(current_page?(controller: "tutorials", action: "index")) %>
+          <%= content_tag :li, link_to("Sessions", sessions_path), :class => active_if(current_page?(controller: "sessions", action: "index")) %>
         </ul>
         <% if signed_in? %>
           <div class="member-header dropdown pull-right">

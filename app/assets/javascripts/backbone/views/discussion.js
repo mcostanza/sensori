@@ -3,9 +3,11 @@ Sensori.Views.Discussion = Backbone.View.extend({
     this.postButton = this.$("[data-trigger='post']");
     this.subjectInput = this.$("#discussion_subject");
     this.bodyInput = this.$("#discussion_body");
-    this.membersOnlyCheckbox = this.$("#discussion_members_only");
+    this.categoryInput = this.$("#discussion_category");
+    this.membersOnlyInput = this.$("#discussion_members_only");
     this.validatesPresenceOf(this.subjectInput);
     this.validatesPresenceOf(this.bodyInput);
+    this.validatesPresenceOf(this.categoryInput);
   },
 
   events: {
@@ -29,7 +31,8 @@ Sensori.Views.Discussion = Backbone.View.extend({
     var attributes = {
       subject: this.subjectInput.val(),
       body: this.bodyInput.val(),
-      members_only: this.membersOnlyCheckbox.prop('checked')
+      category: this.categoryInput.val(),
+      members_only: this.membersOnlyInput.prop('checked')
     };
     this.model.save(attributes, {
       success: function() {
@@ -68,7 +71,7 @@ Sensori.Views.Discussion = Backbone.View.extend({
   render: function() {
     this.subjectInput.val(this.model.get("subject"));
     this.bodyInput.val(this.model.get("body"));
-    this.membersOnlyCheckbox.prop("checked", this.model.get("members_only"));
+    this.membersOnlyInput.prop("checked", this.model.get("members_only"));
 
     this.attachmentUploader = new Sensori.Views.AttachmentUploader({
       model: this.model,

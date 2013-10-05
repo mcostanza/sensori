@@ -17,5 +17,9 @@ module ApplicationHelper
   def admin?
     @member && @member.admin?
   end
+
+  def active_if(condition)
+    'active' if condition
+  end
   
 end

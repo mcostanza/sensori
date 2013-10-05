@@ -28,6 +28,7 @@ group :test, :development do
   gem 'jasmine'
   # Javascript mocking library
   gem "sinon-rails"
+  gem "autotest-standalone"
 end
 
 group :test do

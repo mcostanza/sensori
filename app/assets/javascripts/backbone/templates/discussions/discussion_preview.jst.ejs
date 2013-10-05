@@ -1,0 +1,14 @@
+<div class="media discussion-preview">
+  <a href="<%= discussion.url() %>" class="pull-left" target="_blank" title=<%= discussion.member.get("name") %>">
+    <img alt="<%= discussion.member.get("name") %>" src="<%= discussion.member.image("small") %>">
+  </a>
+  <div class="media-body">
+    <div class="media-timestamp">
+      Posted by <a href="<%= discussion.member.profileURL() %>" title="<%= discussion.member.get("name") %>" target="_blank"><%= discussion.member.get("name") %></a> <abbr class="timeago" title="<%= discussion.get('created_at') %>"></abbr>
+    </div>
+    <a href="<%= discussion.url() %>" class="link-right">Join Discussion</a>
+    <h5 class="media-heading"><a href="<%= discussion.url() %>"><%= discussion.get('subject') %></a></h5>
+    <%= _.truncate(discussion.body, 100) %>
+  </div>
+</div>
+

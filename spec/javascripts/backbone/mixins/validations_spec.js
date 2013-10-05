@@ -1,4 +1,4 @@
-describe("Sensori.objects.EmailPrompt", function() {
+describe("Sensori.Mixins.Validations", function() {
   var object,
       input,
       invalidInput,

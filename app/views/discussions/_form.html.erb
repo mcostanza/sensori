@@ -9,17 +9,18 @@
     <div class="control-group">
     <%= text_area :discussion, :body, :placeholder => "Message", :rows => 10 %>
     </div>
-    
-    <div class="attachment-container"></div>
-
-    <%= label :discussion, :members_only, :class => "checkbox last" do %>
+    <div class="control-group">
+      <%= select :discussion, :category, discussion_categories_for_select, { :include_blank => 'Choose a category...' } %>
+    </div>
+    <%= label :discussion, :members_only, :class => "checkbox" do %>
       <%= check_box :discussion, :members_only %>
       Members only
     <% end %>
+    <div class="attachment-container"></div>
   </div>
 </div>
 <div class="pull-right">
-  <button data-trigger="post" type="submit" class="btn btn-primary pull-right">Post</button>
+  <button data-trigger="post" type="submit" class="btn btn-primary pull-right"><%= @discussion.new_record? ? "Post" : "Update" %></button>
 </div>
 
 <%= render '/shared/s3_uploader_form_jst' %>

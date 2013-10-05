@@ -39,6 +39,7 @@ GEM
     auto_html (1.6.0)
       redcarpet (~> 2.0)
       rinku (~> 1.5.0)
+    autotest-standalone (4.5.11)
     aws-ses (0.5.0)
       builder
       mail (> 2.2.5)
@@ -246,6 +247,7 @@ PLATFORMS
 
 DEPENDENCIES
   auto_html
+  autotest-standalone
   aws-ses
   bootstrap-wysihtml5-rails!
   carrierwave

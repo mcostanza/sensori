@@ -1,3 +1,7 @@
-<li>
-  <%= link_to_unless current_page.last?, raw(t 'views.pagination.next'), url, :rel => 'next', :remote => remote %>
+<li class="<%= active_if(current_page.last?) %>">
+<%=
+  link_to_unless(current_page.last?, raw("&rsaquo;"), url, :rel => 'next', :remote => remote) do |name|
+    content_tag(:span, name)
+  end
+%>
 </li>

@@ -4,30 +4,48 @@ describe DiscussionsController do
   describe "GET 'index'" do
     before do
       @discussion = double(Discussion)
-      @scope = double('paginated discussions', :per => [@discussion])
-      Discussion.stub(:page).and_return(@scope)
+      @page_scope = double('paginated discussions', :per => [@discussion])
+      @includes_scope = double('includes scope', :page => @page_scope)
+      @where_scope = double('where scope', :includes => @includes_scope)
+      Discussion.stub(:where).and_return(@where_scope)
     end
     it "should return http success" do
       get 'index'
       response.should be_success
     end
+    it "should not include any filter options when category is not passed" do
+      Discussion.should_receive(:where).with({}).and_return(@where_scope)
+      get 'index'
+    end
+    it "should filter by category when passed" do
+      Discussion.should_receive(:where).with({ :category => 'general' }).and_return(@where_scope)
+      get 'index', :category => 'general'
+    end
+    it "should include the member association when loading discussions" do
+      @where_scope.should_receive(:includes).with(:member).and_return(@includes_scope)
+      get 'index'
+    end
     it "should load 10 discussions and assign them to @discussions" do
-      Discussion.should_receive(:page).with(1).and_return(@scope)
-      @scope.should_receive(:per).with(10).and_return([@discussion])
+      @includes_scope.should_receive(:page).with(1).and_return(@page_scope)
+      @page_scope.should_receive(:per).with(10).and_return([@discussion])
       get 'index'
       assigns[:discussions].should == [@discussion]
     end
     it "should load 10 discussions with pagination" do
-      Discussion.should_receive(:page).with(2).and_return(@scope)
-      @scope.should_receive(:per).with(10).and_return([@discussion])
+      @includes_scope.should_receive(:page).with(2).and_return(@page_scope)
+      @page_scope.should_receive(:per).with(10).and_return([@discussion])
       get 'index', :page => 2
       assigns[:discussions].should == [@discussion]
     end
     it "should not allow a page less than 1" do
-      Discussion.should_receive(:page).with(1).and_return(@scope)
-      @scope.should_receive(:per).with(10).and_return([@discussion])
+      @includes_scope.should_receive(:page).with(1).and_return(@page_scope)
+      @page_scope.should_receive(:per).with(10).and_return([@discussion])
       get 'index', :page => 0
       assigns[:discussions].should == [@discussion]
+    end
+    it "should use the paginated_respond_with method to respond" do
+      controller.should_receive(:paginated_respond_with).with([@discussion])
+      get 'index'
     end
   end
 

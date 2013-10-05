@@ -6,4 +6,17 @@ module DiscussionsHelper
 		discussion_creator.name.possessive
 	end
 
+  def discussion_categories
+    [nil] + Discussion::CATEGORIES
+  end
+
+  def discussion_categories_for_select
+    Discussion::CATEGORIES.map { |category| [category.titleize, category] }
+  end
+
+  def category_name(category)
+    return 'All' if category.blank?
+    category.titleize
+  end
+
 end

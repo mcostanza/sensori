@@ -84,6 +84,20 @@ describe ApplicationController do
     end
   end
 
+  # This test is way too strict on implementation but I don't know how to test it otherwise outside of functional testing
+  describe "#paginated_respond_with(resource)" do
+    before do
+      @resource = double('resource', :total_pages => 10, :current_page => 1)
+      @format = double('format')
+    end
+    it "should include pagination parameters in json responses" do
+      controller.should_receive(:respond_with).with(@resource).and_yield(@format)
+      @format.should_receive(:json).and_yield
+      controller.should_receive(:render).with(:json => { :models => @resource, :total_pages => @resource.total_pages, :page => @resource.current_page })
+      controller.paginated_respond_with(@resource)
+    end
+  end
+
   describe ".responder" do
     it "should return BasicResponder" do
       ApplicationController.send(:responder).should == BasicResponder    

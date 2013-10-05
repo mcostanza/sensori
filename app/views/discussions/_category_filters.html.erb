@@ -1,0 +1,7 @@
+<ul class="pager categories">
+  <% discussion_categories.each do |category| -%>
+  <li class="<%= active_if(params[:category] == category) %>" data-category="<%= category %>">
+    <a href="<%= discussions_url(:category => category) %>"><%= category_name(category) %></a>
+  </li>
+  <% end -%>
+</ul>

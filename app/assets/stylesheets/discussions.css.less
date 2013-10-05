@@ -21,6 +21,9 @@
       width: 100%;
       margin-bottom: 5px;
     }
+    select {
+      margin-bottom: 5px;
+    }
     input[type="checkbox"] {
       width: auto;
     }
@@ -33,8 +36,25 @@
     textarea {
       height: auto;
     }
-    .last {
-      margin-bottom: 0px;
+    .attachment-container {
+      margin-bottom: 5px;
+
+      .link-container, .progress {
+        margin-top: 5px;
+        margin-bottom: 0px;
+      }
+    }
+  }
+
+  .categories {
+    text-align: left;
+
+    .active {
+      a, span {
+        background-color: #0088CC;
+        border-color: #0088CC;
+        color: white;
+      }
     }
   }
 }	

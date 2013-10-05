@@ -1,7 +1,9 @@
 class Discussion < ActiveRecord::Base
   extend FriendlyId
 
-  attr_accessible :subject, :body, :member_id, :member, :members_only, :attachment_url
+  CATEGORIES = ['general', 'production', 'music-recs', 'collabs', 'events']
+
+  attr_accessible :subject, :body, :member_id, :member, :members_only, :attachment_url, :category
   default_scope order('last_post_at DESC')
 
   belongs_to :member
@@ -11,6 +13,7 @@ class Discussion < ActiveRecord::Base
   validates :member, :presence => true
   validates :subject, :presence => true
   validates :body, :presence => true
+  validates :category, :inclusion => { :in => CATEGORIES }
 
   before_create { |discussion| discussion.last_post_at = Time.now }
 
@@ -42,7 +45,8 @@ class Discussion < ActiveRecord::Base
     self.attachment_url.to_s.split("/").last
   end
 
-  def to_json(options = {})
-    self.attributes.merge("attachment_name" => self.attachment_name).to_json
+  # extend the default json representation of a discussion to include attachment_name and member attributes
+  def as_json(options = {})
+    super(:methods => :attachment_name, :include => { :member => { :only => [:name, :slug, :image_url] } })
   end
 end

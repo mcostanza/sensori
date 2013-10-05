@@ -1,8 +1,24 @@
 <h2>Discussions</h2>
+<%= render :partial => 'category_filters' %>
+<div class="discussions-wrapper">
 <% @discussions.each do |discussion| %>
-  <%= render :partial => 'shared/discussion', :object => discussion %>
+  <%= render :partial => 'shared/discussion_preview', :object => discussion, :as => 'discussion' %>
 <% end %>
+<% if @discussions.blank? -%>
+  <div class="well well-large">
+    No matching discussions found.
+  </div>
+<% end -%>
+</div>
 <% if signed_in? %>
   <%= link_to 'New Discussion', new_discussion_path, :class => "btn btn-primary btn-mini new-button" %>
 <% end %>
-<div class="pagination pagination-right"><%= paginate @discussions %></div>
+<%= paginate @discussions %>
+<script type="text/javascript">
+$(function() {
+  Sensori.DiscussionsView = new Sensori.Views.Discussions({
+    collection: new Sensori.Collections.Discussions(<%= raw @discussions.to_json %>),
+    el: $('.discussions')
+  });
+});
+</script>

@@ -19,4 +19,27 @@ describe DiscussionsHelper do
 	  end
 	end
 
+  describe "#discussion_categories" do
+    it "should return Discussion::CATEGORIES prepended with nil (nil is used for all)" do
+      helper.discussion_categories.should == [nil] + Discussion::CATEGORIES
+    end
+  end
+
+  describe "#discussion_categories_for_select" do
+    it "should return Discussion::CATEGORIES mapped into an array of arrays" do
+      helper.discussion_categories_for_select.should == Discussion::CATEGORIES.map { |c| [c.titleize, c] }
+    end
+  end
+
+  describe "#category_name(category)" do
+    it "should titleize the passed category" do
+      helper.category_name('music-recs').should == 'Music Recs'
+    end
+    it "should return 'All' when nil is passed" do
+      helper.category_name(nil).should == 'All'
+    end
+    it "should return 'All' when '' is passed" do
+      helper.category_name('').should == 'All'
+    end
+  end
 end

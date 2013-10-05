@@ -10,6 +10,8 @@ FactoryGirl.define do
       "Body #{n}"
     end
 
+    category 'general'
+
     association :member
   end
 end

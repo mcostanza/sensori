@@ -8,4 +8,4 @@
 <% if admin? %>
   <%= link_to 'New Tutorial', new_tutorial_path, :class => "btn btn-primary btn-mini new-button" %>
 <% end %>
-<div class="pagination pagination-right"><%= paginate @tutorials %></div>
+<%= paginate @tutorials %>

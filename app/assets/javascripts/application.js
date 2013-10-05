@@ -18,6 +18,7 @@
 //= require jquery-fileupload/basic
 //= require jquery-fileupload/vendor/tmpl
 //= require underscore
+//= require underscore_mixins
 //= require backbone
 //= require backbone_rails_sync
 //= require backbone_datalink

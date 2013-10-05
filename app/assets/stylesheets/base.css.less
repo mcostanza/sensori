@@ -13,7 +13,19 @@ body {
 	margin: 0;
 	padding: 0;
 	color: #000; 
-  padding-top: 60px;
+}
+
+abbr[title] {
+  border-bottom: 0px;
+  cursor: default;
+}
+
+.pagination > ul > li > a, .pagination > ul > .active > span {
+  font-family: "Times New Roman";
+}
+
+.pagination > ul > li > span {
+  color: #777;
 }
 
 .join-message {
@@ -31,18 +43,28 @@ body {
 }
 
 .navbar {
+  .nav > li > a {
+    padding: 13px 15px 7px 15px;
+  }
   .brand, .nav {
     font-family: 'Orator';
     text-transform: uppercase;
   }
-  .navbar-inner {
-    .border-radius(0px 0px 4px 4px);
+  .brand {
+    width: 80px;
+    height: 40px;
+    padding: 0px 20px;
+    background:image-url("sensori-header-logo-sprite.png") no-repeat 20px 0px;
   }
-  
+  .brand:hover {
+    background-position: 20px -50px;
+  }
+  .navbar-inner {
+    .border-radius(0px);
+  }
   .soundcloud-connect {
     margin-top: 7px;
   }
-
   .member-header {
     padding: 10px 0px 0px 0px;
     > a {
@@ -164,8 +186,10 @@ body {
 
 
 @media (max-width: 979px) {
-  body {
-    padding-top: 71px;
+  #wrap {
+    > .container {
+      padding-top: 71px;
+    }
   }
   .navbar {
     .soundcloud-connect {
@@ -176,9 +200,10 @@ body {
       float: left;
       padding: 0px 0px 10px 15px;
     }
-    .nav-collapse .dropdown-menu a {
+    .nav-collapse .dropdown-menu a, .nav-collapse .nav > li > a {
       font-family: 'Orator';
       text-transform: uppercase;
+      font-weight: normal;
     }
   }
   .navbar-fixed-top {
@@ -192,12 +217,6 @@ body {
   .control-group {
     margin-bottom: 0px;
   }
-}
-
-#footer {
-  background-color: #000;
-  margin-top: 30px;
-  padding: 20px 0px;
 }
 
 .attachment-buttons {

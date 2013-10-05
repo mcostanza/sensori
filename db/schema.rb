@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130928190227) do
+ActiveRecord::Schema.define(:version => 20130930011311) do
 
   create_table "discussion_notifications", :force => true do |t|
     t.integer  "discussion_id", :null => false
@@ -35,8 +35,11 @@ ActiveRecord::Schema.define(:version => 20130928190227) do
     t.string   "attachment_url"
     t.integer  "response_count", :default => 0
     t.datetime "last_post_at"
+    t.string   "category"
   end
 
+  add_index "discussions", ["category"], :name => "index_discussions_on_category"
+  add_index "discussions", ["last_post_at"], :name => "index_discussions_on_last_post_at"
   add_index "discussions", ["member_id"], :name => "discussions_member_id_fk"
 
   create_table "members", :force => true do |t|

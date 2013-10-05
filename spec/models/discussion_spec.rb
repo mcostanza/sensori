@@ -5,6 +5,12 @@ describe Discussion do
     @discussion = FactoryGirl.build(:discussion)
   end
 
+  describe "CATEGORIES" do
+    it "should return a list of valid categories" do
+      Discussion::CATEGORIES.should == ['general', 'production', 'music-recs', 'collabs', 'events']
+    end
+  end
+
   describe "validations" do
     it "should be valid given valid attributes" do
       @discussion.should be_valid
@@ -19,6 +25,14 @@ describe Discussion do
     end
     it "should be invalid without a body" do
       @discussion.body = ' '
+      @discussion.should_not be_valid
+    end
+    it "should be invalid without a category" do
+      @discussion.category = ' '
+      @discussion.should_not be_valid
+    end
+    it "should be invalid with a bogus category" do
+      @discussion.category = 'bogus'
       @discussion.should_not be_valid
     end
   end
@@ -113,8 +127,15 @@ describe Discussion do
   end
 
   describe "#to_json(options = {})" do
-    it "should return a JSON object with attributes and attachment_name" do
-      expected = @discussion.attributes.merge("attachment_name" => @discussion.attachment_url)
+    it "should return a JSON object with attributes, attachment_name and the member association included" do
+      expected = @discussion.attributes.merge({
+        "attachment_name" => @discussion.attachment_url,
+        "member" => {
+          'name' => @discussion.member.name,
+          'slug' => @discussion.member.slug,
+          'image_url' => @discussion.member.image_url
+        }
+      })
       JSON.parse(@discussion.to_json).should == expected
     end
   end
