@@ -1,5 +1,5 @@
 class SensoriMailer < ActionMailer::Base
-  default :from => "sensoricollective@gmail.com"
+  default :from => "Sensori Collective <info@sensoricollective.com>"
 
   def contact_us(params = {})
     @name    = params[:name]

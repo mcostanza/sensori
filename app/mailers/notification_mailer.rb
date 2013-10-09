@@ -1,7 +1,7 @@
 class NotificationMailer < ActionMailer::Base
 	helper :discussions
 
-  default :from => "sensoricollective@gmail.com"
+  default :from => "Sensori Collective <info@sensoricollective.com>"
 
   def discussion_notification(params = {})
     @member = params[:member]

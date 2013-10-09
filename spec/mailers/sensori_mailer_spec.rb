@@ -3,8 +3,8 @@ require "spec_helper"
 describe SensoriMailer do
 
   describe ".default_params" do
-    it "should have from => sensoricollective@gmail.com" do
-      SensoriMailer.default_params[:from].should == "sensoricollective@gmail.com"
+    it "should have from => 'Sensori Collective <info@sensoricollective.com>'" do
+      SensoriMailer.default_params[:from].should == "Sensori Collective <info@sensoricollective.com>"
     end
   end
 
