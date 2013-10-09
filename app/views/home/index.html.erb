@@ -3,3 +3,11 @@
 <%= render :partial => "popular_tutorials", :object => @tutorials, :as => 'tutorials' %>
 
 <%= render :partial => "recent_discussions", :object => @discussions, :as => 'discussions' %>
+<script type="text/javascript">
+$(function() {
+  Sensori.HomeView = new Sensori.Views.Home({
+    discussions: new Sensori.Collections.Discussions(<%= raw @discussions.to_json %>),
+    el: $('.home-container')
+  });
+});
+</script>

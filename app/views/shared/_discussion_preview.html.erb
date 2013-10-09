@@ -1,13 +1,15 @@
-<div class="media discussion-preview">
+<div class="media discussion-preview clickable" data-discussion-id="<%= discussion.slug %>">
   <%= link_to discussion, :class => 'pull-left', :title => discussion.member.name do %>
     <%= image_tag discussion.member.image(:small), :alt => discussion.member.name, :class => "media-object" %>
   <% end %>
   </a>
   <div class="media-body">
     <div class="media-timestamp">
-      Posted by <%= link_to discussion.member.name, discussion.member.profile_url, :title => discussion.member.name, :target => :_blank %> <%= time_ago_in_words(discussion.created_at)%> ago
+      Last post <%= time_ago_in_words(discussion.created_at)%> ago
     </div>
-    <%= link_to "Join discussion", discussion, :class => "link-right" %>
+    <% if discussion.response_count > 0 -%>
+    <div class="comment-bubble"><%= discussion.response_count %></div>
+    <% end -%>
     <h5 class="media-heading"><%= link_to discussion.subject, discussion %></h5>
     <%= truncate(discussion.body, :length => 100) %>
   </div>

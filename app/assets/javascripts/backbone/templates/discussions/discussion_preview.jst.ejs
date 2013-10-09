@@ -8,7 +8,7 @@
     </div>
     <a href="<%= discussion.url() %>" class="link-right">Join Discussion</a>
     <h5 class="media-heading"><a href="<%= discussion.url() %>"><%= discussion.get('subject') %></a></h5>
-    <%= _.truncate(discussion.body, 100) %>
+    <%= _.truncate(discussion.get('body'), 100) %>
   </div>
 </div>
 

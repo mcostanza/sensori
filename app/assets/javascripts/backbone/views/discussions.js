@@ -1,4 +1,17 @@
 Sensori.Views.Discussions = Backbone.View.extend({
+
+  initialize: function() {
+    this.bootstrap();
+  },
+
+  bootstrap: function() {
+    if(this.collection) {
+      // Setup views for the discussion previews (rendered server side on page load)
+      this.collection.each(function(discussion) {
+        new Sensori.Views.DiscussionPreview({ model: discussion, el: this.$("[data-discussion-id='" + discussion.id + "']") });
+      }, this);
+    }
+  }
   /*
   initialize: function() {
     _.bindAll(this, "refresh", "updatePageInfo", "render");
@@ -57,10 +70,11 @@ Sensori.Views.Discussions = Backbone.View.extend({
     this.discussionsWrapper.hide()
     this.discussionsWrapper.empty();
       
+
     this.collection.each(function(discussion) {
       this.discussionsWrapper.append(new Sensori.Views.DiscussionPreview({ model: discussion }).render().el)
     }, this);
-    Sensori.updateTimestamps();
+    $("abbr.timeago").timeago();
     this.discussionsWrapper.fadeIn();
 
     return this;

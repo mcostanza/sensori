@@ -235,6 +235,7 @@ describe("Sensori.Views.GalleryEditor", function() {
       }
     });
     it("should update the progress bar", function() {
+      var event = {};
       view.uploaderOnProgress(event, data);
       expect(view.$(".progress-bar").width() > 0).toBe(true);
     });
