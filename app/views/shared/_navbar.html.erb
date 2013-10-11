@@ -9,11 +9,11 @@
       <a class="brand" href="/"></a>
       <div class="nav-collapse collapse">
         <ul class="nav">
-          <%= content_tag :li, link_to("Home", root_path), :class => active_if(current_page?(root_path)) %>
-          <%= content_tag :li, link_to("Beats", beats_path), :class => active_if(current_page?(controller: "tracks", action: "index")) %>
-          <%= content_tag :li, link_to("Discussions", discussions_path), :class => active_if(current_page?(controller: "discussions", action: "index")) %>
-          <%= content_tag :li, link_to("Tips/Tutorials", tutorials_path), :class => active_if(current_page?(controller: "tutorials", action: "index")) %>
-          <%= content_tag :li, link_to("Sessions", sessions_path), :class => active_if(current_page?(controller: "sessions", action: "index")) %>
+          <%= content_tag :li, link_to("Home", root_path), :class => active_if(current_page?(root_path)), :id => 'nav-home' %>
+          <%= content_tag :li, link_to("Beats", beats_path), :class => active_if(current_page?(controller: "tracks", action: "index")), :id => 'nav-beats' %>
+          <%= content_tag :li, link_to("Discussions", discussions_path), :class => active_if(current_page?(controller: "discussions", action: "index")), :id => 'nav-discussions' %>
+          <%= content_tag :li, link_to("Tips/Tutorials", tutorials_path), :class => active_if(current_page?(controller: "tutorials", action: "index")), :id => 'nav-tutorials' %>
+          <%= content_tag :li, link_to("Sessions", sessions_path), :class => active_if(current_page?(controller: "sessions", action: "index")), :id => 'nav-sessions' %>
         </ul>
         <% if signed_in? %>
           <div class="member-header dropdown pull-right">

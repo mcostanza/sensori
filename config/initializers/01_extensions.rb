@@ -1,1 +1,1 @@
-Dir.glob("#{Rails.root}/lib/extensions/*").each { |f| require f }
+Dir.glob(File.join(Rails.root, 'lib/extensions', '**', '*.rb')).each { |f| require f }

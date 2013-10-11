@@ -33,7 +33,7 @@ describe MembersController do
     before(:each) do
       @soundcloud_app_client = double(::Soundcloud)
       controller.stub(:soundcloud_app_client).and_return(@soundcloud_app_client)
-      @member = double(Member, :valid? => true, :soundcloud_id => '123')
+      @member = double(Member, :valid? => true, :soundcloud_id => '123', :just_created? => false)
       Member.stub(:sync_from_soundcloud).and_return(@member)
     end
     describe "soundcloud code is present" do
@@ -52,10 +52,18 @@ describe MembersController do
           get 'soundcloud_connect', :code => @code
           session[:soundcloud_id].should == @member.soundcloud_id
         end
-        it "should redirect to the root url with a flash notice" do
+        it "should redirect to the root url with a flash notice (existing member)" do
           get 'soundcloud_connect', :code => @code
           response.should redirect_to(root_url)
           flash[:notice].should_not be_nil
+          flash[:signed_up].should be_false
+        end
+        it "should redirect to the root url with a flash notice (new member)" do
+          @member.stub(:just_created?).and_return(true)
+          get 'soundcloud_connect', :code => @code
+          response.should redirect_to(root_url)
+          flash[:notice].should_not be_nil
+          flash[:signed_up].should be_true
         end
       end
       describe "valid Member not successfully found/created" do
@@ -70,6 +78,7 @@ describe MembersController do
           get 'soundcloud_connect', :code => @code
           response.should redirect_to root_url
           flash[:error].should_not be_nil
+          flash[:signed_up].should be_false
         end
       end
     end

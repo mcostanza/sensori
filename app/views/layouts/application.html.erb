@@ -28,10 +28,14 @@
     <%= render 'shared/footer' %>
     <script type="text/javascript">
       $(function() {
-        new Sensori.Player();
-        <% if signed_in? %>
+        Sensori.Player = new Sensori.Player();
+        <% if signed_in? -%>
         Sensori.Member = new Sensori.Models.Member(<%= raw @member.to_json %>);
-        <% end %>
+        <% end -%>
+        <% if flash[:signed_up] -%>
+        Sensori.WelcomeMessageView = new Sensori.Views.WelcomeMessage({ el: $('body') });
+        Sensori.WelcomeMessageView.show();
+        <% end -%>
       });
       $(window).load(function() {
         $('.beats li').equalHeights();

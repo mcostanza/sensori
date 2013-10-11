@@ -25,6 +25,7 @@ class MembersController < ApplicationController
     else
       flash[:error] = "Error while signing in..."
     end
+    flash[:signed_up] = @member && @member.just_created?
 
     redirect_to root_url
   end
