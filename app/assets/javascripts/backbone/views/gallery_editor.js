@@ -5,6 +5,14 @@ Sensori.Views.GalleryEditor = Backbone.View.extend({
     this.content = this.options.content || [];
   },
 
+  events: {
+    "click .fileinput-button": "triggerUpload"
+  },
+
+  triggerUpload: function(e) {
+    this.$("input[type='file']").click();
+  },
+
   tagName: "div",
 
   className: "gallery-editor",
