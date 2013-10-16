@@ -8,7 +8,11 @@
 	<%= link_to image_tag("discussion_notifications/header.png", :alt => "Sensori Collective", :title => "Sensori Collective", :style => "width: 600px; margin-bottom: 10px;"), discussion_url(@response.discussion) %>
 	
 	<div style="width: 400px; margin: 0px 100px 10px 100px;">
-		Hey <%= @member.name %>, <%= @response.member.name %> just commented on <%= discussion_owner(@response.discussion.member, @response.member, @member) %> post titled "<%= @response.discussion.subject %>" in Discussions.
+		Hey <%= @member.name %>, <%= @response.member.name %> just commented on <%= discussion_owner(@response.discussion.member, @response.member, @member) %> post titled "<%= @response.discussion.subject %>" in Discussions:
+	</div>
+
+	<div style="width: 400px; margin: 0px 100px 10px 100px;">
+		<%= @response.body %>
 	</div>
 	
 	<div style="width: 400px; margin: 0px 100px 10px 100px;">
