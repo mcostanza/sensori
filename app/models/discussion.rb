@@ -8,7 +8,7 @@ class Discussion < ActiveRecord::Base
 
   belongs_to :member
   has_many :responses, :include => :member, :dependent => :destroy
-  has_many :notifications, :class_name => "DiscussionNotification", :include => :member
+  has_many :notifications, :class_name => "DiscussionNotification", :include => :member, :dependent => :destroy
 
   validates :member, :presence => true
   validates :subject, :presence => true
