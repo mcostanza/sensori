@@ -12,4 +12,9 @@ class Track < ActiveRecord::Base
   validates :posted_at, :presence => true
 
   scope :latest, lambda { order("posted_at DESC") }
+
+  # extend the default json representation of a discussion to include member attributes
+  def as_json(options = {})
+    super(:include => { :member => { :only => [:name, :slug, :image_url] } })
+  end
 end

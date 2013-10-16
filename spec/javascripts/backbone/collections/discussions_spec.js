@@ -6,6 +6,12 @@ describe("Sensori.Collections.Discussions", function() {
     expect(discussions instanceof Backbone.Collection).toBe(true);
   });
 
+  describe(".model", function() {
+    it("should set model to Sensori.Models.Discussion", function() {
+      expect(discussions.model).toEqual(Sensori.Models.Discussion);
+    });
+  });
+
   describe(".url", function() {
     it("should set url to /discussions", function() {
       discussions = new Sensori.Collections.Discussions();
@@ -22,4 +28,3 @@ describe("Sensori.Collections.Discussions", function() {
     });
   });
 });
-

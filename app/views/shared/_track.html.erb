@@ -1,5 +1,5 @@
 <li class="span3">
-  <%= content_tag :div, :class => "thumbnail", :data => { :track => track.stream_url, :artist => track.member.name, :title => track.title } do -%>
+  <div class="thumbnail" data-track-id="<%= track.id %>">
     <div class="thumbnail-wrapper">
       <%= image_tag track.artwork_url %>
       <a class="overlay" href="javascript:;"></a>
@@ -9,5 +9,5 @@
         <strong><%= track.member.name %></strong> - <%= track.title %>
       <% end %>
     </p>
-  <% end -%>
+  </div>
 </li>

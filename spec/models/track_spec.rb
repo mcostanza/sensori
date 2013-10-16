@@ -58,4 +58,18 @@ describe Track do
       end
     end
   end
+
+  describe "#to_json(options = {})" do
+    it "should return a JSON object with attributes and the member association included" do
+      @track.posted_at = 'posted_at' # issues with matching up the formatting for some reason
+      expected = @track.attributes.merge({
+        "member" => {
+          'name' => @track.member.name,
+          'slug' => @track.member.slug,
+          'image_url' => @track.member.image_url
+        }
+      })
+      JSON.parse(@track.to_json).should == expected
+    end
+  end
 end
