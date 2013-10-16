@@ -34,11 +34,26 @@ describe Tutorial do
         @tutorial.save
       end
     end
+
+    it "should set slug from the title when saving" do
+      @tutorial.save
+      @tutorial.slug.should == @tutorial.title.parameterize
+    end
   end
 
-  it "should set slug from the title when saving" do
-    @tutorial.save
-    @tutorial.slug.should == @tutorial.title.parameterize
+  describe "#editable?(member)" do
+    it "should return true if the member is an admin" do
+      admin = FactoryGirl.build(:member, :admin => true)
+      @tutorial.editable?(admin).should be_true
+    end
+    it "should return true if the member created the tutorial" do
+      creator = @tutorial.member
+      @tutorial.editable?(creator).should be_true
+    end
+    it "should return false if the member is not an admin and did not create the tutorial" do
+      buddy = FactoryGirl.build(:member, :admin => false)
+      @tutorial.editable?(buddy).should be_false
+    end
   end
 
   describe "#youtube_image_url" do

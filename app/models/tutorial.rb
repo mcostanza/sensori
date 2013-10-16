@@ -19,6 +19,10 @@ class Tutorial < ActiveRecord::Base
 
   before_save :format_table_of_contents
 
+  def editable?(member)
+    member.admin? || member.id == self.member_id
+  end
+
   def youtube_image_url
     "http://img.youtube.com/vi/#{self.youtube_id}/0.jpg"
   end
