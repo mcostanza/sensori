@@ -41,6 +41,10 @@ describe("Sensori.Views.Discussions", function() {
       view = new Sensori.Views.Discussions();
       expect(Sensori.Views.DiscussionPreview.callCount).toBe(0);
     });
+    it("should setup an empty collection if one is not passed", function() {
+      view = new Sensori.Views.Discussions();
+      expect(view.collection).toBeDefined();
+    });
   });
 
   describe(".bootstrap()", function() {
@@ -61,11 +65,6 @@ describe("Sensori.Views.Discussions", function() {
         model: collection.models[1],
         el: el.find("[data-discussion-id='" + collection.models[1].id + "']")
       })).toBe(true);
-    });
-    it("should not do anything if collection is not set", function() {
-      view.collection = undefined;
-      view.bootstrap();
-      expect(Sensori.Views.DiscussionPreview.callCount).toBe(0);
     });
   });
 });

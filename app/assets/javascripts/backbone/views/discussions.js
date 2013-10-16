@@ -1,16 +1,15 @@
 Sensori.Views.Discussions = Backbone.View.extend({
 
   initialize: function() {
+    this.collection = (this.collection || new Sensori.Collections.Discussions()); 
     this.bootstrap();
   },
 
   bootstrap: function() {
-    if(this.collection) {
-      // Setup views for the discussion previews (rendered server side on page load)
-      this.collection.each(function(discussion) {
-        new Sensori.Views.DiscussionPreview({ model: discussion, el: this.$("[data-discussion-id='" + discussion.id + "']") });
-      }, this);
-    }
+    // Setup views for the discussion previews (rendered server side on page load)
+    this.collection.each(function(discussion) {
+      new Sensori.Views.DiscussionPreview({ model: discussion, el: this.$("[data-discussion-id='" + discussion.id + "']") });
+    }, this);
   }
   /*
   initialize: function() {

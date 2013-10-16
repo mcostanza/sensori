@@ -28,7 +28,10 @@
     <%= render 'shared/footer' %>
     <script type="text/javascript">
       $(function() {
-        Sensori.Player = new Sensori.Player();
+        Sensori.Player = new Sensori.Views.Player({
+          collection: new Sensori.Collections.Tracks(<%= raw (@latest_tracks || @tracks).to_json %>),
+          el: $('body')
+        });
         <% if signed_in? -%>
         Sensori.Member = new Sensori.Models.Member(<%= raw @member.to_json %>);
         <% end -%>
