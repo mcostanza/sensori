@@ -84,9 +84,9 @@ describe TutorialsController do
   end
 
   describe "GET 'new'" do
-    describe "when logged in as an admin" do
+    describe "when logged in" do
       before(:each) do
-        login_user(:admin => true)
+        login_user
       end
       it "should return http success" do
         get 'new'
@@ -101,15 +101,6 @@ describe TutorialsController do
         Tutorial.should_receive(:new).with(member: @member).and_return(tutorial)
         get 'new'
         assigns[:tutorial].should == tutorial
-      end
-    end
-    describe "when logged in as a non-admin" do
-      before(:each) do
-        login_user
-      end 
-      it "should redirect to the root path" do
-        get 'new'
-        response.should redirect_to(root_path)
       end
     end
     describe "when not logged in" do
@@ -135,9 +126,9 @@ describe TutorialsController do
       @tutorial.stub(:save).and_return(true)
       Tutorial.stub(:new).and_return(@tutorial)
     end
-    describe "when logged in as an admin" do
+    describe "when logged in" do
       before(:each) do 
-        login_user(:admin => true)
+        login_user
       end
       it "should initialize a tutorial from params[:tutorial] and the current member" do
         expected_args = @tutorial_params.merge(:member => @member).stringify_keys
@@ -168,19 +159,6 @@ describe TutorialsController do
         end
       end
     end
-    describe "when logged in as a non-admin" do
-      before(:each) do
-        login_user
-      end 
-      it "should not initialize a tutorial" do
-        Tutorial.should_not_receive(:new)
-        post 'create', :tutorial => @tutorial_params
-      end
-      it "should redirect to the root path" do
-        post 'create', :tutorial => @tutorial_params
-        response.should redirect_to(root_path)
-      end
-    end
     describe "when not logged in" do
       it "should not initialize a tutorial" do
         Tutorial.should_not_receive(:new)
@@ -195,7 +173,7 @@ describe TutorialsController do
 
   describe "GET 'edit'" do
     before(:each) do
-      @tutorial = double(Tutorial)
+      @tutorial = FactoryGirl.build(:tutorial)
       Tutorial.stub(:find).and_return(@tutorial)
     end
     describe "when logged in as an admin" do
@@ -216,7 +194,26 @@ describe TutorialsController do
         assigns[:tutorial].should == @tutorial
       end
     end
-    describe "when logged in as a non-admin" do
+    describe "when logged in as a non-admin who created the tutorial" do
+      before(:each) do
+        login_user
+        @tutorial.member = @member
+      end 
+      it "should return http success" do
+        get 'edit', id: '123'
+        response.should be_success
+      end
+      it "should render the edit template" do
+        get 'edit', id: '123'
+        response.should render_template("tutorials/edit")
+      end
+      it "should find the tutorial from params[:id] and assign to @tutorial" do
+        Tutorial.should_receive(:find).with('123').and_return(@tutorial)
+        get 'edit', id: '123'
+        assigns[:tutorial].should == @tutorial
+      end
+    end
+    describe "when logged in as a non-admin who did not created the tutorial" do
       before(:each) do
         login_user
       end 
@@ -280,12 +277,45 @@ describe TutorialsController do
         end
       end
     end
-    describe "when logged in as a non-admin" do
+    describe "when logged in as a non-admin who created the tutorial" do
+      before(:each) do 
+        login_user
+        @tutorial.member = @member
+      end
+      it "should find the tutorial from params" do
+        Tutorial.should_receive(:find).with('123').and_return(@tutorial)
+        put 'update', :id => '123', :tutorial => @tutorial_params
+      end
+      it "should update tutorial attributes" do
+        @tutorial.should_receive(:update_attributes).with(@tutorial_params.stringify_keys).and_return(true)
+        put 'update', :id => '123', :tutorial => @tutorial_params
+      end
+      describe "valid params given" do
+        it "should redirect to the tutorial" do
+          put 'update', :id => '123', :tutorial => @tutorial_params
+          response.should redirect_to(@tutorial)
+        end
+      end
+      describe "invalid params given" do
+        before(:each) do
+          @tutorial.stub(:update_attributes).and_return(false)
+
+          # Not called directly but needed for correct test behavior when using respond_with
+          @tutorial.stub(:valid).and_return(false)
+          @tutorial.stub(:errors).and_return('errors')
+        end
+        it "should render the edit template" do
+          put 'update', :id => '123', :tutorial => @tutorial_params
+          response.should render_template("tutorials/edit")
+        end
+      end
+    end
+    describe "when logged in as a non-admin who did not create the tutorial" do
       before(:each) do
         login_user
       end 
-      it "should not find a tutorial" do
-        Tutorial.should_not_receive(:find)
+      it "should find the tutorial from params" do
+        Tutorial.should_receive(:find).with('123').and_return(@tutorial)
         put 'update', :id => '123', :tutorial => @tutorial_params
       end
       it "should redirect to the root path" do
@@ -335,13 +365,32 @@ describe TutorialsController do
         response.should render_template("tutorials/show")
       end
     end
-    describe "when logged in as a non-admin" do
+    describe "when logged in as a non-admin who created the tutorial" do
+      before(:each) do
+        login_user
+        @tutorial.member = @member
+      end
+      it "should find the tutorial and prepare a preview" do
+        Tutorial.should_receive(:find).with("123").and_return(@tutorial)
+        @tutorial.should_receive(:prepare_preview).with(@tutorial_params.stringify_keys)
+        post 'preview', :id => "123", :tutorial => @tutorial_params
+      end
+      it "should not save the tutorial" do
+        @tutorial.should_not_receive(:save)
+        post 'preview', :id => "123", :tutorial => @tutorial_params
+      end
+      it "should render the show template" do
+        post 'preview', :id => "123", :tutorial => @tutorial_params
+        response.should render_template("tutorials/show")
+      end
+    end
+    describe "when logged in as a non-admin who did not create the tutorial" do
       before(:each) do
         login_user
       end 
-      it "should not find a tutorial" do
-        Tutorial.should_not_receive(:find)
-        post 'preview', :id => "123", :tutorial => @tutorial_params
+      it "should find the tutorial from params" do
+        Tutorial.should_receive(:find).with('123').and_return(@tutorial)
+        post 'preview', :id => '123', :tutorial => @tutorial_params
       end
       it "should redirect to the root path" do
         post 'preview', :id => "123", :tutorial => @tutorial_params

@@ -1,7 +1,9 @@
 class TutorialsController < ApplicationController
   respond_to :html, :json
 
-  before_filter :ensure_admin, :only => [:new, :create, :edit, :update, :preview]
+  before_filter :ensure_signed_in, :only => [:new, :create, :edit, :update, :preview]
+  before_filter :find_tutorial, :only => [:edit, :update, :preview]
+  before_filter :ensure_tutorial_is_editable, :only => [:edit, :update, :preview]
 
   # GET /tutorials
   def index
@@ -31,20 +33,25 @@ class TutorialsController < ApplicationController
 
   # GET /tutorials/1/edit
   def edit
-    @tutorial = Tutorial.find(params[:id])
   end
 
   # PUT /tutorials/1
   def update
-    @tutorial = Tutorial.find(params[:id])
     @tutorial.update_attributes(params[:tutorial])
     respond_with @tutorial
   end
 
   # POST /tutorials/1/preview
   def preview
-    @tutorial = Tutorial.find(params[:id])
     @tutorial.prepare_preview(params[:tutorial])
     render :template => "tutorials/show"
+  end
+
+  def find_tutorial
+    @tutorial = Tutorial.find(params[:id])
+  end
+
+  def ensure_tutorial_is_editable
+    redirect_to root_path unless @tutorial.editable?(@member)
   end
 end
