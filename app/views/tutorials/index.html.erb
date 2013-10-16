@@ -5,7 +5,7 @@
     <%= render :partial => 'shared/tutorial', :object => tutorial %>
   <% end %>
 </ul>
-<% if admin? %>
+<% if signed_in? %>
   <%= link_to 'New Tutorial', new_tutorial_path, :class => "btn btn-primary btn-mini new-button" %>
 <% end %>
 <%= paginate @tutorials %>

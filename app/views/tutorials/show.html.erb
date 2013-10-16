@@ -1,4 +1,4 @@
-<% if admin? %>
+<% if @tutorial.editable?(@member) %>
 <div class="row">
 <%= render :partial => 'shared/action_buttons', :locals => { :object => @tutorial } %>
 </div>
