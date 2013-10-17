@@ -22,14 +22,7 @@ Sensori::Application.routes.draw do
   get "members/soundcloud_connect"
 
   get "home/index"
-  get "home/about"
-  get "home/kickstarter"
-  match "contact_us" => "home#contact_us", :via => "get"
-  match "send_feedback"   => "home#send_feedback",   :via => "post"
-
-  post "prelaunch_signups" => "prelaunch_signups#create"
-  
-  get "admin/prelaunch_signups(.:format)" => "admin/prelaunch_signups#index", :defaults => { :format => :csv }, :constraints => { :format => "csv" }
+  match "about" => "home#about", :via => "get"
 
   get '/post/*post_id' => "home#blog_post_redirect", :format => false
   

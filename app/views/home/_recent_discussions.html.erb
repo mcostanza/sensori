@@ -4,6 +4,6 @@
     <% discussions.each do |discussion| %>
       <%= render :partial => 'shared/discussion_preview', :object => discussion, :as => 'discussion' %>
     <% end %>
-    <%= link_to "View more...", discussions_path, :class => "btn btn-inverse btn-mini pull-right" %>
+    <%= link_to raw("View more &raquo;"), discussions_path, :class => "btn btn-inverse btn-mini pull-right" %>
   </div>
 </div>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130930011311) do
+ActiveRecord::Schema.define(:version => 20131017173516) do
 
   create_table "discussion_notifications", :force => true do |t|
     t.integer  "discussion_id", :null => false
@@ -55,12 +55,6 @@ ActiveRecord::Schema.define(:version => 20130930011311) do
   end
 
   add_index "members", ["soundcloud_id"], :name => "index_members_on_soundcloud_id"
-
-  create_table "prelaunch_signups", :force => true do |t|
-    t.string   "email"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
 
   create_table "responses", :force => true do |t|
     t.integer  "discussion_id", :null => false
