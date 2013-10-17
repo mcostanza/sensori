@@ -54,6 +54,9 @@ describe Tutorial do
       buddy = FactoryGirl.build(:member, :admin => false)
       @tutorial.editable?(buddy).should be_false
     end
+    it "should return false if the member is nil" do
+      @tutorial.editable?(nil).should be_false
+    end
   end
 
   describe "#youtube_image_url" do

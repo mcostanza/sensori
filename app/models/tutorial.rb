@@ -20,6 +20,7 @@ class Tutorial < ActiveRecord::Base
   before_save :format_table_of_contents
 
   def editable?(member)
+    return false if member.blank?
     member.admin? || member.id == self.member_id
   end
 
