@@ -94,3 +94,6 @@ gem "bootstrap-wysihtml5-rails", :git => "https://sensoricollective@bitbucket.or
 
 # Backbone JS library
 gem "rails-backbone", '>= 0.9.10'
+
+# page title plugin
+gem "headliner"

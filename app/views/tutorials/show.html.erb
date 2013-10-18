@@ -8,7 +8,7 @@
     <div class="flex-video widescreen"><%= content_tag :iframe, nil, :type => "text/html", :src => @tutorial.youtube_embed_url, :frameborder => "0" %></div>
   </div>
   <div class="span4 tutorial-sidebar">
-    <h2><%= @tutorial.title %></h2>
+    <h2><%= title @tutorial.title %></h2>
     <h4>by <%= @tutorial.member.name %></h4>
     <p><%= simple_format(@tutorial.description) %></p>
     <% if @tutorial.attachment_url.present? %>

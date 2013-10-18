@@ -9,7 +9,7 @@
     <%= render :partial => 'submission_form' %>
   </div>
   <div class="span4">
-    <h2><%= @session.title %></h2>
+    <h2><%= title @session.title %></h2>
     <p><%= simple_format(@session.description) %></p>
     <% if @session.attachment_url? %>
       <%= link_to(@session.attachment_url, :class => "btn btn-primary") do %>

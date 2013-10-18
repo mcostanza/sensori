@@ -94,6 +94,7 @@ GEM
     friendly_id (4.0.10.1)
       activerecord (>= 3.0, < 4.0)
     hashie (2.0.5)
+    headliner (0.1.3)
     hike (1.2.3)
     httmultiparty (0.3.10)
       httparty (>= 0.7.3)
@@ -256,6 +257,7 @@ DEPENDENCIES
   fog
   foreigner
   friendly_id (~> 4.0.9)
+  headliner
   jasmine
   jquery-fileupload-rails
   jquery-rails

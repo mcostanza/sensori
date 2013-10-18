@@ -1,4 +1,4 @@
-<h2>Beats</h2>
+<h2><%= title "Beats" %></h2>
 <ul class="thumbnails beats">
   <% @tracks.each do |track| %>
     <%= render :partial => 'shared/track', :object => track %>
