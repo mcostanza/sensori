@@ -20,6 +20,12 @@ abbr[title] {
   cursor: default;
 }
 
+h3 {
+  > a, > a:hover {
+    color: #000;
+  }
+}
+
 .pagination > ul > li > a, .pagination > ul > .active > span {
   font-family: "Times New Roman";
 }
@@ -99,9 +105,13 @@ abbr[title] {
   }
 
   .thumbnail {
+    background-color: #fff;
     p {
       margin-top: 10px;
       margin-left: 5px;
+    }
+    .caption {
+      color: #000;
     }
   }
 
@@ -110,13 +120,6 @@ abbr[title] {
     max-width: 100%;
     margin-left: auto;
     margin-right: auto;
-  }
-}
-
-.thumbnail {
-  background-color: #fff;
-  .caption {
-    color: #000;
   }
 }
 

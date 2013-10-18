@@ -41,7 +41,12 @@
         <% end -%>
       });
       $(window).load(function() {
-        $('.beats li, .about-sections .thumbnail').equalHeights();
+        $('.beats li').equalHeights();
+        $('.about-sections .thumbnail').equalHeights();
+      });
+      $(window).resize(function() {
+        $('.beats li').equalHeights();
+        $('.about-sections .thumbnail').equalHeights();
       });
     </script>
 
