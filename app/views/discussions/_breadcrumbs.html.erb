@@ -1,5 +1,8 @@
-<ul class="breadcrumb">
-  <li><%= link_to "Discussions", discussions_path %> <span class="divider">/</span></li>
-  <li><%= link_to @discussion.category.titleize, discussions_path(:category => @discussion.category) %> <span class="divider">/</span></li>
-  <li class="active"><%= @discussion.subject %></li>
-</ul>
+<% class_name = local_assigns[:class_name] || 'top' -%>
+<div class="breadcrumb-wrapper">
+  <ul class="breadcrumb <%= class_name %>">
+    <li><%= link_to "Discussions", discussions_path %> <span class="divider">/</span></li>
+    <li><%= link_to @discussion.category.titleize, discussions_path(:category => @discussion.category) %> <span class="divider">/</span></li>
+    <li class="active"><%= @discussion.subject %></li>
+  </ul>
+</div>
