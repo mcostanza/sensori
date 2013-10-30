@@ -18,9 +18,10 @@ $(function() {
 
   });
 
-  $("img[data-src]").unveil();
+  // Lazy-load images with data-src attribute when you scroll within 1000px of where they appear on the page
+  $("img[data-src]").unveil(1000);
 
-// close popovers on external clicks
+  // close popovers on external clicks
   $(':not(#anything)').on('click', function (e) {
     $('.popover-link').each(function () {
       //the 'is' for buttons that trigger popups
