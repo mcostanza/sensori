@@ -116,6 +116,11 @@ describe("Sensori.Views.Player", function() {
       view.onTrackStatusChanging('track', 'playing');
       expect(view.currentTrack.stop.callCount).toBe(1);
     });
+    it("should not stop the current track if the event is triggered on the current track (resuming from a pause)", function() {
+      view.currentTrack = { stop: sinon.stub() };
+      view.onTrackStatusChanging(view.currentTrack, 'playing');
+      expect(view.currentTrack.stop.callCount).toBe(0);
+    });
     it("should do nothing if the status is not 'playing'", function() {
       view.currentTrack = { stop: sinon.stub() };
       view.onTrackStatusChanging('track', 'stopped');

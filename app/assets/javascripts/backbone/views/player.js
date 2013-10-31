@@ -16,7 +16,7 @@ Sensori.Views.Player = Backbone.View.extend({
   },
 
   onTrackStatusChanging: function(track, newStatus) {
-    if(this.currentTrack && newStatus == 'playing') {
+    if(this.currentTrack && (this.currentTrack != track) && newStatus == 'playing') {
       this.currentTrack.stop();
     }
   },
