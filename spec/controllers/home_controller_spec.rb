@@ -71,4 +71,28 @@ describe HomeController do
       response.should redirect_to(File.join("http://blog.sensoricollective.com/post", @post_id))
     end
   end
+
+  describe "GET 'blog_tag_redirect'" do
+    before(:each) do
+      @tag = "playlist"
+    end
+    it "should be connected as '/tagged/*'" do
+      assert_generates "tagged/#{@tag}", :controller => 'home', :action => 'blog_tag_redirect', :tag => @tag
+    end
+    it "should redirect to the equivalent tagged posts path on blog.sensoricollective.com" do
+      get 'blog_tag_redirect', :tag => @tag
+      response.should redirect_to(File.join("http://blog.sensoricollective.com/tagged", @tag))
+    end
+  end
+
+  describe "GET 'kickstarter'" do
+    it "should be connected as '/kickstarter'" do
+      assert_generates "/kickstarter", :controller => 'home', :action => 'kickstarter'
+    end
+    it "should redirect to kickstarter with 302 status" do
+      get "kickstarter"
+      response.should redirect_to("http://www.kickstarter.com/projects/philsergi/sensori-collective-community-music-center")
+      response.status.should == 302
+    end
+  end
 end

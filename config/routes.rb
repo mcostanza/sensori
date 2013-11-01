@@ -24,6 +24,8 @@ Sensori::Application.routes.draw do
   get "home/index"
   match "about" => "home#about", :via => "get"
 
+  match "kickstarter"  => "home#kickstarter", :via => "get"
+  get '/tagged/*tag'   => "home#blog_tag_redirect",  :format => false
   get '/post/*post_id' => "home#blog_post_redirect", :format => false
   
   # The priority is based upon order of creation:
