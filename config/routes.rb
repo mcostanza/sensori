@@ -13,18 +13,19 @@ Sensori::Application.routes.draw do
 
   resources :responses, :only => [:create, :update, :destroy]
 
-  resources :members, :only => [:update]
-
-  match "beats" => "tracks#index", :via => "get"
-
   get "members/sign_in"
   get "members/sign_out"
   get "members/soundcloud_connect"
+  resources :members, :only => [:update, :show]
+
+  match "beats" => "tracks#index", :via => "get"
 
   get "home/index"
   match "about" => "home#about", :via => "get"
 
   get '/post/*post_id' => "home#blog_post_redirect", :format => false
+
+  get "/:id" => "members#show"
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

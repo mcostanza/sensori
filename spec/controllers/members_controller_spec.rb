@@ -135,4 +135,26 @@ describe MembersController do
       response.status.should == 422
     end
   end
+
+  describe "GET 'show'" do
+    before do
+      @tracks = [double(Track)]
+      @member = double(Member, :tracks => @tracks)
+      Member.stub(:find).and_return(@member)
+    end
+    it "should return http success" do
+      get 'show', :id => 1
+      response.should be_success
+    end
+    it "should find the member by id and assign it to @member" do
+      Member.should_receive(:find).with("1").and_return(@member)
+      get 'show', :id => 1
+      assigns[:member].should == @member
+    end
+    it "should load the members tracks and assign them to @tracks" do
+      @member.should_receive(:tracks).and_return(@tracks)
+      get 'show', :id => 1
+      assigns[:tracks].should == @tracks
+    end
+  end
 end

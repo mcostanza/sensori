@@ -190,7 +190,11 @@ describe Member do
         "username" => "DJ Costanza", 
         "uri" => "https://api.soundcloud.com/users/3897419", 
         "permalink_url" => "http://soundcloud.com/dj-costanza", 
-        "avatar_url" => "https://i1.sndcdn.com/avatars-000039096498-86ivun-large.jpg?0c5f27c"
+        "avatar_url" => "https://i1.sndcdn.com/avatars-000039096498-86ivun-large.jpg?0c5f27c",
+        "full_name" => "Mike Costanza",
+        "description" => "Beat Buddy",
+        "city" => "San Diego",
+        "country" => "United States"
       })
       @soundcloud_client = double(::Soundcloud, :get => @member_profile)
       ::Soundcloud.stub(:new).and_return(@soundcloud_client)
@@ -210,6 +214,10 @@ describe Member do
           :name => @member_profile.username,
           :slug => @member_profile.permalink,
           :image_url => "https://i1.sndcdn.com/avatars-000039096498-86ivun-t500x500.jpg?0c5f27c",
+          :full_name => @member_profile.full_name,
+          :bio => @member_profile.description,
+          :city => @member_profile.city,
+          :country => @member_profile.country,
           :soundcloud_access_token => @access_token
         }
         Member.should_receive(:find_or_initialize_by_soundcloud_id).with(expected_attributes).and_return(@member)
@@ -253,6 +261,49 @@ describe Member do
   describe "#profile_url" do
     it "should return the member's soundcloud profile url" do
       @member.profile_url.should == File.join("https://soundcloud.com", @member.slug)
+    end
+  end
+
+  describe "friendly id" do
+    it "should setup slug as a friendly id" do
+      @member.save
+      Member.find(@member.id).should == Member.find(@member.slug)
+    end
+  end
+
+  describe "#sync_soundcloud_profile" do
+    before(:each) do
+      @member_profile = ::Soundcloud::HashResponseWrapper.new({
+        "id" => 3897419, 
+        "permalink" => "dj-costanza", 
+        "username" => "DJ Costanza", 
+        "uri" => "https://api.soundcloud.com/users/3897419", 
+        "permalink_url" => "http://soundcloud.com/dj-costanza", 
+        "avatar_url" => "https://i1.sndcdn.com/avatars-000039096498-86ivun-large.jpg?0c5f27c",
+        "full_name" => "Mike Costanza",
+        "description" => "Beat Buddy",
+        "city" => "San Diego",
+        "country" => "United States"
+      })
+      @soundcloud_client = double(::Soundcloud, :get => @member_profile)
+      ::Sensori::Soundcloud.stub(:app_client).and_return(@soundcloud_client)
+    end
+    it "should load the soundcloud user's profile" do
+      @soundcloud_client.should_receive(:get).with("/users/#{@member.soundcloud_id}").and_return(@member_profile)
+      @member.sync_soundcloud_profile
+    end
+    it "should update the members profile data from soundcloud" do
+      expected_attributes = {
+        :name => @member_profile.username,
+        :slug => @member_profile.permalink,
+        :image_url => "https://i1.sndcdn.com/avatars-000039096498-86ivun-t500x500.jpg?0c5f27c",
+        :full_name => @member_profile.full_name,
+        :bio => @member_profile.description,
+        :city => @member_profile.city,
+        :country => @member_profile.country
+      }
+      @member.should_receive(:update_attributes).with(expected_attributes).and_return(true)
+      @member.sync_soundcloud_profile
     end
   end
 end

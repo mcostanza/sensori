@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131017173516) do
+ActiveRecord::Schema.define(:version => 20131101001513) do
 
   create_table "discussion_notifications", :force => true do |t|
     t.integer  "discussion_id", :null => false
@@ -52,8 +52,13 @@ ActiveRecord::Schema.define(:version => 20131017173516) do
     t.datetime "created_at",                                 :null => false
     t.datetime "updated_at",                                 :null => false
     t.string   "soundcloud_access_token"
+    t.string   "full_name"
+    t.string   "city"
+    t.string   "country"
+    t.text     "bio"
   end
 
+  add_index "members", ["slug"], :name => "index_members_on_slug"
   add_index "members", ["soundcloud_id"], :name => "index_members_on_soundcloud_id"
 
   create_table "responses", :force => true do |t|

@@ -6,6 +6,14 @@ describe MembersController do
     it "routes to #update" do
       put("/members/1").should route_to("members#update", :id => "1")
     end
+
+    it "routes to #show" do
+      get("/members/1").should route_to("members#show", :id => "1")
+    end
+
+    it "routes to #show (flat route)" do
+      get("/five05").should route_to("members#show", :id => "five05")
+    end
     
     it "routes to sign_in" do
       get("/members/sign_in").should route_to("members#sign_in")

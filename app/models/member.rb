@@ -1,5 +1,7 @@
 class Member < ActiveRecord::Base
-  attr_accessible :admin, :email, :image_url, :name, :slug, :soundcloud_id, :soundcloud_access_token
+  extend FriendlyId
+
+  attr_accessible :admin, :email, :image_url, :name, :slug, :soundcloud_id, :soundcloud_access_token, :full_name, :city, :country, :bio
 
   has_many :tracks, :dependent => :destroy
   has_many :tutorials, :dependent => :destroy
@@ -14,6 +16,8 @@ class Member < ActiveRecord::Base
   after_commit :sync_soundcloud_tracks_in_background, :on => :create
 
   attr_accessor :soundcloud_tracks
+
+  friendly_id :slug
 
   def soundcloud_tracks(reload = false)
     if reload
@@ -35,6 +39,20 @@ class Member < ActiveRecord::Base
         :posted_at => Time.parse(soundcloud_track.created_at)
       })
     end
+  end
+
+  def sync_soundcloud_profile
+    soundcloud_profile = Sensori::Soundcloud.app_client.get("/users/#{self.soundcloud_id}")
+    image_url = soundcloud_profile.avatar_url.gsub(/-\w+\.jpg/, "-t500x500.jpg")
+    self.update_attributes({
+      :name => soundcloud_profile.username,
+      :slug => soundcloud_profile.permalink,
+      :image_url => image_url,
+      :full_name => soundcloud_profile.full_name,
+      :bio => soundcloud_profile.description,
+      :city => soundcloud_profile.city,
+      :country => soundcloud_profile.country
+    })
   end
 
   def sync_soundcloud_tracks_in_background
@@ -67,6 +85,10 @@ class Member < ActiveRecord::Base
       :name => soundcloud_profile.username,
       :slug => soundcloud_profile.permalink,
       :image_url => image_url,
+      :full_name => soundcloud_profile.full_name,
+      :bio => soundcloud_profile.description,
+      :city => soundcloud_profile.city,
+      :country => soundcloud_profile.country,
       :soundcloud_access_token => access_token
     })
     member.save

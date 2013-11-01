@@ -30,6 +30,12 @@ class MembersController < ApplicationController
     redirect_to root_url
   end
 
+  # GET /five05 OR /members/five05
+  def show
+    @member = Member.find(params[:id])
+    @tracks = @member.tracks
+  end
+
   # PUT /members/id
   def update
     @member.update_attributes(params[:member])
