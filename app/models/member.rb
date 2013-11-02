@@ -19,6 +19,12 @@ class Member < ActiveRecord::Base
 
   friendly_id :slug
 
+  auto_html_for :bio do
+    html_escape
+    link :target => "_blank", :rel => "nofollow"
+    simple_format
+  end
+
   def soundcloud_tracks(reload = false)
     if reload
       @soundcloud_tracks = Sensori::Soundcloud.app_client.get("/users/#{self.soundcloud_id}/tracks")

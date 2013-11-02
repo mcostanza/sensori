@@ -306,4 +306,9 @@ describe Member do
       @member.sync_soundcloud_profile
     end
   end
+
+  it "should store an html version of the bio text when set" do
+    @member = Member.new(:bio => 'test')
+    @member.bio_html.should_not be_blank
+  end
 end

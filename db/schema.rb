@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(:version => 20131101001513) do
     t.string   "city"
     t.string   "country"
     t.text     "bio"
+    t.text     "bio_html"
   end
 
   add_index "members", ["slug"], :name => "index_members_on_slug"
