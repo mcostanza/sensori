@@ -1,4 +1,4 @@
-<% if @tutorial.editable?(@member) %>
+<% if @tutorial.editable?(@current_member) %>
 <div class="row">
 <%= render :partial => 'shared/action_buttons', :locals => { :object => @tutorial } %>
 </div>
@@ -9,7 +9,7 @@
   </div>
   <div class="span4 tutorial-sidebar">
     <h2><%= title @tutorial.title %></h2>
-    <h4>by <%= @tutorial.member.name %></h4>
+    <h4>by <%= link_to @tutorial.member.name, member_profile_path(@tutorial.member), :class => 'profile-link' %></h4>
     <p><%= simple_format(@tutorial.description) %></p>
     <% if @tutorial.attachment_url.present? %>
       <%= link_to raw("<i class=\"icon-white icon-download-alt\"></i> Download Samples"), @tutorial.attachment_url, :class => "btn btn-primary attachment-button" %>

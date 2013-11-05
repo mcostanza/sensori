@@ -121,13 +121,24 @@ describe MembersController do
         :format => 'json'
       }
       @member = Member.new
-      controller.instance_variable_set(:@member, @member)
+      controller.instance_variable_set(:@current_member, @member)
+      Member.stub(:find).and_return(@member)
       @member.stub(:update_attributes).and_return(true)
     end
     it "should update attributes" do
       @member.should_receive(:update_attributes).with(@params[:member]).and_return(true)
       put 'update', @params
       response.should be_success
+    end
+    it "should not update the member if it differs from the logged in member" do
+      controller.instance_variable_set(:@current_member, double(Member))
+      @member.should_not_receive(:update_attributes)
+      put 'update', @params
+    end
+    it "should not update the member if there is no logged in member" do
+      controller.instance_variable_set(:@current_member, nil)
+      @member.should_not_receive(:update_attributes)
+      put 'update', @params
     end
     it "should return 400 when there are errors" do
       @member.stub(:errors).and_return({ :error => true })

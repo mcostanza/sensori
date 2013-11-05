@@ -1,6 +1,6 @@
 <div class="media response">
-  <%= link_to @member.profile_url, :title => @member.name, :class => 'pull-left', :target => :_blank do %>
-    <%= image_tag @member.image(:small), :alt => @member.name %>
+  <%= link_to member_profile_path(@current_member), :title => @current_member.name, :class => 'pull-left' do %>
+    <%= image_tag @current_member.image(:small), :alt => @current_member.name %>
   <% end %>
   <div class="media-body control-group">
     <%= text_area :response, :body, :placeholder => "Add a comment...", :rows => 2 %>

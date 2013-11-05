@@ -6,10 +6,10 @@
           <%= image_tag @member.image(:large), :alt => @member.name %>
         </div>
         <div class="offset2">
-          <%= link_to @member.profile_url, :target => "_blank", :class => "pull-right" do %>
+          <%= link_to @member.soundcloud_profile_url, :target => "_blank", :class => "pull-right" do %>
             <%= image_tag "soundcloud-logo.png", :alt => "Soundcloud profile" %>
           <% end %>
-          <h2><%= @member.name %></h2> <%= member_profile_full_name(@member) %>
+          <h2><%= title @member.name %></h2> <%= member_profile_full_name(@member) %>
           <%= member_profile_location(@member) %>
           <%= @member.bio_html %>
         </div>
@@ -19,7 +19,6 @@
 </div>
 <div class="row">
   <div class="span12">
-    <h2>Beats</h2>
     <ul class="thumbnails beats">
       <% @tracks.each do |track| %>
         <%= render :partial => 'shared/track', :object => track %>

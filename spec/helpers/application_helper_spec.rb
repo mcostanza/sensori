@@ -31,17 +31,17 @@ describe ApplicationHelper do
 
   describe "#admin?" do
     before do
-      @member = double(Member, :admin? => true)
+      @current_member = double(Member, :admin? => true)
     end
     it "should return true when @member is set and @member.admin is true" do
       helper.admin?.should be_true
     end
     it "should return false when @member is set and @member.admin if false" do
-      @member.stub(:admin?).and_return(false)
+      @current_member.stub(:admin?).and_return(false)
       helper.admin?.should be_false
     end
     it "should return false when @member is not set" do
-      @member = nil
+      @current_member = nil
       helper.admin?.should be_false
     end
   end
@@ -55,5 +55,25 @@ describe ApplicationHelper do
       helper.active_if(nil).should == nil
     end
   end
-  
+
+  describe "#member_profile_page?" do
+    before do
+      helper.stub(:member_profile_path).and_return('/user')
+      helper.stub(:current_page?).and_return(true)
+      @member = double(Member)
+    end
+    it "should return true if there is a @member set and the current page is that member's profile" do
+      helper.should_receive(:member_profile_path).with(@member).and_return('/user')
+      helper.should_receive(:current_page?).with('/user').and_return(true)
+      helper.member_profile_page?.should be_true
+    end
+    it "should return false if there is no @member set" do
+      @member = nil
+      helper.member_profile_page?.should be_false
+    end
+    it "should return false if there is a @member set but the current page is not their profile" do
+      helper.should_receive(:current_page?).and_return(false)
+      helper.member_profile_page?.should be_false
+    end
+  end
 end

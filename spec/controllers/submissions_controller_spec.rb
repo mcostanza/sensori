@@ -97,7 +97,7 @@ describe SubmissionsController do
         login_user
       end
       it "should initialize a submission from the session and member and params[:submission]" do
-        Submission.should_receive(:new).with(@submission_params.merge(:session_id => @session.id, :member_id => @member.id).stringify_keys).and_return(@submission)
+        Submission.should_receive(:new).with(@submission_params.merge(:session_id => @session.id, :member_id => @current_member.id).stringify_keys).and_return(@submission)
         post 'create', @params
       end
       it "should attempt to save the submission" do

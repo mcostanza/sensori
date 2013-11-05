@@ -17,8 +17,8 @@
         <% if signed_in? %>
           <div class="member-header dropdown pull-right">
             <a href="#" id="member-header-link" data-toggle="dropdown">
-              <%= image_tag(@member.image(:small)) %>
-              <span><%= @member.name %></span>
+              <%= image_tag(@current_member.image(:small)) %>
+              <span><%= @current_member.name %></span>
             </a>
             <ul class="dropdown-menu" role="menu" aria-labelledby="member-header-link">
               <li><%= link_to "Log Out", members_sign_out_path %></li>

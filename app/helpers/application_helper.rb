@@ -15,11 +15,15 @@ module ApplicationHelper
   end
 
   def admin?
-    @member && @member.admin?
+    @current_member && @current_member.admin?
   end
 
   def active_if(condition)
     'active' if condition
+  end
+
+  def member_profile_page?
+    @member && current_page?(member_profile_path(@member))
   end
   
 end

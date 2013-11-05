@@ -15,18 +15,18 @@ class TutorialsController < ApplicationController
   def show
     @tutorial = Tutorial.find(params[:id])
     if !@tutorial.published?
-      redirect_to(@member && @member.admin? ? edit_tutorial_path(@tutorial) : tutorials_path)
+      redirect_to(@tutorial.editable?(@current_member) ? edit_tutorial_path(@tutorial) : tutorials_path)
     end
   end
 
   # GET /tutorials/new
   def new
-    @tutorial = Tutorial.new(member: @member)
+    @tutorial = Tutorial.new(member: @current_member)
   end
 
   # POST /tutorials
   def create
-    @tutorial = Tutorial.new(params[:tutorial].merge(member: @member))
+    @tutorial = Tutorial.new(params[:tutorial].merge(member: @current_member))
     @tutorial.save
     respond_with @tutorial
   end
@@ -52,6 +52,6 @@ class TutorialsController < ApplicationController
   end
 
   def ensure_tutorial_is_editable
-    redirect_to root_path unless @tutorial.editable?(@member)
+    redirect_to root_path unless @tutorial.editable?(@current_member)
   end
 end

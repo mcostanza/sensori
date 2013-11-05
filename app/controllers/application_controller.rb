@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   before_filter :load_member_if_signed_in
 
   def load_member_if_signed_in
-    @member = Member.find_by_soundcloud_id(session[:soundcloud_id]) if signed_in?
+    @current_member = Member.find_by_soundcloud_id(session[:soundcloud_id]) if signed_in?
   end
 
   def signed_in?
@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
   end
 
   def ensure_admin
-    redirect_to root_path unless @member && @member.admin?
+    redirect_to root_path unless @current_member && @current_member.admin?
   end
 
   def paginated_respond_with(resource)

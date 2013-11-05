@@ -258,9 +258,9 @@ describe Member do
     end
   end
 
-  describe "#profile_url" do
+  describe "#soundcloud_profile_url" do
     it "should return the member's soundcloud profile url" do
-      @member.profile_url.should == File.join("https://soundcloud.com", @member.slug)
+      @member.soundcloud_profile_url.should == File.join("https://soundcloud.com", @member.slug)
     end
   end
 

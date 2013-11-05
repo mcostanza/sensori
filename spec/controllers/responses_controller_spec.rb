@@ -5,7 +5,7 @@ describe ResponsesController do
     before do
       controller.stub(:ensure_signed_in)
       @member = double(Member, :id => 41)
-      controller.instance_variable_set(:@member, @member)
+      controller.instance_variable_set(:@current_member, @member)
       @params = { :response => { :discussion_id => '1', :body => "body" }, :format => :json }
       @discussion_response = Response.new
       @discussion_response.stub(:id).and_return(10)

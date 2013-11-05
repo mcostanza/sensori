@@ -20,12 +20,12 @@ class DiscussionsController < ApplicationController
 
   # GET /discussions/new
   def new
-    @discussion = Discussion.new
+    @discussion = Discussion.new(member: @current_member)
   end
 
   # POST /discussions
   def create
-    @discussion = Discussion.new(params[:discussion].merge(:member => @member))
+    @discussion = Discussion.new(params[:discussion].merge(:member => @current_member))
     @discussion.save
     respond_with @discussion
   end
@@ -53,7 +53,7 @@ class DiscussionsController < ApplicationController
 
   def ensure_editable
     @discussion = Discussion.find(params[:id])
-    if !@discussion.editable?(@member)
+    if !@discussion.editable?(@current_member)
       redirect_to @discussion, :alert => 'Discussion is no longer editable.'
     end
   end

@@ -1,10 +1,10 @@
 <div class="media response">
-  <a href="<%= member.profileURL() %>" class="pull-left" target="_blank" title="<%= member.get("name") %>">
+  <a href="<%= member.profilePath() %>" class="pull-left" target="_blank" title="<%= member.get("name") %>">
     <img alt="<%= member.get("name") %>" src="<%= member.image("small") %>">
   </a>
   <div class="media-body">
     <div class="media-timestamp">a few seconds ago</div>
-    <a href="<%= member.profileURL() %>" target="_blank" title="<%= member.get("name") %>"><%= member.get("name") %></a>
+    <a href="<%= member.profilePath() %>" target="_blank" title="<%= member.get("name") %>"><%= member.get("name") %></a>
     <%= response.get("body_html") %>
   </div>
 </div>

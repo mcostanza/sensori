@@ -33,7 +33,7 @@
           el: $('body')
         });
         <% if signed_in? -%>
-        Sensori.Member = new Sensori.Models.Member(<%= raw @member.to_json %>);
+        Sensori.Member = new Sensori.Models.Member(<%= raw @current_member.to_json %>);
         <% end -%>
         <% if flash[:signed_up] -%>
         Sensori.WelcomeMessageView = new Sensori.Views.WelcomeMessage({ el: $('body') });

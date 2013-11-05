@@ -25,19 +25,19 @@ describe ApplicationController do
   end
 
   describe "#load_member_if_signed_in" do
-    it "should assign @member to a Member loaded from session[:soundcloud_id] if signed in" do
+    it "should assign @current_member to a Member loaded from session[:soundcloud_id] if signed in" do
       controller.stub(:signed_in?).and_return(true)
       session[:soundcloud_id] = 123
       member = double(Member)
       Member.should_receive(:find_by_soundcloud_id).with(123).and_return(member)
       controller.load_member_if_signed_in
-      controller.instance_variable_get(:@member).should == member
+      controller.instance_variable_get(:@current_member).should == member
     end
-    it "should not assign @member or load a Member if signed_in? returns false" do
+    it "should not assign @current_member or load a Member if signed_in? returns false" do
       controller.stub(:signed_in?).and_return(false)
       Member.should_not_receive(:find_by_soundcloud_id)
       controller.load_member_if_signed_in
-      controller.instance_variable_get(:@member).should be_nil
+      controller.instance_variable_get(:@current_member).should be_nil
     end
   end
 
@@ -68,17 +68,17 @@ describe ApplicationController do
   end
 
   describe "#ensure_admin" do
-    it "should redirect to the root path if @member is nil" do
+    it "should redirect to the root path if @current_member is nil" do
       controller.should_receive(:redirect_to).with(root_path)
       controller.ensure_admin
     end
-    it "should redirect to the root path if @member is set but not an admin" do
-      controller.instance_variable_set(:@member, double(Member, :admin? => false))
+    it "should redirect to the root path if @current_member is set but not an admin" do
+      controller.instance_variable_set(:@current_member, double(Member, :admin? => false))
       controller.should_receive(:redirect_to).with(root_path)
       controller.ensure_admin
     end
-    it "should not redirect if @member is set to an admin" do
-      controller.instance_variable_set(:@member, double(Member, :admin? => true))
+    it "should not redirect if @current_member is set to an admin" do
+      controller.instance_variable_set(:@current_member, double(Member, :admin? => true))
       controller.should_not_receive(:redirect_to)
       controller.ensure_admin
     end

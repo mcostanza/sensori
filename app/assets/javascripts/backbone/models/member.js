@@ -12,7 +12,7 @@ Sensori.Models.Member = Backbone.Model.extend({
     }
   },
 
-  profileURL: function() {
-    return "https://soundcloud.com/" + this.get("slug");
+  profilePath: function() {
+    return "/" + this.get("slug");
   }
 });

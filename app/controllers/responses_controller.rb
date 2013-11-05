@@ -5,7 +5,7 @@ class ResponsesController < ApplicationController
 
   # POST /responses
   def create
-    @response = Response.new(params[:response].merge(:member => @member))
+    @response = Response.new(params[:response].merge(:member => @current_member))
     @response.save
     respond_with @response
   end

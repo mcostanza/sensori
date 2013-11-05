@@ -1,14 +1,13 @@
 class SubmissionsController < ApplicationController
 	 respond_to :html, :json
 
-	 before_filter :load_member_if_signed_in
 	 before_filter :find_session
 	 before_filter :find_submission, :except => [:create]
 	 before_filter :format_submission_params, :except => [:destroy]
 
 	# POST /sessions/:session_id/submissions
 	def create
-		@submission = Submission.new(params[:submission].merge(session_id: @session.id, member_id: @member.id))
+		@submission = Submission.new(params[:submission].merge(session_id: @session.id, member_id: @current_member.id))
 		@submission.save
 		respond_with @session, @submission
   end

@@ -38,7 +38,12 @@ class MembersController < ApplicationController
 
   # PUT /members/id
   def update
-    @member.update_attributes(params[:member])
+    @member = Member.find(params[:id])
+    # only allow logged in members to update their own account
+    if @member == @current_member
+      @member.update_attributes(params[:member])
+    end
+
     respond_with @member
   end
 

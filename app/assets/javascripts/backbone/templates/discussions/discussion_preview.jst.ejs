@@ -4,7 +4,7 @@
   </a>
   <div class="media-body">
     <div class="media-timestamp">
-      Posted by <a href="<%= discussion.member.profileURL() %>" title="<%= discussion.member.get("name") %>" target="_blank"><%= discussion.member.get("name") %></a> <abbr class="timeago" title="<%= discussion.get('created_at') %>"></abbr>
+      Posted by <a href="<%= discussion.member.profilePath() %>" title="<%= discussion.member.get("name") %>" target="_blank"><%= discussion.member.get("name") %></a> <abbr class="timeago" title="<%= discussion.get('created_at') %>"></abbr>
     </div>
     <a href="<%= discussion.url() %>" class="link-right">Join Discussion</a>
     <h5 class="media-heading"><a href="<%= discussion.url() %>"><%= discussion.get('subject') %></a></h5>

@@ -5,9 +5,13 @@
       <a class="overlay" href="javascript:;"></a>
     </div>
     <p>
-      <%= link_to track.permalink_url, :target => :_blank do %>
-        <strong><%= track.member.name %></strong> - <%= track.title %>
-      <% end %>
+      <% if member_profile_page? %>
+        <%= link_to track.title, track.permalink_url, :target => :_blank %>
+      <% else %>
+        <%= link_to track.member.name, member_profile_path(track.member), :class => 'profile-link' %>
+         - 
+        <%= link_to track.title, track.permalink_url, :target => :_blank %>
+      <% end -%>
     </p>
   </div>
 </li>

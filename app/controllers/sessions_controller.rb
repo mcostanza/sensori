@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
   def show
     @session = Session.find(params[:id])
     if signed_in?
-      @submission = @member.submissions.find_or_initialize_by_session_id(@session.id)
+      @submission = @current_member.submissions.find_or_initialize_by_session_id(@session.id)
     end
   end
 
@@ -27,7 +27,7 @@ class SessionsController < ApplicationController
 
   # POST /sessions
   def create
-    @session = Session.new(params[:session].merge(:member_id => @member.id))
+    @session = Session.new(params[:session].merge(:member_id => @current_member.id))
 
     if @session.save
       redirect_to @session, :notice => 'Session was successfully created.'

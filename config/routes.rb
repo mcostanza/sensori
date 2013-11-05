@@ -25,7 +25,7 @@ Sensori::Application.routes.draw do
 
   get '/post/*post_id' => "home#blog_post_redirect", :format => false
 
-  get "/:id" => "members#show"
+  get "/:id" => "members#show", :as => :member_profile
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

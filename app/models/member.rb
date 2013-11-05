@@ -76,7 +76,7 @@ class Member < ActiveRecord::Base
     end
   end
 
-  def profile_url
+  def soundcloud_profile_url
     "https://soundcloud.com/#{self.slug}"
   end
 

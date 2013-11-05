@@ -36,10 +36,10 @@ describe("Sensori.Models.Member", function() {
     });
   });
 
-  describe("profileURL()", function() {
-    it("should return https://soundcloud.com/:slug", function() {
+  describe("profilePath()", function() {
+    it("should return /:slug", function() {
       member = new Sensori.Models.Member({ slug: 'five05' });
-      expect(member.profileURL(), "https://soundcloud.com/five05");
+      expect(member.profilePath(), "/five05");
     });
   });
 });

@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe DiscussionsController do
+
+  include LoginHelper
+
   describe "GET 'index'" do
     before do
       @discussion = double(Discussion)
@@ -84,8 +87,9 @@ describe DiscussionsController do
     end
 
     it "should initialize a new discussion and assign it to @discussion" do
+      login_user
       discussion = Discussion.new
-      Discussion.should_receive(:new).and_return(discussion)
+      Discussion.should_receive(:new).with(member: @current_member).and_return(discussion)
       get 'new'
       assigns[:discussion].should == discussion
     end
@@ -95,7 +99,7 @@ describe DiscussionsController do
     before do
       controller.stub(:ensure_signed_in)
       @member = double(Member, :id => 41)
-      controller.instance_variable_set(:@member, @member)
+      controller.instance_variable_set(:@current_member, @member)
       @params = { :discussion => { :subject => "hello", :body => "body" } }
       @discussion = Discussion.new
       @discussion.stub(:id).and_return(10)
@@ -140,6 +144,8 @@ describe DiscussionsController do
       @discussion.stub(:editable?).and_return(true)
       Discussion.stub(:find).and_return(@discussion)
       @params = { :id => '10' }
+      @member = double(Member)
+      controller.instance_variable_set(:@current_member, @member)
     end
 
     describe "before filters" do
@@ -160,12 +166,12 @@ describe DiscussionsController do
       flash[:notice].should == 'Discussion was successfully deleted.'
     end
     it "should not destroy the discussion if it is not editable" do
-      @discussion.stub(:editable?).and_return(false)
+      @discussion.should_receive(:editable?).with(@member).and_return(false)
       @discussion.should_not_receive(:destroy)
       delete 'destroy', @params  
     end
     it "should redirect to the discussion with an alert message if it is not editable" do
-      @discussion.stub(:editable?).and_return(false)
+      @discussion.should_receive(:editable?).with(@member).and_return(false)
       delete 'destroy', @params  
       response.should redirect_to(@discussion)
       flash[:alert].should == 'Discussion is no longer editable.'
@@ -181,6 +187,8 @@ describe DiscussionsController do
       @discussion.stub(:editable?).and_return(true)
       Discussion.stub(:find).and_return(@discussion)
       @params = { :id => '10' }
+      @member = double(Member)
+      controller.instance_variable_set(:@current_member, @member)
     end
 
     describe "before filters" do
@@ -195,7 +203,7 @@ describe DiscussionsController do
       get 'edit', @params
     end
     it "should redirect to the discussion with an alert message if it is not editable" do
-      @discussion.stub(:editable?).and_return(false)
+      @discussion.should_receive(:editable?).with(@member).and_return(false)
       get 'edit', @params
       response.should redirect_to(@discussion)
       flash[:alert].should == 'Discussion is no longer editable.'
@@ -211,6 +219,8 @@ describe DiscussionsController do
       @discussion.stub(:editable?).and_return(true)
       Discussion.stub(:find).and_return(@discussion)
       @params = { :id => '10', :discussion => { :title => 'test' } }
+      @member = double(Member)
+      controller.instance_variable_set(:@current_member, @member)
     end
 
     describe "before filters" do
@@ -235,12 +245,11 @@ describe DiscussionsController do
       response.should render_template("edit")
     end
     it "should not update and should redirect to the discussion with an alert message if the discussion is not editable" do
-      @discussion.stub(:editable?).and_return(false)
+      @discussion.should_receive(:editable?).with(@member).and_return(false)
       @discussion.should_not_receive(:update_attributes)
       put 'update', @params
       response.should redirect_to(@discussion)
       flash[:alert].should == 'Discussion is no longer editable.'
     end
-    
   end
 end

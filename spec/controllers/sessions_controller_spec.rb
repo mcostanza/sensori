@@ -36,7 +36,7 @@ describe SessionsController do
 
   describe "GET 'show'" do
     before do
-      @session = double(Session)
+      @session = double(Session, :id => 41)
       Session.stub(:find).and_return(@session)
     end
     it "should return http success" do
@@ -47,6 +47,14 @@ describe SessionsController do
       Session.should_receive(:find).with("1").and_return(@session)
       get 'show', :id => 1
       assigns[:session].should == @session
+    end
+    it "should load the submission if the member is logged in" do
+      login_user
+      Member.should_receive(:find_by_soundcloud_id).and_return(@current_member)
+      @current_member.stub(:submissions).and_return('submissions')
+      @current_member.submissions.should_receive(:find_or_initialize_by_session_id).with(@session.id).and_return('submission')
+      get 'show', :id => 41
+      assigns[:submission].should == 'submission'
     end
   end
 
@@ -88,7 +96,7 @@ describe SessionsController do
     end
 
     it "should initialize a new session with the passed params and the member id and assign it to @session" do
-      Session.should_receive(:new).with(@params[:session].merge(:member_id => @member.id).stringify_keys).and_return(@session)
+      Session.should_receive(:new).with(@params[:session].merge(:member_id => @current_member.id).stringify_keys).and_return(@session)
       post 'create', @params
       assigns[:session].should == @session
     end

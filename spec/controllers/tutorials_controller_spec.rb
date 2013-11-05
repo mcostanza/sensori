@@ -71,7 +71,13 @@ describe TutorialsController do
         get 'show', id: '123'
         response.should redirect_to("http://test.host/tutorials/#{@tutorial.slug}/edit")
       end
-      it "should redirect to the tutorials path if logged in as a non-admin" do
+      it "should redirect to the edit path if the member is the owner of the tutorial (non-admin)" do
+        login_user
+        @tutorial.member = @current_member
+        get 'show', id: '123'
+        response.should redirect_to("http://test.host/tutorials/#{@tutorial.slug}/edit")
+      end
+      it "should redirect to the tutorials path the member is not an owner of the tutorial (non-admin)" do
         login_user
         get 'show', id: '123'
         response.should redirect_to("http://test.host/tutorials")
@@ -98,7 +104,7 @@ describe TutorialsController do
       end
       it "should initialize a Tutorial and assign to @tutorial" do
         tutorial = double(Tutorial)
-        Tutorial.should_receive(:new).with(member: @member).and_return(tutorial)
+        Tutorial.should_receive(:new).with(member: @current_member).and_return(tutorial)
         get 'new'
         assigns[:tutorial].should == tutorial
       end
@@ -131,7 +137,7 @@ describe TutorialsController do
         login_user
       end
       it "should initialize a tutorial from params[:tutorial] and the current member" do
-        expected_args = @tutorial_params.merge(:member => @member).stringify_keys
+        expected_args = @tutorial_params.merge(:member => @current_member).stringify_keys
         Tutorial.should_receive(:new).with(expected_args).and_return(@tutorial)
         post 'create', :tutorial => @tutorial_params
       end
@@ -197,7 +203,7 @@ describe TutorialsController do
     describe "when logged in as a non-admin who created the tutorial" do
       before(:each) do
         login_user
-        @tutorial.member = @member
+        @tutorial.member = @current_member
       end 
       it "should return http success" do
         get 'edit', id: '123'
@@ -280,7 +286,7 @@ describe TutorialsController do
     describe "when logged in as a non-admin who created the tutorial" do
       before(:each) do 
         login_user
-        @tutorial.member = @member
+        @tutorial.member = @current_member
       end
       it "should find the tutorial from params" do
         Tutorial.should_receive(:find).with('123').and_return(@tutorial)
@@ -368,7 +374,7 @@ describe TutorialsController do
     describe "when logged in as a non-admin who created the tutorial" do
       before(:each) do
         login_user
-        @tutorial.member = @member
+        @tutorial.member = @current_member
       end
       it "should find the tutorial and prepare a preview" do
         Tutorial.should_receive(:find).with("123").and_return(@tutorial)
