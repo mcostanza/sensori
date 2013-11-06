@@ -8,7 +8,7 @@ class TutorialsController < ApplicationController
   # GET /tutorials
   def index
     page = [1, params[:page].to_i].max
-    conditions = signed_in? ? ["published = :true OR member_id = :member_id", { true: true, member_id: @member.id }] : { published: true }
+    conditions = signed_in? ? ["published = :true OR member_id = :member_id", { true: true, member_id: @current_member.id }] : { published: true }
     @tutorials = Tutorial.where(conditions).page(page).per(6)
   end
 
