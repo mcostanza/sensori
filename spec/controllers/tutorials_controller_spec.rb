@@ -40,6 +40,14 @@ describe TutorialsController do
       get 'index', :page => 0
       assigns[:tutorials].should == [@tutorial]
     end
+    it "should load 6 tutorials that are published or created by the current member if logged in" do
+      login_user
+      Tutorial.should_receive(:where).with(["published = :true OR member_id = :member_id", { true: true, member_id: @member.id }]).and_return(@scope)
+      @scope.should_receive(:page).with(1).and_return(@scope)
+      @scope.should_receive(:per).with(6).and_return([@tutorial])
+      get 'index'
+      assigns[:tutorials].should == [@tutorial]
+    end
   end
 
   describe "GET 'show'" do
