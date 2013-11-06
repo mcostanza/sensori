@@ -64,7 +64,7 @@ Sensori.Views.Tutorial = Backbone.View.extend({
 
   parseYoutubeId: function() {
     var videoUrl = this.$("#tutorial_youtube_video_url").val(),
-        matchData = videoUrl.match(/v=(\w+)/);
+        matchData = videoUrl.match(/v=([\w-]+)/);
     return matchData ? matchData[1] : null;
   },
 

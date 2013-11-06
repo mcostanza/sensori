@@ -184,6 +184,11 @@ describe("Sensori.Views.Tutorial", function() {
 
       expect(view.parseYoutubeId()).toEqual("abc123");
     });
+    it("should work with youtube video ids that include hyphens", function() {
+      view.$el.append("<input id='tutorial_youtube_video_url' value='http://www.youtube.com/watch?v=abc-123&more=shit' />");
+
+      expect(view.parseYoutubeId()).toEqual("abc-123");
+    });
   });
 
   describe(".updateYoutubeId", function() {
