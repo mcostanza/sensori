@@ -3,7 +3,8 @@ describe("Sensori.Views.Tutorial", function() {
       element,
       model,
       mockSubview,
-      youtubeId = "xot5GaY5VPw";
+      youtubeId = "xot5GaY5VPw",
+      mockForm;
 
   beforeEach(function() {
 
@@ -183,6 +184,11 @@ describe("Sensori.Views.Tutorial", function() {
       view.$el.append("<input id='tutorial_youtube_video_url' value='http://www.youtube.com/watch?v=abc123&more=shit' />");
 
       expect(view.parseYoutubeId()).toEqual("abc123");
+    });
+    it("should work with youtube video ids that include hyphens", function() {
+      view.$el.append("<input id='tutorial_youtube_video_url' value='http://www.youtube.com/watch?v=abc-123&more=shit' />");
+
+      expect(view.parseYoutubeId()).toEqual("abc-123");
     });
   });
 
@@ -418,7 +424,8 @@ describe("Sensori.Views.Tutorial", function() {
 
   describe(".preview()", function() {
     beforeEach(function() {
-      sinon.stub($.fn, "submit");
+      mockForm = { remove: sinon.spy() };
+      sinon.stub($.fn, "submit").returns(mockForm);
       sinon.stub(view, "getHTMLValue").returns("body html");
       model.set({
         title: "wah effect",
@@ -430,7 +437,7 @@ describe("Sensori.Views.Tutorial", function() {
       });
     });
     afterEach(function() {
-      $.fn.submit.restore()
+      $.fn.submit.restore();
     });
     it("should render and submit a preview form based on tutorial data", function() {
       view.preview();
@@ -449,6 +456,8 @@ describe("Sensori.Views.Tutorial", function() {
       expect(form.find("input#tutorial_attachment_url").val()).toEqual(model.get("attachment_url"));
       expect(form.find("input#tutorial_body_html").val()).toEqual("body html");
       expect(form.find("input#tutorial_include_table_of_contents").val()).toEqual("true");
+
+      expect(mockForm.remove.callCount).toEqual(1);
       
       expect(view.getHTMLValue.callCount).toEqual(1);
     });

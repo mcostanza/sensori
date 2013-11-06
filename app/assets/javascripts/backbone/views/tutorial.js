@@ -64,7 +64,7 @@ Sensori.Views.Tutorial = Backbone.View.extend({
 
   parseYoutubeId: function() {
     var videoUrl = this.$("#tutorial_youtube_video_url").val(),
-        matchData = videoUrl.match(/v=(\w+)/);
+        matchData = videoUrl.match(/v=([\w-]+)/);
     return matchData ? matchData[1] : null;
   },
 
@@ -156,7 +156,9 @@ Sensori.Views.Tutorial = Backbone.View.extend({
 
     form.find("#tutorial_body_html").val(this.getHTMLValue());
 
-    form.submit();
+    // NOTE: Necessary because Firefox won't submit the form unless it is attached to the body
+    this.$el.append(form);
+    form.submit().remove();
   },
 
   show: function() {
