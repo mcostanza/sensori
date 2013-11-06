@@ -1,7 +1,7 @@
 <div class="row">
   <div class="span12">
     <h2>Popular Tutorials</h2>
-    <ul class="thumbnails">
+    <ul class="thumbnails tutorials">
       <% tutorials.each do |tutorial| %>
         <%= render :partial => 'shared/tutorial', :object => tutorial %>
       <% end %>
