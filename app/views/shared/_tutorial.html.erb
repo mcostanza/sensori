@@ -1,6 +1,11 @@
 <li class="span4">
   <div class="thumbnail">
     <%= link_to image_tag(tutorial.youtube_image_url), tutorial %>
-    <p><%= tutorial.title %></p>
+    <p>
+      <%= link_to tutorial.title, tutorial %>
+      <% if !tutorial.published? %>
+        <span class="label label-important">Unpublished</span>
+      <% end %>
+    </p>
   </div>
 </li>
