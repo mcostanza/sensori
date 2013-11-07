@@ -150,7 +150,8 @@ describe MembersController do
   describe "GET 'show'" do
     before do
       @tracks = [double(Track)]
-      @member = double(Member, :tracks => @tracks)
+      @tracks_scope = double('tracks scope', :latest => @tracks)
+      @member = double(Member, :tracks => @tracks_scope)
       Member.stub(:find).and_return(@member)
     end
     it "should return http success" do
@@ -163,7 +164,8 @@ describe MembersController do
       assigns[:member].should == @member
     end
     it "should load the members tracks and assign them to @tracks" do
-      @member.should_receive(:tracks).and_return(@tracks)
+      @member.should_receive(:tracks).and_return(@tracks_scope)
+      @tracks_scope.should_receive(:latest).and_return(@tracks)
       get 'show', :id => 1
       assigns[:tracks].should == @tracks
     end

@@ -33,7 +33,7 @@ class MembersController < ApplicationController
   # GET /five05 OR /members/five05
   def show
     @member = Member.find(params[:id])
-    @tracks = @member.tracks
+    @tracks = @member.tracks.latest
   end
 
   # PUT /members/id
