@@ -34,6 +34,7 @@ class Member < ActiveRecord::Base
   end
 
   def sync_soundcloud_tracks
+    # Create/update new tracks
     self.soundcloud_tracks(:reload).each do |soundcloud_track|
       track = self.tracks.find_or_initialize_by_soundcloud_id(soundcloud_track.id)
       artwork_url = soundcloud_track.artwork_url.gsub(/-\w+\.jpg/, "-t500x500.jpg") if soundcloud_track.artwork_url.present?
@@ -45,6 +46,8 @@ class Member < ActiveRecord::Base
         :posted_at => Time.parse(soundcloud_track.created_at)
       })
     end
+    # Destroy deleted tracks
+    self.tracks.where(["soundcloud_id NOT IN (?)", self.soundcloud_tracks.map(&:id)]).destroy_all unless self.soundcloud_tracks.blank?
   end
 
   def sync_soundcloud_profile

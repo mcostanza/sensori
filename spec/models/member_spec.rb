@@ -138,7 +138,8 @@ describe Member do
       @member.stub(:soundcloud_tracks).and_return([@soundcloud_track])
 
       @track = double(Track, :update_attributes => true)
-      @tracks = double('tracks', :find_or_initialize_by_soundcloud_id => @track)
+      @deleted_tracks = double('deleted tracks', :destroy_all => true)
+      @tracks = double('tracks', :find_or_initialize_by_soundcloud_id => @track, :where => @deleted_tracks)
       @member.stub(:tracks).and_return(@tracks)
     end
     it "should load the member's soundcloud tracks" do
@@ -165,6 +166,17 @@ describe Member do
         @soundcloud_track.artwork_url = nil
         @track.should_receive(:update_attributes).with(hash_including(:artwork_url => @member.image_url))
         @member.sync_soundcloud_tracks 
+      end
+      it "should destroy tracks that were removed from soundcloud" do
+        @member.tracks.should_receive(:where).with(["soundcloud_id NOT IN (?)", @member.soundcloud_tracks.map(&:id)]).and_return(@deleted_tracks)
+        @deleted_tracks.should_receive(:destroy_all)
+        @member.sync_soundcloud_tracks
+      end
+      it "should not destroy tracks if there are no tracks returned from soundcloud (safeguard)" do
+        @member.stub(:soundcloud_tracks).and_return([])
+        @member.tracks.should_not_receive(:where)
+        @deleted_tracks.should_not_receive(:destroy_all)
+        @member.sync_soundcloud_tracks
       end
     end
   end
