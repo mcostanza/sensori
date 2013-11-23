@@ -40,9 +40,23 @@ describe Session do
     end
   end
   
-  it "should set a slug from the title when saving" do
-    @session.slug.should be_nil
-    @session.save
-    @session.slug.should == @session.title.parameterize
+  describe "callbacks" do
+    it "should set a slug from the title when saving" do
+      @session.slug.should be_nil
+      @session.save
+      @session.slug.should == @session.title.parameterize
+    end
+    it "should call deliver_session_notifications after create" do
+      @session.should_receive(:deliver_session_notifications)
+      @session.save
+    end
+  end
+
+  describe "#deliver_session_notifications" do
+    it "should create a worker to deliver the notifications" do
+      @session.id = 123
+      SessionNotificationWorker.should_receive(:perform_async).with(@session.id)
+      @session.deliver_session_notifications
+    end
   end
 end

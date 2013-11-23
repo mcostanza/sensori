@@ -66,5 +66,22 @@ describe NotificationMailer do
     end
   end
 
+  describe "#session_notification(params = {})" do
+    before(:each) do
+      @member_1 = double(Member, :email => "slim@mail.com", :name => "Slim James")
+      @session = double(Session, :title => "Bobby Bland", :description => "Make a beat please!!!", :member => double(Member, :name => "Buddy Boy"))
+    end
+    it "should send an email to the member passed with the correct subject and body" do
+      email = NotificationMailer.session_notification(:member => @member_1, :session => @session).deliver
+      ActionMailer::Base.deliveries.should_not be_empty
+
+      email.to.should == ["slim@mail.com"]
+      email.subject.should == "Buddy Boy created a session on Sensori"
+      email.encoded.should include("Hey Slim James, Buddy Boy just created a session:")
+      email.encoded.should include("Bobby Bland")
+      email.encoded.should include("Make a beat please!!!")
+    end
+  end
+
 end
 

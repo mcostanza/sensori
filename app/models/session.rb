@@ -17,4 +17,10 @@ class Session < ActiveRecord::Base
   friendly_id :title, :use => :slugged
 
   mount_uploader :image, ImageUploader
+
+  after_commit :deliver_session_notifications, :on => :create
+
+  def deliver_session_notifications
+    SessionNotificationWorker.perform_async(self.id)
+  end
 end

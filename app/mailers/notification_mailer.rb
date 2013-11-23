@@ -16,4 +16,10 @@ class NotificationMailer < ActionMailer::Base
     @tutorial = params[:tutorial]
     mail(:to => @member.email, :subject => "#{@tutorial.member.name} published a tutorial on Sensori")
   end
+
+  def session_notification(params = {})
+    @member = params[:member]
+    @session = params[:session]
+    mail(:to => @member.email, :subject => "#{@session.member.name} created a session on Sensori")
+  end
 end
