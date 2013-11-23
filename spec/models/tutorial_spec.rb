@@ -39,6 +39,17 @@ describe Tutorial do
       @tutorial.save
       @tutorial.slug.should == @tutorial.title.parameterize
     end
+
+    describe "after_update" do
+      before(:each) do
+        @tutorial.save
+      end
+      it "should call deliver_tutorial_notifications_if_published" do
+        @tutorial.should_receive(:deliver_tutorial_notifications_if_published)
+        @tutorial.published = true
+        @tutorial.save
+      end
+    end
   end
 
   describe "#editable?(member)" do
@@ -138,6 +149,22 @@ describe Tutorial do
     it "should not save the tutorial" do
       @tutorial.should_not_receive(:save)
       @tutorial.prepare_preview(@params)
+    end
+  end
+
+  describe "#deliver_tutorial_notifications_if_published" do
+    before(:each) do
+      @tutorial = FactoryGirl.create(:tutorial, :published => false)
+    end
+    it "should create a worker to send tutorial notifications if published changed false => true" do
+      @tutorial.published = true
+      TutorialNotificationWorker.should_receive(:perform_async).with(@tutorial.id)
+      @tutorial.deliver_tutorial_notifications_if_published
+    end
+    it "should not create a worker if published did not change" do
+      @tutorial.title = "new title"
+      TutorialNotificationWorker.should_not_receive(:perform_async)
+      @tutorial.deliver_tutorial_notifications_if_published
     end
   end
 end

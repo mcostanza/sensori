@@ -19,6 +19,8 @@ class Tutorial < ActiveRecord::Base
 
   before_save :format_table_of_contents
 
+  after_update :deliver_tutorial_notifications_if_published
+
   def editable?(member)
     return false if member.blank?
     member.admin? || member.id == self.member_id
@@ -49,5 +51,11 @@ class Tutorial < ActiveRecord::Base
       self.send("#{attribute}=", params[attribute])
     end
     format_table_of_contents if params[:include_table_of_contents].to_s == "true"
+  end
+
+  def deliver_tutorial_notifications_if_published
+    if self.published_changed? && self.published?
+      TutorialNotificationWorker.perform_async(self.id)
+    end
   end
 end

@@ -1,0 +1,23 @@
+<table cellpadding="0" cellspacing="0" style="width: 100%" width="100%">
+	<tr>
+		<td>
+			<%= link_to image_tag("discussion_notifications/header.png", :alt => "Sensori Collective", :title => "Sensori Collective", :style => "width: 600px; margin-bottom: 10px;"), tutorial_url(@tutorial) %>
+			
+			<div style="width: 400px; margin: 0px 100px 10px 100px; font-size: 11px;">
+				Hey <%= @member.name %>, <%= @tutorial.member.name %> just published a tutorial:
+			</div>
+
+			<div style="width: 400px; margin: 0px 100px 10px 100px; font-size: 11px;">
+				<b><%= link_to @tutorial.title, tutorial_url(@tutorial) %></b>
+				<br/>
+				<%= @tutorial.description %>
+			</div>
+			
+			<div style="width: 400px; margin: 0px 100px 10px 100px; font-size: 11px;">
+				<%= link_to "Check it out!", tutorial_url(@tutorial) %>
+			</div>
+			
+			<%= link_to image_tag("discussion_notifications/footer.png", :alt => "San Diego, CA", :title => "San Diego, CA", :style => "width: 600px;"), tutorial_url(@tutorial) %>
+		</td>
+	</tr>
+</table>

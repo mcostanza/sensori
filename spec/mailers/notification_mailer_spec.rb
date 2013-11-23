@@ -49,5 +49,22 @@ describe NotificationMailer do
     end
   end
 
+  describe "#tutorial_notification(params = {})" do
+    before(:each) do
+      @member_1 = double(Member, :email => "slim@mail.com", :name => "Slim James")
+      @tutorial = double(Tutorial, :title => "Creating a Sampled Bass", :description => "How 2 make 1", :member => double(Member, :name => "Buddy Boy"))
+    end
+    it "should send an email to the member passed with the correct subject and body" do
+      email = NotificationMailer.tutorial_notification(:member => @member_1, :tutorial => @tutorial).deliver
+      ActionMailer::Base.deliveries.should_not be_empty
+
+      email.to.should == ["slim@mail.com"]
+      email.subject.should == "Buddy Boy published a tutorial on Sensori"
+      email.encoded.should include("Hey Slim James, Buddy Boy just published a tutorial:")
+      email.encoded.should include("Creating a Sampled Bass")
+      email.encoded.should include("How 2 make 1")
+    end
+  end
+
 end
 
