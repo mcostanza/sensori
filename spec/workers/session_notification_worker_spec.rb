@@ -4,12 +4,12 @@ describe SessionNotificationWorker do
   
   describe "#perform(session_id)" do
     before(:each) do
-      @member_1 = double(Member)
+      @member_1 = double(Member, :email => "member@email.com")
       @session_id = 123
       @session = double(Session, :title => "Creating a Sampled Bass Patch", :description => "How 2 make 1", :member => @member_1)
       Session.stub(:find).and_return(@session)
 
-      @member_2 = double(Member, :name => "DJ Jones")
+      @member_2 = double(Member, :name => "DJ Jones", :email => "jones@jones.com")
       Member.stub(:find_each).and_yield(@member_1).and_yield(@member_2)
 
       @email = double('email', :deliver => true)
@@ -23,6 +23,12 @@ describe SessionNotificationWorker do
       Member.should_receive(:find_each).and_yield(@member_1).and_yield(@member_2)
       NotificationMailer.should_receive(:session_notification).once.with(:member => @member_2, :session => @session).and_return(@email)
       @email.should_receive(:deliver).once
+      SessionNotificationWorker.new.perform(@session_id)
+    end
+    it "should skip members who do not have an email" do
+      Member.should_receive(:find_each).and_yield(@member_1).and_yield(@member_2)
+      @member_2.stub(:email).and_return(nil)
+      NotificationMailer.should_not_receive(:session_notification)
       SessionNotificationWorker.new.perform(@session_id)
     end
     it "should have an async method" do

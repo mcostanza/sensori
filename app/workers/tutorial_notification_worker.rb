@@ -6,6 +6,7 @@ class TutorialNotificationWorker
   	tutorial = Tutorial.find(tutorial_id)
   	Member.find_each do |member|
   		next if member == tutorial.member
+  		next if member.email.blank?
   		NotificationMailer.tutorial_notification(:member => member, :tutorial => tutorial).deliver
   	end
   end
