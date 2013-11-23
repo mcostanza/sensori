@@ -10,7 +10,7 @@ describe TutorialNotificationWorker do
       Tutorial.stub(:find).and_return(@tutorial)
 
       @member_2 = double(Member, :name => "DJ Jones")
-      Member.stub(:all).and_return(double('all members', :find_each => nil))
+      Member.stub(:find_each).and_yield(@member_1).and_yield(@member_2)
 
       @email = double('email', :deliver => true)
       NotificationMailer.stub(:tutorial_notification).and_return(@email)
@@ -20,7 +20,7 @@ describe TutorialNotificationWorker do
       TutorialNotificationWorker.new.perform(@tutorial_id)
     end
     it "should deliver a tutorial notification to all members except the member who created the tutorial" do
-      Member.all.should_receive(:find_each).and_yield(@member_1).and_yield(@member_2)
+      Member.should_receive(:find_each).and_yield(@member_1).and_yield(@member_2)
       NotificationMailer.should_receive(:tutorial_notification).once.with(:member => @member_2, :tutorial => @tutorial).and_return(@email)
       @email.should_receive(:deliver).once
       TutorialNotificationWorker.new.perform(@tutorial_id)
