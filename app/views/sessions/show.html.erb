@@ -6,7 +6,11 @@
 <div class="row">
   <div class="span8">
     <%= image_tag @session.image_url %>
-    <%= render :partial => 'submission_form' %>
+    <% if @session.end_date.future? %>
+      <%= render :partial => 'submission_form' %>
+    <% else %>
+      <%= render :partial => 'playlist' %>
+    <% end %>
   </div>
   <div class="span4">
     <h2><%= title @session.title %></h2>

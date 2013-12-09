@@ -23,6 +23,8 @@
     <%= f.label :end_date %>
     <%= f.date_select :end_date, {} , { :class => "span2" } %>
     <%= f.hidden_field :attachment_url %>
+    <%= f.label :soundcloud_playlist_url, "Soundcloud Playlist URL" %>
+    <%= f.text_field :soundcloud_playlist_url, :placeholder => "Soundcloud Playlist URL", :class => 'span6' %>
   <% end %>
 
   <div class="attachment-container"></div>

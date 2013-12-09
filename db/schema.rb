@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131101001513) do
+ActiveRecord::Schema.define(:version => 20131209222218) do
 
   create_table "discussion_notifications", :force => true do |t|
     t.integer  "discussion_id", :null => false
@@ -75,16 +75,17 @@ ActiveRecord::Schema.define(:version => 20131101001513) do
   add_index "responses", ["member_id"], :name => "responses_member_id_fk"
 
   create_table "sessions", :force => true do |t|
-    t.string   "title",             :null => false
-    t.text     "description",       :null => false
-    t.string   "image",             :null => false
-    t.datetime "end_date",          :null => false
+    t.string   "title",                   :null => false
+    t.text     "description",             :null => false
+    t.string   "image",                   :null => false
+    t.datetime "end_date",                :null => false
     t.string   "facebook_event_id"
-    t.string   "slug",              :null => false
-    t.integer  "member_id",         :null => false
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.string   "slug",                    :null => false
+    t.integer  "member_id",               :null => false
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
     t.string   "attachment_url"
+    t.string   "soundcloud_playlist_url"
   end
 
   add_index "sessions", ["member_id"], :name => "sessions_member_id_fk"
