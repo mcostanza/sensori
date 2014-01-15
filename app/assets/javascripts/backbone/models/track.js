@@ -1,4 +1,4 @@
-Sensori.Models.Track = Backbone.Model.extend({
+Sensori.Models.Track = Sensori.Models.Audio.extend({
   urlRoot: "/tracks",
 
   initialize: function() {
@@ -12,29 +12,8 @@ Sensori.Models.Track = Backbone.Model.extend({
     this.prepareSoundObject();
   },
 
-  play: function() {
-    this.trigger('status:changing', this, 'playing');
-    this.soundObject.play({
-      onfinish: $.proxy(function() { this.trigger('finished', this); }, this)
-    });
-    this.updateStatus('playing');
-  },
-
-  pause: function() {
-    this.trigger('status:changing', this, 'paused');
-    this.soundObject.pause();
-    this.updateStatus('paused');
-  },
-
-  stop: function() {
-    this.trigger('status:changing', this, 'stopped');
-    this.soundObject.stop();
-    this.updateStatus('stopped');
-  },
-
-  updateStatus: function(status) {
-    this.status = status;
-    this.trigger('status:changed', this);
+  title: function() {
+    return this.member.get("name") + " - " + this.get("title");
   },
 
   prepareSoundObject: function() {
@@ -43,7 +22,5 @@ Sensori.Models.Track = Backbone.Model.extend({
         this.soundObject = soundObject;
       }, this));
     }
-  },
-
+  }
 });
-

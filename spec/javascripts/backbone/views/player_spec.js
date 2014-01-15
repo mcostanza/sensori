@@ -3,7 +3,9 @@ describe("Sensori.Views.Player", function() {
       el,
       collection,
       track,
-      pageTitle;
+      pageTitle,
+      audioView,
+      clickEvent;
 
   beforeEach(function() {
     collection = new Sensori.Collections.Tracks([{ id: 13 }, { id: 14 }]);
@@ -14,6 +16,12 @@ describe("Sensori.Views.Player", function() {
     view = new Sensori.Views.Player({
       collection: collection,
       el: el
+    });
+  });
+
+  describe("events", function() {
+    it("should fire the setupAndPlayAudio callback when an audio data type element is clicked", function() {
+      expect(view.events["click [data-type=audio]"]).toEqual("setupAndPlayAudio");
     });
   });
 
@@ -146,19 +154,20 @@ describe("Sensori.Views.Player", function() {
       view.onTrackStatusChanged(track);
       expect(view.currentTrack).toBe(track);
     });
-    it("should set the page title to the currentTrack if it is playing", function() {
+    it("should set the page title to the currentTrack's title if it is playing", function() {
       expect(view.currentTrack).toBeUndefined();
       track = new Sensori.Models.Track({ member: { name: 'Five05' }, title: 'Vaca' });
+      sinon.stub(track, 'title').returns('title');
       track.status = 'playing';
       view.onTrackStatusChanged(track);
-      expect(document.title).toBe("► Five05 - Vaca");
+      expect(document.title).toBe("► title");
     });
     it("should reset the page title if the status is not playing", function() {
       expect(view.currentTrack).toBeUndefined();
       track = new Sensori.Models.Track({ member: { name: 'Five05' }, title: 'Vaca' });
       track.status = 'playing';
       view.onTrackStatusChanged(track);
-      expect(document.title).toBe("► Five05 - Vaca");
+      expect(document.title).toBe("► " + track.title());
       track.status = 'stopped';
       view.onTrackStatusChanged(track);
       expect(document.title).toBe(pageTitle);
@@ -174,15 +183,67 @@ describe("Sensori.Views.Player", function() {
       sinon.stub(lastTrack, 'stop');
       sinon.stub(lastTrack, 'play');
     });
-    it("should call stop the track", function() {
-      view.onTrackFinished(lastTrack);
-      expect(lastTrack.stop.callCount).toBe(1);
-      expect(firstTrack.play.callCount).toBe(0);
-    });
     it("should play the next track", function() {
       view.onTrackFinished(firstTrack);
-      expect(firstTrack.stop.callCount).toBe(1);
       expect(lastTrack.play.callCount).toBe(1);
+    });
+    it("should not play the next track if the finished track is the last", function() {
+      view.onTrackFinished(lastTrack);
+      expect(firstTrack.play.callCount).toBe(0);
+    });
+  });
+  describe("setupAndPlayAudio(e)", function() {
+    beforeEach(function() {
+      sinon.stub(soundManager, 'createSound');
+      el = $("<a data-type='audio' href='http://stream.com/sound.wav'>Drums 88bpm</a>");
+      audioView = new Sensori.Views.Audio({ el: el });
+      sinon.stub(audioView.model, 'play');
+      el.removeData('audio-id');
+      sinon.stub(Sensori.Views, 'Audio').returns(audioView);
+      clickEvent = { target: el, preventDefault: sinon.stub() }
+    });
+    afterEach(function() {
+      soundManager.createSound.restore();
+      Sensori.Views.Audio.restore();
+    });
+    it("should return if the element already has an audio-id (has already been setup)", function() {
+      clickEvent.target.data('audio-id', '414');
+      view.setupAndPlayAudio(clickEvent);
+      expect(Sensori.Views.Audio.callCount).toBe(0);
+    });
+    it("should prevent the default click behavior", function() {
+      view.setupAndPlayAudio(clickEvent);
+      expect(clickEvent.preventDefault.callCount).toBe(1);
+    });
+    it("should setup an audio with with the target element", function() {
+      view.setupAndPlayAudio(clickEvent);
+      expect(Sensori.Views.Audio.callCount).toBe(1);
+      expect(Sensori.Views.Audio.calledWith({ el: clickEvent.target })).toBe(true);
+    });
+    it("should fire the onTrackStatusChanging event when the view's model triggers a status:changing event", function() {
+      sinon.stub(view, 'onTrackStatusChanging');
+      view.setupAndPlayAudio(clickEvent);
+      expect(view.onTrackStatusChanging.callCount).toBe(0);
+      audioView.model.trigger("status:changing", audioView.model, 'playing');
+      expect(view.onTrackStatusChanging.callCount).toBe(1);
+    });
+    it("should fire the onTrackStatusChanged event wwhen the view's model triggers a status:changed event", function() {
+      sinon.stub(view, 'onTrackStatusChanged');
+      view.setupAndPlayAudio(clickEvent);
+      expect(view.onTrackStatusChanged.callCount).toBe(0);
+      audioView.model.trigger("status:changed", audioView.model);
+      expect(view.onTrackStatusChanged.callCount).toBe(1);
+    });
+    it("should not listen for finished events", function() {
+      sinon.stub(view, 'onTrackFinished');
+      view.setupAndPlayAudio(clickEvent);
+      expect(view.onTrackFinished.callCount).toBe(0);
+      audioView.model.trigger("finished", audioView.model);
+      expect(view.onTrackFinished.callCount).toBe(0);
+    });
+    it("should play the audio", function() {
+      view.setupAndPlayAudio(clickEvent);
+      expect(audioView.model.play.callCount).toBe(1);
     });
   });
 });

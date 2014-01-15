@@ -97,3 +97,6 @@ gem "rails-backbone", '>= 0.9.10'
 
 # page title plugin
 gem "headliner"
+
+# SoundManager2 JS library
+gem "soundmanager-rails"

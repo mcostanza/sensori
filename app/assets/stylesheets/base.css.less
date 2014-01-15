@@ -278,3 +278,22 @@ h3 {
     margin-left: 5px;
   }
 }
+
+a[data-type=audio] {
+  min-width: 250px;
+  background: asset-url("audio-icons.png") 5px 7px #000 no-repeat;
+  padding: 5px 10px 5px 25px;
+  color: #fff;
+  text-decoration: none;
+  display: inline-block;
+  line-height: 19px;
+  .border-radius(4px);
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  &.playing {
+    background-position: 5px -13px;
+  }
+}

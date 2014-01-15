@@ -4,15 +4,15 @@ describe("Sensori.Models.Track", function() {
 
   beforeEach(function() {
     sinon.stub(SC, 'stream');
-    track = new Sensori.Models.Track({ stream_url: 'http://stream.com' });
+    track = new Sensori.Models.Track({ stream_url: 'http://stream.com', member: { name: 'Five05' }, title: 'Know What I Mean' });
   });
   afterEach(function() {
     SC.stream.restore();
   });
 
-  it("should extend Backbone.Model", function() {
+  it("should extend Sensori.Models.Audio", function() {
     track = new Sensori.Models.Track();
-    expect(track instanceof Backbone.Model).toBe(true);
+    expect(track instanceof Sensori.Models.Audio).toBe(true);
   });
 
   describe(".url()", function() {
@@ -66,93 +66,9 @@ describe("Sensori.Models.Track", function() {
     // This is not intended to be called directly and is tested in the initialize() test block
   });
 
-  describe(".play()", function() {
-    beforeEach(function() {
-      track.soundObject = { play: sinon.stub() };
-      sinon.stub(track, 'trigger');
-    });
-    it("should call play on the soundObject", function() {
-      track.play();
-      expect(track.soundObject.play.callCount).toBe(1);
-      track.soundObject.play.yieldTo("onfinish");
-      expect(track.trigger.calledWith('finished', track)).toBe(true);
-    });
-    it("should set the status to 'playing'", function() {
-      track.play();
-      expect(track.status).toBe('playing');
-    });
-    it("should fire a status:change and status:changed events", function() {
-      track.play();
-      expect(track.trigger.callCount).toBe(2);
-      expect(track.trigger.calledWith('status:changing', track, 'playing')).toBe(true);
-      expect(track.trigger.calledWith('status:changed', track)).toBe(true);
-      // ensure the ordering
-      expect(track.trigger.getCall(0).args[0]).toBe('status:changing');
-      expect(track.trigger.getCall(1).args[0]).toBe('status:changed');
-    });
-  });
-
-  describe(".pause()", function() {
-    beforeEach(function() {
-      track.soundObject = { pause: sinon.stub() };
-      sinon.stub(track, 'trigger');
-    });
-    it("should call pause on the soundObject", function() {
-      track.pause();
-      expect(track.soundObject.pause.callCount).toBe(1);
-    });
-    it("should set the status to 'paused'", function() {
-      track.pause();
-      expect(track.status).toBe('paused');
-    });
-    it("should fire a status:change and status:changed events", function() {
-      track.pause();
-      expect(track.trigger.callCount).toBe(2);
-      expect(track.trigger.calledWith('status:changing', track, 'paused')).toBe(true);
-      expect(track.trigger.calledWith('status:changed', track)).toBe(true);
-      // ensure the ordering
-      expect(track.trigger.getCall(0).args[0]).toBe('status:changing');
-      expect(track.trigger.getCall(1).args[0]).toBe('status:changed');
-    });
-  });
-
-  describe(".stop()", function() {
-    beforeEach(function() {
-      track.soundObject = { stop: sinon.stub() };
-      sinon.stub(track, 'trigger');
-    });
-    it("should call stop on the soundObject", function() {
-      track.stop();
-      expect(track.soundObject.stop.callCount).toBe(1);
-    });
-    it("should set the status to 'stopped'", function() {
-      track.stop();
-      expect(track.status).toBe('stopped');
-    });
-    it("should fire a status:change and status:changed events", function() {
-      track.stop();
-      expect(track.trigger.callCount).toBe(2);
-      expect(track.trigger.calledWith('status:changing', track, 'stopped')).toBe(true);
-      expect(track.trigger.calledWith('status:changed', track)).toBe(true);
-      // ensure the ordering
-      expect(track.trigger.getCall(0).args[0]).toBe('status:changing');
-      expect(track.trigger.getCall(1).args[0]).toBe('status:changed');
-    });
-  });
-
-  describe(".updateStatus(status)", function() {
-    beforeEach(function() {
-      sinon.stub(track, 'trigger');
-    });
-    it("should set the status to the passed status", function() {
-      expect(track.status).toBe('stopped');
-      track.updateStatus('playing');
-      expect(track.status).toBe('playing');
-    });
-    it("should fire a status:changed event", function() {
-      track.updateStatus('playing');
-      expect(track.trigger.callCount).toBe(1);
-      expect(track.trigger.calledWith('status:changed', track)).toBe(true);
+  describe(".title()", function() {
+    it("should return 'name - title' using the member's name and the track's title", function() {
+      expect(track.title()).toBe("Five05 - Know What I Mean");
     });
   });
 });
