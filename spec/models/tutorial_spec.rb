@@ -74,6 +74,10 @@ describe Tutorial do
     it "should return an image url based on self.youtube_id" do
       @tutorial.youtube_image_url.should == "http://img.youtube.com/vi/#{@tutorial.youtube_id}/0.jpg"
     end
+    it "should return a placeholder image if youtube_id is not set" do
+      @tutorial.youtube_id = nil
+      @tutorial.youtube_image_url.should == "https://s3.amazonaws.com/sensori/video-placeholder.jpg"
+    end
   end
 
   describe "#youtube_embed_url" do

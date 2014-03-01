@@ -16,9 +16,10 @@ describe("Sensori.Views.Tutorial", function() {
         "<div class='flex-video widescreen'><label class='flex-video-content'>placeholder image</label></div>",
         "<input type='checkbox' id='tutorial_include_table_of_contents' value='1' />",
         "<button data-trigger='add-more'>Add More</button>",
-        "<button data-trigger='save-tutorial'>Save</button>",
-        "<button data-trigger='publish-tutorial'>Publish</button>",
-        "<button data-trigger='preview-more'>Preview</button>",
+        "<div class='btn-group'><button data-trigger='save-tutorial'>Save</button></div>",
+        "<div class='btn-group' style='display:none;'><button data-trigger='preview-tutorial'>Preview</button></div>",
+        "<div class='btn-group' style='display:none;'><button data-trigger='view-tutorial'>View Tutorial</button></div>",
+        "<div class='btn-group' style='display:none;'><button data-trigger='publish-tutorial'>Publish</button></div>",
       "</div>"
     ].join(""))[0];
 
@@ -312,25 +313,23 @@ describe("Sensori.Views.Tutorial", function() {
   describe(".saveSuccess()", function() {
     beforeEach(function(){ 
       view.render();
-      sinon.stub($.fn, "fadeIn");
       sinon.stub($.fn, "notice");
     });
     afterEach(function() {
       $.fn.notice.restore()
-      $.fn.fadeIn.restore()
     });
-    it("should show the preview and publish tutorial buttons if the tutorial is not published yet", function() {
-      view.saveSuccess()
-      expect($.fn.fadeIn.callCount).toEqual(2);
-      expect($.fn.fadeIn.getCall(0).thisValue.selector).toEqual("[data-trigger='publish-tutorial']")
-      expect($.fn.fadeIn.getCall(1).thisValue.selector).toEqual("[data-trigger='preview-tutorial']")
+    it("should show the preview and publish tutorial (but not the view) buttons if the tutorial is not published yet", function() {
+      view.saveSuccess();
+      expect(view.$("[data-trigger='preview-tutorial']").closest(".btn-group").css('display')).not.toBe('none');
+      expect(view.$("[data-trigger='publish-tutorial']").closest(".btn-group").css('display')).not.toBe('none');
+      expect(view.$("[data-trigger='view-tutorial']").closest(".btn-group").css('display')).toBe('none');
     });
-    it("should show the preview and view tutorial buttons if the tutorial is already published", function() {
+    it("should show the preview and view tutorial (but not publish) buttons if the tutorial is already published", function() {
       view.model.set("published", true);
       view.saveSuccess()
-      expect($.fn.fadeIn.callCount).toEqual(2);
-      expect($.fn.fadeIn.getCall(0).thisValue.selector).toEqual("[data-trigger='view-tutorial']")
-      expect($.fn.fadeIn.getCall(1).thisValue.selector).toEqual("[data-trigger='preview-tutorial']")
+      expect(view.$("[data-trigger='preview-tutorial']").closest(".btn-group").css('display')).not.toBe('none');
+      expect(view.$("[data-trigger='publish-tutorial']").closest(".btn-group").css('display')).toBe('none');
+      expect(view.$("[data-trigger='view-tutorial']").closest(".btn-group").css('display')).not.toBe('none');
     });
     it("should render a success notice", function() {
       view.saveSuccess();
@@ -358,23 +357,15 @@ describe("Sensori.Views.Tutorial", function() {
   describe(".publishSuccess()", function() {
     beforeEach(function() {
       view.render();
-      sinon.stub($.fn, "fadeOut");
-      sinon.stub($.fn, "fadeIn");
       sinon.stub($.fn, "notice");
     });
     afterEach(function() {
-      $.fn.fadeIn.restore()
-      $.fn.fadeOut.restore()
       $.fn.notice.restore()
     });
     it("should hide the publish tutorial button and show the view tutorial button", function() {
       view.publishSuccess()
-      expect($.fn.fadeOut.callCount).toEqual(1);
-      expect($.fn.fadeOut.getCall(0).thisValue.selector).toEqual("[data-trigger='publish-tutorial']");
-
-      $.fn.fadeOut.yield();
-      expect($.fn.fadeIn.callCount).toEqual(1);
-      expect($.fn.fadeIn.getCall(0).thisValue.selector).toEqual("[data-trigger='view-tutorial']");
+      expect(view.$("[data-trigger='publish-tutorial']").closest(".btn-group").css('display')).toBe('none');
+      expect(view.$("[data-trigger='view-tutorial']").closest(".btn-group").css('display')).not.toBe('none');
     });
     it("should render a success notice", function() {
       view.saveSuccess();

@@ -1,7 +1,7 @@
 Sensori.Views.GalleryEditor = Backbone.View.extend({
 
   initialize: function(options) {
-    this.imageViews = [];
+    this.mediaViews = [];
     this.content = this.options.content || [];
   },
 
@@ -17,36 +17,23 @@ Sensori.Views.GalleryEditor = Backbone.View.extend({
 
   className: "gallery-editor",
 
-  resizeThumbnails: function() {
-    $(_.pluck(this.imageViews, 'el'))
-      .removeClass("span11 span5 span3 span2")
-      .addClass(this.getSpanClass());
-  },
-
-  getSpanClass: function() {
-    var rowSize = Math.min(this.imageViews.length, 4);
-    return {
-      1: "span11",
-      2: "span5",
-      3: "span3",
-      4: "span2"
-    }[rowSize];
-  },
-
   unveilImages: function() {
     this.$("img[data-src]").unveil();
   },
 
   updateGallery: function() {
-    this.resizeThumbnails();
     this.unveilImages();
   },
 
   isImage: function(file) {
-    return _.include(["image/png", "image/jpeg", "image/jpg", "image/gif"], file.type.toLowerCase());
+    return !!file.name.match(/(png|jpe?g|gif)$/i);
   },
 
-  setupImageUploaderForm: function() {
+  isAudio: function(file) { 
+    return !!file.name.match(/(mp3|wav)$/i);
+  },
+
+  setupUploaderForm: function() {
     this.$("form").fileupload({
       add:      _.bind(this.uploaderOnAdd, this),
       progress: _.bind(this.uploaderOnProgress, this),
@@ -56,7 +43,8 @@ Sensori.Views.GalleryEditor = Backbone.View.extend({
   },
 
   uploaderOnAdd: function(event, data) {
-    if (this.isImage(data.files[0])) {
+    var file = data.files[0];
+    if (this.isImage(file) || this.isAudio(file)) {
       this.$(".control-group").removeClass("error");
       this.$(".control-group").find(".help-inline").fadeOut();
 
@@ -76,17 +64,25 @@ Sensori.Views.GalleryEditor = Backbone.View.extend({
   },
 
   uploaderOnDone: function(e, data) {
-    var file       = data.files[0],
+    var model,
+        file       = data.files[0],
         domain     = this.$("form").attr('action'),
-        path       = this.$('input[name=key]').val().replace('${filename}', file.name),
-        imageModel = {
-          type: "image",
-          src: domain + path,
-          title: ""
-        };
+        path       = this.$('input[name=key]').val().replace('${filename}', file.name);
 
-    this.addImage(this.createImageEditorView(imageModel));
-
+    if(this.isImage(file)) {
+      model = {
+        type: "image",
+        src: domain + path,
+        title: ""
+      };
+    } else {
+      model = {
+        type: "audio",
+        src: domain + path,
+        title: file.name
+      }
+    }
+    this.addMedia(this.createEditorView(model));
 
     this.$(".progress").fadeOut({
       complete: _.bind(function() {
@@ -99,60 +95,59 @@ Sensori.Views.GalleryEditor = Backbone.View.extend({
     console.error('upload fail', e, data);
   },
 
-  addImage: function(imageView, options) {
+  addMedia: function(mediaView, options) {
     options = _.extend({ initialRender: false }, options);
 
-    this.imageViews.push(imageView);
-    this.$("ul").append(imageView.$el);
+    this.mediaViews.push(mediaView);
+    this.$(".media-items").append(mediaView.$el);
 
     if (!options.initialRender) { this.updateGallery(); }
   },
 
-  removeImage: function(imageView) {
-    this.imageViews = _.without(this.imageViews, imageView);
-    imageView.remove();
+  removeMedia: function(mediaView) {
+    this.mediaViews = _.without(this.mediaViews, mediaView);
+    mediaView.remove();
     this.updateGallery();
   },
 
-  renderImages: function() {
-    _.each(this.content, _.bind(function(imageModel) {
-      var imageView = this.createImageEditorView(imageModel);
-      this.addImage(imageView, { initialRender: true });
+  renderMedia: function() {
+    var mediaView;
+    _.each(this.content, _.bind(function(model) {
+      mediaView = this.createEditorView(model);
+      this.addMedia(mediaView, { initialRender: true });
     }, this));
     this.updateGallery();
   },
 
-  createImageEditorView: function(imageModel) {
-    return new Sensori.Views.ImageEditor({ 
-      model: imageModel,
+  createEditorView: function(model) {
+    return new Sensori.Views.MediaEditor({
+      model: model,
       galleryView: this
     }).render();
   },
 
   getHTMLValue: function() {
-    return JST["backbone/templates/tutorials/gallery_show"]({
-      spanClass: this.getSpanClass(),
-      thumbnails: _.invoke(this.imageViews, "getHTMLValue")
+    return JST["backbone/templates/tutorials/gallery"]({
+      mediaItems: _.invoke(this.mediaViews, "getHTMLValue")
     });
   },
 
   getJSONValue: function() {
     return {
       type: "gallery",
-      content: _.invoke(this.imageViews, "getJSONValue")
+      content: _.invoke(this.mediaViews, "getJSONValue")
     };
   },
 
   render: function() {
     this.$el.html(JST["backbone/templates/tutorials/gallery_editor"]({
-      imageUploaderForm: JST["backbone/templates/shared/s3_uploader_form"]()
+      mediaUploaderForm: JST["backbone/templates/shared/s3_uploader_form"]()
     }));
 
-    this.setupImageUploaderForm();
+    this.setupUploaderForm();
   
-    this.renderImages();
+    this.renderMedia();
 
     return this;
   }
-
 });

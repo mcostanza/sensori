@@ -1,13 +1,21 @@
+<div class="media-items"></div>
 <div class="control-group attachment-buttons">
   <button class="btn fileinput-button">
-    <i class="icon-plus"></i> Add Image
+    <i class="icon-picture"></i> Add Image
   </button>
-  <div class="hidden"><%= imageUploaderForm %></div>
-  <span class="help-inline" style="display:none;">Please attach gif, png, or jpg images</span>
+  <button class="btn fileinput-button">
+    <i class="icon-music"></i> Add Audio
+  </button>
+  <button class="btn" data-trigger="add-more">
+    <i class="icon-pencil"></i> New Section
+  </button>
+  <div class="hidden"><%= mediaUploaderForm %></div>
+  <span class="help-inline" style="display:none;">Please attach gif, png, or jpg for images and mp3 or wav for audio</span>
 </div>
 
 <div class="progress progress-striped active" style="display:none">
   <div class="bar progress-bar"></div>
 </div>
 
-<ul class="thumbnails"></ul>
+<div class="clearfix"></div>
+

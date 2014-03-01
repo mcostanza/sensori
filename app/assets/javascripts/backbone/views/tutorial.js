@@ -115,11 +115,11 @@ Sensori.Views.Tutorial = Backbone.View.extend({
 
   saveSuccess: function() {
     if (this.model.get("published")) {
-      this.$("[data-trigger='view-tutorial']").fadeIn();
+      this.$("[data-trigger='view-tutorial']").closest(".btn-group").fadeIn();
     } else {
-      this.$("[data-trigger='publish-tutorial']").fadeIn();
+      this.$("[data-trigger='publish-tutorial']").closest(".btn-group").fadeIn();
     }
-    this.$("[data-trigger='preview-tutorial']").fadeIn();
+    this.$("[data-trigger='preview-tutorial']").closest(".btn-group").fadeIn();
 
     this.$el.notice({ text: "Tutorial saved successfully!" });
   },
@@ -129,8 +129,8 @@ Sensori.Views.Tutorial = Backbone.View.extend({
   },
 
   publishSuccess: function() {
-    this.$("[data-trigger='publish-tutorial']").fadeOut("fast", _.bind(function() {
-      this.$("[data-trigger='view-tutorial']").fadeIn();
+    this.$("[data-trigger='publish-tutorial']").closest('.btn-group').fadeOut("fast", _.bind(function() {
+      this.$("[data-trigger='view-tutorial']").closest('.btn-group').fadeIn();
     }, this));
     this.$el.notice({ text: "Tutorial published!" });
   },

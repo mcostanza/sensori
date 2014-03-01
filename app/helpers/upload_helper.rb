@@ -45,6 +45,7 @@ module UploadHelper
         :policy => policy,
         :signature => signature,
         "AWSAccessKeyId" => @options[:aws_access_key_id],
+        "Content-Type" => ""
       }
     end
 
@@ -66,6 +67,7 @@ module UploadHelper
         conditions: [
           ["starts-with", "$utf8", ""],
           ["starts-with", "$key", ""],
+          ["starts-with", "$Content-Type", ""],
           ["content-length-range", 0, @options[:max_file_size]],
           {bucket: @options[:bucket]},
           {acl: @options[:acl]}

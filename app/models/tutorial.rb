@@ -27,7 +27,11 @@ class Tutorial < ActiveRecord::Base
   end
 
   def youtube_image_url
-    "http://img.youtube.com/vi/#{self.youtube_id}/0.jpg"
+    if self.youtube_id?
+      "http://img.youtube.com/vi/#{self.youtube_id}/0.jpg"
+    else
+      "https://s3.amazonaws.com/sensori/video-placeholder.jpg"
+    end
   end
 
   def youtube_embed_url
