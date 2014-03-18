@@ -20,6 +20,6 @@ class NotificationMailer < ActionMailer::Base
   def session_notification(params = {})
     @member = params[:member]
     @session = params[:session]
-    mail(:to => @member.email, :subject => "#{@session.member.name} created a session on Sensori")
+    mail(:to => @member.email, :subject => "New Session posted on Sensori!")
   end
 end

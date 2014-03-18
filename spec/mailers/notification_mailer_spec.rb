@@ -76,7 +76,7 @@ describe NotificationMailer do
       ActionMailer::Base.deliveries.should_not be_empty
 
       email.to.should == ["slim@mail.com"]
-      email.subject.should == "Buddy Boy created a session on Sensori"
+      email.subject.should == "New Session posted on Sensori!"
       email.encoded.should include("Hey Slim James,")
       email.encoded.should include("NEW SESSION POSTED")
       email.encoded.should include("Bobby Bland")
