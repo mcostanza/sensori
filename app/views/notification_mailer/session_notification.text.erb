@@ -1,8 +1,10 @@
-Hey <%= @member.name %>, <%= @session.member.name %> just created a session:
+Hey <%= @member.name %>,
+
+NEW SESSION POSTED!
 
 <%= @session.title %>
 
-<%= @session.description %>
+Submission Deadline: <%= @session.end_date.strftime("%B %-d") %>, 23:59 PST
 
 Check it out!
 

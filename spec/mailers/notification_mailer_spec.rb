@@ -69,7 +69,7 @@ describe NotificationMailer do
   describe "#session_notification(params = {})" do
     before(:each) do
       @member_1 = double(Member, :email => "slim@mail.com", :name => "Slim James")
-      @session = double(Session, :title => "Bobby Bland", :description => "Make a beat please!!!", :member => double(Member, :name => "Buddy Boy"))
+      @session = double(Session, :title => "Bobby Bland", :description => "Make a beat please!!!", :member => double(Member, :name => "Buddy Boy"), :end_date => Time.parse('2014-05-05'))
     end
     it "should send an email to the member passed with the correct subject and body" do
       email = NotificationMailer.session_notification(:member => @member_1, :session => @session).deliver
@@ -77,9 +77,10 @@ describe NotificationMailer do
 
       email.to.should == ["slim@mail.com"]
       email.subject.should == "Buddy Boy created a session on Sensori"
-      email.encoded.should include("Hey Slim James, Buddy Boy just created a session:")
+      email.encoded.should include("Hey Slim James,")
+      email.encoded.should include("NEW SESSION POSTED")
       email.encoded.should include("Bobby Bland")
-      email.encoded.should include("Make a beat please!!!")
+      email.encoded.should include("Submission Deadline: May 5, 23:59 PST")
     end
   end
 

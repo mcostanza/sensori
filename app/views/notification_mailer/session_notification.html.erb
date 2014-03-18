@@ -4,19 +4,17 @@
 			<%= link_to image_tag("discussion_notifications/header.png", :alt => "Sensori Collective", :title => "Sensori Collective", :style => "width: 600px; margin-bottom: 10px;"), session_url(@session) %>
 			
 			<div style="width: 400px; margin: 0px 100px 10px 100px; font-size: 11px;">
-				Hey <%= @member.name %>, <%= @session.member.name %> just created a session:
+				Hey <%= @member.name %>,
 			</div>
-
 			<div style="width: 400px; margin: 0px 100px 10px 100px; font-size: 11px;">
-				<b><%= @session.title %></b>
-				<br/>
-				<%= @session.description %>
+        NEW SESSION POSTED!
+      </div>
+			<div style="width: 400px; margin: 0px 100px 10px 100px; font-size: 14px; font-weight:bold;">
+				<%= link_to @session.title, session_url(@session) %>
 			</div>
-			
 			<div style="width: 400px; margin: 0px 100px 10px 100px; font-size: 11px;">
-				<%= link_to "Check it out!", session_url(@session) %>
-			</div>
-			
+      <strong>Submission Deadline</strong><%= @session.end_date.strftime("%B %-d") %> 23:59 PST
+      </div>
 			<%= link_to image_tag("discussion_notifications/footer.png", :alt => "San Diego, CA", :title => "San Diego, CA", :style => "width: 600px;"), session_url(@session) %>
 		</td>
 	</tr>
