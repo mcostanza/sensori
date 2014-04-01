@@ -7,9 +7,9 @@
 		    <%= image_tag submission.member.image(:small), :alt => submission.member.name %>
 		  <% end %>
 		  <div class="media-body">
-    		<h4 class="media-heading"><%= link_to submission.title, submission.attachment_url %></h4>
+        <%= link_to submission.title, submission.attachment_url, :data => { :type => :audio } %>
+        <%= link_to "Download", submission.attachment_url %>
     		<div>by <%= link_to submission.member.name, member_profile_path(submission.member) %></div>
-    		<%= tag :audio, :src => submission.attachment_url, :controls => true %>
     	</div>
 		</div>
 	<% end %>

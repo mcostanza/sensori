@@ -6,10 +6,13 @@
 <div class="row">
   <div class="span8">
     <%= image_tag @session.image_url %>
-    <% if @session.end_date.future? %>
+    <% if @session.active? %>
       <%= render :partial => 'submission_form' %>
     <% else %>
       <%= render :partial => 'playlist' %>
+    <% end %>
+    <% if admin? %>
+      <%= link_to "View Submissions", session_submissions_path(@session) %>
     <% end %>
   </div>
   <div class="span4">
@@ -22,7 +25,7 @@
     <% end %>
     <div class="deadline">
       <div class="header"><i class="icon-time"></i> <strong>Submission Deadline</strong></div>
-      <span><%= @session.end_date.strftime("%b %e, %Y") %> Midnight(PST)</span>
+      <span><%= @session.end_date.strftime("%B %e, %Y") %> 23:59 (PST)</span>
     </div>
   </div>
 </div>
