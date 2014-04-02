@@ -306,6 +306,15 @@ describe("Sensori.Views.Submission", function() {
 	    view.onDone("event", data);
 	    expect(view.$(".submission-link").attr("href")).toEqual(model.get("attachment_url"));
 	  });
+	  describe("files with characters that need to be escaped", function() {
+	  	beforeEach(function() {
+	  		data.files[0].name = "Whip Em (Didn't We?).mp3";
+	  	});
+	  	it("sets the model's attachment_url to the correctly escaped url", function() {
+	  		view.onDone("event", data);
+	  		expect(model.get("attachment_url")).toEqual("https://sensori-dev.s3.amazonaws.com/uploads/id/Whip%20Em%20%28Didn%27t%20We%3F%29.mp3")
+	  	});
+	  });
 	});
 
 	describe(".showForm()", function() {

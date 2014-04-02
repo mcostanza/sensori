@@ -110,7 +110,7 @@ Sensori.Views.Submission = Backbone.View.extend({
 
     var file   = data.files[0],
         domain = this.$("form").attr('action'),
-        path   = this.$('input[name=key]').val().replace('${filename}', file.name);
+        path   = this.$('input[name=key]').val().replace('${filename}', escape(file.name));
         
     this.model.set("attachment_url", domain + path);
     
