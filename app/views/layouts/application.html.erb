@@ -19,7 +19,7 @@
       <div class="container <%= controller.controller_name %>-container">
         <%= render 'layouts/messages' %>
         <% if signed_out? %>
-          <%# render 'shared/join_message' %>
+          <%= render 'shared/join_message' %>
         <% end %>
         <%= yield %>
       </div>
