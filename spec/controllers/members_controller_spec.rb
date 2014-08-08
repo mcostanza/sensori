@@ -22,10 +22,9 @@ describe MembersController do
       get 'sign_out'
       session[:soundcloud_id].should be_nil
     end
-    it "should redirect to the previous url with a flash notice" do
+    it "should redirect to the previous url" do
       get 'sign_out'
       response.should redirect_to('/previous/url')
-      flash[:notice].should_not be_nil
     end
   end
 
@@ -52,17 +51,15 @@ describe MembersController do
           get 'soundcloud_connect', :code => @code
           session[:soundcloud_id].should == @member.soundcloud_id
         end
-        it "should redirect to the root url with a flash notice (existing member)" do
+        it "should redirect to the root url (existing member)" do
           get 'soundcloud_connect', :code => @code
           response.should redirect_to(root_url)
-          flash[:notice].should_not be_nil
           flash[:signed_up].should be_false
         end
-        it "should redirect to the root url with a flash notice (new member)" do
+        it "should redirect to the root url with a flash set (new member)" do
           @member.stub(:just_created?).and_return(true)
           get 'soundcloud_connect', :code => @code
           response.should redirect_to(root_url)
-          flash[:notice].should_not be_nil
           flash[:signed_up].should be_true
         end
       end
@@ -74,10 +71,9 @@ describe MembersController do
           get 'soundcloud_connect', :code => @code
           session[:soundcloud_id].should be_nil
         end
-        it "should redirect to the root url with an error message" do
+        it "should redirect to the root url" do
           get 'soundcloud_connect', :code => @code
           response.should redirect_to root_url
-          flash[:error].should_not be_nil
           flash[:signed_up].should be_false
         end
       end
@@ -87,10 +83,9 @@ describe MembersController do
         Member.should_not_receive(:sync_from_soundcloud)
         get 'soundcloud_connect'
       end
-      it "should redirect to the root url with an error message" do
+      it "should redirect to the root url" do
         get 'soundcloud_connect'
         response.should redirect_to root_url
-        flash[:error].should_not be_nil
       end
       it "should not set session data" do
         get 'soundcloud_connect'
