@@ -23,10 +23,19 @@ h1 {
   font-weight: 600;
 }
 
+h2, h3, h4, h5, h6 { 
+  font-family: 'Open Sans';
+  font-weight: 400;
+}
+
 h3 {
   > a, > a:hover {
     color: #000;
   }
+}
+
+p { 
+  color: #333;
 }
 
 .pagination > ul > li > a, .pagination > ul > .active > span {
@@ -144,6 +153,10 @@ h3 {
   li {
     margin-bottom: 5px;
   }
+
+  a {
+    color: #333;
+  }
 }
 
 .thumbnail {
@@ -186,6 +199,7 @@ h3 {
   .box-shadow(0 1px 3px rgba(0,0,0,0.055));
   .media-body {
     padding-right: 15px;
+    color: #333;
   }
   .media-heading {
     a { color: #000; }
@@ -230,9 +244,6 @@ h3 {
 .beats { 
   .thumbnail-wrapper {
     position: relative;
-  }
-  a {
-    color: #000;
   }
   a.overlay {
     position: absolute;

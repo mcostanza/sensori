@@ -16,7 +16,7 @@
             <ul class ="dropdown-menu">
               <%= content_tag :li, link_to("Beats", beats_path), :id => 'nav-beats' %>
               <%= content_tag :li, link_to("Discussions", discussions_path), :id => 'nav-discussions' %>
-              <%= content_tag :li, link_to("Playlists", "https://soundcloud.com/sensori-collective/sets"), :id => 'nav-discussions' %>
+              <%= content_tag :li, link_to("Playlists", "https://soundcloud.com/sensori-collective/sets", :target => "_blank"), :id => 'nav-discussions' %>
             </ul>
           <% end %>
         </ul>

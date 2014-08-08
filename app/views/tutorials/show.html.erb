@@ -7,9 +7,9 @@
   <div class="span8">
     <div class="flex-video widescreen"><%= content_tag :iframe, nil, :type => "text/html", :src => @tutorial.youtube_embed_url, :frameborder => "0" %></div>
   </div>
-  <div class="span4 tutorial-sidebar">
+  <div class="span4 sidebar">
     <h2><%= title @tutorial.title %></h2>
-    <h4>by <%= link_to @tutorial.member.name, member_profile_path(@tutorial.member), :class => 'profile-link' %></h4>
+    <span class="attribution">by <%= link_to @tutorial.member.name, member_profile_path(@tutorial.member) %></span>
     <p><%= simple_format(@tutorial.description) %></p>
     <% if @tutorial.attachment_url.present? %>
       <%= link_to raw("<i class=\"icon-white icon-download-alt\"></i> Download Samples"), @tutorial.attachment_url, :class => "btn btn-primary attachment-button" %>
