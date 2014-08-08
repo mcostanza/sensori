@@ -1,6 +1,17 @@
 // Place all the styles related to the Home controller here.
 // They will automatically be included in application.css.
 
+//Homepage specific styles
+#home-index {
+  padding-left: 0px;
+  padding-right: 0px;
+
+  #wrap > .home-container {
+    width: 100%;
+    padding-top: 40px;
+  }
+}
+
 .home { 
   .span12 {
     > a {
@@ -23,5 +34,115 @@
       margin-top: 0px;
       text-align: center;
     }
+  }
+}
+
+/* Carousel
+  -------------------------------------------------- */
+
+.carousel {
+  .container {
+    position: relative;
+    z-index: 9;
+  }
+
+  .carousel-control {
+    height: 80px;
+    margin-top: 0;
+    font-size: 120px;
+    text-shadow: 0 1px 1px rgba(0,0,0,.4);
+    background-color: transparent;
+    border: 0;
+    z-index: 10;
+  }
+
+  .item {
+    height: 500px;
+  }
+
+  .carousel-img {
+    margin-top: 50px;
+    margin-right: 50px;
+    margin-left: 20px;
+    text-align: center;
+    img {
+      border: 2px solid #fff;
+    }
+    
+  }
+
+  .carousel-caption {
+    background-color: transparent;
+    position: static;
+    max-width: 550px;
+    padding: 0px 20px 0px 50px;
+    margin-top: 50px;
+    
+    h1 {
+      border-top: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      margin: 0px;
+      padding: 10px 0px;
+    }
+
+    .lead {
+      margin-top: 25px;
+      margin-bottom: 20px;
+    }
+
+    h1, .lead {
+      font-family: 'Open Sans';
+      line-height: 1.25;
+      color: #fff;
+      text-shadow: 0 1px 1px rgba(0,0,0,.4);
+    }
+
+    .btn {
+      margin-top: 10px;
+    }
+  }
+}
+
+@media (max-width: 976px) {
+  .carousel {
+    h1 {
+      font-size: 34px;
+    }
+    .lead {
+      font-size: 18px;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .carousel {
+    h1 {
+      font-size: 30px;
+    }
+    .lead {
+      font-size: 16px;
+    }
+    .carousel-caption {
+      padding-right: 60px;
+      padding-left: 60px;
+      max-width: none;
+    }
+    
+    .carousel-control {
+      left: 5px;
+    }
+    .carousel-control.right {
+      left: auto;
+      right: 5px;
+    }
+
+    .carousel-img {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  .carousel {
   }
 }

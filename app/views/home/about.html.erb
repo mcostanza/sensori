@@ -10,6 +10,32 @@ Sensori is an initiative to unite and strengthen the San Diego beat community by
 <ul class="thumbnails about-sections">
   <li class="span3">
     <div class="thumbnail">
+      <%= link_to tutorials_path do %>
+        <%= image_tag "about-tutorials.png" %>
+      <% end %>
+      <div class="caption">
+        <h3><%= link_to "Tips / Tutorials", tutorials_path %></h3>
+        <p>
+        Learn and share knowledge with other members with video tutorials, sharing production tips and how-to's.
+        </p>
+      </div>
+    </div>
+  </li>
+  <li class="span3">
+    <div class="thumbnail">
+      <%= link_to sessions_path do %>
+        <%= image_tag "about-sessions.png" %>
+      <% end %>
+      <div class="caption">
+        <h3><%= link_to "Sessions", sessions_path %></h3>
+        <p>
+        Sessions are theme based beat challenges. Get involved and participate in the current session or listen to submissions from past sessions.
+        </p>
+      </div>
+    </div>
+  </li>
+  <li class="span3">
+    <div class="thumbnail">
       <%= link_to beats_path do %>
         <%= image_tag "about-beats.png" %>
       <% end %>
@@ -31,32 +57,6 @@ Sensori is an initiative to unite and strengthen the San Diego beat community by
         <h3><%= link_to "Discussions", discussions_path %></h3>
         <p>
         Join other members in different discussion forums: share production tips, share works in progress for feedback from the community, and talk about music in general.
-        </p>
-      </div>
-    </div>
-  </li>
-  <li class="span3">
-    <div class="thumbnail">
-      <%= link_to tutorials_path do %>
-        <%= image_tag "about-tutorials.png" %>
-      <% end %>
-      <div class="caption">
-        <h3><%= link_to "Tips / Tutorials", tutorials_path %></h3>
-        <p>
-        Learn and share knowledge with other members with video tutorials, sharing production tips and how-to's.
-        </p>
-      </div>
-    </div>
-  </li>
-  <li class="span3">
-    <div class="thumbnail">
-      <%= link_to sessions_path do %>
-        <%= image_tag "about-sessions.png" %>
-      <% end %>
-      <div class="caption">
-        <h3><%= link_to "Sessions", sessions_path %></h3>
-        <p>
-        Sessions are theme based beat challenges. Get involved and participate in the current session or listen to submissions from past sessions.
         </p>
       </div>
     </div>

@@ -1,8 +1,5 @@
-<%= render :partial => "latest_beats", :object => @latest_tracks, :as => 'tracks' %>
-
-<%= render :partial => "popular_tutorials", :object => @tutorials, :as => 'tutorials' %>
-
-<%= render :partial => "recent_discussions", :object => @discussions, :as => 'discussions' %>
+<%= render 'carousel' %>
+<%= render 'latest_playlist' %>
 <script type="text/javascript">
 $(function() {
   Sensori.HomeView = new Sensori.Views.Home({

@@ -9,10 +9,16 @@
       <a class="brand <%= active_if(current_page?(root_path)) %>" href="/"></a>
       <div class="nav-collapse collapse">
         <ul class="nav">
-          <%= content_tag :li, link_to("Beats", beats_path), :class => active_if(current_page?(controller: "tracks", action: "index")), :id => 'nav-beats' %>
-          <%= content_tag :li, link_to("Discussions", discussions_path), :class => active_if(current_page?(controller: "discussions", action: "index")), :id => 'nav-discussions' %>
           <%= content_tag :li, link_to("Tips/Tutorials", tutorials_path), :class => active_if(current_page?(controller: "tutorials", action: "index")), :id => 'nav-tutorials' %>
           <%= content_tag :li, link_to("Sessions", sessions_path), :class => active_if(current_page?(controller: "sessions", action: "index")), :id => 'nav-sessions' %>
+          <%= content_tag :li, :class => "dropdown" do %> 
+            <%= link_to "Community", "#", :class => "dropdown-toggle", :data => { :toggle => "dropdown" } %>
+            <ul class ="dropdown-menu">
+              <%= content_tag :li, link_to("Beats", beats_path), :id => 'nav-beats' %>
+              <%= content_tag :li, link_to("Discussions", discussions_path), :id => 'nav-discussions' %>
+              <%= content_tag :li, link_to("Playlists", "https://soundcloud.com/sensori-collective/sets"), :id => 'nav-discussions' %>
+            </ul>
+          <% end %>
         </ul>
         <% if signed_in? %>
           <div class="member-header dropdown pull-right">

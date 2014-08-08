@@ -1,0 +1,18 @@
+<div class="item<%= ' active' if carousel_item_counter == 0 %>" style="background: url('/assets/<%= cover_image %>') no-repeat center center; background-size: cover">
+  <div class="container">
+    <div class="row">
+      <div class="span5">
+        <div class="carousel-caption">
+          <h1><%= carousel_item.title %></h1>
+          <p class="lead"><%= carousel_item.description %></p>
+          <%= link_to "View More", carousel_item, :class => "btn btn-large btn-primary" %>
+        </div>
+      </div>
+      <div class="span7">
+        <div class="carousel-img">
+          <%= link_to image_tag(carousel_item.youtube_image_url), carousel_item %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

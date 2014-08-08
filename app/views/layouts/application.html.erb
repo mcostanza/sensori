@@ -13,13 +13,13 @@
   <%= csrf_meta_tags %>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-  <%= content_tag :body, :class => controller.controller_name do %>
+<%= content_tag :body, :class => controller.controller_name, :id => "#{controller.controller_name}-#{controller.action_name}" do %>
     <div id="wrap">
       <%= render 'shared/navbar' %>
       <div class="container <%= controller.controller_name %>-container">
         <%= render 'layouts/messages' %>
         <% if signed_out? %>
-          <%= render 'shared/join_message' %>
+          <%# render 'shared/join_message' %>
         <% end %>
         <%= yield %>
       </div>
