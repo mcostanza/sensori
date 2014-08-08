@@ -26,25 +26,12 @@ describe HomeController do
       get 'index'
       response.should render_template('home/index')
     end
-    it "should load the latest 4 tracks with member association and assign to @latest_tracks" do
-      Track.should_receive(:includes).with(:member).and_return(@tracks_scope)
-      @tracks_scope.should_receive(:latest).and_return(@tracks_scope)
-      @tracks_scope.should_receive(:limit).with(4).and_return([@track])
-      get 'index'
-      assigns[:latest_tracks].should == [@track]
-    end
     it "should load the latest 3 published tutorials with member association and assign to @tutorials" do
       Tutorial.should_receive(:includes).with(:member).and_return(@tutorials_scope)
       @tutorials_scope.should_receive(:where).with(published: true).and_return(@tutorials_scope)
       @tutorials_scope.should_receive(:limit).with(3).and_return([@tutorial])
       get 'index'
       assigns[:tutorials].should == [@tutorial]
-    end
-    it "should load the latest 3 discussions with member association and assign to @discussions" do
-      Discussion.should_receive(:includes).with(:member).and_return(@discussions_scope)
-      @discussions_scope.should_receive(:limit).with(3).and_return([@discussion])
-      get 'index'
-      assigns[:discussions].should == [@discussion]
     end
   end
 

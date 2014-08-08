@@ -2,9 +2,8 @@
 <%= render 'latest_playlist' %>
 <script type="text/javascript">
 $(function() {
-  Sensori.HomeView = new Sensori.Views.Home({
-    discussions: new Sensori.Collections.Discussions(<%= raw @discussions.to_json %>),
-    el: $('.home-container')
-  });
+  Sensori.LatestPlaylistView = new Sensori.Views.LatestPlaylist({
+    el: $('#latest-playlist')
+  }).render();
 });
 </script>

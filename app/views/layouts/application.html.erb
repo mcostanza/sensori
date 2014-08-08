@@ -30,7 +30,7 @@
       $(function() {
         soundManager.onready(function() {
           Sensori.Player = new Sensori.Views.Player({
-            collection: new Sensori.Collections.Tracks(<%= raw (@latest_tracks || @tracks).to_json %>),
+            collection: new Sensori.Collections.Tracks(<%= raw @tracks.to_json %>),
             el: $('body')
           });
         });
