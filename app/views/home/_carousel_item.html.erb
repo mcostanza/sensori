@@ -5,12 +5,12 @@
         <div class="carousel-caption">
           <h1><%= carousel_item.title %></h1>
           <p class="lead"><%= carousel_item.description %></p>
-          <%= link_to "View More", carousel_item, :class => "btn btn-large btn-primary" %>
+          <%= link_to "View More", carousel_link(carousel_item), carousel_link_options(carousel_item).merge(:class => "btn btn-large btn-primary") %>
         </div>
       </div>
       <div class="span7">
         <div class="carousel-img">
-          <%= link_to image_tag(carousel_item.youtube_image_url), carousel_item %>
+          <%= link_to image_tag(carousel_item.image_url(:thumb)), carousel_link(carousel_item), carousel_link_options(carousel_item) %>
         </div>
       </div>
     </div>

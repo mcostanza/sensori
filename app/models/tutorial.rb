@@ -34,6 +34,11 @@ class Tutorial < ActiveRecord::Base
     end
   end
 
+  # This is used to match the carrier wave image_url format (for duck typing), but since we only have 1 image the size is ignored
+  def image_url(size = nil)
+    youtube_image_url
+  end
+
   def youtube_embed_url
     "http://www.youtube.com/embed/#{self.youtube_id}"
   end

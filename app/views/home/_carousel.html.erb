@@ -1,6 +1,6 @@
 <div id="homeCarousel" class="carousel slide" data-interval="12000">
   <div class="carousel-inner">
-    <%= render :partial => 'carousel_item', :collection => @tutorials %>
+    <%= render :partial => 'carousel_item', :collection => @features + @tutorials %>
   </div>
   <a class="left carousel-control" href="#homeCarousel" data-slide="prev">&lsaquo;</a>
   <a class="right carousel-control" href="#homeCarousel" data-slide="next">&rsaquo;</a>

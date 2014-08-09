@@ -1,6 +1,7 @@
 class HomeController < ApplicationController
   # GET /
   def index
+    @features = Feature.all
     @tutorials = Tutorial.includes(:member).where(:published => true).limit(3)
   end
 

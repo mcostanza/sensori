@@ -33,6 +33,11 @@ describe HomeController do
       get 'index'
       assigns[:tutorials].should == [@tutorial]
     end
+    it "should load all features and assign them to @features" do
+      Feature.should_receive(:all).and_return('features')
+      get 'index'
+      assigns[:features].should == 'features'
+    end
   end
 
   describe "GET 'about'" do

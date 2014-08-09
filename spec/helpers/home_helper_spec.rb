@@ -22,4 +22,36 @@ describe HomeHelper do
       @cover_image_ids.should_not include(5) 
     end
 	end
+
+  describe "#carousel_link(item)" do
+    it "should return 'link' if the item has one" do
+      item = double('item', :link => 'ok')
+      helper.carousel_link(item).should == 'ok'
+    end
+    it "should return the item otherwise" do
+      item = double('item')
+      helper.carousel_link(item).should == item
+    end
+  end
+
+  describe "#carousel_link_options(item)" do
+    it "should return { :target => '_blank' } when link is defined and is external" do
+      item = double('item', :link => 'http://google.com')
+      helper.carousel_link_options(item).should == { :target => '_blank' }
+    end
+    it "should return { } when link is defined and is internal" do
+      item = double('item', :link => 'http://sensoricollective.com/sessions/1')
+      helper.carousel_link_options(item).should == { }
+      item = double('item', :link => 'http://www.SensoriCollective.com/sessions/1')
+      helper.carousel_link_options(item).should == { }
+    end
+    it "should not fail if link is nil" do
+      item = double('item', :link => nil)
+      lambda { helper.carousel_link_options(item) }.should_not raise_error
+    end
+    it "should return { } if link is not defined" do
+      item = double('item')
+      helper.carousel_link_options(item).should == { }
+    end
+  end
 end
