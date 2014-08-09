@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131209222218) do
+ActiveRecord::Schema.define(:version => 20140808222557) do
 
   create_table "discussion_notifications", :force => true do |t|
     t.integer  "discussion_id", :null => false
@@ -41,6 +41,18 @@ ActiveRecord::Schema.define(:version => 20131209222218) do
   add_index "discussions", ["category"], :name => "index_discussions_on_category"
   add_index "discussions", ["last_post_at"], :name => "index_discussions_on_last_post_at"
   add_index "discussions", ["member_id"], :name => "discussions_member_id_fk"
+
+  create_table "features", :force => true do |t|
+    t.string   "title",       :null => false
+    t.text     "description", :null => false
+    t.string   "image",       :null => false
+    t.string   "link",        :null => false
+    t.integer  "member_id",   :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "features", ["member_id"], :name => "features_member_id_fk"
 
   create_table "members", :force => true do |t|
     t.integer  "soundcloud_id"
@@ -137,6 +149,8 @@ ActiveRecord::Schema.define(:version => 20131209222218) do
   add_foreign_key "discussion_notifications", "members", :name => "discussion_notifications_member_id_fk"
 
   add_foreign_key "discussions", "members", :name => "discussions_member_id_fk"
+
+  add_foreign_key "features", "members", :name => "features_member_id_fk"
 
   add_foreign_key "responses", "discussions", :name => "responses_discussion_id_fk"
   add_foreign_key "responses", "members", :name => "responses_member_id_fk"

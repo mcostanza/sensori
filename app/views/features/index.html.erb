@@ -1,0 +1,9 @@
+<h2><%= title "Features" %></h2>
+
+<ul class="thumbnails features">
+  <% @features.each do |feature| %>
+    <%= render :partial => 'shared/feature', :object => feature %>
+  <% end %>
+</ul>
+
+<%= link_to 'New Feature', new_feature_path, :class => "btn btn-primary btn-mini new-button" %>
