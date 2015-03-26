@@ -21,5 +21,9 @@ FactoryGirl.define do
     end
 
     soundcloud_access_token "tokez"
+
+    trait :admin do
+      admin true
+    end
   end
 end
