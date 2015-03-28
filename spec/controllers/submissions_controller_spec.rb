@@ -22,7 +22,7 @@ describe SubmissionsController do
 
   describe "POST 'create'" do
     def make_request
-      post 'create', params, { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }
+      post 'create', params
     end
 
     let(:params) do
@@ -117,7 +117,7 @@ describe SubmissionsController do
 
   describe "PUT 'update'" do
     def make_request
-      put 'update', params, { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }
+      put 'update', params
     end
 
     let!(:submission) { create(:submission, session: session_model, member: member, updated_at: 1.day.ago) }
@@ -197,7 +197,7 @@ describe SubmissionsController do
 
   describe "DELETE 'destroy'" do
     def make_request
-      delete 'destroy', params, { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }
+      delete 'destroy', params
     end
 
     let!(:submission) { create(:submission, member: member, session: session_model) }

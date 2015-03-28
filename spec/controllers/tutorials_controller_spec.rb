@@ -1,133 +1,181 @@
 require 'spec_helper'
 
 describe TutorialsController do
-
   include LoginHelper
 
+  before do
+    allow(controller).to receive(:respond_with).and_call_original
+  end
+
   describe "GET 'index'" do
-    before(:each) do
-      @tutorial = double(Tutorial)
-      @scope = double('paginated Tutorials', :per => [@tutorial])
-      @scope.stub(:where).and_return(@scope)
-      Tutorial.stub(:page).and_return(@scope)
+    def make_request
+      get 'index', params
     end
-    it "should return http success" do
-      get 'index'
-      response.should be_success
+
+    let(:params) { {} }
+
+    let!(:tutorial_1) { create(:tutorial, :created_at => 8.days.ago) }
+    let!(:tutorial_2) { create(:tutorial, :created_at => 7.days.ago) }
+    let!(:tutorial_3) { create(:tutorial, :created_at => 6.days.ago, :featured => true) }
+    let!(:tutorial_4) { create(:tutorial, :created_at => 5.days.ago) }
+    let!(:tutorial_5) { create(:tutorial, :created_at => 4.days.ago, :published => false) }
+    let!(:tutorial_6) { create(:tutorial, :created_at => 3.days.ago) }
+    let!(:tutorial_7) { create(:tutorial, :created_at => 2.days.ago) }
+    let!(:tutorial_8) { create(:tutorial, :created_at => 1.day.ago) }
+
+    it "return http success" do
+      make_request
+      expect(response).to be_success
     end
-    it "should return the index template" do
-      get 'index'
-      response.should render_template("tutorials/index")
+
+    it "renders the index template" do
+      make_request
+      expect(response).to render_template("tutorials/index")
     end
-    it "should load 6 published tutorials and assign them to @tutorials" do
-      Tutorial.should_receive(:where).with(published: true).and_return(@scope)
-      @scope.should_receive(:page).with(1).and_return(@scope)
-      @scope.should_receive(:per).with(6).and_return([@tutorial])
-      get 'index'
-      assigns[:tutorials].should == [@tutorial]
+
+    it "loads and assigns 6 published/featured tutorials" do
+      make_request
+      expect(assigns[:tutorials]).to eq [tutorial_3, tutorial_8, tutorial_7, tutorial_6, tutorial_4, tutorial_2]
     end
-    it "should load 6 tutorials with pagination" do
-      Tutorial.should_receive(:where).with(published: true).and_return(@scope)
-      @scope.should_receive(:page).with(2).and_return(@scope)
-      @scope.should_receive(:per).with(6).and_return([@tutorial])
-      get 'index', :page => 2
-      assigns[:tutorials].should == [@tutorial]
-    end
-    it "should not allow a page less than 1" do
-      Tutorial.should_receive(:where).with(published: true).and_return(@scope)
-      @scope.should_receive(:page).with(1).and_return(@scope)
-      @scope.should_receive(:per).with(6).and_return([@tutorial])
-      get 'index', :page => 0
-      assigns[:tutorials].should == [@tutorial]
-    end
-    it "should load 6 tutorials that are published or created by the current member if logged in" do
-      login_user
-      Tutorial.should_receive(:where).with(["published = :true OR member_id = :member_id", { true: true, member_id: @current_member.id }]).and_return(@scope)
-      @scope.should_receive(:page).with(1).and_return(@scope)
-      @scope.should_receive(:per).with(6).and_return([@tutorial])
-      get 'index'
-      assigns[:tutorials].should == [@tutorial]
+
+    context 'with pagination' do
+      let(:params) { { page: 2 } }
+
+      it "loads paginated tutorials" do
+        make_request
+        expect(assigns[:tutorials]).to eq [tutorial_1]
+      end
+
+      context 'when page is less than 1' do
+        let(:params) { { page: 0 } }
+        it "loads and assigns the first page of tutorials" do
+          make_request
+          expect(assigns[:tutorials]).to eq [tutorial_3, tutorial_8, tutorial_7, tutorial_6, tutorial_4, tutorial_2]
+        end
+      end
     end
   end
 
   describe "GET 'show'" do
-    before(:each) do
-      @tutorial = FactoryGirl.create(:tutorial)
-      Tutorial.stub(:find).and_return(@tutorial)
+    def make_request
+      get 'show', id: tutorial.id
     end
-    describe "tutorial is published" do
-      it "should return http success" do
-        get 'show', :id => '123'
-        response.should be_success
+    
+    let(:tutorial) { create(:tutorial) }
+    
+    context "when the tutorial is published" do
+      it "returns http success" do
+        make_request
+        expect(response).to be_success
       end
-      it "should render the show template" do
-        get 'show', :id => '123'
-        response.should render_template("tutorials/show")
+      it "renders the show template" do
+        make_request
+        expect(response).to render_template("tutorials/show")
       end
-      it "should find the tutorial from params[:id] and assign to @tutorial" do
-        Tutorial.should_receive(:find).with('123').and_return(@tutorial)
-        get 'show', id: '123'
-        assigns[:tutorial].should == @tutorial
+      it "finds and assigns the tutorial" do
+        make_request
+        expect(assigns[:tutorial]).to eq tutorial
       end
     end
-    describe "tutorial is not published" do
-      before(:each) do
-        @tutorial.published = false
+
+    context "when the tutorial is not published" do
+      let(:tutorial) { create(:tutorial, published: false) }
+
+      context 'when signed in' do
+        before do
+          sign_in_as(member)
+        end
+
+        context 'as an admin' do
+          let(:member) { create(:member, :admin) }
+
+          before do
+            sign_in_as(member)
+          end
+
+          it "redirects to the edit path" do
+            make_request
+            expect(response).to redirect_to("http://test.host/tutorials/#{tutorial.slug}/edit")
+          end
+        end
+
+        context 'as the member who created the tutorial' do
+          let(:member) { tutorial.member }
+
+          before do
+            sign_in_as(member)
+          end
+
+          it "should redirect to the edit path if the member is the owner of the tutorial (non-admin)" do
+            make_request
+            expect(response).to redirect_to("http://test.host/tutorials/#{tutorial.slug}/edit")
+          end
+        end
+
+        context 'as any other member' do
+          let(:member) { create(:member) }
+
+          it "redirects to the tutorials index" do
+            make_request
+            expect(response).to redirect_to(tutorials_url)
+          end
+        end
       end
-      it "should redirect to the edit path if logged in as an admin" do
-        login_user(:admin => true)
-        get 'show', id: '123'
-        response.should redirect_to("http://test.host/tutorials/#{@tutorial.slug}/edit")
-      end
-      it "should redirect to the edit path if the member is the owner of the tutorial (non-admin)" do
-        login_user
-        @tutorial.member = @current_member
-        get 'show', id: '123'
-        response.should redirect_to("http://test.host/tutorials/#{@tutorial.slug}/edit")
-      end
-      it "should redirect to the tutorials path the member is not an owner of the tutorial (non-admin)" do
-        login_user
-        get 'show', id: '123'
-        response.should redirect_to("http://test.host/tutorials")
-      end
-      it "should redirect to the tutorials path if not logged in" do
-        get 'show', id: '123'
-        response.should redirect_to("http://test.host/tutorials")
+
+      context 'when not signed in' do
+        it "redirects to the tutorials index" do
+          make_request
+          expect(response).to redirect_to(tutorials_url)
+        end
       end
     end
   end
 
   describe "GET 'new'" do
+    def make_request
+      get 'new'
+    end
+
+    it_should_behave_like 'an action that requires a signed in member'
+
     describe "when logged in" do
-      before(:each) do
-        login_user
+      let(:member) { create(:member) }
+      
+      before do
+        sign_in_as(member)
       end
-      it "should return http success" do
-        get 'new'
-        response.should be_success
+
+      it "returns http success" do
+        make_request
+        expect(response).to be_success
       end
       it "should render the new template" do
-        get 'new'
-        response.should render_template("tutorials/new")
+        make_request
+        expect(response).to render_template("tutorials/new")
       end
-      it "should initialize a Tutorial and assign to @tutorial" do
-        tutorial = double(Tutorial)
-        Tutorial.should_receive(:new).with(member: @current_member).and_return(tutorial)
-        get 'new'
-        assigns[:tutorial].should == tutorial
-      end
-    end
-    describe "when not logged in" do
-      it "should redirect to the root path" do
-        get 'new'
-        response.should redirect_to(root_path)
+      it "assigns a new tutorial" do
+        make_request
+        tutorial = assigns[:tutorial]
+        expect(tutorial).to be_an_instance_of(Tutorial)
+        expect(tutorial.member).to eq member
       end
     end
   end
 
   describe "POST 'create'" do
-    before(:each) do
-      @tutorial_params = {
+    def make_request
+      post 'create', params
+    end
+
+    let(:params) do
+      {
+        tutorial: tutorial_params,
+        format: 'json'
+      }
+    end
+
+    let(:tutorial_params) do
+      {
         :title => "Tutorial",
         :description => "Show u how to do this",
         :body_html => "lots of text with some html",
@@ -135,52 +183,65 @@ describe TutorialsController do
         :attachment_url => "http://s3.amazon.com/tutorial.zip",
         :youtube_id => "10110"
       }
-      @tutorial = Tutorial.new
-      @tutorial.stub(:id).and_return(10)
-      @tutorial.stub(:save).and_return(true)
-      Tutorial.stub(:new).and_return(@tutorial)
     end
-    describe "when logged in" do
-      before(:each) do 
-        login_user
-      end
-      it "should initialize a tutorial from params[:tutorial] and the current member" do
-        expected_args = @tutorial_params.merge(:member => @current_member).stringify_keys
-        Tutorial.should_receive(:new).with(expected_args).and_return(@tutorial)
-        post 'create', :tutorial => @tutorial_params
-      end
-      it "should attempt to save the tutorial" do
-        @tutorial.should_receive(:save)
-        post 'create', :tutorial => @tutorial_params
-      end
-      describe "valid params given" do
-        it "should redirect to the tutorial" do
-          post 'create', :tutorial => @tutorial_params
-          response.should redirect_to(@tutorial)
-        end
-      end
-      describe "invalid params given" do
-        before(:each) do
-          @tutorial.stub(:save).and_return(false)
 
-          # Not called directly but needed for correct test behavior when using respond_with
-          @tutorial.stub(:valid?).and_return(false)
-          @tutorial.stub(:errors).and_return('errors!')
+    it_should_behave_like 'an action that requires a signed in member'
+
+    context "when signed in" do
+      let(:member) { create(:member) }
+
+      before do
+        sign_in_as(member)
+      end
+
+      context 'when valid parameters are given' do
+        let(:created_tutorial) { Tutorial.last }
+
+        it "creates an unpublished tutorial" do
+          expect {
+            make_request
+          }.to change { Tutorial.count }.by(1)
+
+          expect(created_tutorial.title).to eq tutorial_params[:title]
+          expect(created_tutorial.description).to eq tutorial_params[:description]
+          expect(created_tutorial.body_html).to eq tutorial_params[:body_html]
+          expect(created_tutorial.body_components).to eq tutorial_params[:body_components]
+          expect(created_tutorial.title).to eq tutorial_params[:title]
+          expect(created_tutorial.member).to eq member
+          expect(created_tutorial.published?).to be_false
         end
-        it "should render the new template" do
-          post 'create', :tutorial => @tutorial_params
-          response.should render_template("tutorials/new")
+
+        it "responds with 201 status" do
+          make_request
+          expect(response.status).to eq 201
+        end
+
+        it "responds with the tutorial" do
+          make_request
+          expect(controller).to have_received(:respond_with).with(created_tutorial)
         end
       end
-    end
-    describe "when not logged in" do
-      it "should not initialize a tutorial" do
-        Tutorial.should_not_receive(:new)
-        post 'create', :tutorial => @tutorial_params
-      end
-      it "should redirect to the root path" do
-        post 'create', :tutorial => @tutorial_params
-        response.should redirect_to(root_path)
+
+      context 'when invalid parameters are given' do
+        before do
+          params[:tutorial][:title] = ''
+        end
+
+        it "does not create a tutorial" do
+          expect {
+            make_request
+          }.not_to change { Tutorial.count }
+        end
+
+        it "responds with 422" do
+          make_request
+          expect(response.status).to eq 422
+        end
+
+        it "responds with the tutorial" do
+          make_request
+          expect(controller).to have_received(:respond_with).with(an_instance_of(Tutorial))
+        end
       end
     end
   end
