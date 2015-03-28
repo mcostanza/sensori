@@ -94,7 +94,7 @@ describe DiscussionsController do
       get 'new'
     end
 
-    it_should_behave_like "an action that requires a signed in user"
+    it_should_behave_like "an action that requires a signed in member"
 
     context 'when signed in' do
       let(:member) { create(:member) }
@@ -133,7 +133,7 @@ describe DiscussionsController do
       }
     end    
 
-    it_should_behave_like "an action that requires a signed in user"
+    it_should_behave_like "an action that requires a signed in member"
 
     context 'when signed in' do
       let(:member) { create(:member) }
@@ -204,7 +204,7 @@ describe DiscussionsController do
       allow(Discussion).to receive(:find).with(discussion.id).and_return(discussion)
     end
 
-    it_should_behave_like "an action that requires a signed in user"
+    it_should_behave_like "an action that requires a signed in member"
 
     context 'when signed in' do
       before do
@@ -271,7 +271,7 @@ describe DiscussionsController do
       allow(Discussion).to receive(:find).with(discussion.id).and_return(discussion)
     end
 
-    it_should_behave_like "an action that requires a signed in user"
+    it_should_behave_like "an action that requires a signed in member"
 
     context 'when signed in' do
       before do
@@ -325,13 +325,13 @@ describe DiscussionsController do
       }
     end
 
-    it_should_behave_like "an action that requires a signed in user"
+    it_should_behave_like "an action that requires a signed in member"
 
     before do
       allow(Discussion).to receive(:find).and_return(discussion)
     end
 
-    it_should_behave_like "an action that requires a signed in user"
+    it_should_behave_like "an action that requires a signed in member"
 
     context 'when signed in' do
       before do

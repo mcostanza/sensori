@@ -15,10 +15,10 @@ describe MembersController do
   describe "#soundcloud_app_client" do
     it "should return a ::Soundcloud instance initialized with the Sensori client_id, secret, and redirect url" do
       soundcloud_app_client = controller.soundcloud_app_client
-      soundcloud_app_client.should be_an_instance_of(::Soundcloud::Client)
-      soundcloud_app_client.client_id.should == soundcloud_client_id
-      soundcloud_app_client.client_secret.should == soundcloud_secret
-      soundcloud_app_client.redirect_uri.should == members_soundcloud_connect_url
+      expect(soundcloud_app_client).to be_an_instance_of(::Soundcloud::Client)
+      expect(soundcloud_app_client.client_id).to eq soundcloud_client_id
+      expect(soundcloud_app_client.client_secret).to eq soundcloud_secret
+      expect(soundcloud_app_client.redirect_uri).to eq members_soundcloud_connect_url
     end
   end
 
@@ -237,7 +237,7 @@ describe MembersController do
       context 'when not currently signed in' do
         it "returns success" do
           make_request
-          response.should be_success
+          expect(response).to be_success
         end
 
         it "does not update the member" do

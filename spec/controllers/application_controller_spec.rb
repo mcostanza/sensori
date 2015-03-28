@@ -12,13 +12,13 @@ describe ApplicationController do
       end
 
       it "returns true" do
-        controller.signed_in?.should == true
+        expect(controller.signed_in?).to be_true
       end
     end
 
     context 'when session[:soundcloud_id] is not set' do
       it "returns false" do
-        controller.signed_in?.should be_false
+        expect(controller.signed_in?).to be_false
       end
     end
   end
@@ -30,13 +30,13 @@ describe ApplicationController do
       end
 
       it "returns false" do
-        controller.signed_out?.should be_false
+        expect(controller.signed_out?).to be_false
       end
     end
     
     context 'when not signed in' do
       it "returns true" do
-        controller.signed_out?.should be_true
+        expect(controller.signed_out?).to be_true
       end
     end
   end
@@ -51,7 +51,7 @@ describe ApplicationController do
 
       it "assigns @current_member from session data" do
         controller.load_member_if_signed_in
-        controller.instance_variable_get(:@current_member).should == member
+        expect(controller.instance_variable_get(:@current_member)).to eq member
       end
     end
 
@@ -63,7 +63,7 @@ describe ApplicationController do
 
       it "does not assign @current_member" do
         controller.load_member_if_signed_in
-        controller.instance_variable_get(:@current_member).should be_nil
+        expect(controller.instance_variable_get(:@current_member)).to be_nil
       end
     end
   end
@@ -75,14 +75,14 @@ describe ApplicationController do
       end
 
       it "does not redirect" do
-        controller.should_not_receive(:redirect_to)
+        expect(controller).not_to receive(:redirect_to)
         controller.ensure_signed_in
       end
     end
 
     context 'when not signed in' do
       it "redirects to the root path" do
-        controller.should_receive(:redirect_to).with(root_path)
+        expect(controller).to receive(:redirect_to).with(root_path)
         controller.ensure_signed_in
       end      
     end
@@ -95,14 +95,14 @@ describe ApplicationController do
       end
 
       it "redirects to the root path" do
-        controller.should_receive(:redirect_to).with(root_path)
+        expect(controller).to receive(:redirect_to).with(root_path)
         controller.ensure_signed_out  
       end
     end
 
     context 'when not signed in' do
       it "does not redirect" do
-        controller.should_not_receive(:redirect_to)
+        expect(controller).not_to receive(:redirect_to)
         controller.ensure_signed_out
       end  
     end
@@ -118,7 +118,7 @@ describe ApplicationController do
         let(:member) { create(:member, :admin, :soundcloud_id => soundcloud_id) }  
 
         it "does not redirect" do
-          controller.should_not_receive(:redirect_to)
+          expect(controller).not_to receive(:redirect_to)
           controller.ensure_admin
         end
       end
@@ -127,7 +127,7 @@ describe ApplicationController do
         let(:member) { create(:member, :soundcloud_id => soundcloud_id) }  
       
         it "redirects to the root path" do
-          controller.should_receive(:redirect_to).with(root_path)
+          expect(controller).to receive(:redirect_to).with(root_path)
           controller.ensure_admin
         end
       end
@@ -135,7 +135,7 @@ describe ApplicationController do
 
     context 'when not signed in' do
       it "redirects to the root path" do
-        controller.should_receive(:redirect_to).with(root_path)
+        expect(controller).to receive(:redirect_to).with(root_path)
         controller.ensure_admin
       end
     end

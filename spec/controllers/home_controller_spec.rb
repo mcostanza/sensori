@@ -5,11 +5,11 @@ describe HomeController do
   describe "GET 'index'" do
     it "returns http success" do
       get 'index'
-      response.should be_success
+      expect(response).to be_success
     end
     it "renders the index template" do
       get 'index'
-      response.should render_template('home/index')
+      expect(response).to render_template('home/index')
     end
 
     context 'assigned data' do
