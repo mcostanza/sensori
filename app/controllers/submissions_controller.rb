@@ -14,7 +14,7 @@ class SubmissionsController < ApplicationController
 
   # PUT /sessions/:session_id/submissions/:id
   def update
-  	@submission.update_attributes(params[:submission])
+    @submission.update_attributes(params[:submission])
   	respond_with @session, @submission
   end
 
@@ -23,6 +23,8 @@ class SubmissionsController < ApplicationController
   	@submission.destroy
   	redirect_to @session
   end
+
+  private
 
   def find_session
   	@session = Session.find(params[:session_id])
