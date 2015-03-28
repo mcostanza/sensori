@@ -5,251 +5,375 @@ describe DiscussionsController do
   include LoginHelper
 
   describe "GET 'index'" do
-    before do
-      @discussion = double(Discussion)
-      @page_scope = double('paginated discussions', :per => [@discussion])
-      @includes_scope = double('includes scope', :page => @page_scope)
-      @where_scope = double('where scope', :includes => @includes_scope)
-      Discussion.stub(:where).and_return(@where_scope)
+    def make_request
+      get 'index', params
     end
+
+    let!(:discussions) do 
+      1.upto(11).map { |num| create(:discussion, :any_category, last_post_at: num.hours.ago) }
+    end
+
+    let(:params) { {} }
+
     it "should return http success" do
-      get 'index'
-      response.should be_success
+      make_request
+      expect(response).to be_success
     end
-    it "should not include any filter options when category is not passed" do
-      Discussion.should_receive(:where).with({}).and_return(@where_scope)
-      get 'index'
+
+    context 'when filtering by a category' do
+      let(:params) { { category: 'general' } }
+      
+      let!(:discussions) do 
+        1.upto(11).map { |num| create(:discussion, category: 'general', last_post_at: num.hours.ago) }
+      end
+
+      let!(:other_discussion) { create(:discussion, category: 'production') }
+
+      it "loads and assigns 10 discussions from the category" do
+        make_request
+        expect(assigns[:discussions]).to eq discussions.first(10)
+      end
     end
-    it "should filter by category when passed" do
-      Discussion.should_receive(:where).with({ :category => 'general' }).and_return(@where_scope)
-      get 'index', :category => 'general'
+
+    context 'when not filtering by category' do
+      it "loads and assigns 10 discussions from all categories" do
+        make_request
+        expect(assigns[:discussions]).to eq discussions.first(10)
+      end
     end
-    it "should include the member association when loading discussions" do
-      @where_scope.should_receive(:includes).with(:member).and_return(@includes_scope)
-      get 'index'
+
+    context 'with pagination' do
+      let(:params) { { page: 2 } }
+
+      it "loads and assigns paginated discussions" do
+        make_request
+        expect(assigns[:discussions]).to eq [discussions.last]
+      end
     end
-    it "should load 10 discussions and assign them to @discussions" do
-      @includes_scope.should_receive(:page).with(1).and_return(@page_scope)
-      @page_scope.should_receive(:per).with(10).and_return([@discussion])
-      get 'index'
-      assigns[:discussions].should == [@discussion]
+
+    context 'with a page lower than 1' do
+      let(:params) { { page: 0 } }
+
+      it "loads and assigns the first page of discussions" do
+        make_request
+        expect(assigns[:discussions]).to eq discussions.first(10)
+      end
     end
-    it "should load 10 discussions with pagination" do
-      @includes_scope.should_receive(:page).with(2).and_return(@page_scope)
-      @page_scope.should_receive(:per).with(10).and_return([@discussion])
-      get 'index', :page => 2
-      assigns[:discussions].should == [@discussion]
-    end
-    it "should not allow a page less than 1" do
-      @includes_scope.should_receive(:page).with(1).and_return(@page_scope)
-      @page_scope.should_receive(:per).with(10).and_return([@discussion])
-      get 'index', :page => 0
-      assigns[:discussions].should == [@discussion]
-    end
-    it "should use the paginated_respond_with method to respond" do
-      controller.should_receive(:paginated_respond_with).with([@discussion])
-      get 'index'
+
+    it "uses the paginated_respond_with method to respond" do
+      expect(controller).to receive(:paginated_respond_with).with(discussions.first(10))
+      make_request
     end
   end
 
   describe "GET 'show'" do
-    before do
-      @responses = [double(Response)]
-      @discussion = double(Discussion, :responses => @responses)
-      Discussion.stub(:find).and_return(@discussion)
+    def make_request
+      get 'show', params
     end
+
+    let(:params) { { id: discussion.id } }
+
+    let(:discussion) { create(:discussion, :response_count => 3) }
+
     it "should return http success" do
-      get 'show', :id => 1
-      response.should be_success
+      make_request
+      expect(response).to be_success
     end
-    it "should find the discussion by id and assign it to @discussion" do
-      Discussion.should_receive(:find).with("1").and_return(@discussion)
-      get 'show', :id => 1
-      assigns[:discussion].should == @discussion
+    it "finds and assigns the discussion" do
+      make_request
+      expect(assigns[:discussion]).to eq discussion
     end
-    it "should load the responses and assign them to @responses" do
-      @discussion.should_receive(:responses).and_return(@responses)
-      get 'show', :id => 1
-      assigns[:responses].should == @responses
+    it "assigns the discussion's responses" do
+      make_request
+      expect(assigns[:responses]).to eq discussion.responses
     end
   end
 
   describe "GET 'new'" do
-    before do
-      controller.stub(:ensure_signed_in)
-    end
-
-    describe "before filters" do
-      it "should have the ensure_signed_in before filter" do
-        controller.should_receive(:ensure_signed_in)
-        get 'new'
-      end
-    end
-
-    it "should initialize a new discussion and assign it to @discussion" do
-      login_user
-      discussion = Discussion.new
-      Discussion.should_receive(:new).with(member: @current_member).and_return(discussion)
+    def make_request
       get 'new'
-      assigns[:discussion].should == discussion
+    end
+
+    it_should_behave_like "an action that requires a signed in user"
+
+    context 'when signed in' do
+      let(:member) { create(:member) }
+
+      before do
+        sign_in_as(member)
+      end
+
+      it "renders the new discussion template" do
+        make_request
+        expect(response).to render_template("discussions/new")
+      end
+
+      it "assigns a new discussion associated with the current member" do
+        make_request
+        discussion = assigns[:discussion]
+        expect(discussion.new_record?).to be_true
+        expect(discussion.member).to eq member
+      end
     end
   end
 
   describe "POST 'create'" do
-    before do
-      controller.stub(:ensure_signed_in)
-      @member = double(Member, :id => 41)
-      controller.instance_variable_set(:@current_member, @member)
-      @params = { :discussion => { :subject => "hello", :body => "body" } }
-      @discussion = Discussion.new
-      @discussion.stub(:id).and_return(10)
-      @discussion.stub(:save).and_return(true)
-      Discussion.stub(:new).and_return(@discussion)
+    def make_request
+      post 'create', params
     end
 
-    describe "before filters" do
-      it "should have the ensure_signed_in before filter" do
-        controller.should_receive(:ensure_signed_in)
-        post 'create', @params
+    let(:params) do
+      {
+        discussion: {
+          subject: 'check my new beat',
+          body: 'its cool right?',
+          category: 'production',
+          members_only: false
+        }
+      }
+    end    
+
+    it_should_behave_like "an action that requires a signed in user"
+
+    context 'when signed in' do
+      let(:member) { create(:member) }
+
+      let(:created_discussion) { Discussion.last }
+
+      before do
+        sign_in_as(member)    
+      end  
+
+      context 'with valid parameters' do
+        it "creates a discussion" do
+          expect { 
+            make_request 
+          }.to change { Discussion.count }.by(1)
+
+          expect(created_discussion.member).to eq member
+          expect(created_discussion.subject).to eq params[:discussion][:subject]
+          expect(created_discussion.body).to eq params[:discussion][:body]
+          expect(created_discussion.members_only).to eq params[:discussion][:members_only]
+        end
+
+        it "assigns the created discussion" do
+          make_request
+          expect(assigns[:discussion]).to eq created_discussion
+        end
+
+        it "redirects to the created discussion" do
+          make_request
+          expect(response).to redirect_to(created_discussion)
+        end
       end
-    end
 
-    it "should initialize a new discussion with the passed params and the member id and assign it to @discussion" do
-      Discussion.should_receive(:new).with(@params[:discussion].merge(:member => @member).stringify_keys).and_return(@discussion)
-      post 'create', @params
-      assigns[:discussion].should == @discussion
-    end
-    it "should save the new discussion" do
-      @discussion.should_receive(:save).and_return(true)
-      post 'create', @params
-    end
-    it "should redirect to the created discussion" do
-      post 'create', @params
-      response.should redirect_to(@discussion)
-    end
-    it "should render the new action if the discussion fails to save" do
-      @discussion.stub(:save).and_return(false)
-      @discussion.stub(:errors).and_return({ :error => true })
-      post 'create', @params
-      response.should render_template(:new)
+      context 'with invalid parameters' do
+        before do
+          params[:discussion][:subject] = nil
+        end
+
+        it "does not create a discussion" do
+          expect { 
+            make_request
+          }.not_to change { Discussion.count }
+        end
+
+        it "renders the new template" do
+          make_request
+          expect(response).to render_template('discussions/new')
+        end
+      end
     end
   end
 
   describe "DELETE 'destroy'" do
+    def make_request
+      delete 'destroy', params
+    end
+
+    let(:member) { create(:member) }
+    let(:discussion) { create(:discussion, member: member) }
+
+    let(:params) do
+      {
+        id: discussion.id
+      }
+    end
+
     before do
-      controller.stub(:ensure_signed_in)
-      @discussion = Discussion.new
-      @discussion.stub(:id).and_return(10)
-      @discussion.stub(:destroy).and_return(true)
-      @discussion.stub(:editable?).and_return(true)
-      Discussion.stub(:find).and_return(@discussion)
-      @params = { :id => '10' }
-      @member = double(Member)
-      controller.instance_variable_set(:@current_member, @member)
+      allow(Discussion).to receive(:find).with(discussion.id).and_return(discussion)
     end
 
-    describe "before filters" do
-      it "should have the ensure_signed_in before filter" do
-        controller.should_receive(:ensure_signed_in)
-        delete 'destroy', @params
+    it_should_behave_like "an action that requires a signed in user"
+
+    context 'when signed in' do
+      before do
+        sign_in_as(member)
       end
-    end
 
-    it "should find a discussion and destroy it" do
-      Discussion.should_receive(:find).with(@params[:id]).and_return(@discussion)
-      @discussion.should_receive(:destroy)
-      delete 'destroy', @params
-    end
-    it "should redirect to the discussions index" do
-      delete 'destroy', @params
-      response.should redirect_to(discussions_url)
-      flash[:notice].should == 'Discussion was successfully deleted.'
-    end
-    it "should not destroy the discussion if it is not editable" do
-      @discussion.should_receive(:editable?).with(@member).and_return(false)
-      @discussion.should_not_receive(:destroy)
-      delete 'destroy', @params  
-    end
-    it "should redirect to the discussion with an alert message if it is not editable" do
-      @discussion.should_receive(:editable?).with(@member).and_return(false)
-      delete 'destroy', @params  
-      response.should redirect_to(@discussion)
-      flash[:alert].should == 'Discussion is no longer editable.'
+      context 'when the discussion is editable by the current member' do
+        before do
+          allow(discussion).to receive(:editable?).with(member).and_return(true)
+        end
+
+        it "destroys the discussion" do
+          expect {
+            make_request
+          }.to change { Discussion.count }.by(-1)
+
+          expect(Discussion.exists?(discussion.id)).to be_false
+        end
+
+        it "redirects to the discussions index with a success notice" do
+          make_request
+          expect(response).to redirect_to(discussions_url)
+          expect(flash[:notice]).to eq 'Discussion was successfully deleted.'
+        end
+      end      
+
+      context 'when the discussion is not editable by the current member' do
+        before do
+          allow(discussion).to receive(:editable?).with(member).and_return(false)
+        end
+
+        it "does not destroy the discussion" do
+          expect {
+            make_request
+          }.not_to change { Discussion.count }
+
+          expect(Discussion.exists?(discussion.id)).to be_true
+        end
+
+        it "redirects to the discussion with a flash alert" do
+          make_request
+          expect(response).to redirect_to(discussion)
+          expect(flash[:alert]).to eq 'Discussion is no longer editable.'
+        end
+      end
     end
   end
 
   describe "GET 'edit'" do
+    def make_request
+      get 'edit', params
+    end
+
+    let(:member) { create(:member) }
+    let(:discussion) { build(:discussion, member: member, :id => 10101) }
+
+    let(:params) do
+      {
+        :id => discussion.id
+      }
+    end
+
     before do
-      controller.stub(:ensure_signed_in)
-      @discussion = Discussion.new
-      @discussion.stub(:id).and_return(10)
-      @discussion.stub(:destroy).and_return(true)
-      @discussion.stub(:editable?).and_return(true)
-      Discussion.stub(:find).and_return(@discussion)
-      @params = { :id => '10' }
-      @member = double(Member)
-      controller.instance_variable_set(:@current_member, @member)
+      allow(Discussion).to receive(:find).with(discussion.id).and_return(discussion)
     end
 
-    describe "before filters" do
-      it "should have the ensure_signed_in before filter" do
-        controller.should_receive(:ensure_signed_in)
-        get 'edit', @params
+    it_should_behave_like "an action that requires a signed in user"
+
+    context 'when signed in' do
+      before do
+        sign_in_as(member)
       end
-    end
 
-    it "should find a discussion" do
-      Discussion.should_receive(:find).with(@params[:id]).and_return(@discussion)
-      get 'edit', @params
-    end
-    it "should redirect to the discussion with an alert message if it is not editable" do
-      @discussion.should_receive(:editable?).with(@member).and_return(false)
-      get 'edit', @params
-      response.should redirect_to(@discussion)
-      flash[:alert].should == 'Discussion is no longer editable.'
+      context 'when the discussion is editable by the current member' do
+        before do
+          allow(discussion).to receive(:editable?).with(member).and_return(true)
+        end
+
+        it "assigns the discussion" do
+          make_request
+          expect(assigns[:discussion]).to eq discussion
+        end
+
+        it "renders the edit template" do
+          make_request
+          expect(response).to render_template('discussions/edit')
+        end
+      end      
+
+      context 'when the discussion is not editable by the current member' do
+        before do
+          allow(discussion).to receive(:editable?).with(member).and_return(false)
+        end
+
+        it "redirects to the discussion with a flash alert" do
+          make_request
+          expect(response).to redirect_to(discussion)
+          expect(flash[:alert]).to eq 'Discussion is no longer editable.'
+        end
+      end
     end
   end
 
   describe "PUT 'update'" do
+    def make_request
+      put 'update', params
+    end
+
+    let(:member) { create(:member) }
+    let(:discussion) { create(:discussion, member: member, updated_at: 1.day.ago) }
+
+    let(:params) do
+      {
+        id: discussion.id, 
+        discussion: {
+          body: 'new body!'
+        }
+      }
+    end
+
+    it_should_behave_like "an action that requires a signed in user"
+
     before do
-      controller.stub(:ensure_signed_in)
-      @discussion = Discussion.new
-      @discussion.stub(:id).and_return(10)
-      @discussion.stub(:update_attributes).and_return(true)
-      @discussion.stub(:editable?).and_return(true)
-      Discussion.stub(:find).and_return(@discussion)
-      @params = { :id => '10', :discussion => { :title => 'test' } }
-      @member = double(Member)
-      controller.instance_variable_set(:@current_member, @member)
+      allow(Discussion).to receive(:find).and_return(discussion)
     end
 
-    describe "before filters" do
-      it "should have the ensure_signed_in before filter" do
-        controller.should_receive(:ensure_signed_in)
-        put 'update', @params
+    it_should_behave_like "an action that requires a signed in user"
+
+    context 'when signed in' do
+      before do
+        sign_in_as(member)
       end
-    end
 
-    it "should find a discussion" do
-      Discussion.should_receive(:find).with(@params[:id]).and_return(@discussion)
-      put 'update', @params
-    end
-    it "should redirect to the discussion" do
-      put 'update', @params
-      response.should redirect_to(@discussion)
-    end
-    it "should redirect to the discussion with an alert message if the update fails" do
-      @discussion.stub(:update_attributes).and_return(false)
-      @discussion.stub(:errors).and_return({ :error => true })
-      put 'update', @params
-      response.should render_template("edit")
-    end
-    it "should not update and should redirect to the discussion with an alert message if the discussion is not editable" do
-      @discussion.should_receive(:editable?).with(@member).and_return(false)
-      @discussion.should_not_receive(:update_attributes)
-      put 'update', @params
-      response.should redirect_to(@discussion)
-      flash[:alert].should == 'Discussion is no longer editable.'
+      context 'when the discussion is editable by the current member' do
+        before do
+          allow(discussion).to receive(:editable?).with(member).and_return(true)
+        end
+
+        it "updates the discussion" do
+          expect {
+            make_request
+          }.to change { discussion.reload.updated_at }
+
+          expect(discussion.reload.body).to eq params[:discussion][:body]
+        end
+
+        it "redirects to the discussion" do
+          make_request
+          expect(response).to redirect_to(discussion)
+        end
+      end      
+
+      context 'when the discussion is not editable by the current member' do
+        before do
+          allow(discussion).to receive(:editable?).with(member).and_return(false)
+        end
+
+        it "does not update the discussion" do
+          expect {
+            make_request
+          }.not_to change { discussion.reload.updated_at }
+        end
+
+        it "redirects to the discussion with a flash alert" do
+          make_request
+          expect(response).to redirect_to(discussion)
+          expect(flash[:alert]).to eq 'Discussion is no longer editable.'
+        end
+      end
     end
   end
 end
