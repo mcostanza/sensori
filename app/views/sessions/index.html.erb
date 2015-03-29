@@ -5,7 +5,7 @@
     <%= render :partial => 'shared/session', :object => session %>
   <% end %>
 </ul>
-<% if admin? %>
+<% if @current_member.try(:admin?) %>
   <%= link_to 'New Session', new_session_path, :class => "btn btn-primary btn-mini new-button" %>
 <% end %>
 <%= paginate @sessions %>

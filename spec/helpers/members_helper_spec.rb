@@ -2,51 +2,72 @@ require 'spec_helper'
 
 describe MembersHelper do
   describe "#member_location(member)" do
-    before do
-      @member = Member.new(:city => "Boston", :country => "United States")
+    let(:member) { build(:member, :city => "Boston", :country => "United States") }
+    
+    it "returns a formatted string of the members location" do
+      expect(helper.member_location(member)).to eq "Boston, United States"
     end
-    it "should return a formatted string of the members location" do
-      helper.member_location(@member).should == "Boston, United States"
+
+    context "when the member's country is blank" do
+      let(:member) { build(:member, :city => "Boston") }
+        
+      it "returns only the city when country is unavailable" do
+        expect(helper.member_location(member)).to eq "Boston"
+      end    
     end
-    it "should return only the city when country is unavailable" do
-      @member.country = nil
-      helper.member_location(@member).should == "Boston"
+    
+    context "when the member's city is blank" do
+      let(:member) { build(:member, :country => "United States") }
+
+      it "returns only the country" do
+        expect(helper.member_location(member)).to eq "United States"
+      end  
     end
-    it "should return only the country when city is unavailable" do
-      @member.city = ''
-      helper.member_location(@member).should == "United States"
-    end
-    it "should return an empty string when neither is set" do
-      @member.city = nil
-      @member.country = nil
-      helper.member_location(@member).should == ""
+    
+    context 'when the member does not have any location data' do
+      let(:member) { build(:member) }
+      
+      it "returns an empty string" do
+        expect(helper.member_location(member)).to eq ''
+      end  
     end
   end
 
   describe "#member_profile_full_name(member)" do
-    before do
-      @member = Member.new(:full_name => "Steve Dods")
+    context 'when the member has a full_name' do
+      let(:member) { build(:member, :full_name => 'Steve Dods') }
+
+      it "returns a muted span with the member's full name" do
+        assert_dom_equal(helper.member_profile_full_name(member), '<span class="full-name muted">(Steve Dods)</span>')
+      end  
     end
-    it "should return a muted span with the member's full name" do
-      helper.member_profile_full_name(@member).should == '<span class="full-name muted">(Steve Dods)</span>'
-    end
-    it "should return nil when the member's full name is not set" do
-      @member.full_name = ''
-      helper.member_profile_full_name(@member).should == nil
+    
+    context 'when the member does not have a full_name' do
+      let(:member) { build(:member) }
+
+      it "returns nil when the member's full name is not set" do
+        expect(helper.member_profile_full_name(member)).to be_nil
+      end      
     end
   end
 
   describe "#member_profile_location(member)" do
-    before do
-      @member = Member.new(:city => "Boston", :country => "United States")
+    context "when the member's location is set" do
+      let(:member) { build(:member, :city => "Boston", :country => "United States") }
+
+      it "returns the member's location along with a map marker icon" do
+        assert_dom_equal(helper.member_profile_location(member), '<p><i class="icon-map-marker"></i> Boston, United States</p>')
+      end
     end
-    it "should return the member's location along with a map marker icon" do
-      helper.member_profile_location(@member).should == '<p><i class="icon-map-marker"></i> Boston, United States</p>'
+  
+
+    context "when the member's location data is not set" do
+      let(:member) { build(:member) }
+      
+      it "should return nil when the member's location is not set" do
+        expect(helper.member_profile_location(member)).to be_nil
+      end
     end
-    it "should return nil when the member's location is not set" do
-      @member.city = ""
-      @member.country = ""
-      helper.member_profile_location(@member).should == nil
-    end
+    
   end
 end

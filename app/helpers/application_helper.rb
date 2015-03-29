@@ -14,16 +14,12 @@ module ApplicationHelper
     request.user_agent.to_s.match(MOBILE_USER_AGENT_REGEX)
   end
 
-  def admin?
-    @current_member && @current_member.admin?
-  end
-
   def active_if(condition)
     'active' if condition
   end
 
-  def member_profile_page?
-    @member && current_page?(member_profile_path(@member))
+  def member_profile_page?(member)
+    member.present? && current_page?(member_profile_path(member))
   end
   
 end
