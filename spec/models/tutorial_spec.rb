@@ -93,18 +93,25 @@ describe Tutorial do
   end
 
   describe "#format_table_of_contents" do
+    let(:tutorial) { build(:tutorial) }
+    let(:formatter) { double(TutorialTableOfContentsService) }
+
     it "should process the tutorial with a table of contents formatter and set the body_html from the result" do
-      formatter = double(Formatters::Tutorial::TableOfContents)
-      Formatters::Tutorial::TableOfContents.should_receive(:new).with(@tutorial).and_return(formatter)
-      formatter.should_receive(:format).and_return("processed content")
-      @tutorial.format_table_of_contents
-      @tutorial.body_html.should == "processed content"
+      expect(TutorialTableOfContentsService).to receive(:new).with(tutorial).and_return(formatter)
+      expect(formatter).to receive(:format).and_return("processed content")
+      tutorial.format_table_of_contents
+      expect(tutorial.body_html).to eq "processed content"
     end
-    it "should not do anything if include_table_of_contents is false" do
-      @tutorial.include_table_of_contents = false
-      Formatters::Tutorial::TableOfContents.should_not_receive(:new)
-      @tutorial.should_not_receive(:body_html=)
-      @tutorial.format_table_of_contents
+
+    context 'when include_table_of_contents is false' do
+      let(:tutorial) { build(:tutorial, include_table_of_contents: false) }
+
+      it "should not do anything if include_table_of_contents is false" do
+        expect(TutorialTableOfContentsService).not_to receive(:new)
+        expect {
+          tutorial.format_table_of_contents
+        }.not_to change { tutorial.body_html }
+      end
     end
   end
 

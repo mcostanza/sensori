@@ -25,7 +25,7 @@ module DiscussionsHelper
   # "Jones" => "Jones'"
   #
   def possessive_name(name)
-    suffix = self[-1] == "s" ? "'" : "'s"
-    "#{self}#{suffix}"
+    suffix = name[-1] == "s" ? "'" : "'s"
+    "#{name}#{suffix}"
   end
 end
