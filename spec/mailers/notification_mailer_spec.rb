@@ -2,6 +2,8 @@ require "spec_helper"
 
 describe NotificationMailer do
 
+  let(:member_1) { create(:member, email: "slim@mail.com", name: "Slim James") }
+
   describe ".default_params" do
     it "should have from => 'Sensori Collective <info@sensoricollective.com>'" do
       NotificationMailer.default_params[:from].should == "Sensori Collective <info@sensoricollective.com>"
@@ -9,78 +11,82 @@ describe NotificationMailer do
   end
 
   describe "#discussion_notification(params = {})" do
-    before(:each) do
-      @member_1 = double(Member, :email => "slim@mail.com", :name => "Slim James")
-      @member_2 = double(Member, :email => "phil@mail.com", :name => "Five05")
-      @member_3 = double(Member, :email => "will@mail.com", :name => "William")
+    let(:member_2) { create(:member, email: "phil@mail.com", name: "Five05") }
+    let(:member_3) { create(:member, email: "will@mail.com", name: "William") }
+    let(:discussion) { create(:discussion, :subject => "check out my neat beat", :member => member_1) }
+    let(:response) { create(:response, :member => member_2, :discussion => discussion, :body => "that beat is dope") }
 
-      @discussion = double(Discussion, :subject => "check out my neat beat", :member => @member_1)
-      @response   = double(Response, :member => @member_2, :discussion => @discussion, :body => "that beat is dope")
-    end
-    it "should send an email to the member passed with the correct subject" do
-      email = NotificationMailer.discussion_notification(:member => @member_1, :response => @response).deliver
-      ActionMailer::Base.deliveries.should_not be_empty
+    let!(:email) { NotificationMailer.discussion_notification(:member => member_1, :response => response).deliver }
 
-      email.to.should == ["slim@mail.com"]
-      email.subject.should == "Five05 posted in a discussion on Sensori"
+    it "sends an email to the member passed with the correct subject" do
+      expect(ActionMailer::Base.deliveries).not_to be_empty
+      expect(email.to).to eq ["slim@mail.com"]
+      expect(email.subject).to eq "Five05 posted in a discussion on Sensori"
     end
-    it "should format the text correctly when the member receiving the notification created the discussion" do
-      email = NotificationMailer.discussion_notification(:member => @member_1, :response => @response).deliver
-      email.to.should == ["slim@mail.com"]
-      email.subject.should == "Five05 posted in a discussion on Sensori"
-      email.encoded.should include("Hey Slim James, Five05 just commented on your post titled \"check out my neat beat\" in Discussions:")
-      email.encoded.should include("that beat is dope")
+
+    context 'when the member receiving the notification also created the discussion' do
+      it "formats the text correctly" do
+        expect(email.to).to eq ["slim@mail.com"]
+        expect(email.subject).to eq "Five05 posted in a discussion on Sensori"
+        expect(email.encoded).to include("Hey Slim James, Five05 just commented on your post titled \"check out my neat beat\" in Discussions:")
+        expect(email.encoded).to include("that beat is dope")
+      end    
     end
-    it "should format the text correctly when the member who created the response also created the discussion" do
-      @response.stub(:member).and_return(@member_1)
-      email = NotificationMailer.discussion_notification(:member => @member_2, :response => @response).deliver
-      email.to.should == ["phil@mail.com"]
-      email.subject.should == "Slim James posted in a discussion on Sensori"
-      email.encoded.should include("Hey Five05, Slim James just commented on their post titled \"check out my neat beat\" in Discussions:")
-      email.encoded.should include("that beat is dope")
+
+    context 'when the member who created the response also created the discussion' do
+      let(:response) { build(:response, :member => member_1, :discussion => discussion, :body => "that beat is dope") }
+      let!(:email) { NotificationMailer.discussion_notification(:member => member_2, :response => response).deliver }
+
+      it "formats the text correctly" do
+        expect(email.to).to eq ["phil@mail.com"]
+        expect(email.subject).to eq "Slim James posted in a discussion on Sensori"
+        expect(email.encoded).to include("Hey Five05, Slim James just commented on their post titled \"check out my neat beat\" in Discussions:")
+        expect(email.encoded).to include("that beat is dope")
+      end
     end
-    it "should format the text correctly when the member receiving the notification did not create the discussion" do
-      @discussion.stub(:member).and_return(@member_3)
-      email = NotificationMailer.discussion_notification(:member => @member_1, :response => @response).deliver
-      email.to.should == ["slim@mail.com"]
-      email.subject.should == "Five05 posted in a discussion on Sensori"
-      email.encoded.should include("Hey Slim James, Five05 just commented on William&#x27;s post titled \"check out my neat beat\" in Discussions:")
-      email.encoded.should include("that beat is dope")
+
+    context 'when the member receiving the notification did not create the discussion' do
+      let(:discussion) { build(:discussion, :subject => "check out my neat beat", :member => member_3) }
+      let!(:email) { NotificationMailer.discussion_notification(:member => member_1, :response => response).deliver }
+
+      it "should format the text correctly when the member receiving the notification did not create the discussion" do
+        expect(email.to).to eq ["slim@mail.com"]
+        expect(email.subject).to eq "Five05 posted in a discussion on Sensori"
+        expect(email.encoded).to include("Hey Slim James, Five05 just commented on William&#x27;s post titled \"check out my neat beat\" in Discussions:")
+        expect(email.encoded).to include("that beat is dope")
+      end
     end
   end
 
   describe "#tutorial_notification(params = {})" do
-    before(:each) do
-      @member_1 = double(Member, :email => "slim@mail.com", :name => "Slim James")
-      @tutorial = double(Tutorial, :title => "Creating a Sampled Bass", :description => "How 2 make 1", :member => double(Member, :name => "Buddy Boy"))
-    end
-    it "should send an email to the member passed with the correct subject and body" do
-      email = NotificationMailer.tutorial_notification(:member => @member_1, :tutorial => @tutorial).deliver
-      ActionMailer::Base.deliveries.should_not be_empty
+    let(:tutorial) { create(:tutorial, title: "Creating a Sampled Bass", description: "How 2 make 1", member: create(:member, name: "Buddy Boy")) }
+    
+    let!(:email) { NotificationMailer.tutorial_notification(:member => member_1, :tutorial => tutorial).deliver }
 
-      email.to.should == ["slim@mail.com"]
-      email.subject.should == "Buddy Boy published a tutorial on Sensori"
-      email.encoded.should include("Hey Slim James, Buddy Boy just published a tutorial:")
-      email.encoded.should include("Creating a Sampled Bass")
-      email.encoded.should include("How 2 make 1")
+    it "should send an email to the member passed with the correct subject and body" do
+      expect(ActionMailer::Base.deliveries).not_to be_empty
+
+      expect(email.to).to eq ["slim@mail.com"]
+      expect(email.subject).to eq "Buddy Boy published a tutorial on Sensori"
+      expect(email.encoded).to include("Hey Slim James, Buddy Boy just published a tutorial:")
+      expect(email.encoded).to include("Creating a Sampled Bass")
+      expect(email.encoded).to include("How 2 make 1")
     end
   end
 
   describe "#session_notification(params = {})" do
-    before(:each) do
-      @member_1 = double(Member, :email => "slim@mail.com", :name => "Slim James")
-      @session = double(Session, :title => "Bobby Bland", :description => "Make a beat please!!!", :member => double(Member, :name => "Buddy Boy"), :end_date => Time.parse('2014-05-05'))
-    end
-    it "should send an email to the member passed with the correct subject and body" do
-      email = NotificationMailer.session_notification(:member => @member_1, :session => @session).deliver
-      ActionMailer::Base.deliveries.should_not be_empty
+    let(:session) { create(:session, title: "Bobby Bland", description: "Make a beat please!!!", :member => create(:member, name: "Buddy Boy"), end_date: Time.parse('2014-05-05')) }
+    let!(:email) { NotificationMailer.session_notification(:member => member_1, :session => session).deliver }
 
-      email.to.should == ["slim@mail.com"]
-      email.subject.should == "New Session posted on Sensori!"
-      email.encoded.should include("Hey Slim James,")
-      email.encoded.should include("NEW SESSION POSTED")
-      email.encoded.should include("Bobby Bland")
-      email.encoded.should include("Submission Deadline: May 5, 23:59 PST")
+    it "should send an email to the member passed with the correct subject and body" do
+      expect(ActionMailer::Base.deliveries).not_to be_empty
+
+      expect(email.to).to eq ["slim@mail.com"]
+      expect(email.subject).to eq "New Session posted on Sensori!"
+      expect(email.encoded).to include("Hey Slim James,")
+      expect(email.encoded).to include("NEW SESSION POSTED")
+      expect(email.encoded).to include("Bobby Bland")
+      expect(email.encoded).to include("Submission Deadline: May 5, 23:59 PST")
     end
   end
 
