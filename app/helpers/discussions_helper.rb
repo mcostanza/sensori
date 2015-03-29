@@ -3,7 +3,7 @@ module DiscussionsHelper
 	def discussion_owner(discussion_creator, response_creator, current_member)
 		return "your" if discussion_creator == current_member
 		return "their" if discussion_creator == response_creator
-		discussion_creator.name.possessive
+		possessive_name(discussion_creator.name)
 	end
 
   def discussion_categories
@@ -19,4 +19,13 @@ module DiscussionsHelper
     category.titleize
   end
 
+  private
+
+  # "Mike" => "Mike's"
+  # "Jones" => "Jones'"
+  #
+  def possessive_name(name)
+    suffix = self[-1] == "s" ? "'" : "'s"
+    "#{self}#{suffix}"
+  end
 end
