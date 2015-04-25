@@ -1,326 +1,399 @@
 require 'spec_helper'
 
 describe Member do
-  before(:each) do
-    @member = FactoryGirl.build(:member)
+  let(:member) { build(:member) }
+
+  let(:soundcloud_track) do
+    Hashie::Mash.new({
+      "kind"=>"track", 
+      "id"=>96520157, 
+      "created_at"=>"2013/06/12 04:57:28 +0000", 
+      "user_id"=>3897419, 
+      "duration"=>116125, 
+      "commentable"=>true, 
+      "state"=>"finished", 
+      "original_content_size"=>20470244, 
+      "sharing"=>"public", 
+      "tag_list"=>"beats hip-hop costanza instrumental", 
+      "permalink"=>"restless", 
+      "streamable"=>true, 
+      "embeddable_by"=>"all", 
+      "downloadable"=>false, 
+      "purchase_url"=>nil, 
+      "label_id"=>nil, 
+      "purchase_title"=>nil, 
+      "genre"=>"Beats", 
+      "title"=>"Restless", 
+      "description"=>"Completed 2013-06-11", 
+      "label_name"=>"", 
+      "release"=>"", 
+      "track_type"=>"original", 
+      "key_signature"=>"", 
+      "isrc"=>"", 
+      "video_url"=>nil, 
+      "bpm"=>nil, 
+      "release_year"=>nil, 
+      "release_month"=>nil, 
+      "release_day"=>nil, 
+      "original_format"=>"wav", 
+      "license"=>"all-rights-reserved", 
+      "uri"=>"http://api.soundcloud.com/tracks/96520157", 
+      "user"=>{
+        "id"=>3897419, 
+        "kind"=>"user", 
+        "permalink"=>"dj-costanza", 
+        "username"=>"DJ Costanza", 
+        "uri"=>"http://api.soundcloud.com/users/3897419", 
+        "permalink_url"=>"http://soundcloud.com/dj-costanza", 
+        "avatar_url"=>"http://i1.sndcdn.com/avatars-000039096498-86ivun-large.jpg?0c5f27c"
+      }, 
+      "permalink_url"=>"http://soundcloud.com/dj-costanza/restless", 
+      "artwork_url"=>"http://i1.sndcdn.com/artworks-000050386537-zjgsyi-large.jpg?0c5f27c", 
+      "waveform_url"=>"http://w1.sndcdn.com/3Vu1z6awKyQs_m.png", 
+      "stream_url"=>"http://api.soundcloud.com/tracks/96520157/stream", 
+      "playback_count"=>19, 
+      "download_count"=>0, 
+      "favoritings_count"=>5, 
+      "comment_count"=>1, 
+      "attachments_uri"=>"http://api.soundcloud.com/tracks/96520157/attachments"
+    })
   end
-  
+
+  let(:member_profile) do
+    ::Soundcloud::HashResponseWrapper.new({
+      "id" => 3897419, 
+      "permalink" => "dj-costanza", 
+      "username" => "DJ Costanza", 
+      "uri" => "https://api.soundcloud.com/users/3897419", 
+      "permalink_url" => "http://soundcloud.com/dj-costanza", 
+      "avatar_url" => "https://i1.sndcdn.com/avatars-000039096498-86ivun-large.jpg?0c5f27c",
+      "full_name" => "Mike Costanza",
+      "description" => "Beat Buddy",
+      "city" => "San Diego",
+      "country" => "United States"
+    })
+  end  
+
   describe "validations" do
-    it "should be valid given valid attributes" do
-      @member.valid?.should be_true
+    it "is valid given valid attributes" do
+      expect(member).to be_valid
     end
-    it "should be invalid without a soundcloud_id" do
-      @member.soundcloud_id = nil
-      @member.valid?.should be_false
+    it "is invalid without a soundcloud_id" do
+      member.soundcloud_id = nil
+      expect(member).not_to be_valid
     end
-    it "should be invalid with a non-unique soundcloud_id" do
-      @member.save
-      other = FactoryGirl.build(:member)
-      other.soundcloud_id = @member.soundcloud_id
-      other.valid?.should be_false
+    it "is invalid with a non-unique soundcloud_id" do
+      member.save
+      other = build(:member, soundcloud_id: member.soundcloud_id)
+      expect(other).not_to be_valid
     end
-    it "should be invalid without name" do
-      @member.name = nil
-      @member.valid?.should be_false
+    it "is invalid without name" do
+      member.name = nil
+      expect(member).not_to be_valid
     end
-    it "should be invalid without slug" do
-      @member.slug = nil
-      @member.valid?.should be_false
+    it "is invalid without slug" do
+      member.slug = nil
+      expect(member).not_to be_valid
     end
-    it "should be invalid without image_url" do
-      @member.image_url = nil
-      @member.valid?.should be_false
+    it "is invalid without image_url" do
+      member.image_url = nil
+      expect(member).not_to be_valid
     end
-    it "should be invalid without soundcloud_access_token" do
-      @member.soundcloud_access_token = nil
-      @member.valid?.should be_false
+    it "is invalid without soundcloud_access_token" do
+      member.soundcloud_access_token = nil
+      expect(member).not_to be_valid
     end
   end
 
   describe "associations" do
-    it "should have a tracks association" do
-      @member.should respond_to(:tracks)
+    it "has many tracks" do
+      expect(Member.reflect_on_association(:tracks).macro).to eq :has_many
     end
-    it "should have a tutorials association" do
-      @member.should respond_to(:tutorials)
+    it "has many tutorials" do
+      expect(Member.reflect_on_association(:tutorials).macro).to eq :has_many
     end
-    it "should have a submissions association" do
-      @member.should respond_to(:submissions)
+    it "has many submissions" do
+      expect(Member.reflect_on_association(:submissions).macro).to eq :has_many
     end
   end
 
   describe "callbacks" do
-    describe "after_create" do
-      it "should call sync_soundcloud_tracks_in_background" do
-        @member.should_receive(:sync_soundcloud_tracks_in_background)
-        @member.save
+    context "after_create" do
+      before do
+        MemberTrackSyncWorker.jobs.clear
+      end
+
+      it "syncs soundcloud tracks in the background" do
+        expect {
+          member.save
+        }.to change {
+          MemberTrackSyncWorker.jobs.size
+        }.by(1)
+        
+        expect(MemberTrackSyncWorker.jobs.first["args"]).to eq [member.id]
       end
     end
   end
 
   describe "#soundcloud_tracks(reload = false)" do
+    let(:app_client) { double(::Soundcloud) }
+
     before(:each) do
-      @track = Hashie::Mash.new(:id => 123)
-      @app_client = double(::Soundcloud, :get => [@track])
-      Sensori::Soundcloud.stub(:app_client).and_return(@app_client)
+      allow(app_client).to receive(:get).and_return([soundcloud_track])
+      allow(Sensori::Soundcloud).to receive(:app_client).and_return(app_client)
     end
-    it "should load the member's tracks from the Soundcloud API" do
-      @app_client.should_receive(:get).with("/users/#{@member.soundcloud_id}/tracks").and_return([@track])
-      @member.soundcloud_tracks.should == [@track]
+
+    it "loads and returns the member's tracks from the Soundcloud API" do
+      expect(app_client).to receive(:get).with("/users/#{member.soundcloud_id}/tracks").and_return([soundcloud_track])
+      expect(member.soundcloud_tracks).to eq [soundcloud_track]
     end
-    it "should be memoized" do
-      @app_client.should_receive(:get).once.and_return([@track])
-      @member.soundcloud_tracks
-      @member.soundcloud_tracks
+
+    it "is memoized" do
+      expect(app_client).to receive(:get).once.and_return([soundcloud_track])
+      member.soundcloud_tracks
+      member.soundcloud_tracks
     end
-    it "should reload if the reload parameter is passed" do
-      @member.soundcloud_tracks = 'tracks!'
-      @app_client.should_receive(:get).with("/users/#{@member.soundcloud_id}/tracks").and_return([@track])
-      @member.soundcloud_tracks(:reload).should == [@track]      
+
+    context 'when reload is passed as a truthy value' do
+      before do
+        member.soundcloud_tracks = 'tracks!'      
+      end
+
+      it "reloads data from the Soundcloud API" do
+        expect(app_client).to receive(:get).with("/users/#{member.soundcloud_id}/tracks").and_return([soundcloud_track])
+        expect(member.soundcloud_tracks(:reload)).to eq [soundcloud_track]      
+      end  
     end
   end
 
   describe "#sync_soundcloud_tracks" do
-    before(:each) do
-      @soundcloud_track = Hashie::Mash.new({
-        "kind"=>"track", 
-        "id"=>96520157, 
-        "created_at"=>"2013/06/12 04:57:28 +0000", 
-        "user_id"=>3897419, 
-        "duration"=>116125, 
-        "commentable"=>true, 
-        "state"=>"finished", 
-        "original_content_size"=>20470244, 
-        "sharing"=>"public", 
-        "tag_list"=>"beats hip-hop costanza instrumental", 
-        "permalink"=>"restless", 
-        "streamable"=>true, 
-        "embeddable_by"=>"all", 
-        "downloadable"=>false, 
-        "purchase_url"=>nil, 
-        "label_id"=>nil, 
-        "purchase_title"=>nil, 
-        "genre"=>"Beats", 
-        "title"=>"Restless", 
-        "description"=>"Completed 2013-06-11", 
-        "label_name"=>"", 
-        "release"=>"", 
-        "track_type"=>"original", 
-        "key_signature"=>"", 
-        "isrc"=>"", 
-        "video_url"=>nil, 
-        "bpm"=>nil, 
-        "release_year"=>nil, 
-        "release_month"=>nil, 
-        "release_day"=>nil, 
-        "original_format"=>"wav", 
-        "license"=>"all-rights-reserved", 
-        "uri"=>"http://api.soundcloud.com/tracks/96520157", 
-        "user"=>{
-          "id"=>3897419, 
-          "kind"=>"user", 
-          "permalink"=>"dj-costanza", 
-          "username"=>"DJ Costanza", 
-          "uri"=>"http://api.soundcloud.com/users/3897419", 
-          "permalink_url"=>"http://soundcloud.com/dj-costanza", 
-          "avatar_url"=>"http://i1.sndcdn.com/avatars-000039096498-86ivun-large.jpg?0c5f27c"
-        }, 
-        "permalink_url"=>"http://soundcloud.com/dj-costanza/restless", 
-        "artwork_url"=>"http://i1.sndcdn.com/artworks-000050386537-zjgsyi-large.jpg?0c5f27c", 
-        "waveform_url"=>"http://w1.sndcdn.com/3Vu1z6awKyQs_m.png", 
-        "stream_url"=>"http://api.soundcloud.com/tracks/96520157/stream", 
-        "playback_count"=>19, 
-        "download_count"=>0, 
-        "favoritings_count"=>5, 
-        "comment_count"=>1, 
-        "attachments_uri"=>"http://api.soundcloud.com/tracks/96520157/attachments"
-      })
-      @member.stub(:soundcloud_tracks).and_return([@soundcloud_track])
+    let(:member) { create(:member) }
 
-      @track = double(Track, :update_attributes => true)
-      @deleted_tracks = double('deleted tracks', :destroy_all => true)
-      @tracks = double('tracks', :find_or_initialize_by_soundcloud_id => @track, :where => @deleted_tracks)
-      @member.stub(:tracks).and_return(@tracks)
+    let(:full_size_artwork_url) { "http://i1.sndcdn.com/artworks-000050386537-zjgsyi-t500x500.jpg?0c5f27c" }
+
+    before do
+      allow(member).to receive(:soundcloud_tracks).and_return([soundcloud_track])
     end
-    it "should load the member's soundcloud tracks" do
-      @member.should_receive(:soundcloud_tracks).with(:reload).and_return([@soundcloud_track])
-      @member.sync_soundcloud_tracks
+
+    it "loads the member's soundcloud tracks" do
+      expect(member).to receive(:soundcloud_tracks).with(:reload).and_return([soundcloud_track])
+      member.sync_soundcloud_tracks
     end
-    describe "for each soundcloud track" do
-      it "should find or initialize a Track based on the soundcloud_id" do
-        @member.tracks.should_receive(:find_or_initialize_by_soundcloud_id).with(@soundcloud_track.id).and_return(@track)
-        @member.sync_soundcloud_tracks 
+
+    context "each soundcloud track" do
+      context "when there is an existing Track model" do
+        let!(:existing_track) { create(:track, member: member, soundcloud_id: soundcloud_track.id) }
+
+        it "updates the Track" do
+          expect {
+            member.sync_soundcloud_tracks
+          }.not_to change { 
+            member.tracks.count
+          }
+
+          existing_track.reload
+
+          expect(existing_track.soundcloud_id).to eq soundcloud_track.id
+          expect(existing_track.title).to eq soundcloud_track.title
+          expect(existing_track.permalink_url).to eq soundcloud_track.permalink_url
+          expect(existing_track.artwork_url).to eq full_size_artwork_url
+          expect(existing_track.stream_url).to eq soundcloud_track.stream_url
+          expect(existing_track.posted_at).to eq soundcloud_track.created_at
+        end      
       end
-      it "should update the Track attributes from soundcloud track data" do
-        expected_attributes = {
-          :title => @soundcloud_track.title,
-          :permalink_url => @soundcloud_track.permalink_url,
-          :artwork_url => "http://i1.sndcdn.com/artworks-000050386537-zjgsyi-t500x500.jpg?0c5f27c",
-          :stream_url => @soundcloud_track.stream_url,
-          :posted_at => Time.parse(@soundcloud_track.created_at)
-        }
-        @track.should_receive(:update_attributes).with(expected_attributes)
-        @member.sync_soundcloud_tracks 
+
+      context "when there is no existing Track model" do
+        it "creates a Track" do
+          expect {
+            member.sync_soundcloud_tracks
+          }.to change { 
+            member.tracks.count
+          }.by(1)
+
+          track = member.tracks.last
+          expect(track.soundcloud_id).to eq soundcloud_track.id
+          expect(track.title).to eq soundcloud_track.title
+          expect(track.permalink_url).to eq soundcloud_track.permalink_url
+          expect(track.artwork_url).to eq full_size_artwork_url
+          expect(track.stream_url).to eq soundcloud_track.stream_url
+          expect(track.posted_at).to eq soundcloud_track.created_at
+        end
       end
-      it "should set the Track's artwork_url to the Member's image_url if no artwork_url is given in the response" do
-        @soundcloud_track.artwork_url = nil
-        @track.should_receive(:update_attributes).with(hash_including(:artwork_url => @member.image_url))
-        @member.sync_soundcloud_tracks 
+
+      context 'when there is no artwork_url' do
+        before do
+          soundcloud_track.artwork_url = nil
+        end
+
+        it "sets the Track's artwork_url to the Member's image_url" do
+          member.sync_soundcloud_tracks 
+          expect(member.tracks.last.artwork_url).to eq member.image_url
+        end
       end
-      it "should destroy tracks that were removed from soundcloud" do
-        @member.tracks.should_receive(:where).with(["soundcloud_id NOT IN (?)", @member.soundcloud_tracks.map(&:id)]).and_return(@deleted_tracks)
-        @deleted_tracks.should_receive(:destroy_all)
-        @member.sync_soundcloud_tracks
+      
+      context 'when tracks were deleted from Soundcloud' do
+        let!(:track) { create(:track, member: member) }
+
+        it "destroys the Track models" do
+          member.sync_soundcloud_tracks
+          
+          expect { 
+            track.reload 
+          }.to raise_error(ActiveRecord::RecordNotFound)
+        end  
       end
-      it "should not destroy tracks if there are no tracks returned from soundcloud (safeguard)" do
-        @member.stub(:soundcloud_tracks).and_return([])
-        @member.tracks.should_not_receive(:where)
-        @deleted_tracks.should_not_receive(:destroy_all)
-        @member.sync_soundcloud_tracks
+      
+      context "when Soundcloud's API returns no tracks" do
+        let!(:track) { create(:track, member: member) }
+
+        before do
+          allow(member).to receive(:soundcloud_tracks).and_return([])
+        end
+
+        it "does not destroy tracks as a safeguard" do
+          member.sync_soundcloud_tracks
+
+          expect {
+            track.reload
+          }.not_to raise_error
+        end
       end
     end
   end
-
-  describe "#sync_soundcloud_tracks_in_background" do
-    it "should sync soundcloud tracks in the background" do
-      @member.save
-      MemberTrackSyncWorker.jobs.clear
-      @member.sync_soundcloud_tracks_in_background
-      MemberTrackSyncWorker.jobs.size.should == 1
-      MemberTrackSyncWorker.jobs.first["args"].should == [@member.id]
-    end
-  end
-
 
   describe ".sync_from_soundcloud(access_token)" do
+    let(:access_token) { 'soundtokez' }
+
+    let(:soundcloud_client) { double(::Soundcloud) }
+
     before(:each) do
-      @access_token = 'soundtokez'
-
-      @member_profile = ::Soundcloud::HashResponseWrapper.new({
-        "id" => 3897419, 
-        "permalink" => "dj-costanza", 
-        "username" => "DJ Costanza", 
-        "uri" => "https://api.soundcloud.com/users/3897419", 
-        "permalink_url" => "http://soundcloud.com/dj-costanza", 
-        "avatar_url" => "https://i1.sndcdn.com/avatars-000039096498-86ivun-large.jpg?0c5f27c",
-        "full_name" => "Mike Costanza",
-        "description" => "Beat Buddy",
-        "city" => "San Diego",
-        "country" => "United States"
-      })
-      @soundcloud_client = double(::Soundcloud, :get => @member_profile)
-      ::Soundcloud.stub(:new).and_return(@soundcloud_client)
-
-      @member = double(Member, :save => true, :valid? => true, :soundcloud_id => @member_profile.soundcloud_id)
-      Member.stub(:find_or_initialize_by_soundcloud_id).and_return(@member)
+      allow(soundcloud_client).to receive(:get).and_return(member_profile)
+      allow(::Soundcloud).to receive(:new).and_return(soundcloud_client)
     end
-    describe "access token is present" do
-      it "should load the soundcloud user's profile" do
-        ::Soundcloud.should_receive(:new).with(:access_token => @access_token).and_return(@soundcloud_client)
-        @soundcloud_client.should_receive(:get).with('/me').and_return(@member_profile)
-        Member.sync_from_soundcloud(@access_token)
+
+    context "when access token is present" do
+      it "loads the soundcloud user's profile" do
+        expect(::Soundcloud).to receive(:new).with(:access_token => access_token).and_return(soundcloud_client)
+        expect(soundcloud_client).to receive(:get).with('/me').and_return(member_profile)
+        Member.sync_from_soundcloud(access_token)
       end
-      it "should find or initialize a Member from soundcloud profile data" do
-        expected_attributes = {
-          :soundcloud_id => @member_profile.id,
-          :name => @member_profile.username,
-          :slug => @member_profile.permalink,
-          :image_url => "https://i1.sndcdn.com/avatars-000039096498-86ivun-t500x500.jpg?0c5f27c",
-          :full_name => @member_profile.full_name,
-          :bio => @member_profile.description,
-          :city => @member_profile.city,
-          :country => @member_profile.country,
-          :soundcloud_access_token => @access_token
-        }
-        Member.should_receive(:find_or_initialize_by_soundcloud_id).with(expected_attributes).and_return(@member)
-        Member.sync_from_soundcloud(@access_token)
+
+      it "creates a Member from Soundcloud profile data" do
+        expect {
+          Member.sync_from_soundcloud(access_token)
+        }.to change { 
+          Member.count
+        }.by(1)
+
+        member = Member.last
+
+        expect(member.soundcloud_id).to eq member_profile.id
+        expect(member.name).to eq member_profile.username
+        expect(member.slug).to eq member_profile.permalink
+        expect(member.image_url).to eq "https://i1.sndcdn.com/avatars-000039096498-86ivun-t500x500.jpg?0c5f27c"
+        expect(member.full_name).to eq member_profile.full_name
+        expect(member.bio).to eq member_profile.description
+        expect(member.city).to eq member_profile.city
+        expect(member.country).to eq member_profile.country
+        expect(member.soundcloud_access_token).to eq access_token
       end
-      it "should attempt to save the Member" do
-        @member.should_receive(:save)
-        Member.sync_from_soundcloud(@access_token)
-      end
-      it "should return the Member" do
-        Member.sync_from_soundcloud(@access_token).should == @member
+      
+      it "returns the Member" do
+        expect(Member.sync_from_soundcloud(access_token)).to eq Member.last
       end
     end
-    describe "access_token is nil" do
-      it "should return without loading any data" do
-        ::Soundcloud.should_not_receive(:new)
-        Member.should_not_receive(:find_or_initialize_by_soundcloud_id)
+
+    context "when access_token is nil" do
+      it "returns without loading any data" do
+        expect(::Soundcloud).not_to receive(:new)
         Member.sync_from_soundcloud(nil).should be_nil
+      end
+
+      it "does not create a member" do
+        expect { 
+          Member.sync_from_soundcloud(nil) 
+        }.not_to change {
+          Member.count
+        }
       end
     end
   end
 
   describe "#image(size = :large)" do
-    it "should return the large image by default" do
-      @member.image.should == @member.image_url    
+    it "returns the large image by default" do
+      expect(member.image).to eq member.image_url    
     end
-    it "should allow passing a :large option" do
-      @member.image(:large).should == @member.image_url
+    it "allows passing a :large option" do
+      expect(member.image(:large)).to eq member.image_url
     end
-    it "should allow passing a :small option" do
-      @member.image(:small).should == @member.image_url.gsub('t500x500', 't50x50')
+    it "allows passing a :small option" do
+      expect(member.image(:small)).to eq member.image_url.gsub('t500x500', 't50x50')
     end
-    it "should allow passing a :medium option" do
-      @member.image(:medium).should == @member.image_url.gsub('t500x500', 'large')
+    it "allows passing a :medium option" do
+      expect(member.image(:medium)).to eq member.image_url.gsub('t500x500', 'large')
     end
-    it "should default to large when an unknown size is passed" do
-      @member.image(:unknown).should == @member.image_url
+    it "defaults to large when an unknown size is passed" do
+      expect(member.image(:unknown)).to eq member.image_url
     end
   end
 
   describe "#soundcloud_profile_url" do
-    it "should return the member's soundcloud profile url" do
-      @member.soundcloud_profile_url.should == File.join("https://soundcloud.com", @member.slug)
+    it "returns the member's soundcloud profile url" do
+      expect(member.soundcloud_profile_url).to eq File.join("https://soundcloud.com", member.slug)
     end
   end
 
   describe "friendly id" do
-    it "should setup slug as a friendly id" do
-      @member.save
-      Member.find(@member.id).should == Member.find(@member.slug)
+    it "sets up slug as a friendly id" do
+      member.save
+      expect(Member.find(member.id)).to eq member
+      expect(Member.find(member.slug)).to eq member
     end
   end
 
   describe "#sync_soundcloud_profile" do
-    before(:each) do
-      @member_profile = ::Soundcloud::HashResponseWrapper.new({
-        "id" => 3897419, 
-        "permalink" => "dj-costanza", 
-        "username" => "DJ Costanza", 
-        "uri" => "https://api.soundcloud.com/users/3897419", 
-        "permalink_url" => "http://soundcloud.com/dj-costanza", 
-        "avatar_url" => "https://i1.sndcdn.com/avatars-000039096498-86ivun-large.jpg?0c5f27c",
-        "full_name" => "Mike Costanza",
-        "description" => "Beat Buddy",
-        "city" => "San Diego",
-        "country" => "United States"
-      })
-      @soundcloud_client = double(::Soundcloud, :get => @member_profile)
-      ::Sensori::Soundcloud.stub(:app_client).and_return(@soundcloud_client)
-    end
-    it "should load the soundcloud user's profile" do
-      @soundcloud_client.should_receive(:get).with("/users/#{@member.soundcloud_id}").and_return(@member_profile)
-      @member.sync_soundcloud_profile
-    end
-    it "should update the members profile data from soundcloud" do
-      expected_attributes = {
-        :name => @member_profile.username,
-        :slug => @member_profile.permalink,
-        :image_url => "https://i1.sndcdn.com/avatars-000039096498-86ivun-t500x500.jpg?0c5f27c",
-        :full_name => @member_profile.full_name,
-        :bio => @member_profile.description,
-        :city => @member_profile.city,
-        :country => @member_profile.country
-      }
-      @member.should_receive(:update_attributes).with(expected_attributes).and_return(true)
-      @member.sync_soundcloud_profile
-    end
-  end
+    let(:member) { create(:member, updated_at: 1.day.ago) }
 
-  it "should store an html version of the bio text when set" do
-    @member = Member.new(:bio => 'test')
-    @member.bio_html.should_not be_blank
+    let(:soundcloud_client) { double(::Soundcloud) }
+
+    before(:each) do
+      allow(soundcloud_client).to receive(:get).and_return(member_profile)
+      allow(Sensori::Soundcloud).to receive(:app_client).and_return(soundcloud_client)
+    end
+
+    it "loads the soundcloud user's profile" do
+      expect(soundcloud_client).to receive(:get).with("/users/#{member.soundcloud_id}").and_return(member_profile)
+      member.sync_soundcloud_profile
+    end
+
+    it "updates the member's profile data from soundcloud" do
+      expect {
+        member.sync_soundcloud_profile
+      }.to change { 
+        member.reload.updated_at
+      }
+
+      member.reload
+
+      expect(member.name).to eq member_profile.username
+      expect(member.slug).to eq member_profile.permalink
+      expect(member.image_url).to eq "https://i1.sndcdn.com/avatars-000039096498-86ivun-t500x500.jpg?0c5f27c"
+      expect(member.full_name).to eq member_profile.full_name
+      expect(member.bio).to eq member_profile.description
+      expect(member.city).to eq member_profile.city
+      expect(member.country).to eq member_profile.country
+    end
+
+    context 'when bio is set' do
+      before do
+        member_profile.bio = "bio!"
+      end
+
+      it "stores an html version" do
+        member.sync_soundcloud_profile
+        member.reload
+        expect(member.bio_html).to be_present
+      end
+    end
   end
 end

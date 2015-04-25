@@ -64,10 +64,6 @@ class Member < ActiveRecord::Base
     })
   end
 
-  def sync_soundcloud_tracks_in_background
-    MemberTrackSyncWorker.perform_async(self.id)
-  end
-
   def image(size = :large)
     case size
     when :small
@@ -103,5 +99,11 @@ class Member < ActiveRecord::Base
     member.save
 
     member
+  end
+
+  private
+
+  def sync_soundcloud_tracks_in_background
+    MemberTrackSyncWorker.perform_async(self.id)
   end
 end
