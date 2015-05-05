@@ -7,7 +7,7 @@
       Posted by <a href="<%= discussion.member.profilePath() %>" title="<%= discussion.member.get("name") %>" target="_blank"><%= discussion.member.get("name") %></a> <abbr class="timeago" title="<%= discussion.get('created_at') %>"></abbr>
     </div>
     <a href="<%= discussion.url() %>" class="link-right">Join Discussion</a>
-    <h5 class="media-heading"><a href="<%= discussion.url() %>"><%= discussion.get('subject') %></a></h5>
+    <h4 class="media-heading"><a href="<%= discussion.url() %>"><%= discussion.get('subject') %></a></h4>
     <%= _.truncate(discussion.get('body'), 100) %>
   </div>
 </div>

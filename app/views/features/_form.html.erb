@@ -1,0 +1,26 @@
+<div class="form-container">
+  <% if @feature.errors.any? %>
+    <div id="error_explanation">
+      <h4><%= pluralize(@feature.errors.count, "error") %> prohibited this feature from being saved:</h4>
+
+      <ul>
+      <% @feature.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_for(@feature, :html => { :multipart => true, :id => "feature-form" }) do |f| %>
+    <%= f.label :title %>
+    <%= f.text_field :title, :placeholder => "Title", :class => 'span6' %>
+    <%= f.label :description %>
+    <%= f.text_area :description, :placeholder => "Description", :rows => 10, :class => 'span6' %>
+    <%= f.label :link %>
+    <%= f.text_field :link, :placeholder => "Link", :class => 'span6' %>
+    <%= f.label :image %>
+    <%= f.file_field :image %>
+    <br/><br/>
+    <%= f.submit "Save", :class => "btn btn-primary" %>
+  <% end %>
+</div>

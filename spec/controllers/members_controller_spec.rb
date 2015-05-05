@@ -43,14 +43,9 @@ describe MembersController do
       expect(session[:soundcloud_id]).to be_nil
     end
 
-    it "redirects to the previous url with a flash notice" do
+    it "redirects to the previous url" do
       get 'sign_out'
       expect(response).to redirect_to(referer)
-    end
-
-    it "sets a flash notice" do
-      get 'sign_out'
-      expect(flash[:notice]).not_to be_nil
     end
   end
 
@@ -103,9 +98,8 @@ describe MembersController do
             expect(response).to redirect_to(root_url)
           end
 
-          it "sets flash data" do
+          it "does not set flash data for a new member" do
             make_request
-            expect(flash[:notice]).not_to be_nil
             expect(flash[:signed_up]).to be_false
           end
         end
@@ -120,9 +114,8 @@ describe MembersController do
             expect(response).to redirect_to(root_url)
           end
 
-          it "sets flash data, including signed_up: true" do
+          it "sets flash data for a new member" do
             make_request
-            expect(flash[:notice]).not_to be_nil
             expect(flash[:signed_up]).to be_true
           end
         end
@@ -140,10 +133,8 @@ describe MembersController do
           make_request
           expect(response).to redirect_to(root_url)
         end
-
-        it "sets a flash error message" do
+        it "does not set flash data for a new member" do
           make_request
-          expect(flash[:error]).not_to be_nil
           expect(flash[:signed_up]).to be_false
         end
       end
@@ -156,15 +147,10 @@ describe MembersController do
         expect(Member).not_to receive(:sync_from_soundcloud)
         make_request
       end
-
+      
       it "redirects to the root url" do
         make_request
         expect(response).to redirect_to root_url
-      end
-
-      it "sets a flash error message" do
-        make_request
-        expect(flash[:error]).not_to be_nil
       end
 
       it "does not sign the user in" do

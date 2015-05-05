@@ -1,0 +1,17 @@
+<% if admin? %>
+<div class="row">
+<%= render :partial => 'shared/action_buttons', :locals => { :object => @feature } %>
+</div>
+<% end %>
+<div class="row">
+  <div class="span8">
+    <%= image_tag @feature.image_url %>
+  </div>
+  <div class="span4 sidebar">
+    <h2><%= title @feature.title %></h2>
+    <p><%= simple_format(@feature.description) %></p>
+    <i class="icon-arrow-right"></i> <%= link_to "Link", @feature.link, :target => "_blank" %>
+  </div>
+</div>
+
+

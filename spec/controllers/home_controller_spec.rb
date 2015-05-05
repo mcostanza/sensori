@@ -11,38 +11,24 @@ describe HomeController do
       get 'index'
       expect(response).to render_template('home/index')
     end
-
+    
     context 'assigned data' do
-      let!(:track_1) { create(:track, :posted_at => 5.minutes.ago) }
-      let!(:track_2) { create(:track, :posted_at => 4.minutes.ago) }
-      let!(:track_3) { create(:track, :posted_at => 3.minutes.ago) }
-      let!(:track_4) { create(:track, :posted_at => 2.minutes.ago) }
-      let!(:track_5) { create(:track, :posted_at => 1.minute.ago)  }
-
       let!(:tutorial_1) { create(:tutorial, :created_at => 5.days.ago) }
       let!(:tutorial_2) { create(:tutorial, :created_at => 4.days.ago, :featured => true) }
       let!(:tutorial_3) { create(:tutorial, :created_at => 3.days.ago) }
       let!(:tutorial_4) { create(:tutorial, :created_at => 2.days.ago, :published => false) }
       let!(:tutorial_5) { create(:tutorial, :created_at => 1.day.ago) }
 
-      let!(:discussion_1) { create(:discussion, :last_post_at => 4.minutes.ago) }
-      let!(:discussion_2) { create(:discussion, :last_post_at => 3.minutes.ago) }
-      let!(:discussion_3) { create(:discussion, :last_post_at => 2.minutes.ago) }
-      let!(:discussion_4) { create(:discussion, :last_post_at => 1.minute.ago)  }
-
-      it "finds and assigns the latest tracks" do
-        get 'index'
-        expect(assigns[:latest_tracks]).to eq([track_5, track_4, track_3, track_2])
-      end
+      let!(:feature_1) { create(:feature) }
 
       it "finds and assigns featured and latest published tutorials" do
         get 'index'
         expect(assigns[:tutorials]).to eq([tutorial_2, tutorial_5, tutorial_3])
       end
 
-      it "finds and assigns the latest discussions" do
+      it "assigns all features to @features" do
         get 'index'
-        expect(assigns[:discussions]).to eq([discussion_4, discussion_3, discussion_2])
+        expect(assigns[:features]).to eq([feature_1])
       end
     end
   end

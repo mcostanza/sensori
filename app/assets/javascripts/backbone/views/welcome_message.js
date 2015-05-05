@@ -1,6 +1,6 @@
 Sensori.Views.WelcomeMessage = Backbone.View.extend({
   initialize: function() {
-    this.popoverTarget = this.$("#nav-beats");
+    this.popoverTarget = this.$(".navbar .container");
   },
 
   events: {

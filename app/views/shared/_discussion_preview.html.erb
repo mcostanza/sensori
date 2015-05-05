@@ -10,7 +10,7 @@
     <% if discussion.response_count > 0 -%>
     <div class="comment-bubble"><%= discussion.response_count %></div>
     <% end -%>
-    <h5 class="media-heading"><%= link_to discussion.subject, discussion %></h5>
+    <h4 class="media-heading"><%= link_to discussion.subject, discussion %></h4>
     <%= truncate(discussion.body, :length => 100) %>
   </div>
 </div>

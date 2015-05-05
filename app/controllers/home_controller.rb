@@ -1,9 +1,8 @@
 class HomeController < ApplicationController
   # GET /
   def index
-    @latest_tracks = Track.includes(:member).latest.limit(4)
+    @features = Feature.all
     @tutorials = Tutorial.includes(:member).where(:published => true).limit(3)
-    @discussions = Discussion.includes(:member).limit(3)
   end
 
   # GET /about

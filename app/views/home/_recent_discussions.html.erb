@@ -1,9 +1,0 @@
-<div class="row">
-  <div class="span12">
-    <h2>Recent Discussions</h2>
-    <% discussions.each do |discussion| %>
-      <%= render :partial => 'shared/discussion_preview', :object => discussion, :as => 'discussion' %>
-    <% end %>
-    <%= link_to raw("View more &raquo;"), discussions_path, :class => "btn btn-inverse btn-mini pull-right" %>
-  </div>
-</div>

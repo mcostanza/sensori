@@ -3,7 +3,7 @@ describe("Sensori.Views.WelcomeMessage", function() {
       el;
 
   beforeEach(function() {
-    el = $("<body><div class='nav'><ul><li id='nav-beats'><a href='#'>Beats</a></li></ul></div></body>");
+    el = $("<body><div class='nav'><div class='container'></div></div></body>");
     view = new Sensori.Views.WelcomeMessage({ el: el });
   });
 
@@ -14,8 +14,8 @@ describe("Sensori.Views.WelcomeMessage", function() {
   });
 
   describe("initialize", function() {
-    it("should set popoverTarget to the beats nav element", function() {
-      expect(view.popoverTarget).toEqual(view.$("#nav-beats"));
+    it("should set popoverTarget to the navbar container", function() {
+      expect(view.popoverTarget).toEqual(view.$(".navbar .container"));
     });
   });
 

@@ -9,7 +9,6 @@ class MembersController < ApplicationController
 
   def sign_out
     reset_session
-    flash[:notice] = "Successfully signed out"
     redirect_to :back
   end
 
@@ -21,9 +20,6 @@ class MembersController < ApplicationController
 
     if @member && @member.valid?
       session[:soundcloud_id] = @member.soundcloud_id
-      flash[:notice] = "Signed in successfully!"
-    else
-      flash[:error] = "Error while signing in..."
     end
     flash[:signed_up] = @member && @member.just_created?
 

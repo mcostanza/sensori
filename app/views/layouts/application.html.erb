@@ -5,6 +5,7 @@
   <link rel="icon" type="image/png" href="/favicon.png" />
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
   <script src="//connect.soundcloud.com/sdk.js?v=1"></script>
   <script>
     SC.initialize(<%= { :client_id => Sensori::Soundcloud.client_id }.to_json.html_safe %>);
@@ -13,7 +14,7 @@
   <%= csrf_meta_tags %>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-  <%= content_tag :body, :class => controller.controller_name do %>
+<%= content_tag :body, :class => controller.controller_name, :id => "#{controller.controller_name}-#{controller.action_name}" do %>
     <div id="wrap">
       <%= render 'shared/navbar' %>
       <div class="container <%= controller.controller_name %>-container">
@@ -30,7 +31,7 @@
       $(function() {
         soundManager.onready(function() {
           Sensori.Player = new Sensori.Views.Player({
-            collection: new Sensori.Collections.Tracks(<%= raw (@latest_tracks || @tracks).to_json %>),
+            collection: new Sensori.Collections.Tracks(<%= raw @tracks.to_json %>),
             el: $('body')
           });
         });

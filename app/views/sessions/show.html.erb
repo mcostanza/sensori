@@ -16,7 +16,7 @@
       <%= link_to "View Submissions", session_submissions_path(@session) %>
     <% end %>
   </div>
-  <div class="span4">
+  <div class="span4 sidebar">
     <h2><%= title @session.title %></h2>
     <p><%= simple_format(@session.description) %></p>
     <% if @session.attachment_url? %>

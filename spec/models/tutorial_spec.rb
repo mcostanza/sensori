@@ -112,6 +112,21 @@ describe Tutorial do
     end
   end
 
+  describe "#image_url(size)" do
+    before do
+      @youtube_image_url = 'http://youtube.com/image'
+      @tutorial.stub(:youtube_image_url).and_return(@youtube_image_url)
+    end
+    it "should return the youtube_image_url regardless of the size passed" do
+      @tutorial.image_url(:thumb).should == @youtube_image_url
+      @tutorial.image_url(:random).should == @youtube_image_url
+      @tutorial.image_url(nil).should == @youtube_image_url
+    end
+    it "should not require a size be passed" do
+      @tutorial.image_url.should == @youtube_image_url
+    end
+  end
+
   describe "#youtube_embed_url" do
     it "returns an embed url based on self.youtube_id" do
       expect(tutorial.youtube_embed_url).to eq "http://www.youtube.com/embed/#{tutorial.youtube_id}"

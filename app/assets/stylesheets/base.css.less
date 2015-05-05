@@ -16,10 +16,24 @@ abbr[title] {
   cursor: default;
 }
 
+h1 {
+  font-family: 'Open Sans';
+  font-weight: 600;
+}
+
+h2, h3, h4, h5, h6 { 
+  font-family: 'Open Sans';
+  font-weight: 400;
+}
+
 h3 {
   > a, > a:hover {
     color: #000;
   }
+}
+
+p { 
+  color: #333;
 }
 
 .pagination > ul > li > a, .pagination > ul > .active > span {
@@ -54,6 +68,12 @@ h3 {
     text-transform: uppercase;
     padding: 13px 15px 7px 15px;
   }
+  .nav > li > a:focus {
+    color: #999;
+  }
+  .nav > li > a:hover {
+    color: #fff;
+  }
   .brand {
     width: 80px;
     height: 40px;
@@ -68,10 +88,44 @@ h3 {
   }
   .navbar-inner {
     .border-radius(0px);
-    .box-shadow(0 1px 3px rgba(0,0,0,0.25));
+    .box-shadow(0 1px 3px rgba(0,0,0,0.30));
+    border-color: #444;
+    padding-bottom: 1px;
   }
   .soundcloud-connect {
     margin-top: 7px;
+  }
+  .dropdown-menu {
+    background-color: #000;
+    font-family: 'Orator';
+    border: 1px solid #444;
+    border-top: 0px;
+    .border-top-radius(0px);
+    top: 39px;
+    .box-shadow(0 5px 10px rgba(0,0,0,0.30));
+    > li > a {
+      color: #999;
+      font-size: 12px;
+      text-transform: uppercase;
+      &:hover {
+        background-color: #000;
+        background-image: none;
+        color: #fff;
+      }
+    }
+  }
+  //Hide dropdown caret
+  .nav > li > .dropdown-menu {
+    &:before {
+      display: none;
+    }
+    &:after {
+      display: none;
+    }
+  }
+  //Hide welcome message caret
+  .popover .arrow {
+    display: none;
   }
   .member-header {
     padding: 10px 0px 0px 0px;
@@ -106,6 +160,10 @@ h3 {
 
   li {
     margin-bottom: 5px;
+  }
+
+  a {
+    color: #333;
   }
 }
 
@@ -149,6 +207,7 @@ h3 {
   .box-shadow(0 1px 3px rgba(0,0,0,0.055));
   .media-body {
     padding-right: 15px;
+    color: #333;
   }
   .media-heading {
     a { color: #000; }
@@ -193,9 +252,6 @@ h3 {
 .beats { 
   .thumbnail-wrapper {
     position: relative;
-  }
-  a {
-    color: #000;
   }
   a.overlay {
     position: absolute;
@@ -250,6 +306,10 @@ h3 {
       font-family: 'Orator';
       text-transform: uppercase;
       font-weight: normal;
+    }
+    .dropdown-menu {
+      border: none;
+      background: transparent;
     }
   }
   .navbar-fixed-top {
