@@ -1,7 +1,7 @@
 class Session < ActiveRecord::Base
   extend FriendlyId
 
-  attr_accessible :title, :description, :image, :member_id, :facebook_event_id, :end_date, :attachment_url, :soundcloud_playlist_url
+  attr_accessible :title, :description, :image, :member_id, :facebook_event_id, :end_date, :attachment_url, :soundcloud_playlist_url, :bandcamp_album_id
   default_scope order('id DESC')
 
   belongs_to :member
