@@ -1,39 +1,37 @@
 require 'spec_helper'
 
 describe Feature do
-  before(:each) do
-    @feature = FactoryGirl.build(:feature)
-  end
-
+  let(:feature_model) { build(:feature) }
+  
   describe "validations" do
-    it "should be valid given valid attributes" do
-      @feature.should be_valid
+    it "is valid given valid attributes" do
+      expect(feature_model).to be_valid
     end
-    it "should be invalid without a member" do
-      @feature.member = nil
-      @feature.should_not be_valid
+    it "is invalid without a member" do
+      feature_model.member = nil
+      expect(feature_model).not_to be_valid
     end
-    it "should be invalid without a title" do
-      @feature.title = nil
-      @feature.should_not be_valid
+    it "is invalid without a title" do
+      feature_model.title = nil
+      expect(feature_model).not_to be_valid
     end
-    it "should be invalid without a description" do
-      @feature.description = nil
-      @feature.should_not be_valid
+    it "is invalid without a description" do
+      feature_model.description = nil
+      expect(feature_model).not_to be_valid
     end
-    it "should be invalid without an image" do
-      @feature.remove_image!
-      @feature.should_not be_valid
+    it "is invalid without an image" do
+      feature_model.remove_image!
+      expect(feature_model).not_to be_valid
     end
-    it "should be invalid without a link" do
-      @feature.link = nil
-      @feature.should_not be_valid
+    it "is invalid without a link" do
+      feature_model.link = nil
+      expect(feature_model).not_to be_valid
     end
   end
 
   describe "associations" do
-    it "should have a member association" do
-      @feature.should respond_to(:member)
+    it "belongs to a member" do
+      expect(Feature.reflect_on_association(:member).macro).to eq :belongs_to
     end
   end
 end
