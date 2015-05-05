@@ -3,32 +3,36 @@ require 'spec_helper'
 describe DiscussionNotificationWorker do
   
   describe "#perform(response_id)" do
+    let(:discussion) { create(:discussion) }
+    let!(:response_1) { create(:response, discussion: discussion) }
+    let!(:response_2) { create(:response, discussion: discussion) }
+    let!(:response_3) { create(:response, discussion: discussion) }
+    let(:email ) { double('email') }
+
     before(:each) do
-      @response_id = 1
-      @member = double(Member)
-      @notifications = [double(DiscussionNotification, :member => @member)]
-      @discussion = double(Discussion, :notifications => @notifications)
-      @response = double(Response, :discussion => @discussion, :member => double(Member))
-      Response.stub(:find).and_return(@response)
-      @email = double('email', :deliver => true)
-      NotificationMailer.stub(:discussion_notification).and_return(@email)
+      allow(email).to receive(:deliver)
+      allow(NotificationMailer).to receive(:discussion_notification).and_return(email)
     end
-    it "should find the Response from response_id" do
-      Response.should_receive(:find).with(@response_id).and_return(@response)
-      DiscussionNotificationWorker.new.perform(@response_id)
+
+    it "finds the Response from response_id" do
+      expect(Response).to receive(:find).with(response_3.id).and_return(response_3)
+      DiscussionNotificationWorker.new.perform(response_3.id)
     end
-    it "should deliver the notifications" do
-      NotificationMailer.should_receive(:discussion_notification).with(:member => @member, :response => @response).and_return(@email)
-      @email.should_receive(:deliver)
-      DiscussionNotificationWorker.new.perform(@response_id)
+
+    it "sends an email to each member associated with the discussion" do
+      expect(NotificationMailer).to receive(:discussion_notification).with(:member => response_1.member, :response => response_3).and_return(email)
+      expect(NotificationMailer).to receive(:discussion_notification).with(:member => response_2.member, :response => response_3).and_return(email)
+      expect(email).to receive(:deliver)
+      DiscussionNotificationWorker.new.perform(response_3.id)
     end
-    it "should not send a notification to the member responding" do
-      @response.stub(:member).and_return(@member)
-      NotificationMailer.should_not_receive(:discussion_notification)
-      DiscussionNotificationWorker.new.perform(@response_id)
+    
+    it "does not send a notification to the responding member" do
+      expect(NotificationMailer).not_to receive(:discussion_notification).with(:member => response_3.member, :response => response_3)
+      DiscussionNotificationWorker.new.perform(response_3.id)
     end
-    it "should have an async method" do
-      DiscussionNotificationWorker.should respond_to(:perform_async)
+
+    it "has an async method" do
+      expect(DiscussionNotificationWorker).to respond_to(:perform_async)
     end
   end
 end

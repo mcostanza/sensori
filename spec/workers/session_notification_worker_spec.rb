@@ -3,36 +3,31 @@ require 'spec_helper'
 describe SessionNotificationWorker do
   
   describe "#perform(session_id)" do
+    let(:member_1) { create(:member) }
+    let(:member_2) { create(:member) }
+    let(:member_3) { create(:member, :email => nil) }
+    let(:session) { create(:session, :member => member_1) }
+
+    let(:email) { double('email') }
+
     before(:each) do
-      @member_1 = double(Member, :email => "member@email.com")
-      @session_id = 123
-      @session = double(Session, :title => "Creating a Sampled Bass Patch", :description => "How 2 make 1", :member => @member_1)
-      Session.stub(:find).and_return(@session)
+      allow(email).to receive(:deliver)
+      allow(NotificationMailer).to receive(:session_notification).and_return(email)
+    end
 
-      @member_2 = double(Member, :name => "DJ Jones", :email => "jones@jones.com")
-      Member.stub(:find_each).and_yield(@member_1).and_yield(@member_2)
+    it "finds the Session from session_id" do
+      expect(Session).to receive(:find).with(session.id).and_return(session)
+      SessionNotificationWorker.new.perform(session.id)
+    end
 
-      @email = double('email', :deliver => true)
-      NotificationMailer.stub(:session_notification).and_return(@email)
+    it "delivers a session notification to all members with an email, except the member who created the session" do
+      expect(NotificationMailer).to receive(:session_notification).once.with(:member => member_2, :session => session).and_return(email)
+      expect(email).to receive(:deliver).once
+      SessionNotificationWorker.new.perform(session.id)
     end
-    it "should find the Session from session_id" do
-      Session.should_receive(:find).with(@session_id).and_return(@session)
-      SessionNotificationWorker.new.perform(@session_id)
-    end
-    it "should deliver a session notification to all members except the member who created the session" do
-      Member.should_receive(:find_each).and_yield(@member_1).and_yield(@member_2)
-      NotificationMailer.should_receive(:session_notification).once.with(:member => @member_2, :session => @session).and_return(@email)
-      @email.should_receive(:deliver).once
-      SessionNotificationWorker.new.perform(@session_id)
-    end
-    it "should skip members who do not have an email" do
-      Member.should_receive(:find_each).and_yield(@member_1).and_yield(@member_2)
-      @member_2.stub(:email).and_return(nil)
-      NotificationMailer.should_not_receive(:session_notification)
-      SessionNotificationWorker.new.perform(@session_id)
-    end
-    it "should have an async method" do
-      SessionNotificationWorker.should respond_to(:perform_async)
+
+    it "has an async method" do
+      expect(SessionNotificationWorker).to respond_to(:perform_async)
     end
   end
 end
