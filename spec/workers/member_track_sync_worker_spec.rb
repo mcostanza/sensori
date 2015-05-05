@@ -3,21 +3,25 @@ require 'spec_helper'
 describe MemberTrackSyncWorker do
   
   describe "#perform(member_id)" do
+    let(:member) { create(:member) }
+
     before(:each) do
-      @member_id = 1
-      @member = double(Member, :sync_soundcloud_tracks => true)
-      Member.stub(:find).and_return(@member)
+      allow(member).to receive(:sync_soundcloud_tracks)
+      allow(Member).to receive(:find).and_return(member)
     end
-    it "should find the Member from member_id" do
-      Member.should_receive(:find).with(@member_id).and_return(@member)
-      MemberTrackSyncWorker.new.perform(@member_id)
+
+    it "finds the Member from member_id" do
+      expect(Member).to receive(:find).with(member.id).and_return(member)
+      MemberTrackSyncWorker.new.perform(member.id)
     end
-    it "should sync the Member's soundcloud tracks" do
-      @member.should_receive(:sync_soundcloud_tracks)
-      MemberTrackSyncWorker.new.perform(@member_id)
+
+    it "syncs the Member's soundcloud tracks" do
+      expect(member).to receive(:sync_soundcloud_tracks)
+      MemberTrackSyncWorker.new.perform(member.id)
     end
-    it "should have an async method" do
-      MemberTrackSyncWorker.should respond_to(:perform_async)
+
+    it "has an async method" do
+      expect(MemberTrackSyncWorker).to respond_to(:perform_async)
     end
   end
 

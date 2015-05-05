@@ -1,138 +1,185 @@
 require 'spec_helper'
 
 describe Tutorial do
-  before(:each) do
-    @tutorial = FactoryGirl.build(:tutorial)
-  end
-
+  let(:tutorial) { build(:tutorial) }
+  
   describe "validations" do
-    it "should be valid given valid attributes" do
-      @tutorial.should be_valid
+    it "is valid given valid attributes" do
+      tutorial.should be_valid
     end
-    it "should be invalid without a title" do
-      @tutorial.title = nil
-      @tutorial.should_not be_valid
+    it "is invalid without a title" do
+      tutorial.title = nil
+      tutorial.should_not be_valid
     end
-    it "should be invalid without a description" do
-      @tutorial.description = nil
-      @tutorial.should_not be_valid
+    it "is invalid without a description" do
+      tutorial.description = nil
+      tutorial.should_not be_valid
     end
-    it "should be invalid without a member" do
-      @tutorial.member = nil
-      @tutorial.should_not be_valid
+    it "is invalid without a member" do
+      tutorial.member = nil
+      tutorial.should_not be_valid
     end
-    it "should be invalid without body_html" do
-      @tutorial.body_html = nil
-      @tutorial.should_not be_valid
+    it "is invalid without body_html" do
+      tutorial.body_html = nil
+      tutorial.should_not be_valid
     end
   end
 
   describe "callbacks" do
     describe "before_save" do
-      it "should call format_table_of_contents" do
-        @tutorial.should_receive(:format_table_of_contents)
-        @tutorial.save
+      before do
+        allow(tutorial).to receive(:format_table_of_contents)
+      end
+
+      it "formats the table of contents" do
+        expect(tutorial).to receive(:format_table_of_contents)
+        tutorial.save
       end
     end
 
-    it "should set slug from the title when saving" do
-      @tutorial.save
-      @tutorial.slug.should == @tutorial.title.parameterize
+    it "sets slug from the title" do
+      tutorial.save
+      expect(tutorial.slug).to eq tutorial.title.parameterize
     end
 
     describe "after_update" do
-      before(:each) do
-        @tutorial.save
+      let(:tutorial) { create(:tutorial, published: false) }
+
+      before do
+        allow(TutorialNotificationWorker).to receive(:perform_async)
       end
-      it "should call deliver_tutorial_notifications_if_published" do
-        @tutorial.should_receive(:deliver_tutorial_notifications_if_published)
-        @tutorial.published = true
-        @tutorial.save
+
+      context 'when published changed to true' do
+        it "creates a worker to send tutorial notifications if published changed false => true" do
+          tutorial.update_attributes(published: true)
+          expect(TutorialNotificationWorker).to have_received(:perform_async).with(tutorial.id)
+        end
+      end
+
+      context 'when published did not change to true' do
+        it "does not create a worker to send tutorial notifications" do
+          tutorial.update_attributes(title: "new title")
+          tutorial.deliver_tutorial_notifications_if_published
+          expect(TutorialNotificationWorker).not_to have_received(:perform_async)
+        end
       end
     end
   end
 
   describe "#editable?(member)" do
-    it "should return true if the member is an admin" do
-      admin = FactoryGirl.build(:member, :admin => true)
-      @tutorial.editable?(admin).should be_true
+    let(:admin) { build(:member, :admin) }
+    let(:creator) { tutorial.member }
+    let(:other_member) { build(:member) }
+
+    context 'when member is an admin' do
+      it "returns true" do
+        expect(tutorial.editable?(admin)).to be_true
+      end
     end
-    it "should return true if the member created the tutorial" do
-      creator = @tutorial.member
-      @tutorial.editable?(creator).should be_true
+
+    context 'when member is the creator of the tutorial' do
+      it "returns true" do
+        expect(tutorial.editable?(creator)).to be_true
+      end
     end
-    it "should return false if the member is not an admin and did not create the tutorial" do
-      buddy = FactoryGirl.build(:member, :admin => false)
-      @tutorial.editable?(buddy).should be_false
+
+    context 'when member is not the creator and not an admin' do
+      it "returns false" do
+        expect(tutorial.editable?(other_member)).to be_false
+      end
     end
-    it "should return false if the member is nil" do
-      @tutorial.editable?(nil).should be_false
+
+    context 'when member is nil' do
+      it "returns false" do
+        expect(tutorial.editable?(nil)).to be_false
+      end
     end
   end
 
   describe "#youtube_image_url" do
-    it "should return an image url based on self.youtube_id" do
-      @tutorial.youtube_image_url.should == "http://img.youtube.com/vi/#{@tutorial.youtube_id}/0.jpg"
+    it "returns an image url based on self.youtube_id" do
+      expect(tutorial.youtube_image_url).to eq "http://img.youtube.com/vi/#{tutorial.youtube_id}/0.jpg"
     end
-    it "should return a placeholder image if youtube_id is not set" do
-      @tutorial.youtube_id = nil
-      @tutorial.youtube_image_url.should == "https://s3.amazonaws.com/sensori/video-placeholder.jpg"
+
+    context 'when youtube_id is not set' do
+      before do
+        tutorial.youtube_id = nil
+      end
+
+      it "returns a placeholder image" do
+        expect(tutorial.youtube_image_url).to eq "https://s3.amazonaws.com/sensori/video-placeholder.jpg" 
+      end
     end
   end
 
   describe "#image_url(size)" do
-    before do
-      @youtube_image_url = 'http://youtube.com/image'
-      @tutorial.stub(:youtube_image_url).and_return(@youtube_image_url)
+    it "returns the youtube_image_url regardless of the size passed" do
+      expect(tutorial.image_url(:thumb)).to eq tutorial.youtube_image_url
+      expect(tutorial.image_url(:random)).to eq tutorial.youtube_image_url
+      expect(tutorial.image_url(:random)).to eq tutorial.youtube_image_url
     end
-    it "should return the youtube_image_url regardless of the size passed" do
-      @tutorial.image_url(:thumb).should == @youtube_image_url
-      @tutorial.image_url(:random).should == @youtube_image_url
-      @tutorial.image_url(nil).should == @youtube_image_url
-    end
-    it "should not require a size be passed" do
-      @tutorial.image_url.should == @youtube_image_url
+    
+    it "does not require a size be passed" do
+      expect(tutorial.image_url).to eq tutorial.youtube_image_url
     end
   end
 
   describe "#youtube_embed_url" do
-    it "should return an embed url based on self.youtube_id" do
-      @tutorial.youtube_embed_url.should == "http://www.youtube.com/embed/#{@tutorial.youtube_id}"
+    it "returns an embed url based on self.youtube_id" do
+      expect(tutorial.youtube_embed_url).to eq "http://www.youtube.com/embed/#{tutorial.youtube_id}"
     end
   end
 
   describe "#youtube_video_url" do
-    it "should return a video url based on self.youtube_id" do
-      @tutorial.youtube_video_url.should == "http://www.youtube.com/watch?v=#{@tutorial.youtube_id}"
+    it "returns a video url based on self.youtube_id" do
+      expect(tutorial.youtube_video_url).to eq "http://www.youtube.com/watch?v=#{tutorial.youtube_id}"
     end
   end
 
   describe "#format_table_of_contents" do
-    it "should process the tutorial with a table of contents formatter and set the body_html from the result" do
-      formatter = double(Formatters::Tutorial::TableOfContents)
-      Formatters::Tutorial::TableOfContents.should_receive(:new).with(@tutorial).and_return(formatter)
-      formatter.should_receive(:format).and_return("processed content")
-      @tutorial.format_table_of_contents
-      @tutorial.body_html.should == "processed content"
+    let(:tutorial) { build(:tutorial) }
+    let(:formatter) { double(TutorialTableOfContentsService) }
+    let(:formatted_content) { 'formatted content' }
+
+    before do
+      allow(TutorialTableOfContentsService).to receive(:new).and_return(formatter)
+      allow(formatter).to receive(:format).and_return(formatted_content)
     end
-    it "should not do anything if include_table_of_contents is false" do
-      @tutorial.include_table_of_contents = false
-      Formatters::Tutorial::TableOfContents.should_not_receive(:new)
-      @tutorial.should_not_receive(:body_html=)
-      @tutorial.format_table_of_contents
+
+    it "should process the tutorial with a table of contents formatter and set the body_html from the result" do
+      expect(TutorialTableOfContentsService).to receive(:new).with(tutorial).and_return(formatter)
+      expect(formatter).to receive(:format).and_return(formatted_content)
+      tutorial.format_table_of_contents
+      expect(tutorial.body_html).to eq formatted_content
+    end
+
+    context 'when include_table_of_contents is false' do
+      let(:tutorial) { build(:tutorial, include_table_of_contents: false) }
+
+      it "does nothing" do
+        expect(TutorialTableOfContentsService).not_to receive(:new)
+        expect {
+          tutorial.format_table_of_contents
+        }.not_to change { tutorial.body_html }
+      end
     end
   end
 
   describe "#body_components" do
-    it "should return a formatted array if nil" do
-      @tutorial.body_components = nil
-      @tutorial.body_components.should == [{ "type" => "text", "content" => "" }, { "type" => "gallery", "content" => [] }]
+    context 'when the attribute is nil' do
+      before do
+        tutorial.body_components = nil
+      end
+
+      it "returns an array of default components" do
+        tutorial.body_components.should == [{ "type" => "text", "content" => "" }, { "type" => "gallery", "content" => [] }]
+      end  
     end
   end
 
   describe "#prepare_preview(params)" do
-    before(:each) do
-      @params = {
+    let(:params) do
+      {
         :title => "new title",
         :description => "this is it",
         :body_html => "new body html",
@@ -140,50 +187,58 @@ describe Tutorial do
         :attachment_url => "http://s3.amazon.com/samples.zip",
         :include_table_of_contents => "true"
       }
-      @tutorial = FactoryGirl.build(:tutorial)
-      @tutorial.stub(:format_table_of_contents)
     end
-    it "should set title, description, body_html, youtube_id, and attachment_url" do
-      @tutorial.prepare_preview(@params)
-      @tutorial.title.should == @params[:title]
-      @tutorial.description.should == @params[:description]
-      @tutorial.youtube_id.should == @params[:youtube_id]
-      @tutorial.body_html.should == @params[:body_html]
-      @tutorial.attachment_url.should == @params[:attachment_url]
-    end
-    it "should not set other attributes" do
-      @tutorial.prepare_preview(@params.merge(id: 123, body_components: "oops"))
-      @tutorial.id.should_not == 123
-      @tutorial.body_components.should_not == "oops"
-    end
-    it "should format the table of contents if params[:include_table_of_contents].to_s is 'true'" do
-      @tutorial.should_receive(:format_table_of_contents)
-      @tutorial.prepare_preview(@params)
-    end
-    it "should not format the table of contents if params[:include_table_of_contents] is not true" do
-      @params[:include_table_of_contents] = "false"
-      @tutorial.should_not_receive(:format_table_of_contents)
-      @tutorial.prepare_preview(@params)
-    end
-    it "should not save the tutorial" do
-      @tutorial.should_not_receive(:save)
-      @tutorial.prepare_preview(@params)
-    end
-  end
 
-  describe "#deliver_tutorial_notifications_if_published" do
-    before(:each) do
-      @tutorial = FactoryGirl.create(:tutorial, :published => false)
+    before do
+      allow(tutorial).to receive(:format_table_of_contents)
     end
-    it "should create a worker to send tutorial notifications if published changed false => true" do
-      @tutorial.published = true
-      TutorialNotificationWorker.should_receive(:perform_async).with(@tutorial.id)
-      @tutorial.deliver_tutorial_notifications_if_published
+
+    it "sets title, description, body_html, youtube_id, and attachment_url" do
+      tutorial.prepare_preview(params)
+      expect(tutorial.title).to eq params[:title]
+      expect(tutorial.description).to eq params[:description]
+      expect(tutorial.youtube_id).to eq params[:youtube_id]
+      expect(tutorial.body_html).to eq params[:body_html]
+      expect(tutorial.attachment_url).to eq params[:attachment_url]
     end
-    it "should not create a worker if published did not change" do
-      @tutorial.title = "new title"
-      TutorialNotificationWorker.should_not_receive(:perform_async)
-      @tutorial.deliver_tutorial_notifications_if_published
+
+    context 'when additional attributes are passed' do
+      before do
+        params[:id] = 123
+        params[:body_components] = 'oops'
+      end
+
+      it "does not set other attributes" do
+        tutorial.prepare_preview(params)
+        expect(tutorial.id).not_to eq 123
+        expect(tutorial.body_components).not_to eq "oops"
+      end  
+    end
+    
+    context 'when params[:include_table_of_contents] is true' do
+      it "formats the table of contents if params[:include_table_of_contents].to_s is 'true'" do
+        expect(tutorial).to receive(:format_table_of_contents)
+        tutorial.prepare_preview(params)
+      end  
+    end
+    
+    context 'when params[:include_table_of_contents] is not true' do
+      before do
+        params[:include_table_of_contents] = "false"
+      end
+      
+      it "does not format the table of contents if params[:include_table_of_contents] is not true" do
+        expect(tutorial).not_to receive(:format_table_of_contents)
+        tutorial.prepare_preview(params)
+      end      
+    end
+
+    it "does not save the tutorial" do
+      expect {
+        tutorial.prepare_preview(params)
+      }.not_to change {
+        tutorial.updated_at
+      }
     end
   end
 end

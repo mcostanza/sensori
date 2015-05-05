@@ -52,7 +52,7 @@ class DiscussionsController < ApplicationController
   private
 
   def ensure_editable
-    @discussion = Discussion.find(params[:id])
+    @discussion = Discussion.find(params[:id].to_i)
     if !@discussion.editable?(@current_member)
       redirect_to @discussion, :alert => 'Discussion is no longer editable.'
     end

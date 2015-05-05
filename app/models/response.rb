@@ -20,6 +20,8 @@ class Response < ActiveRecord::Base
     simple_format
   end
 
+  private
+
   def deliver_discussion_notifications
     DiscussionNotificationWorker.perform_async(self.id)
   end

@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.12'
+gem 'rails', '~> 3.2'
 
 gem 'mysql2'
 
@@ -21,6 +21,7 @@ end
 gem 'jquery-rails'
 
 group :test, :development do
+  gem 'rspec'
   gem 'rspec-rails', '~> 2.0'
   gem 'factory_girl_rails'
 
@@ -50,9 +51,6 @@ gem 'unicorn'
 
 # To use debugger
 gem 'debugger'
-
-# Cannot run `rails console` from AWS elastic beanstalk without this, probably a rails bug: https://github.com/rails/rails/issues/9256
-gem 'minitest', "~> 4.7.5"
 
 # AWS Email
 gem "aws-ses"

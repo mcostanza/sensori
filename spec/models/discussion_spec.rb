@@ -1,142 +1,178 @@
 require 'spec_helper'
 
 describe Discussion do
-  before(:each) do
-    @discussion = FactoryGirl.build(:discussion)
-  end
-
+  
+  let(:discussion) { build(:discussion) }
+  
   describe "CATEGORIES" do
-    it "should return a list of valid categories" do
-      Discussion::CATEGORIES.should == ['general', 'production', 'music-recs', 'collabs', 'events']
+    it "returns an array of valid categories" do
+      expect(Discussion::CATEGORIES).to eq ['general', 'production', 'music-recs', 'collabs', 'events']
     end
   end
 
   describe "validations" do
-    it "should be valid given valid attributes" do
-      @discussion.should be_valid
+    it "is valid given valid attributes" do
+      expect(discussion).to be_valid
     end
-    it "should be invalid without a member" do
-      @discussion.member = nil
-      @discussion.should_not be_valid
+    it "is invalid without a member" do
+      discussion.member = nil
+      expect(discussion).not_to be_valid
     end
-    it "should be invalid without a subject" do
-      @discussion.subject = ' '
-      @discussion.should_not be_valid
+    it "is invalid without a subject" do
+      discussion.subject = ' '
+      expect(discussion).not_to be_valid
     end
-    it "should be invalid without a body" do
-      @discussion.body = ' '
-      @discussion.should_not be_valid
+    it "is invalid without a body" do
+      discussion.body = ' '
+      expect(discussion).not_to be_valid
     end
-    it "should be invalid without a category" do
-      @discussion.category = ' '
-      @discussion.should_not be_valid
+    it "is invalid without a category" do
+      discussion.category = ' '
+      expect(discussion).not_to be_valid
     end
-    it "should be invalid with a bogus category" do
-      @discussion.category = 'bogus'
-      @discussion.should_not be_valid
+    it "is invalid with a bogus category" do
+      discussion.category = 'bogus'
+      expect(discussion).not_to be_valid
     end
   end
 
   describe "associations" do
-    it "should have a member association" do
-      @discussion.should respond_to(:member)
+    it "belongs to a member" do
+      expect(Discussion.reflect_on_association(:member).macro).to eq :belongs_to
     end
-    it "should have a responses association" do
-      @discussion.should respond_to(:responses)
+    it "has many responses" do
+      expect(Discussion.reflect_on_association(:responses).macro).to eq :has_many
     end
-    it "should have a notifications association" do
-      @discussion.should respond_to(:notifications)
+    it "has many notifications" do
+      expect(Discussion.reflect_on_association(:notifications).macro).to eq :has_many
     end
   end
 
   describe "callbacks" do
-    it "should call setup_discussion_notification on create" do
-      @discussion.should_receive(:setup_discussion_notification)
-      @discussion.save
-    end
-    it "should set last_post_at to now on create" do
-      @now = Time.now
-      Time.stub(:now).and_return(@now)
-      @discussion.save
-      @discussion.last_post_at.should == @now
-    end
-  end
+    let!(:now) { Time.now }
 
-  it "should set slug from the subject when saving" do
-    @discussion.slug.should be_nil
-    @discussion.save
-    @discussion.slug.should == @discussion.subject.parameterize
+    before do
+      allow(Time).to receive(:now).and_return(now)
+    end
+
+    it "creates a discussion notification for the member creating the discussion" do
+      expect {
+        discussion.save
+      }.to change {
+        discussion.notifications.where(member_id: discussion.member.id).count
+      }.by(1)
+    end
+
+    it "sets last_post_at to now on create" do
+      expect {
+        discussion.save
+      }.to change {
+        discussion.last_post_at
+      }.to(now)
+    end
+
+    it "sets slug from the subject when saving" do
+      expect { 
+        discussion.save
+      }.to change { 
+        discussion.slug 
+      }.from(nil).to(discussion.subject.parameterize)
+    end
   end
   
-  it "should store an html version of the body text when set" do
-    @discussion = Discussion.new(:body => 'test')
-    @discussion.body_html.should_not be_blank
+  it "sets an html version of the body text when body is set" do
+    discussion.body = 'test'
+    discussion.body_html.should_not be_blank
   end
 
   describe "#editable?(member)" do
-    before do
-      @owner = double(Member, :admin? => false)
-      @non_owner = double(Member, :admin? => false)
-      @admin = double(Member, :admin? => true)
-      @discussion.stub(:member).and_return(@owner)
-      @discussion.stub(:responses).and_return([])
-    end
-    it "should return true if the passed member is the owner" do
-      @discussion.editable?(@owner).should be_true
-    end
-    it "should return false if the passed member is not the owner" do
-      @discussion.editable?(@non_owner).should be_false
-    end
-    it "should return true if the passed member is not the owner and is an admin" do
-      @discussion.editable?(@admin).should be_true
-    end
-    it "should return false if the passed member is the owner but the discussion has responses" do
-      @discussion.stub(:responses).and_return(['response'])
-      @discussion.editable?(@owner).should be_false
-    end
-    it "should return true if the discussion has responses and the passed member is an admin" do
-      @discussion.stub(:responses).and_return(['response'])
-      @discussion.editable?(@admin).should be_true
-    end
-    it "should return false if the passed member is nil" do
-      @discussion.editable?(nil).should be_false
-    end
-  end
+    let(:owner) { build(:member) }
+    let(:non_owner) { build(:member) }
+    let(:admin) { build(:member, :admin) }
 
-  describe "#setup_discussion_notification" do
-    before do
-      @notifications = double('notifications')
-      @discussion.stub(:notifications).and_return(@notifications)
+    let(:discussion) { build(:discussion, member: owner) }
+
+    context 'when the passed member is the owner' do
+      it "returns true" do
+        expect(discussion.editable?(owner)).to be_true
+      end
     end
-    it "should find or create a discussion notification for the member creating the discussion" do
-      @discussion.notifications.should_receive(:create).with({ :member => @discussion.member })
-      @discussion.setup_discussion_notification
+
+    context 'when the passed member is not the owner' do
+      context 'when the passed member is an admin' do
+        it "returns true" do
+          expect(discussion.editable?(admin)).to be_true
+        end
+      end
+
+      context 'when the passed member is not an admin' do
+        it "returns false" do
+          expect(discussion.editable?(non_owner)).to be_false
+        end
+      end
+    end
+
+    context 'when no member is passed' do
+      it "returns nil" do
+        expect(discussion.editable?(nil)).to be_false
+      end
+    end
+
+    context 'when the discussion has responses' do
+      before do
+        create(:response, discussion: discussion)
+      end
+
+      context 'when the passed member is the owner' do
+        it "returns false" do
+          expect(discussion.editable?(owner)).to be_false
+        end
+      end
+
+      context 'when the passed member is an admin' do
+        it "returns true" do
+          expect(discussion.editable?(admin)).to be_true
+        end
+      end
     end
   end
 
   describe "#attachment_name" do
-    it "should return the filename of the attachment_url" do
-      @discussion.attachment_url = "http://s3.amazon.com/sensori/uploads/audio.wav"
-      @discussion.attachment_name.should == "audio.wav"
+    context 'when there is an attachment_url' do
+      before do
+        discussion.attachment_url = "http://s3.amazon.com/sensori/uploads/audio.wav"
+      end
+
+      it "returns the filename of the attachment_url" do
+        expect(discussion.attachment_name).to eq "audio.wav"
+      end  
     end
-    it "should return nil without shitting if attachment_url is nil" do
-      @discussion.attachment_url = nil
-      lambda { @discussion.attachment_name }.should_not raise_error
-      @discussion.attachment_name.should be_nil
+    
+    context 'when there is no attachment_url' do
+      before do
+        discussion.attachment_url = nil
+      end
+
+      it "returns nil" do
+        expect(discussion.attachment_name).to be_nil    
+      end
     end
   end
 
   describe "#to_json(options = {})" do
-    it "should return a JSON object with attributes, attachment_name and the member association included" do
-      expected = @discussion.attributes.merge({
-        "attachment_name" => @discussion.attachment_url,
+    let(:extended_attributes) do
+      discussion.attributes.merge({
+        "attachment_name" => discussion.attachment_url,
         "member" => {
-          'name' => @discussion.member.name,
-          'slug' => @discussion.member.slug,
-          'image_url' => @discussion.member.image_url
+          'name' => discussion.member.name,
+          'slug' => discussion.member.slug,
+          'image_url' => discussion.member.image_url
         }
       })
-      JSON.parse(@discussion.to_json).should == expected
+    end
+
+    it "returns a JSON object with attributes, attachment_name and the member association included" do
+      expect(JSON.parse(discussion.to_json)).to eq extended_attributes
     end
   end
 end

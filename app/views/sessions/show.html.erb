@@ -1,8 +1,9 @@
-<% if admin? %>
+<% if @current_member.try(:admin?) %>
 <div class="row">
-<%= render :partial => 'shared/action_buttons', :locals => { :object => @session } %>
+  <%= render :partial => 'shared/action_buttons', :locals => { :object => @session } %>
 </div>
 <% end %>
+
 <div class="row">
   <div class="span8">
     <%= image_tag @session.image_url %>
@@ -11,7 +12,7 @@
     <% else %>
       <%= render :partial => 'playlist' %>
     <% end %>
-    <% if admin? %>
+    <% if @current_member.try(:admin?) %>
       <%= link_to "View Submissions", session_submissions_path(@session) %>
     <% end %>
   </div>

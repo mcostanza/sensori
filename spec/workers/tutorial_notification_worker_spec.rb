@@ -3,36 +3,31 @@ require 'spec_helper'
 describe TutorialNotificationWorker do
   
   describe "#perform(tutorial_id)" do
+    let(:member_1) { create(:member) }
+    let(:member_2) { create(:member) }
+    let(:member_3) { create(:member, :email => nil) }
+    let(:tutorial) { create(:tutorial, :member => member_1) }
+
+    let(:email) { double('email') }
+
     before(:each) do
-      @member_1 = double(Member, :email => "email@member.com")
-      @tutorial_id = 123
-      @tutorial = double(Tutorial, :title => "Creating a Sampled Bass Patch", :description => "How 2 make 1", :member => @member_1)
-      Tutorial.stub(:find).and_return(@tutorial)
+      allow(email).to receive(:deliver)
+      allow(NotificationMailer).to receive(:tutorial_notification).and_return(email)
+    end
 
-      @member_2 = double(Member, :name => "DJ Jones", :email => "jones@jones.com")
-      Member.stub(:find_each).and_yield(@member_1).and_yield(@member_2)
+    it "finds the Tutorial from tutorial_id" do
+      expect(Tutorial).to receive(:find).with(tutorial.id).and_return(tutorial)
+      TutorialNotificationWorker.new.perform(tutorial.id)
+    end
 
-      @email = double('email', :deliver => true)
-      NotificationMailer.stub(:tutorial_notification).and_return(@email)
+    it "delivers a tutorial notification to all members with an email, except the member who created the tutorial" do
+      expect(NotificationMailer).to receive(:tutorial_notification).once.with(:member => member_2, :tutorial => tutorial).and_return(email)
+      expect(email).to receive(:deliver).once
+      TutorialNotificationWorker.new.perform(tutorial.id)
     end
-    it "should find the Tutorial from tutorial_id" do
-      Tutorial.should_receive(:find).with(@tutorial_id).and_return(@tutorial)
-      TutorialNotificationWorker.new.perform(@tutorial_id)
-    end
-    it "should deliver a tutorial notification to all members except the member who created the tutorial" do
-      Member.should_receive(:find_each).and_yield(@member_1).and_yield(@member_2)
-      NotificationMailer.should_receive(:tutorial_notification).once.with(:member => @member_2, :tutorial => @tutorial).and_return(@email)
-      @email.should_receive(:deliver).once
-      TutorialNotificationWorker.new.perform(@tutorial_id)
-    end
-    it "should skip members who do not have an email" do
-      Member.should_receive(:find_each).and_yield(@member_1).and_yield(@member_2)
-      @member_2.stub(:email).and_return(nil)
-      NotificationMailer.should_not_receive(:tutorial_notification)
-      TutorialNotificationWorker.new.perform(@tutorial_id)
-    end
-    it "should have an async method" do
-      TutorialNotificationWorker.should respond_to(:perform_async)
+
+    it "has an async method" do
+      expect(TutorialNotificationWorker).to respond_to(:perform_async)
     end
   end
 end

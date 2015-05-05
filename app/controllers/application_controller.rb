@@ -4,7 +4,11 @@ class ApplicationController < ActionController::Base
   before_filter :load_member_if_signed_in
 
   def load_member_if_signed_in
-    @current_member = Member.find_by_soundcloud_id(session[:soundcloud_id]) if signed_in?
+    load_member if signed_in?
+  end
+
+  def load_member
+    @current_member = Member.where(:soundcloud_id => session[:soundcloud_id]).first
   end
 
   def signed_in?

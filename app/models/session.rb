@@ -20,12 +20,14 @@ class Session < ActiveRecord::Base
 
   after_commit :deliver_session_notifications, :on => :create
 
-  def deliver_session_notifications
-    SessionNotificationWorker.perform_async(self.id)
-  end
-
   def active?
     return false unless self.end_date?
     Time.now.in_time_zone("Pacific Time (US & Canada)").to_date <= self.end_date.to_date
+  end
+
+  private
+
+  def deliver_session_notifications
+    SessionNotificationWorker.perform_async(self.id)
   end
 end

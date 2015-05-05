@@ -1,217 +1,313 @@
 require 'spec_helper'
 
 describe SessionsController do
-
   include LoginHelper
 
   describe "GET 'index'" do
-    before do
-      @session = double(Session)
-      @scope = double('paginated sessions', :per => [@session])
-      Session.stub(:page).and_return(@scope)
+    def make_request
+      get 'index', params
     end
+
+    let(:params) { {} }
+
+    let(:sessions) { create_list(:session, 7) }
+
     it "should return http success" do
       get 'index'
-      response.should be_success
+      expect(response).to be_success
     end
-    it "should load 6 sessions and assign them to @sessions" do
-      Session.should_receive(:page).with(1).and_return(@scope)
-      @scope.should_receive(:per).with(6).and_return([@session])
-      get 'index'
-      assigns[:sessions].should == [@session]
+    it "assigns @sessions" do
+      make_request
+      expect(assigns[:sessions]).to eq sessions.reverse.first(6)
     end
-    it "should load 6 sessions with pagination" do
-      Session.should_receive(:page).with(2).and_return(@scope)
-      @scope.should_receive(:per).with(6).and_return([@session])
-      get 'index', :page => 2
-      assigns[:sessions].should == [@session]
-    end
-    it "should not allow a page less than 1" do
-      Session.should_receive(:page).with(1).and_return(@scope)
-      @scope.should_receive(:per).with(6).and_return([@session])
-      get 'index', :page => 0
-      assigns[:sessions].should == [@session]
+
+    context 'when pagination params are passed' do
+      before do
+        params[:page] = 2
+      end
+
+      it "loads paginated sessions" do
+        make_request
+        expect(assigns[:sessions]).to eq sessions.first(1)
+      end
+
+      context 'when a page lower than 1 is passed' do
+        before do
+          params[:page] = 0
+        end
+        
+        it "loads the first page of sessions" do
+          make_request
+          expect(assigns[:sessions]).to eq sessions.reverse.first(6)
+        end
+      end
     end
   end
 
   describe "GET 'show'" do
-    before do
-      @session = double(Session, :id => 41)
-      Session.stub(:find).and_return(@session)
+    def make_request
+      get 'show', :id => session_model.id
     end
+
+    let(:session_model) { create(:session) }
+
     it "should return http success" do
-      get 'show', :id => 1
-      response.should be_success
+      make_request
+      expect(response).to be_success
     end
-    it "should find the session by id and assign it to @session" do
-      Session.should_receive(:find).with("1").and_return(@session)
-      get 'show', :id => 1
-      assigns[:session].should == @session
+    it "loads and assigns the session" do
+      make_request
+      expect(assigns[:session]).to eq session_model
     end
-    it "should load the submission if the member is logged in" do
-      login_user
-      Member.should_receive(:find_by_soundcloud_id).and_return(@current_member)
-      @current_member.stub(:submissions).and_return('submissions')
-      @current_member.submissions.should_receive(:find_or_initialize_by_session_id).with(@session.id).and_return('submission')
-      get 'show', :id => 41
-      assigns[:submission].should == 'submission'
+
+    context 'when signed in' do
+      let(:member) { create(:member) }
+
+      before do
+        sign_in_as(member)
+      end
+
+      context 'when the member already has a submission for this session' do
+        let!(:submission) { create(:submission, session: session_model, member: member) }
+
+        it "assigns the member's submission" do
+          make_request
+          expect(assigns[:submission]).to eq submission  
+        end
+      end
+
+      context 'when the member does not already have a submission for this session' do
+        it "assigns a new submission for the member and session" do
+          make_request
+          submission = assigns[:submission]
+          expect(submission).to be_an_instance_of(Submission)
+          expect(submission.member).to eq member
+          expect(submission.session).to eq session_model
+        end
+      end
     end
   end
 
   describe "GET 'new'" do
-    before do
-      controller.stub(:ensure_admin)
-    end
-
-    describe "before filters" do
-      it "should have the ensure_admin before filter" do
-        controller.should_receive(:ensure_admin)
-        get 'new'
-      end
-    end
-
-    it "should initialize a new session and assign it to @session" do
-      session = Session.new
-      Session.should_receive(:new).and_return(session)
+    def make_request
       get 'new'
-      assigns[:session].should == session
+    end
+
+    it_should_behave_like 'an action that requires a signed in admin member'
+
+    context 'when signed in as an admin member' do
+      let(:member) { create(:member, :admin) }
+
+      before do
+        sign_in_as(member)
+      end
+
+      it "initializes a new session and assign it to @session" do
+        make_request
+        session_model = assigns[:session]
+        expect(session_model).to be_an_instance_of(Session)
+        expect(session_model.new_record?).to be_true
+      end
     end
   end
 
   describe "POST 'create'" do
-    before do
-      login_user(:admin => true)
-      @params = { :session => { :title => "Title", :description => "Desc" } }
-      @session = Session.new
-      @session.stub(:id).and_return(10)
-      @session.stub(:save).and_return(true)
-      Session.stub(:new).and_return(@session)
+    def make_request
+      post 'create', params
     end
 
-    describe "before filters" do
-      it "should have the ensure_admin before filter" do
-        controller.should_receive(:ensure_admin)
-        post 'create', @params
+    let(:params) do
+      {
+        session: {
+          title: "title",
+          description: "lets all make some beats",
+          image: fixture_file_upload('/sensori-mpd.jpg', 'image/jpeg'),
+          end_date: 2.weeks.from_now
+        }
+      }
+    end
+
+    it_should_behave_like 'an action that requires a signed in admin member'
+
+    context 'when signed in as an admin member' do
+      let(:member) { create(:member, :admin) }
+
+      let(:created_session) { Session.last }
+
+      before do
+        sign_in_as(member)
       end
-    end
 
-    it "should initialize a new session with the passed params and the member id and assign it to @session" do
-      Session.should_receive(:new).with(@params[:session].merge(:member_id => @current_member.id).stringify_keys).and_return(@session)
-      post 'create', @params
-      assigns[:session].should == @session
-    end
-    it "should save the new session" do
-      @session.should_receive(:save).and_return(true)
-      post 'create', @params
-    end
-    it "should redirect to the created session with a notice that the session was created successfully" do
-      post 'create', @params
-      response.should redirect_to(@session)
-      flash[:notice].should == 'Session was successfully created.'
-    end
-    it "should render the new action if the session fails to save" do
-      @session.stub(:save).and_return(false)
-      post 'create', @params
-      response.should render_template(:new)
+      it "creates a session" do
+        expect { 
+          make_request
+        }.to change { Session.count }.by(1)
+
+        expect(created_session.member).to eq member
+        expect(created_session.title).to eq params[:session][:title]
+        expect(created_session.description).to eq params[:session][:description]
+      end
+
+      it "assigns the session" do
+        make_request
+        expect(assigns[:session]).to eq created_session
+      end
+
+      it "redirects to the created session with a success notice" do
+        make_request
+        expect(response).to redirect_to(created_session)
+        expect(flash[:notice]).to eq 'Session was successfully created.'
+      end
+
+      context 'when the session is invalid' do
+        before do
+          params[:session][:title] = nil
+        end
+
+        it "does not create a session" do
+          expect {
+            make_request
+          }.not_to change { Session.count }
+        end
+
+        it "renders the new template" do
+          make_request
+          expect(response).to render_template('sessions/new')
+        end
+      end
     end
   end
 
   describe "PUT 'update'" do
-    before do
-      login_user(:admin => true)
-      @params = { :id => 10, :session => { :title => "Title", :description => "Desc" } }
-      @session = Session.new
-      @session.id = 10
-      @session.stub(:update_attributes).and_return(true)
-      Session.stub(:find).and_return(@session)
+    def make_request
+      put 'update', params
     end
 
-    describe "before filters" do
-      it "should have the ensure_admin before filter" do
-        controller.should_receive(:ensure_admin)
-        put 'update', @params
+    let(:session_model) { create(:session, updated_at: 1.day.ago) }
+
+    let(:params) do
+      {
+        id: session_model.id,
+        session: {
+          description: "new description!"
+        }
+      }
+    end
+
+    it_should_behave_like 'an action that requires a signed in admin member'
+
+    context 'when signed in as an admin member' do
+      let(:member) { create(:member, :admin) }
+
+      before do
+        sign_in_as(member)
       end
-    end
 
-    it "should find the session from params[:id]" do
-      Session.should_receive(:find).with("10").and_return(@session)
-      put 'update', @params
-    end
-    it "should update the session with the passed params and assign to @session" do
-      @session.should_receive(:update_attributes).with("title" => "Title", "description" => "Desc")
-      put 'update', @params
-      assigns[:session].should == @session
-    end
-    it "should redirect to the session with a notice that the session was updated successfully" do
-      put 'update', @params
-      response.should redirect_to(@session)
-      flash[:notice].should == 'Session was successfully updated.'
-    end
-    it "should render the edit action if the session fails to save" do
-      @session.stub(:update_attributes).and_return(false)
-      put 'update', @params
-      response.should render_template(:edit)
+      it "updates the session" do
+        expect { 
+          make_request
+        }.to change { session_model.reload.updated_at }
+
+        session_model.reload
+        expect(session_model.description).to eq params[:session][:description]
+      end
+
+      it "assigns the session" do
+        make_request
+        expect(assigns[:session]).to eq session_model
+      end
+
+      it "redirects to the session with a success notice" do
+        make_request
+        expect(response).to redirect_to(session_model)
+        expect(flash[:notice]).to eq 'Session was successfully updated.'
+      end
+
+      context 'when the session is invalid' do
+        before do
+          params[:session][:title] = nil
+        end
+
+        it "does not update the session" do
+          expect {
+            make_request
+          }.not_to change { session_model.reload.updated_at }
+        end
+
+        it "renders the edit template" do
+          make_request
+          expect(response).to render_template('sessions/edit')
+        end
+      end
     end
   end
 
   describe "DELETE 'destroy'" do
-    before do
-      login_user(:admin => true)
-      @params = { :id => 10 }
-      @session = Session.new
-      @session.id = 10
-      @session.stub(:destroy)
-      Session.stub(:find).and_return(@session)
+    def make_request
+      delete 'destroy', params
     end
 
-    describe "before filters" do
-      it "should have the ensure_admin before filter" do
-        controller.should_receive(:ensure_admin)
-        delete 'destroy', @params
+    let!(:session_model) { create(:session) }
+
+    let(:params) do
+      {
+        id: session_model.id
+      }
+    end
+
+    it_should_behave_like 'an action that requires a signed in admin member'
+
+    context 'when signed in as an admin member' do
+      let(:member) { create(:member, :admin) }
+
+      before do
+        sign_in_as(member)
       end
-    end
 
-    it "should find the session from params[:id]" do
-      Session.should_receive(:find).with("10").and_return(@session)
-      delete 'destroy', @params
-    end
-    it "should destroy the session" do
-      @session.should_receive(:destroy)
-      delete 'destroy', @params
-    end
-    it "should redirect to the index with a success notice" do
-      delete 'destroy', @params
-      response.should redirect_to(:sessions)
-      flash[:notice].should == 'Session was successfully deleted.'
+      it "destroys the session" do
+        expect { 
+          make_request
+        }.to change { Session.count }.by(-1)
+
+        expect(Session.exists?(session_model.id)).to be_false
+      end
+
+      it "redirects to the sessions index" do
+        make_request
+        expect(response).to redirect_to(sessions_url)
+      end
     end
   end
 
   describe "GET 'submissions'" do
+    def make_request
+      get 'submissions', :id => session_model.id
+    end
+
+    let(:session_model) { create(:session) }
+
     before do
-      @submissions = [double(Submission)]
-      @session = double(Session, :submissions => @submissions)
-      Session.stub(:find).and_return(@session)
-      @session_id = "1"
-      login_user(:admin => true)
+      create_list(:submission, 2, session: session_model)
     end
 
-    describe "before filters" do
-      it "should have the ensure_admin before filter" do
-        controller.should_receive(:ensure_admin)
-        get 'submissions', :id => @session_id
+    it_should_behave_like 'an action that requires a signed in admin member'
+
+    context 'when signed in as an admin member' do
+      let(:member) { create(:member, :admin) }
+
+      before do
+        sign_in_as(member)  
       end
-    end
 
-    it "should return http success" do
-      get 'submissions', :id => @session_id
-      response.should be_success
-    end
-    it "should load and assign @session and @submissions" do
-      Session.should_receive(:find).with(@session_id).and_return(@session)
-      @session.should_receive(:submissions).and_return(@submissions)
-      get 'submissions', :id => @session_id
-      assigns[:session].should == @session
-      assigns[:submissions].should == @submissions
+      it "returns http success" do
+        make_request
+        expect(response).to be_success
+      end
+      it "loads and assigns @session and the associated @submissions" do
+        make_request
+        expect(assigns[:session]).to eq session_model
+        expect(assigns[:submissions]).to eq session_model.submissions
+      end
     end
   end
 end

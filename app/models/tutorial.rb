@@ -48,7 +48,7 @@ class Tutorial < ActiveRecord::Base
   end
 
   def format_table_of_contents
-    self.body_html = Formatters::Tutorial::TableOfContents.new(self).format if self.include_table_of_contents?
+    self.body_html = TutorialTableOfContentsService.new(self).format if self.include_table_of_contents?
   end
 
   def body_components

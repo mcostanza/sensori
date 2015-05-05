@@ -1,168 +1,291 @@
 require 'spec_helper'
 
 describe MembersController do
+  include LoginHelper
 
-  describe "GET '/members/sign_in'" do
-    before(:each) do
-      @soundcloud = double(::Soundcloud, :authorize_url => "soundcloud authorize url")
-      controller.stub(:soundcloud_app_client).and_return(@soundcloud)
+  let(:soundcloud_client_id) { '123' }
+  let(:soundcloud_secret) { 'secret' }
+  let(:soundcloud_app_client) { controller.soundcloud_app_client }
+
+  before(:each) do
+    allow(Sensori::Soundcloud).to receive(:client_id).and_return(soundcloud_client_id)
+    allow(Sensori::Soundcloud).to receive(:secret).and_return(soundcloud_secret)
+  end
+
+  describe "#soundcloud_app_client" do
+    it "should return a ::Soundcloud instance initialized with the Sensori client_id, secret, and redirect url" do
+      soundcloud_app_client = controller.soundcloud_app_client
+      expect(soundcloud_app_client).to be_an_instance_of(::Soundcloud::Client)
+      expect(soundcloud_app_client.client_id).to eq soundcloud_client_id
+      expect(soundcloud_app_client.client_secret).to eq soundcloud_secret
+      expect(soundcloud_app_client.redirect_uri).to eq members_soundcloud_connect_url
     end
-    it "should redirect to the Soundcloud authorizorization url" do
+  end
+
+  describe "GET '/members/sign_in'" do    
+    it "redirects to the Soundcloud authorizorization url" do
       get 'sign_in'
-      response.should redirect_to(@soundcloud.authorize_url)
+      expect(response).to redirect_to(soundcloud_app_client.authorize_url)
     end
   end
 
   describe "GET 'sign_out'" do
+    let(:soundcloud_id) { 123 }
+    let(:referer) { '/previous/url' }
+
     before(:each) do
-      request.env['HTTP_REFERER'] = '/previous/url'
+      sign_in(soundcloud_id)
+      request.env['HTTP_REFERER'] = referer
     end
-    it "should reset the session" do
-      session[:soundcloud_id] = '123'
+
+    it "resets the session" do
       get 'sign_out'
-      session[:soundcloud_id].should be_nil
+      expect(session[:soundcloud_id]).to be_nil
     end
-    it "should redirect to the previous url" do
+
+    it "redirects to the previous url" do
       get 'sign_out'
-      response.should redirect_to('/previous/url')
+      expect(response).to redirect_to(referer)
     end
   end
 
   describe "GET 'soundcloud_connect'" do
-    before(:each) do
-      @soundcloud_app_client = double(::Soundcloud)
-      controller.stub(:soundcloud_app_client).and_return(@soundcloud_app_client)
-      @member = double(Member, :valid? => true, :soundcloud_id => '123', :just_created? => false)
-      Member.stub(:sync_from_soundcloud).and_return(@member)
+    def make_request
+      get 'soundcloud_connect', params
     end
-    describe "soundcloud code is present" do
-      before(:each) do
-        @code = 'soundcayode'
-        @exchange_response = ::Soundcloud::HashResponseWrapper.new({ :access_token => 'soundtokez' })
-        @soundcloud_app_client.stub(:exchange_token).and_return(@exchange_response)
-      end
-      it "should sync Member data from soundcloud" do
-        @soundcloud_app_client.should_receive(:exchange_token).with(:code => @code).and_return(@exchange_response)
-        Member.should_receive(:sync_from_soundcloud).with('soundtokez').and_return(@member)
-        get 'soundcloud_connect', :code => @code
-      end
-      describe "valid Member successfully found/created" do
-        it "should set session[:soundcloud_id]" do
-          get 'soundcloud_connect', :code => @code
-          session[:soundcloud_id].should == @member.soundcloud_id
-        end
-        it "should redirect to the root url (existing member)" do
-          get 'soundcloud_connect', :code => @code
-          response.should redirect_to(root_url)
-          flash[:signed_up].should be_false
-        end
-        it "should redirect to the root url with a flash set (new member)" do
-          @member.stub(:just_created?).and_return(true)
-          get 'soundcloud_connect', :code => @code
-          response.should redirect_to(root_url)
-          flash[:signed_up].should be_true
-        end
-      end
-      describe "valid Member not successfully found/created" do
-        before(:each) do
-          @member.stub(:valid?).and_return(false)
-        end
-        it "should not set session data" do
-          get 'soundcloud_connect', :code => @code
-          session[:soundcloud_id].should be_nil
-        end
-        it "should redirect to the root url" do
-          get 'soundcloud_connect', :code => @code
-          response.should redirect_to root_url
-          flash[:signed_up].should be_false
-        end
-      end
-    end
-    describe "soundcloud code is not present" do
-      it "should not attempt to sync Member data from soundcloud" do
-        Member.should_not_receive(:sync_from_soundcloud)
-        get 'soundcloud_connect'
-      end
-      it "should redirect to the root url" do
-        get 'soundcloud_connect'
-        response.should redirect_to root_url
-      end
-      it "should not set session data" do
-        get 'soundcloud_connect'
-        session[:soundcloud_id].should be_nil
-      end
-    end
-  end
 
-  describe "#soundcloud_app_client" do
+    let(:member) { build(:member) }
+
     before(:each) do
-      Sensori::Soundcloud.stub(:client_id).and_return('123')
-      Sensori::Soundcloud.stub(:secret).and_return('secret')
+      allow(Member).to receive(:sync_from_soundcloud).and_return(member)
     end
-    it "should return a ::Soundcloud instance initialized with the Sensori client_id, secret, and redirect url" do
-      soundcloud_app_client = controller.soundcloud_app_client
-      soundcloud_app_client.should be_an_instance_of(::Soundcloud::Client)
-      soundcloud_app_client.client_id.should == '123'
-      soundcloud_app_client.client_secret.should == 'secret'
-      soundcloud_app_client.redirect_uri.should == members_soundcloud_connect_url
+
+    context "when soundcloud code is present" do
+      let(:code) { 'soundcayode' }
+      let(:token) { 'soundtokez' }
+
+      let(:exchange_response) { ::Soundcloud::HashResponseWrapper.new(access_token: token) }
+
+      let(:params) do
+        {
+          code: code
+        }
+      end
+
+      before(:each) do
+        allow(soundcloud_app_client).to receive(:exchange_token).and_return(exchange_response)
+      end
+
+      it "syncs Member data from soundcloud" do
+        expect(soundcloud_app_client).to receive(:exchange_token).with(code: code).and_return(exchange_response)
+        expect(Member).to receive(:sync_from_soundcloud).with(token).and_return(member)
+        make_request
+      end
+
+      context "when soundcloud Member sync is successful" do
+        it "signs the user in" do
+          make_request
+          expect(session[:soundcloud_id]).to eq member.soundcloud_id
+        end
+
+        context 'when the Member already existed' do
+          before do
+            allow(member).to receive(:just_created?).and_return(false)
+          end
+
+          it "redirects to the root url" do
+            make_request
+            expect(response).to redirect_to(root_url)
+          end
+
+          it "does not set flash data for a new member" do
+            make_request
+            expect(flash[:signed_up]).to be_false
+          end
+        end
+        
+        context 'when the Member was just created' do
+          before do
+            allow(member).to receive(:just_created?).and_return(true)
+          end
+
+          it "redirect to the root url" do
+            make_request
+            expect(response).to redirect_to(root_url)
+          end
+
+          it "sets flash data for a new member" do
+            make_request
+            expect(flash[:signed_up]).to be_true
+          end
+        end
+      end
+
+      context "when soundcloud Member sync fails" do
+        let(:member) { build(:member, :email => nil, :soundcloud_id => nil) }
+        
+        it "does not sign the user in" do
+          make_request
+          expect(session[:soundcloud_id]).to be_nil
+        end
+
+        it "redirects to the root url with an error message" do
+          make_request
+          expect(response).to redirect_to(root_url)
+        end
+        it "does not set flash data for a new member" do
+          make_request
+          expect(flash[:signed_up]).to be_false
+        end
+      end
+    end
+
+    context "when soundcloud code is not present" do
+      let(:params) { {} }
+
+      it "does not sync member data from soundcloud" do
+        expect(Member).not_to receive(:sync_from_soundcloud)
+        make_request
+      end
+      
+      it "redirects to the root url" do
+        make_request
+        expect(response).to redirect_to root_url
+      end
+
+      it "does not sign the user in" do
+        make_request
+        expect(session[:soundcloud_id]).to be_nil
+      end
     end
   end
 
   describe "PUT 'update'" do
-    before do
-      @params = {
-        :id => 41,
-        :member => { 'email' => 'test@gmail.com' },
+    def make_request
+      put 'update', params
+    end
+
+    let(:email) { 'test@gmail.com' }
+
+    let(:params) do
+      {
+        :id => member.id,
+        :member => { 'email' => email },
         :format => 'json'
       }
-      @member = Member.new
-      controller.instance_variable_set(:@current_member, @member)
-      Member.stub(:find).and_return(@member)
-      @member.stub(:update_attributes).and_return(true)
     end
-    it "should update attributes" do
-      @member.should_receive(:update_attributes).with(@params[:member]).and_return(true)
-      put 'update', @params
-      response.should be_success
+
+    let(:member) { create(:member) }
+
+    context 'when the request is valid' do
+      before do
+        sign_in_as(member)
+      end
+
+      it "returns success" do
+        make_request
+        expect(response).to be_success
+      end
+
+      it "updates the member" do
+        expect { 
+          make_request 
+        }.to change { member.reload.email }.to(email)
+      end
     end
-    it "should not update the member if it differs from the logged in member" do
-      controller.instance_variable_set(:@current_member, double(Member))
-      @member.should_not_receive(:update_attributes)
-      put 'update', @params
-    end
-    it "should not update the member if there is no logged in member" do
-      controller.instance_variable_set(:@current_member, nil)
-      @member.should_not_receive(:update_attributes)
-      put 'update', @params
-    end
-    it "should return 400 when there are errors" do
-      @member.stub(:errors).and_return({ :error => true })
-      put 'update', @params
-      response.status.should == 422
+
+    context 'when the request is invalid' do    
+      context 'when the member being updated is not the signed in member' do
+        let(:other_member) { create(:member) }
+
+        before do
+          sign_in_as(other_member)
+        end
+
+        it "returns success" do
+          make_request
+          expect(response).to be_success
+        end
+
+        it "does not update the signed in member" do
+          expect { 
+            make_request 
+          }.not_to change(member, :email)
+        end
+
+        it "does not update the other member" do
+          expect { 
+            make_request 
+          }.not_to change(other_member, :email)
+        end
+      end
+
+      context 'when not currently signed in' do
+        it "returns success" do
+          make_request
+          expect(response).to be_success
+        end
+
+        it "does not update the member" do
+          expect { 
+            make_request 
+          }.not_to change(member, :email)
+        end
+      end
+
+      context 'when parameters are invalid' do
+        before do
+          sign_in_as(member)
+        end
+
+        let(:params) do
+          {
+            :id => member.id,
+            :member => { 'image_url' => nil },
+            :format => 'json'
+          }
+        end
+
+        it "returns an error" do
+          make_request
+          expect(response.status).to eq 422
+        end
+
+        it "does not update the member" do
+          expect { 
+            make_request 
+          }.not_to change(member, :email)
+        end
+      end
     end
   end
 
   describe "GET 'show'" do
-    before do
-      @tracks = [double(Track)]
-      @tracks_scope = double('tracks scope', :latest => @tracks)
-      @member = double(Member, :tracks => @tracks_scope)
-      Member.stub(:find).and_return(@member)
+    def make_request
+      get 'show', params
     end
+
+    let(:params) { { :id => member.id } }
+
+    let(:member) { create(:member) }
+    let!(:track_1) { create(:track, :member => member, :posted_at => 2.days.ago) }
+    let!(:track_2) { create(:track, :member => member, :posted_at => 1.day.ago)  }
+
     it "should return http success" do
-      get 'show', :id => 1
-      response.should be_success
+      make_request
+      expect(response).to be_success
     end
-    it "should find the member by id and assign it to @member" do
-      Member.should_receive(:find).with("1").and_return(@member)
-      get 'show', :id => 1
-      assigns[:member].should == @member
+    it "renders the show template" do
+      make_request
+      expect(response).to render_template('members/show')
     end
-    it "should load the members tracks and assign them to @tracks" do
-      @member.should_receive(:tracks).and_return(@tracks_scope)
-      @tracks_scope.should_receive(:latest).and_return(@tracks)
-      get 'show', :id => 1
-      assigns[:tracks].should == @tracks
+    it "finds and assigns the member" do
+      make_request
+      expect(assigns[:member]).to eq member
+    end
+    it "finds and assigns the member's latest tracks" do
+      make_request
+      expect(assigns[:tracks]).to eq([track_2, track_1])
     end
   end
 end

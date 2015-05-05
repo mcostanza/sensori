@@ -1,89 +1,67 @@
 require 'spec_helper'
 
 describe Response do
-  before(:each) do
-    @response = FactoryGirl.build(:response)
-  end
-
-  describe "validation" do
-    it "should be valid given valid attributes" do
-      @response.should be_valid
+  let(:response) { build(:response) }
+  
+  context "validations" do
+    it "is valid given valid attributes" do
+      expect(response).to be_valid
     end
-    it "should be invalid without a discussion" do
-      @response.discussion = nil
-      @response.should_not be_valid
+    it "is invalid without a discussion" do
+      response.discussion = nil
+      expect(response).not_to be_valid
     end
-    it "should be invalid without a body" do
-      @response.body = nil
-      @response.should_not be_valid
+    it "is invalid without a body" do
+      response.body = nil
+      expect(response).not_to be_valid
     end
-    it "should be invalid without a member" do
-      @response.member = nil
-      @response.should_not be_valid
+    it "is invalid without a member" do
+      response.member = nil
+      expect(response).not_to be_valid
     end
   end
 
-  describe "association" do
-    it "should have a discussion" do
-      @response.should respond_to(:discussion)
+  context "associations" do
+    it "belongs to a discussion" do
+      expect(Response.reflect_on_association(:discussion).macro).to eq :belongs_to
     end
-    it "should have a member" do
-      @response.should respond_to(:member)
+    it "belongs to a member" do
+      expect(Response.reflect_on_association(:member).macro).to eq :belongs_to
     end
   end
 
-  describe "callbacks" do
-    describe "after_create" do
-      it "should call deliver_discussion_notifications" do
-        @response.should_receive(:deliver_discussion_notifications)
-        @response.save
+  context "callbacks" do
+    context "on create" do
+      before do
+        allow(DiscussionNotificationWorker).to receive(:perform_async)
       end
-      it "should call setup_discussion_notification" do
-        @response.should_receive(:setup_discussion_notification)
-        @response.save
+
+      it "creates a worker to deliver the notifications" do
+        response.save
+        expect(DiscussionNotificationWorker).to have_received(:perform_async).with(response.reload.id)
       end
-      it "should call update_discussion_stats" do
-        @response.should_receive(:update_discussion_stats)
-        @response.save
+    
+      it "finds/creates a discussion notification for the member responding" do
+        expect {
+          response.save
+        }.to change {
+          DiscussionNotification.where(member_id: response.member_id, discussion_id: response.discussion_id).count
+        }.by(1)
+      end
+
+      it "updates the discussion with an incremented response_count and last_post_at set to self.created_at" do
+        expect {
+          response.save
+        }.to change {
+          response.discussion.response_count
+        }.from(0).to(1)
+        
+        expect(response.discussion.last_post_at).to eq response.created_at
       end
     end
   end
 
-  it "should store an html version of the body text when set" do
-    @response = Response.new(:body => 'test')
-    @response.body_html.should_not be_blank
-  end
-
-  describe "#deliver_discussion_notifications" do
-    it "should create a worker to deliver the notifications" do
-      DiscussionNotificationWorker.should_receive(:perform_async).with(@response.id)
-      @response.deliver_discussion_notifications
-    end
-  end
-
-  describe "#setup_discussion_notification" do
-    it "should find or create a discussion notification for the member responding" do
-      DiscussionNotification.should_receive(:find_or_create_by_member_id_and_discussion_id).with({
-        :member_id => @response.member_id,
-        :discussion_id => @response.discussion_id
-      })
-      @response.setup_discussion_notification
-    end
-  end
-
-  describe "#update_discussion_stats" do
-    before(:each) do
-      @response.save
-      @discussion = @response.discussion
-      @discussion.response_count = 0
-      @discussion.last_post_at = nil
-      @discussion.save
-    end
-    it "should update the discussion with an incremented response_count and last_post_at set to self.created_at" do
-      @response.update_discussion_stats
-      @discussion.reload
-      @discussion.response_count.should == 1
-      @discussion.last_post_at.to_s.should == @response.created_at.to_s
-    end
+  it "stores an html version of the body text when set" do
+    expect(Response.new(:body => 'test').body_html).to be_present
   end
 end

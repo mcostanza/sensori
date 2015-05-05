@@ -1,91 +1,114 @@
 require 'spec_helper'
 
 describe Session do
-  before(:each) do
-    @session = FactoryGirl.build(:session)
-  end
+  let(:session_model) { build(:session) }
 
   describe "validations" do
-    it "should be valid given valid attributes" do
-      @session.should be_valid
+    it "is valid given valid attributes" do
+      expect(session_model).to be_valid
     end
-    it "should be invalid without a member" do
-      @session.member = nil
-      @session.should_not be_valid
+    it "is invalid without a member" do
+      session_model.member = nil
+      expect(session_model).not_to be_valid
     end
-    it "should be invalid without a title" do
-      @session.title = nil
-      @session.should_not be_valid
+    it "is invalid without a title" do
+      session_model.title = nil
+      expect(session_model).not_to be_valid
     end
-    it "should be invalid without a description" do
-      @session.description = nil
-      @session.should_not be_valid
+    it "is invalid without a description" do
+      session_model.description = nil
+      expect(session_model).not_to be_valid
     end
-    it "should be invalid without a image" do
-      @session.remove_image!
-      @session.should_not be_valid
+    it "is invalid without a image" do
+      session_model.remove_image!
+      expect(session_model).not_to be_valid
     end
-    it "should be invalid without an end_date" do
-      @session.end_date = nil
-      @session.should_not be_valid 
+    it "is invalid without an end_date" do
+      session_model.end_date = nil
+      expect(session_model).not_to be_valid 
     end
   end
 
   describe "associations" do
-    it "should have a member association" do
-      @session.should respond_to(:member)
+    it "belongs to a member" do
+      expect(Session.reflect_on_association(:member).macro).to eq :belongs_to
     end
-    it "should have a submissions association" do
-      @session.should respond_to(:submissions)
+    it "has many submissions" do
+      expect(Session.reflect_on_association(:submissions).macro).to eq :has_many
     end
   end
   
   describe "callbacks" do
-    it "should set a slug from the title when saving" do
-      @session.slug.should be_nil
-      @session.save
-      @session.slug.should == @session.title.parameterize
+    before do
+      allow(SessionNotificationWorker).to receive(:perform_async)
     end
-    it "should call deliver_session_notifications after create" do
-      @session.should_receive(:deliver_session_notifications)
-      @session.save
-    end
-  end
 
-  describe "#deliver_session_notifications" do
-    it "should create a worker to deliver the notifications" do
-      @session.id = 123
-      SessionNotificationWorker.should_receive(:perform_async).with(@session.id)
-      @session.deliver_session_notifications
+    it "sets a slug from the title when saving" do
+      expect {
+        session_model.save
+      }.to change {
+        session_model.slug
+      }.from(nil).to(session_model.title.parameterize)
+    end
+
+    it "creates a worker to deliver session notifications" do
+      session_model.save
+      expect(SessionNotificationWorker).to have_received(:perform_async).with(session_model.id)
     end
   end
 
   describe "#active?" do
+    let!(:session_model) { create(:session) }
+    let!(:now) { Time.now }
+    let!(:now_pst) { now.in_time_zone("Pacific Time (US & Canada)") }
+
     before do
-      @current_time = Time.parse('2014-05-05 23:59:59')
-      @now = double("time", :in_time_zone => @current_time)
-      Time.stub(:now).and_return(@now)
+      allow(Time).to receive(:now).and_return(now)
     end
-    it "should compare against the current time in PST" do
-      @now.should_receive(:in_time_zone).with("Pacific Time (US & Canada)").and_return(@current_time)
-      @session.end_date = Time.parse('2014-05-06 00:00:00')
-      @session.active?
+
+    it "compares against the current time in PST" do
+      expect(now).to receive(:in_time_zone).with("Pacific Time (US & Canada)").and_return(now_pst)
+      session_model.active?
     end
-    it "should return false when the end date is in the past" do
-      @session.end_date = Time.parse('2014-05-04 00:00:00')
-      @session.active?.should  be_false
+
+    context 'when end_date is in the past' do
+      before do
+        session_model.end_date = 2.days.ago
+      end
+
+      it "returns false" do
+        expect(session_model.active?).to be_false
+      end
     end
-    it "should return true when the end date is in the future" do
-      @session.end_date = Time.parse('2014-05-06 00:00:00')
-      @session.active?.should be_true
+
+    context 'when end_date is in the future' do
+      before do
+        session_model.end_date = 1.day.from_now
+      end
+
+      it "returns true" do
+        expect(session_model.active?).to be_true
+      end
     end
-    it "should return true when the end date is today" do
-      @session.end_date = Time.parse('2014-05-05 00:00:00')
-      @session.active?.should be_true
+
+    context 'when end_date is today' do
+      before do
+        session_model.end_date = now
+      end
+
+      it "returns true" do
+        expect(session_model.active?).to be_true
+      end
     end
-    it "should return false when end_date isn't set" do
-      @session.end_date = nil
-      @session.active?.should be_false
+
+    context 'when end_date is not set' do
+      before do
+        session_model.end_date = nil
+      end
+
+      it "returns false" do
+        expect(session_model.active?).to be_false
+      end
     end
   end
 end

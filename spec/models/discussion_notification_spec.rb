@@ -1,21 +1,19 @@
 require 'spec_helper'
 
 describe DiscussionNotification do
-  before do
-    @discussion_notification = FactoryGirl.build(:discussion_notification)
-  end
-
+  let(:discussion_notification) { build(:discussion_notification) }
+  
   describe "validations" do
-    it "should be valid give valid attributes" do
-      @discussion_notification.should be_valid
+    it "is valid when given valid attributes" do
+      expect(discussion_notification).to be_valid
     end
-    it "should be invalid without a member" do
-      @discussion_notification.member = nil
-      @discussion_notification.should_not be_valid
+    it "is invalid without a member" do
+      discussion_notification.member = nil
+      expect(discussion_notification).not_to be_valid
     end
-    it "should be invalid without a discussion" do
-      @discussion_notification.discussion = nil
-      @discussion_notification.should_not be_valid
+    it "is invalid without a discussion" do
+      discussion_notification.discussion = nil
+      expect(discussion_notification).not_to be_valid
     end
   end
 end

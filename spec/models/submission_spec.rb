@@ -1,38 +1,36 @@
 require 'spec_helper'
 
 describe Submission do
-	before(:each) do
-		@submission = FactoryGirl.build(:submission)
-	end
-
+	let(:submission) { build(:submission) }
+	
 	describe "validations" do
-		it "should be valid given valid attributes" do
-			@submission.should be_valid
+		it "is valid given valid attributes" do
+			expect(submission).to be_valid
 		end
-		it "should be invalid without a session" do
-			@submission.session = nil
-			@submission.should_not be_valid
+		it "is invalid without a session" do
+			submission.session = nil
+			expect(submission).not_to be_valid
 		end
-		it "should be invalid without a member" do
-			@submission.member = nil
-			@submission.should_not be_valid
+		it "is invalid without a member" do
+			submission.member = nil
+			expect(submission).not_to be_valid
 		end
-		it "should be invalid without a title" do
-			@submission.title = nil
-			@submission.should_not be_valid
+		it "is invalid without a title" do
+			submission.title = nil
+			expect(submission).not_to be_valid
 		end
-		it "should be invalid without an attachment_url" do
-			@submission.attachment_url = nil
-			@submission.should_not be_valid
+		it "is invalid without an attachment_url" do
+			submission.attachment_url = nil
+			expect(submission).not_to be_valid
 		end
 	end
 
 	describe "associations" do
-		it "should have a member association" do
-			@submission.should respond_to(:member)
+		it "belongs to a member" do
+			expect(Submission.reflect_on_association(:member).macro).to eq :belongs_to
 		end
-		it "should have a session association" do
-			@submission.should respond_to(:session)
+		it "belongs to a session" do
+			expect(Submission.reflect_on_association(:session).macro).to eq :belongs_to
 		end 
 	end
 end

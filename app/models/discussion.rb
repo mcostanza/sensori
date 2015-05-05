@@ -37,10 +37,6 @@ class Discussion < ActiveRecord::Base
     self.responses.blank? && self.member == member
   end
 
-  def setup_discussion_notification
-    self.notifications.create(:member => self.member)
-  end
-
   def attachment_name
     self.attachment_url.to_s.split("/").last
   end
@@ -48,5 +44,11 @@ class Discussion < ActiveRecord::Base
   # extend the default json representation of a discussion to include attachment_name and member attributes
   def as_json(options = {})
     super(:methods => :attachment_name, :include => { :member => { :only => [:name, :slug, :image_url] } })
+  end
+
+  private
+
+  def setup_discussion_notification
+    self.notifications.create(:member => self.member)
   end
 end
