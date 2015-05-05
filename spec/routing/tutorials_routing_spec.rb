@@ -4,31 +4,31 @@ describe TutorialsController do
   describe "routing" do
 
     it "routes to #index" do
-      get("/tutorials").should route_to("tutorials#index")
+      expect(get("/tutorials")).to route_to("tutorials#index")
     end
 
     it "routes to #new" do
-      get("/tutorials/new").should route_to("tutorials#new")
+      expect(get("/tutorials/new")).to route_to("tutorials#new")
     end
 
     it "routes to #show" do
-      get("/tutorials/1").should route_to("tutorials#show", :id => "1")
+      expect(get("/tutorials/1")).to route_to("tutorials#show", :id => "1")
     end
 
     it "routes to #edit" do
-      get("/tutorials/1/edit").should route_to("tutorials#edit", :id => "1")
+      expect(get("/tutorials/1/edit")).to route_to("tutorials#edit", :id => "1")
     end
 
     it "routes to #create" do
-      post("/tutorials").should route_to("tutorials#create")
+      expect(post("/tutorials")).to route_to("tutorials#create")
     end
 
     it "routes to #update" do
-      put("/tutorials/1").should route_to("tutorials#update", :id => "1")
+      expect(put("/tutorials/1")).to route_to("tutorials#update", :id => "1")
     end
 
     it "routes to #preview" do
-      post("/tutorials/1/preview").should route_to("tutorials#preview", :id => "1")
+      expect(post("/tutorials/1/preview")).to route_to("tutorials#preview", :id => "1")
     end
 
   end

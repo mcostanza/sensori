@@ -4,7 +4,7 @@ describe ResponsesController do
   describe "routing" do
 
     it "routes to #create" do
-      post("/responses").should route_to("responses#create")
+      expect(post("/responses")).to route_to("responses#create")
     end
 
   end

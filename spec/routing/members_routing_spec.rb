@@ -4,27 +4,27 @@ describe MembersController do
   describe "routing" do
 
     it "routes to #update" do
-      put("/members/1").should route_to("members#update", :id => "1")
+      expect(put("/members/1")).to route_to("members#update", :id => "1")
     end
 
     it "routes to #show" do
-      get("/members/1").should route_to("members#show", :id => "1")
+      expect(get("/members/1")).to route_to("members#show", :id => "1")
     end
 
     it "routes to #show (flat route)" do
-      get("/five05").should route_to("members#show", :id => "five05")
+      expect(get("/five05")).to route_to("members#show", :id => "five05")
     end
     
     it "routes to sign_in" do
-      get("/members/sign_in").should route_to("members#sign_in")
+      expect(get("/members/sign_in")).to route_to("members#sign_in")
     end
 
     it "routes to sign_out" do
-      get("/members/sign_out").should route_to("members#sign_out")
+      expect(get("/members/sign_out")).to route_to("members#sign_out")
     end
     
     it "routes to soundcloud_connect" do
-      get("/members/soundcloud_connect").should route_to("members#soundcloud_connect")
+      expect(get("/members/soundcloud_connect")).to route_to("members#soundcloud_connect")
     end
   end
 end
