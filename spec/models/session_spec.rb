@@ -73,7 +73,7 @@ describe Session do
 
     context 'when end_date is in the past' do
       before do
-        session_model.end_date = 1.day.ago
+        session_model.end_date = 2.days.ago
       end
 
       it "returns false" do

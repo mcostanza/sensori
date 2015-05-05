@@ -113,17 +113,14 @@ describe Tutorial do
   end
 
   describe "#image_url(size)" do
-    before do
-      @youtube_image_url = 'http://youtube.com/image'
-      @tutorial.stub(:youtube_image_url).and_return(@youtube_image_url)
+    it "returns the youtube_image_url regardless of the size passed" do
+      expect(tutorial.image_url(:thumb)).to eq tutorial.youtube_image_url
+      expect(tutorial.image_url(:random)).to eq tutorial.youtube_image_url
+      expect(tutorial.image_url(:random)).to eq tutorial.youtube_image_url
     end
-    it "should return the youtube_image_url regardless of the size passed" do
-      @tutorial.image_url(:thumb).should == @youtube_image_url
-      @tutorial.image_url(:random).should == @youtube_image_url
-      @tutorial.image_url(nil).should == @youtube_image_url
-    end
-    it "should not require a size be passed" do
-      @tutorial.image_url.should == @youtube_image_url
+    
+    it "does not require a size be passed" do
+      expect(tutorial.image_url).to eq tutorial.youtube_image_url
     end
   end
 
