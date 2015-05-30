@@ -11,7 +11,7 @@ FactoryGirl.define do
 
     trait :bandcamp do
     	sequence(:link) { |n| "http://sensoricollective.bandcamp.com/album/album-#{n}" }
-    	sequence(:bandcamp_album_id) { |n| n }
+     	sequence(:bandcamp_album_id) { |n| n }
     end
   end
 end
