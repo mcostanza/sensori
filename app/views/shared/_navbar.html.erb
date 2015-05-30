@@ -27,7 +27,7 @@
               <span><%= @current_member.name %></span>
             </a>
             <ul class="dropdown-menu" role="menu" aria-labelledby="member-header-link">
-              <% if admin? -%>
+              <% if @current_member.try(:admin?) -%>
               <li><%= link_to "Features", features_path %></li>
               <% end -%>
               <li><%= link_to "Log Out", members_sign_out_path %></li>
