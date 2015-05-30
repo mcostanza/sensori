@@ -1,7 +1,7 @@
 Sensori::Application.routes.draw do
 
   resources :features
-
+  resources :playlists
 
   resources :tutorials, :except => :destroy do
     post "preview", :on => :member
