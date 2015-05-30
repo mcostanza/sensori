@@ -12,10 +12,11 @@ describe SessionsController do
 
     let(:sessions) { create_list(:session, 7) }
 
-    it "should return http success" do
+    it "returns http success" do
       get 'index'
       expect(response).to be_success
     end
+
     it "assigns @sessions" do
       make_request
       expect(assigns[:sessions]).to eq sessions.reverse.first(6)
@@ -51,7 +52,7 @@ describe SessionsController do
 
     let(:session_model) { create(:session) }
 
-    it "should return http success" do
+    it "returns http success" do
       make_request
       expect(response).to be_success
     end

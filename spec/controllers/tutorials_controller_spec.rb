@@ -119,7 +119,7 @@ describe TutorialsController do
             sign_in_as(member)
           end
 
-          it "should redirect to the edit path if the member is the owner of the tutorial (non-admin)" do
+          it "redirects to the edit path if the member is the owner of the tutorial (non-admin)" do
             make_request
             expect(response).to redirect_to("http://test.host/tutorials/#{tutorial.slug}/edit")
           end
@@ -162,7 +162,7 @@ describe TutorialsController do
         make_request
         expect(response).to be_success
       end
-      it "should render the new template" do
+      it "renders the new template" do
         make_request
         expect(response).to render_template("tutorials/new")
       end

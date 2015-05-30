@@ -57,7 +57,7 @@ describe ApplicationController do
 
     context 'when not signed in' do
       it "does not find a Member" do
-        Member.should_not_receive(:find)
+        expect(Member).not_to receive(:find)
         controller.load_member_if_signed_in
       end
 
@@ -147,16 +147,16 @@ describe ApplicationController do
     let(:format) { double('format') }
     
     it "includes pagination parameters in json responses" do
-      controller.should_receive(:respond_with).with(resource).and_yield(format)
-      format.should_receive(:json).and_yield
-      controller.should_receive(:render).with(:json => { :models => resource, :total_pages => resource.total_pages, :page => resource.current_page })
+      expect(controller).to receive(:respond_with).with(resource).and_yield(format)
+      expect(format).to receive(:json).and_yield
+      expect(controller).to receive(:render).with(:json => { :models => resource, :total_pages => resource.total_pages, :page => resource.current_page })
       controller.paginated_respond_with(resource)
     end
   end
 
   describe ".responder" do
     it "returns BasicResponder" do
-      ApplicationController.send(:responder).should == BasicResponder    
+      expect(ApplicationController.send(:responder)).to eq BasicResponder    
     end
   end
 end

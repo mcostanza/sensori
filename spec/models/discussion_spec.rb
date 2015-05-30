@@ -82,7 +82,7 @@ describe Discussion do
   
   it "sets an html version of the body text when body is set" do
     discussion.body = 'test'
-    discussion.body_html.should_not be_blank
+    expect(discussion.body_html).not_to be_blank
   end
 
   describe "#editable?(member)" do

@@ -306,7 +306,7 @@ describe Member do
     context "when access_token is nil" do
       it "returns without loading any data" do
         expect(::Soundcloud).not_to receive(:new)
-        Member.sync_from_soundcloud(nil).should be_nil
+        expect(Member.sync_from_soundcloud(nil)).to be_nil
       end
 
       it "does not create a member" do

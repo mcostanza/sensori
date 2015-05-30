@@ -5,8 +5,8 @@ describe NotificationMailer do
   let(:member_1) { create(:member, email: "slim@mail.com", name: "Slim James") }
 
   describe ".default_params" do
-    it "should have from => 'Sensori Collective <info@sensoricollective.com>'" do
-      NotificationMailer.default_params[:from].should == "Sensori Collective <info@sensoricollective.com>"
+    it "sets from to 'Sensori Collective <info@sensoricollective.com>'" do
+      expect(NotificationMailer.default_params[:from]).to eq "Sensori Collective <info@sensoricollective.com>"
     end
   end
 
@@ -49,7 +49,7 @@ describe NotificationMailer do
       let(:discussion) { build(:discussion, :subject => "check out my neat beat", :member => member_3) }
       let!(:email) { NotificationMailer.discussion_notification(:member => member_1, :response => response).deliver }
 
-      it "should format the text correctly when the member receiving the notification did not create the discussion" do
+      it "formats the text correctly" do
         expect(email.to).to eq ["slim@mail.com"]
         expect(email.subject).to eq "Five05 posted in a discussion on Sensori"
         expect(email.encoded).to include("Hey Slim James, Five05 just commented on William&#x27;s post titled \"check out my neat beat\" in Discussions:")
@@ -63,7 +63,7 @@ describe NotificationMailer do
     
     let!(:email) { NotificationMailer.tutorial_notification(:member => member_1, :tutorial => tutorial).deliver }
 
-    it "should send an email to the member passed with the correct subject and body" do
+    it "sends an email to params[:member]" do
       expect(ActionMailer::Base.deliveries).not_to be_empty
 
       expect(email.to).to eq ["slim@mail.com"]
@@ -78,7 +78,7 @@ describe NotificationMailer do
     let(:session) { create(:session, title: "Bobby Bland", description: "Make a beat please!!!", :member => create(:member, name: "Buddy Boy"), end_date: Time.parse('2014-05-05')) }
     let!(:email) { NotificationMailer.session_notification(:member => member_1, :session => session).deliver }
 
-    it "should send an email to the member passed with the correct subject and body" do
+    it "sends an email to params[:member]" do
       expect(ActionMailer::Base.deliveries).not_to be_empty
 
       expect(email.to).to eq ["slim@mail.com"]

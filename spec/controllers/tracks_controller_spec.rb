@@ -14,7 +14,7 @@ describe TracksController do
       1.upto(13).map { |num| create(:track, posted_at: num.minutes.ago) }
     end
 
-    it "should return http success" do
+    it "returns http success" do
       get 'index'
       expect(response).to be_success
     end

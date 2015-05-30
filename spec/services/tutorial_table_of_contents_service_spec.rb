@@ -54,7 +54,7 @@ describe TutorialTableOfContentsService do
         let(:content_node) { formatter.node(:li, "this is how I think") }
         let(:node) { formatter.node(:ul, content_node) }
 
-        it "should add the content as a child" do
+        it "adds the content as a child" do
           expect(node).to be_an_instance_of(Nokogiri::XML::Element)
           expect(node.document).to eq formatter.parser
           assert_dom_equal("<ul><li>this is how I think</li></ul>", node.to_s)
@@ -116,7 +116,7 @@ describe TutorialTableOfContentsService do
       let(:tutorial) { build(:tutorial, body_html: File.read(File.join(Rails.root, "spec/data/tutorial_body_no_headings.html"))) }
       let(:expected) { tutorial.body_html.gsub("\n", "").gsub("\r", "") }
 
-      it "should return a string containing tutorial.body_html unmodified if there are no headings/subheadings" do
+      it "returns a string containing tutorial.body_html unmodified if there are no headings/subheadings" do
         assert_dom_equal(expected, actual)
       end
     end

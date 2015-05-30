@@ -5,23 +5,23 @@ describe Tutorial do
   
   describe "validations" do
     it "is valid given valid attributes" do
-      tutorial.should be_valid
+      expect(tutorial).to be_valid
     end
     it "is invalid without a title" do
       tutorial.title = nil
-      tutorial.should_not be_valid
+      expect(tutorial).not_to be_valid
     end
     it "is invalid without a description" do
       tutorial.description = nil
-      tutorial.should_not be_valid
+      expect(tutorial).not_to be_valid
     end
     it "is invalid without a member" do
       tutorial.member = nil
-      tutorial.should_not be_valid
+      expect(tutorial).not_to be_valid
     end
     it "is invalid without body_html" do
       tutorial.body_html = nil
-      tutorial.should_not be_valid
+      expect(tutorial).not_to be_valid
     end
   end
 
@@ -146,7 +146,7 @@ describe Tutorial do
       allow(formatter).to receive(:format).and_return(formatted_content)
     end
 
-    it "should process the tutorial with a table of contents formatter and set the body_html from the result" do
+    it "processes the tutorial with a table of contents formatter and set the body_html from the result" do
       expect(TutorialTableOfContentsService).to receive(:new).with(tutorial).and_return(formatter)
       expect(formatter).to receive(:format).and_return(formatted_content)
       tutorial.format_table_of_contents
@@ -172,7 +172,7 @@ describe Tutorial do
       end
 
       it "returns an array of default components" do
-        tutorial.body_components.should == [{ "type" => "text", "content" => "" }, { "type" => "gallery", "content" => [] }]
+        expect(tutorial.body_components).to eq [{ "type" => "text", "content" => "" }, { "type" => "gallery", "content" => [] }]
       end  
     end
   end

@@ -13,7 +13,7 @@ describe MembersController do
   end
 
   describe "#soundcloud_app_client" do
-    it "should return a ::Soundcloud instance initialized with the Sensori client_id, secret, and redirect url" do
+    it "returns a ::Soundcloud instance initialized with the Sensori client_id, secret, and redirect url" do
       soundcloud_app_client = controller.soundcloud_app_client
       expect(soundcloud_app_client).to be_an_instance_of(::Soundcloud::Client)
       expect(soundcloud_app_client.client_id).to eq soundcloud_client_id
@@ -271,7 +271,7 @@ describe MembersController do
     let!(:track_1) { create(:track, :member => member, :posted_at => 2.days.ago) }
     let!(:track_2) { create(:track, :member => member, :posted_at => 1.day.ago)  }
 
-    it "should return http success" do
+    it "returns http success" do
       make_request
       expect(response).to be_success
     end

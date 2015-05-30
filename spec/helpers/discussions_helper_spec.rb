@@ -52,13 +52,13 @@ describe DiscussionsHelper do
   end
 
   describe "#category_name(category)" do
-    it "should titleize the passed category" do
+    it "titleizes the passed category" do
       expect(helper.category_name('music-recs')).to eq 'Music Recs'
     end
-    it "should return 'All' when nil is passed" do
+    it "returns 'All' when nil is passed" do
       expect(helper.category_name(nil)).to eq 'All'
     end
-    it "should return 'All' when '' is passed" do
+    it "returns 'All' when '' is passed" do
       expect(helper.category_name('')).to eq 'All'
     end
   end

@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe ApplicationHelper do
 
-  it "should have a MOBILE_USER_AGENTS constant" do
+  it "has a MOBILE_USER_AGENTS constant" do
     expect(ApplicationHelper::MOBILE_USER_AGENTS).not_to be_nil
   end
-  it "should have a MOBILE_USER_AGENT_REGEX constant" do
+  it "has a MOBILE_USER_AGENT_REGEX constant" do
     expect(ApplicationHelper::MOBILE_USER_AGENT_REGEX).not_to be_nil
   end
   
@@ -51,10 +51,10 @@ describe ApplicationHelper do
   end
 
   describe "#active_if(condition)" do
-    it "should return 'active' if the condition is true" do
+    it "returns 'active' if the condition is true" do
       expect(helper.active_if(true)).to eq 'active'
     end
-    it "should return nil otherwise" do
+    it "returns nil otherwise" do
       expect(helper.active_if(false)).to be_nil
       expect(helper.active_if(nil)).to be_nil
     end
@@ -71,14 +71,14 @@ describe ApplicationHelper do
       context "when viewing the member's profile page" do
         it "returns true" do
           expect(helper).to receive(:current_page?).and_return(true)
-          helper.member_profile_page?(member).should be_true
+          expect(helper.member_profile_page?(member)).to be_true
         end
       end
 
       context "when not viewing the member's profile page" do
         it "returns false" do
           expect(helper).to receive(:current_page?).with('/user').and_return(false)
-          helper.member_profile_page?(member).should be_false
+          expect(helper.member_profile_page?(member)).to be_false
         end
       end
     end

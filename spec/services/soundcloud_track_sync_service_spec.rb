@@ -13,7 +13,7 @@ describe SoundcloudTrackSyncService do
     end
 
     it "finds members in batches" do
-      Member.should_receive(:find_each)
+      expect(Member).to receive(:find_each)
       service.run
     end
 

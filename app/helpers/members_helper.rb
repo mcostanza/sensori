@@ -1,6 +1,6 @@
 module MembersHelper
   def member_location(member)
-    [member.city, member.country].reject { |v| v.blank? }.join(", ")
+    [member.city, member.country].reject(&:blank?).join(", ")
   end
 
   def member_profile_full_name(member)

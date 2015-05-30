@@ -64,7 +64,7 @@ describe MembersHelper do
     context "when the member's location data is not set" do
       let(:member) { build(:member) }
       
-      it "should return nil when the member's location is not set" do
+      it "returns nil" do
         expect(helper.member_profile_location(member)).to be_nil
       end
     end

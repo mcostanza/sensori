@@ -15,7 +15,7 @@ describe DiscussionsController do
 
     let(:params) { {} }
 
-    it "should return http success" do
+    it "returns http success" do
       make_request
       expect(response).to be_success
     end
@@ -75,7 +75,7 @@ describe DiscussionsController do
 
     let(:discussion) { create(:discussion, :response_count => 3) }
 
-    it "should return http success" do
+    it "returns http success" do
       make_request
       expect(response).to be_success
     end
