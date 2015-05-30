@@ -3,6 +3,7 @@ class HomeController < ApplicationController
   def index
     @features = Feature.all
     @tutorials = Tutorial.includes(:member).where(:published => true).limit(3)
+    @carousel_items_presenter = CarouselItemsPresenter.new(@features + @tutorials)
   end
 
   # GET /about

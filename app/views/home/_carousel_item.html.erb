@@ -1,16 +1,16 @@
-<div class="item<%= ' active' if carousel_item_counter == 0 %>" style="background: url('/assets/<%= cover_image %>') no-repeat center center; background-size: cover">
+<div class="item<%= ' active' if carousel_item_counter == 0 %>" style="background: url('/assets/carousel-bg-<%= carousel_item.background_image_id %>.jpg') no-repeat center center; background-size: cover">
   <div class="container">
     <div class="row">
       <div class="span5">
         <div class="carousel-caption">
-          <h1><%= carousel_item.title %></h1>
-          <p class="lead"><%= carousel_item.description %></p>
-          <%= link_to "View More", carousel_link(carousel_item), carousel_link_options(carousel_item).merge(:class => "btn btn-large btn-primary") %>
+          <h1><%= carousel_item.model.title %></h1>
+          <p class="lead"><%= carousel_item.model.description %></p>
+          <%= link_to "View More", carousel_link(carousel_item.model), carousel_link_options(carousel_item.model).merge(:class => "btn btn-large btn-primary") %>
         </div>
       </div>
       <div class="span7">
         <div class="carousel-img">
-          <%= link_to image_tag(carousel_item.image_url(:thumb)), carousel_link(carousel_item), carousel_link_options(carousel_item) %>
+          <%= link_to image_tag(carousel_item.model.image_url(:thumb)), carousel_link(carousel_item.model), carousel_link_options(carousel_item.model) %>
         </div>
       </div>
     </div>

@@ -3,12 +3,16 @@ require 'spec_helper'
 describe HomeController do
 
   describe "GET 'index'" do
-    it "returns http success" do
+    def make_request
       get 'index'
+    end
+
+    it "returns http success" do
+      make_request
       expect(response).to be_success
     end
     it "renders the index template" do
-      get 'index'
+      make_request
       expect(response).to render_template('home/index')
     end
     
@@ -22,13 +26,19 @@ describe HomeController do
       let!(:feature_1) { create(:feature) }
 
       it "finds and assigns featured and latest published tutorials" do
-        get 'index'
+        make_request
         expect(assigns[:tutorials]).to eq([tutorial_2, tutorial_5, tutorial_3])
       end
 
       it "assigns all features to @features" do
-        get 'index'
+        make_request
         expect(assigns[:features]).to eq([feature_1])
+      end
+
+      it "assigns a CarouselItemsPresenter for the features and tutorials" do
+        make_request
+        carousel_items_presenter = assigns[:carousel_items_presenter]
+        expect(carousel_items_presenter.models).to eq([feature_1, tutorial_2, tutorial_5, tutorial_3])
       end
     end
   end

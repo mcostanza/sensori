@@ -20,6 +20,7 @@ module Sensori
     # config.autoload_paths += %W(#{config.root}/extras)
     config.autoload_paths += [
       "#{config.root}/lib", 
+      "#{config.root}/presenters",
       "#{config.root}/responders",
       "#{config.root}/services"
     ]
