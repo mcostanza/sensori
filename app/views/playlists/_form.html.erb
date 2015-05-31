@@ -13,9 +13,9 @@
 
   <%= form_for(@playlist, :html => { :id => "playlist-form" }) do |f| %>
     <%= f.label :title %>
-    <%= f.text_field :title, :placeholder => "Title", :class => 'span6' %>
+    <%= f.text_field :title, :placeholder => "Title (displayed after 'Latest Playlist - ')", :class => 'span6' %>
     <%= f.label :link %>
-    <%= f.text_field :link, :placeholder => "Link", :class => 'span6' %>
+    <%= f.text_field :link, :placeholder => "Link (bandcamp album or soundcloud set)", :class => 'span6' %>
     <br/><br/>
     <%= f.submit "Save", :class => "btn btn-primary" %>
   <% end %>
