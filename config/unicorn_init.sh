@@ -7,7 +7,7 @@ set -e
 TIMEOUT=${TIMEOUT-60}
 APP_ROOT=/var/www/sensori
 PID=/home/unicorn/pids/unicorn.pid
-CMD="/usr/local/rvm/bin/bootup_unicorn_rails -D -c $APP_ROOT/config/unicorn.rb -E production"
+CMD="export PATH='/usr/local/rvm/gems/ruby-2.1.6/bin:/usr/local/rvm/gems/ruby-2.1.6@global/bin:/usr/local/rvm/rubies/ruby-2.1.6/bin:$PATH'; export GEM_HOME='/usr/local/rvm/gems/ruby-2.1.6'; export GEM_PATH='/usr/local/rvm/gems/ruby-2.1.6:/usr/local/rvm/gems/ruby-2.1.6@global'; export MY_RUBY_HOME='/usr/local/rvm/rubies/ruby-2.1.6'; export IRBRC='/usr/local/rvm/rubies/ruby-2.1.6/.irbrc'; unset MAGLEV_HOME; unset RBXOPT; export RUBY_VERSION='ruby-2.1.6'; cd $APP_ROOT && bundle exec $APP_ROOT/bin/unicorn_rails -D -c $APP_ROOT/config/unicorn.rb -E production"
 action="$1"
 set -u
 
