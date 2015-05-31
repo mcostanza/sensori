@@ -4,6 +4,7 @@ class HomeController < ApplicationController
     @features = Feature.all
     @tutorials = Tutorial.includes(:member).where(:published => true).limit(3)
     @carousel_items_presenter = CarouselItemsPresenter.new(@features + @tutorials)
+    @playlist_presenter = PlaylistPresenter.new(Playlist.latest)
   end
 
   # GET /about
