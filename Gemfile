@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+ruby '2.1.6'
+
 gem 'rails', '~> 3.2'
 
 gem 'mysql2'
@@ -49,8 +51,8 @@ gem 'unicorn'
 # Deploy with Capistrano
 # gem 'capistrano'
 
-# To use debugger
-gem 'debugger'
+# Debugger replacement
+gem 'pry'
 
 # AWS Email
 gem "aws-ses"
