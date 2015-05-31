@@ -7,6 +7,7 @@ FactoryGirl.define do
 
     trait :soundcloud do
     	sequence(:link) { |n| "https://soundcloud.com/sensori-collective/sets/playlist-#{n}" }
+      sequence(:soundcloud_uri) { |n| "https://api.soundcloud.com/playlists/#{n}" }
     end
 
     trait :bandcamp do
