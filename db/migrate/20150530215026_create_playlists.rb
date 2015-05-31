@@ -4,6 +4,7 @@ class CreatePlaylists < ActiveRecord::Migration
       t.string :title
       t.text :link
       t.integer :bandcamp_album_id
+      t.string :soundcloud_uri
 
       t.timestamps
     end

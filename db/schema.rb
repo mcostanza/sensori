@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(:version => 20150530215026) do
     t.string   "title"
     t.text     "link"
     t.integer  "bandcamp_album_id"
+    t.string   "soundcloud_uri"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
   end
