@@ -11,6 +11,7 @@ describe HomeController do
       make_request
       expect(response).to be_success
     end
+
     it "renders the index template" do
       make_request
       expect(response).to render_template('home/index')
@@ -24,6 +25,9 @@ describe HomeController do
       let!(:tutorial_5) { create(:tutorial, :created_at => 1.day.ago) }
 
       let!(:feature_1) { create(:feature) }
+
+      let!(:playlist_1) { create(:playlist, :soundcloud) }
+      let!(:playlist_2) { create(:playlist, :bandcamp) }
 
       it "finds and assigns featured and latest published tutorials" do
         make_request
@@ -39,6 +43,12 @@ describe HomeController do
         make_request
         carousel_items_presenter = assigns[:carousel_items_presenter]
         expect(carousel_items_presenter.models).to eq([feature_1, tutorial_2, tutorial_5, tutorial_3])
+      end
+
+      it "assigns a PlaylistPresenter for the latest playlist" do
+        make_request
+        playlist_presenter = assigns[:playlist_presenter]
+        expect(playlist_presenter.playlist).to eq playlist_2
       end
     end
   end

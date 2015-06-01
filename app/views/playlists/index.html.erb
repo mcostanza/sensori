@@ -1,0 +1,7 @@
+<h2><%= title "Playlists" %></h2>
+
+<% @playlists.each do |playlist| %>
+	<p><%= link_to playlist.title, playlist.link, target: '_blank' %> | <%= link_to 'Edit', playlist %></p>
+<% end %>
+
+<%= link_to 'New Playlist', new_playlist_path, :class => "btn btn-primary btn-mini new-button" %>

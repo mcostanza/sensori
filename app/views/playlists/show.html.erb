@@ -1,0 +1,14 @@
+<% if @current_member.try(:admin?) %>
+<div class="row">
+<%= render :partial => 'shared/action_buttons', :locals => { :object => @playlist } %>
+</div>
+<% end %>
+<div class="row">
+	<div class="span4 sidebar">
+    <h2><%= title @playlist.title %></h2>
+    <i class="icon-arrow-right"></i> <%= link_to "Link", @playlist.link, :target => "_blank" %>
+    <%#= render partial: PlaylistPresenter.new(@playlist).playlist_partial %>
+  </div>
+</div>
+
+

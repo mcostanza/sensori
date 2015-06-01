@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150427153122) do
+ActiveRecord::Schema.define(:version => 20150530215026) do
 
   create_table "discussion_notifications", :force => true do |t|
     t.integer  "discussion_id", :null => false
@@ -73,6 +73,15 @@ ActiveRecord::Schema.define(:version => 20150427153122) do
 
   add_index "members", ["slug"], :name => "index_members_on_slug"
   add_index "members", ["soundcloud_id"], :name => "index_members_on_soundcloud_id"
+
+  create_table "playlists", :force => true do |t|
+    t.string   "title"
+    t.text     "link"
+    t.integer  "bandcamp_album_id"
+    t.string   "soundcloud_uri"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
 
   create_table "responses", :force => true do |t|
     t.integer  "discussion_id", :null => false

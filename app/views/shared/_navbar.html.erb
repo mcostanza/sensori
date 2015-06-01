@@ -28,6 +28,7 @@
             </a>
             <ul class="dropdown-menu" role="menu" aria-labelledby="member-header-link">
               <% if @current_member.try(:admin?) -%>
+              <li><%= link_to "Playlists", playlists_path %></li>
               <li><%= link_to "Features", features_path %></li>
               <% end -%>
               <li><%= link_to "Log Out", members_sign_out_path %></li>

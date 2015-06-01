@@ -1,0 +1,4 @@
+<div class="bandcamp-playlist-container">
+  <h2>Latest Playlist - <%= playlist.title %></h2>
+  <%= content_tag :iframe, nil, :class => "bandcamp-playlist", :src => "http://bandcamp.com/EmbeddedPlayer/album=#{playlist.bandcamp_album_id}/size=large/bgcol=ffffff/linkcol=0687f5/artwork=small/transparent=true/", :seamless => '' %>
+</div>

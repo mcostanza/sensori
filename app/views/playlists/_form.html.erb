@@ -1,0 +1,22 @@
+<div class="form-container">
+  <% if @playlist.errors.any? %>
+    <div id="error_explanation">
+      <h4><%= pluralize(@playlist.errors.count, "error") %> prohibited this error from being saved:</h4>
+
+      <ul>
+      <% @playlist.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_for(@playlist, :html => { :id => "playlist-form" }) do |f| %>
+    <%= f.label :title %>
+    <%= f.text_field :title, :placeholder => "Title (displayed after 'Latest Playlist - ')", :class => 'span6' %>
+    <%= f.label :link %>
+    <%= f.text_field :link, :placeholder => "Link (bandcamp album or soundcloud set)", :class => 'span6' %>
+    <br/><br/>
+    <%= f.submit "Save", :class => "btn btn-primary" %>
+  <% end %>
+</div>
