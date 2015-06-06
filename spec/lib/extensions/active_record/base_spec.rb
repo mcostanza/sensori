@@ -6,13 +6,13 @@ describe ActiveRecord::Base do
 
   	context 'when the record was just created' do  	
   		it "returns true" do
-      	expect(model.just_created?).to be_true
+      	expect(model.just_created?).to be true
     	end	
   	end
     
   	context 'when the record already existed in the database' do
   		it "returns false" do
-      	expect(Member.find(model.id).just_created?).to be_false
+      	expect(Member.find(model.id).just_created?).to be false
     	end
   	end
   end

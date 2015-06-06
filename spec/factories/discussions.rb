@@ -14,7 +14,7 @@ FactoryGirl.define do
 
     association :member
 
-    ignore do
+    transient do
       last_post_at { Time.now }
       response_count 0
     end

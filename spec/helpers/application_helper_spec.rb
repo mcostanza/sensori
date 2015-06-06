@@ -20,7 +20,7 @@ describe ApplicationHelper do
       let(:user_agent) { 'iphone' }
 
       it "returns true" do
-        expect(helper.is_mobile_device?).to be_true
+        expect(helper.is_mobile_device?).to be true
       end  
     end
 
@@ -28,7 +28,7 @@ describe ApplicationHelper do
       let(:user_agent) { 'Android' }
 
       it "returns true" do
-        expect(helper.is_mobile_device?).to be_true
+        expect(helper.is_mobile_device?).to be true
       end  
     end
     
@@ -36,7 +36,7 @@ describe ApplicationHelper do
       let(:user_agent) { 'Firefox' }
       
       it "returns false" do
-        expect(helper.is_mobile_device?).to be_false
+        expect(helper.is_mobile_device?).to be false
       end
     end
 
@@ -45,7 +45,7 @@ describe ApplicationHelper do
 
       it "returns nil without shitting" do
         expect { helper.is_mobile_device? }.not_to raise_error
-        expect(helper.is_mobile_device?).to be_false        
+        expect(helper.is_mobile_device?).to be false        
       end
     end
   end
@@ -71,14 +71,14 @@ describe ApplicationHelper do
       context "when viewing the member's profile page" do
         it "returns true" do
           expect(helper).to receive(:current_page?).and_return(true)
-          expect(helper.member_profile_page?(member)).to be_true
+          expect(helper.member_profile_page?(member)).to be true
         end
       end
 
       context "when not viewing the member's profile page" do
         it "returns false" do
           expect(helper).to receive(:current_page?).with('/user').and_return(false)
-          expect(helper.member_profile_page?(member)).to be_false
+          expect(helper.member_profile_page?(member)).to be false
         end
       end
     end
@@ -87,7 +87,7 @@ describe ApplicationHelper do
       let(:member) { nil }
 
       it "returns false" do
-        expect(helper.member_profile_page?(member)).to be_false
+        expect(helper.member_profile_page?(member)).to be false
       end
     end
   end

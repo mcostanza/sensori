@@ -219,7 +219,7 @@ describe SubmissionsController do
           make_request
         }.to change { Submission.count }.by(-1)
 
-        expect(Submission.exists?(submission.id)).to be_false
+        expect(Submission.exists?(submission.id)).to be false
       end
 
       it "redirects to the session" do

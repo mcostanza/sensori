@@ -11,7 +11,7 @@ module ApplicationHelper
   MOBILE_USER_AGENT_REGEX = /#{MOBILE_USER_AGENTS}/i
   
   def is_mobile_device?
-    request.user_agent.to_s.match(MOBILE_USER_AGENT_REGEX)
+    request.user_agent.to_s.match(MOBILE_USER_AGENT_REGEX).present?
   end
 
   def active_if(condition)

@@ -221,7 +221,7 @@ describe TutorialsController do
           expect(created_tutorial.body_components).to eq tutorial_params[:body_components]
           expect(created_tutorial.title).to eq tutorial_params[:title]
           expect(created_tutorial.member).to eq member
-          expect(created_tutorial.published?).to be_false
+          expect(created_tutorial.published?).to be false
         end
 
         it "responds with 201 status" do
@@ -378,7 +378,7 @@ describe TutorialsController do
             expect(tutorial.body_components).to eq tutorial_params[:body_components]
             expect(tutorial.title).to eq tutorial_params[:title]
             expect(tutorial.member).to eq member
-            expect(tutorial.published?).to be_true
+            expect(tutorial.published?).to be true
           end
 
           it "responds with 200 status" do

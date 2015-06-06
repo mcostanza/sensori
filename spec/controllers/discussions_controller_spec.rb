@@ -111,7 +111,7 @@ describe DiscussionsController do
       it "assigns a new discussion associated with the current member" do
         make_request
         discussion = assigns[:discussion]
-        expect(discussion.new_record?).to be_true
+        expect(discussion.new_record?).to be true
         expect(discussion.member).to eq member
       end
     end
@@ -221,7 +221,7 @@ describe DiscussionsController do
             make_request
           }.to change { Discussion.count }.by(-1)
 
-          expect(Discussion.exists?(discussion.id)).to be_false
+          expect(Discussion.exists?(discussion.id)).to be false
         end
 
         it "redirects to the discussions index with a success notice" do
@@ -241,7 +241,7 @@ describe DiscussionsController do
             make_request
           }.not_to change { Discussion.count }
 
-          expect(Discussion.exists?(discussion.id)).to be_true
+          expect(Discussion.exists?(discussion.id)).to be true
         end
 
         it "redirects to the discussion with a flash alert" do

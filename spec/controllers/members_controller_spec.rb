@@ -100,7 +100,7 @@ describe MembersController do
 
           it "does not set flash data for a new member" do
             make_request
-            expect(flash[:signed_up]).to be_false
+            expect(flash[:signed_up]).to be false
           end
         end
         
@@ -116,7 +116,7 @@ describe MembersController do
 
           it "sets flash data for a new member" do
             make_request
-            expect(flash[:signed_up]).to be_true
+            expect(flash[:signed_up]).to be true
           end
         end
       end
@@ -135,7 +135,7 @@ describe MembersController do
         end
         it "does not set flash data for a new member" do
           make_request
-          expect(flash[:signed_up]).to be_false
+          expect(flash[:signed_up]).to be false
         end
       end
     end

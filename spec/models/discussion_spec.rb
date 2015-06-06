@@ -94,27 +94,27 @@ describe Discussion do
 
     context 'when the passed member is the owner' do
       it "returns true" do
-        expect(discussion.editable?(owner)).to be_true
+        expect(discussion.editable?(owner)).to be true
       end
     end
 
     context 'when the passed member is not the owner' do
       context 'when the passed member is an admin' do
         it "returns true" do
-          expect(discussion.editable?(admin)).to be_true
+          expect(discussion.editable?(admin)).to be true
         end
       end
 
       context 'when the passed member is not an admin' do
         it "returns false" do
-          expect(discussion.editable?(non_owner)).to be_false
+          expect(discussion.editable?(non_owner)).to be false
         end
       end
     end
 
     context 'when no member is passed' do
       it "returns nil" do
-        expect(discussion.editable?(nil)).to be_false
+        expect(discussion.editable?(nil)).to be false
       end
     end
 
@@ -125,13 +125,13 @@ describe Discussion do
 
       context 'when the passed member is the owner' do
         it "returns false" do
-          expect(discussion.editable?(owner)).to be_false
+          expect(discussion.editable?(owner)).to be false
         end
       end
 
       context 'when the passed member is an admin' do
         it "returns true" do
-          expect(discussion.editable?(admin)).to be_true
+          expect(discussion.editable?(admin)).to be true
         end
       end
     end

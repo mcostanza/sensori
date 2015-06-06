@@ -107,7 +107,7 @@ describe SessionsController do
         make_request
         session_model = assigns[:session]
         expect(session_model).to be_an_instance_of(Session)
-        expect(session_model.new_record?).to be_true
+        expect(session_model.new_record?).to be true
       end
     end
   end
@@ -270,7 +270,7 @@ describe SessionsController do
           make_request
         }.to change { Session.count }.by(-1)
 
-        expect(Session.exists?(session_model.id)).to be_false
+        expect(Session.exists?(session_model.id)).to be false
       end
 
       it "redirects to the sessions index" do

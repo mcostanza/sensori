@@ -73,25 +73,25 @@ describe Tutorial do
 
     context 'when member is an admin' do
       it "returns true" do
-        expect(tutorial.editable?(admin)).to be_true
+        expect(tutorial.editable?(admin)).to be true
       end
     end
 
     context 'when member is the creator of the tutorial' do
       it "returns true" do
-        expect(tutorial.editable?(creator)).to be_true
+        expect(tutorial.editable?(creator)).to be true
       end
     end
 
     context 'when member is not the creator and not an admin' do
       it "returns false" do
-        expect(tutorial.editable?(other_member)).to be_false
+        expect(tutorial.editable?(other_member)).to be false
       end
     end
 
     context 'when member is nil' do
       it "returns false" do
-        expect(tutorial.editable?(nil)).to be_false
+        expect(tutorial.editable?(nil)).to be false
       end
     end
   end

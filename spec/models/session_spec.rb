@@ -77,7 +77,7 @@ describe Session do
       end
 
       it "returns false" do
-        expect(session_model.active?).to be_false
+        expect(session_model.active?).to be false
       end
     end
 
@@ -87,7 +87,7 @@ describe Session do
       end
 
       it "returns true" do
-        expect(session_model.active?).to be_true
+        expect(session_model.active?).to be true
       end
     end
 
@@ -97,7 +97,7 @@ describe Session do
       end
 
       it "returns true" do
-        expect(session_model.active?).to be_true
+        expect(session_model.active?).to be true
       end
     end
 
@@ -107,7 +107,7 @@ describe Session do
       end
 
       it "returns false" do
-        expect(session_model.active?).to be_false
+        expect(session_model.active?).to be false
       end
     end
   end

@@ -12,13 +12,13 @@ describe ApplicationController do
       end
 
       it "returns true" do
-        expect(controller.signed_in?).to be_true
+        expect(controller.signed_in?).to be true
       end
     end
 
     context 'when session[:soundcloud_id] is not set' do
       it "returns false" do
-        expect(controller.signed_in?).to be_false
+        expect(controller.signed_in?).to be false
       end
     end
   end
@@ -30,13 +30,13 @@ describe ApplicationController do
       end
 
       it "returns false" do
-        expect(controller.signed_out?).to be_false
+        expect(controller.signed_out?).to be false
       end
     end
     
     context 'when not signed in' do
       it "returns true" do
-        expect(controller.signed_out?).to be_true
+        expect(controller.signed_out?).to be true
       end
     end
   end

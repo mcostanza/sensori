@@ -94,13 +94,13 @@ describe Playlist do
 	  	let(:playlist) { build(:playlist, :soundcloud) }
 
 	  	it "returns true" do
-	  		expect(playlist.soundcloud?).to be_true
+	  		expect(playlist.soundcloud?).to be true
 	  	end
 	  end
 
 	  context 'when link is not on soundcloud' do
 	  	it "returns false" do
-	  		expect(playlist.soundcloud?).to be_false
+	  		expect(playlist.soundcloud?).to be false
 	  	end
 	  end
 	end
@@ -110,13 +110,13 @@ describe Playlist do
 	  	let(:playlist) { build(:playlist, :bandcamp) }
 
 	  	it "returns true" do
-	  		expect(playlist.bandcamp?).to be_true
+	  		expect(playlist.bandcamp?).to be true
 	  	end
 	  end
 
 	  context 'when link is not on bandcamp' do
 	  	it "returns false" do
-	  		expect(playlist.bandcamp?).to be_false
+	  		expect(playlist.bandcamp?).to be false
 	  	end
 	  end
 	end
