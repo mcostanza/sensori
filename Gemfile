@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '2.1.6'
 
-gem 'rails', '~> 3.2'
+gem 'rails'
 
 gem 'mysql2'
 
@@ -81,6 +81,10 @@ gem "rmagick"
 
 # S3 file uploads
 gem "fog"
+
+# Used for tutorial table of contents formatter
+# Version requirement is to get rid of warnings - see https://github.com/sparklemotion/nokogiri/issues/1196
+gem "nokogiri", "< 1.6"
 
 # Background jobs
 gem "sidekiq"
