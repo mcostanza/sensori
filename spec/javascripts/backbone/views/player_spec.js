@@ -136,7 +136,9 @@ describe("Sensori.Views.Player", function() {
     });
     it("should not fail if the current track is not set", function() {
       view.currentTrack = undefined;
-      view.onTrackStatusChanging('track', 'playing');
+      expect(function() {
+        view.onTrackStatusChanging('track', 'playing');
+      }).not.toThrow();
     });
   });
 
