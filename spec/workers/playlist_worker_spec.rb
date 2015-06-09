@@ -9,7 +9,7 @@ describe PlaylistWorker do
 
       let(:bandcamp_response_body) { File.read(File.join(Rails.root, "spec/data/bandcamp_album_page.html")) }
       let(:bandcamp_response) { double('HTTParty::Response', body: bandcamp_response_body) }
-      let(:bandcamp_album_id) { 1730958122 }
+      let(:bandcamp_album_id) { '1730958122' }
 
       before do
         allow(HTTParty).to receive(:get).with(playlist.link).and_return(bandcamp_response)
@@ -46,7 +46,7 @@ describe PlaylistWorker do
       it "updates the playlist with the resolved soundcloud uri" do
         expect {
           worker.perform(playlist.id)
-        }.to change { playlist.reload.soundcloud_uri }.to(soundcloud_object.uri)        
+        }.to change { playlist.reload.soundcloud_uri }.to(soundcloud_object.uri)
       end
     end
   end

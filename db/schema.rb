@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150530215026) do
+ActiveRecord::Schema.define(:version => 20150609162917) do
 
   create_table "discussion_notifications", :force => true do |t|
     t.integer  "discussion_id", :null => false
@@ -77,7 +77,7 @@ ActiveRecord::Schema.define(:version => 20150530215026) do
   create_table "playlists", :force => true do |t|
     t.string   "title"
     t.text     "link"
-    t.integer  "bandcamp_album_id"
+    t.string   "bandcamp_album_id"
     t.string   "soundcloud_uri"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
@@ -155,20 +155,20 @@ ActiveRecord::Schema.define(:version => 20150530215026) do
     t.boolean  "include_table_of_contents", :default => false
   end
 
-  add_foreign_key "discussion_notifications", "discussions", :name => "discussion_notifications_discussion_id_fk"
-  add_foreign_key "discussion_notifications", "members", :name => "discussion_notifications_member_id_fk"
+  add_foreign_key "discussion_notifications", "discussions", name: "discussion_notifications_discussion_id_fk"
+  add_foreign_key "discussion_notifications", "members", name: "discussion_notifications_member_id_fk"
 
-  add_foreign_key "discussions", "members", :name => "discussions_member_id_fk"
+  add_foreign_key "discussions", "members", name: "discussions_member_id_fk"
 
-  add_foreign_key "features", "members", :name => "features_member_id_fk"
+  add_foreign_key "features", "members", name: "features_member_id_fk"
 
-  add_foreign_key "responses", "discussions", :name => "responses_discussion_id_fk"
-  add_foreign_key "responses", "members", :name => "responses_member_id_fk"
+  add_foreign_key "responses", "discussions", name: "responses_discussion_id_fk"
+  add_foreign_key "responses", "members", name: "responses_member_id_fk"
 
-  add_foreign_key "sessions", "members", :name => "sessions_member_id_fk"
+  add_foreign_key "sessions", "members", name: "sessions_member_id_fk"
 
-  add_foreign_key "submissions", "members", :name => "submissions_member_id_fk"
+  add_foreign_key "submissions", "members", name: "submissions_member_id_fk"
 
-  add_foreign_key "tracks", "members", :name => "tracks_member_id_fk"
+  add_foreign_key "tracks", "members", name: "tracks_member_id_fk"
 
 end
