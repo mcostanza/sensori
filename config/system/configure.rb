@@ -3,7 +3,7 @@ require 'fileutils'
 
 def symlink(source, destination)
   STDOUT.puts "Symlinking #{source.inspect} to #{destination.inspect}"
-  File.rm(destination) if File.exists?(destination)
+  FileUtils.rm(destination) if File.exists?(destination)
   FileUtils.symlink(source, destination)
 end
 
