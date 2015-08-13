@@ -1,0 +1,3 @@
+database:
+  pre:
+    - cp config/application.yml.example config/application.yml
