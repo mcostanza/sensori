@@ -1,6 +1,6 @@
 ## Summary
 
-This project contains the source code for sensoricollective.com.
+This project contains the source code for [sensoricollective.com](http://www.sensoricollective.com).
 
 ### Stack
 - rvm
