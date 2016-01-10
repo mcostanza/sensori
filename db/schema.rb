@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150609162917) do
+ActiveRecord::Schema.define(:version => 20160110204332) do
 
   create_table "discussion_notifications", :force => true do |t|
     t.integer  "discussion_id", :null => false
@@ -107,7 +107,7 @@ ActiveRecord::Schema.define(:version => 20150609162917) do
     t.datetime "updated_at",              :null => false
     t.string   "attachment_url"
     t.string   "soundcloud_playlist_url"
-    t.integer  "bandcamp_album_id"
+    t.string   "bandcamp_album_id"
   end
 
   add_index "sessions", ["member_id"], :name => "sessions_member_id_fk"
