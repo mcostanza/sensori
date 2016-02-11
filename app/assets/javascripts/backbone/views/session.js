@@ -18,6 +18,14 @@ Sensori.Views.Session = Backbone.View.extend({
     this.saveButton.addClass("disabled");
   },
 
+  addSamplePack: function() {
+
+  },
+
+  removeSamplePack: function(event) {
+
+  },
+
   render: function() {
     this.saveButton = this.$("[data-trigger='save']");
 
