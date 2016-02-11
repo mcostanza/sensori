@@ -21,9 +21,9 @@ module Sensori
     config.autoload_paths += [
       "#{config.root}/lib", 
       "#{config.root}/forms",
-      "#{config.root}/presenters",
       "#{config.root}/responders",
-      "#{config.root}/services"
+      "#{config.root}/services",
+      "#{config.root}/view_models",
     ]
 
     # Only load the plugins named here, in the order given (default is alphabetical).
