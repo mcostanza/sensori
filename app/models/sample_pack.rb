@@ -6,4 +6,6 @@ class SamplePack < ActiveRecord::Base
   validates :name, presence: true
   validates :url, presence: true
   validates :session, presence: true
+
+  scope :live, lambda { where(deleted: false) }
 end

@@ -22,14 +22,15 @@
     <%= f.text_field :facebook_event_id, :placeholder => "Facebook Event ID", :class => 'span6' %>
     <%= f.label :end_date %>
     <%= f.date_select :end_date, {} , { :class => "span2" } %>
-    <%= f.hidden_field :attachment_url %>
     <%= f.label :soundcloud_playlist_url, "Soundcloud Playlist URL" %>
     <%= f.text_field :soundcloud_playlist_url, :placeholder => "Soundcloud Playlist URL", :class => 'span6' %>
     <%= f.label :bandcamp_album_id, "Bandcamp Album ID" %>
     <%= f.text_field :bandcamp_album_id, :placeholder => "Bandcamp Album ID", :class => 'span6' %>
   <% end %>
 
-  <div class="attachment-container"></div>
+  <div class="attachments-container"></div>
+
+  <button class="btn btn-primary" data-trigger="add-sample-pack">Add Sample Pack</button>
 
   <a href="javascript:;" class="btn btn-primary" data-trigger='save'>Save</a>
 </div>
@@ -38,8 +39,10 @@
 
 <script type="text/javascript">
 Sensori.Session = new Sensori.Models.Session(<%= raw @session.to_json %>);
+Sensori.SamplePacks = new Sensori.Collections.SamplePacks(<%= raw @session.sample_packs.live.to_json %>);
 Sensori.SessionView = new Sensori.Views.Session({
   model: Sensori.Session,
+  collection: Sensori.SamplePacks,
   el: $(".form-container")
 }).render();
 </script>
