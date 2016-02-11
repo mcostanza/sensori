@@ -124,7 +124,10 @@ describe SessionsController do
           description: "lets all make some beats",
           image: fixture_file_upload('/sensori-mpd.jpg', 'image/jpeg'),
           end_date: 2.weeks.from_now
-        }
+        },
+        sample_packs: [
+          { url: 'http://s3.amazon.com/sensori/sample-packs/1.zip', name: 'samples-1.zip' }
+        ]
       }
     end
 
@@ -134,6 +137,7 @@ describe SessionsController do
       let(:member) { create(:member, :admin) }
 
       let(:created_session) { Session.last }
+      let(:created_sample_pack) { created_session.sample_packs.last }
 
       before do
         sign_in_as(member)
@@ -149,9 +153,12 @@ describe SessionsController do
         expect(created_session.description).to eq params[:session][:description]
       end
 
-      it "assigns the session" do
-        make_request
-        expect(assigns[:session]).to eq created_session
+      it "creates associated sample packs" do
+        expect { make_request }.to change { SamplePack.count }.by(1)
+
+        expect(created_sample_pack.url).to eq params[:sample_packs][0][:url]
+        expect(created_sample_pack.name).to eq params[:sample_packs][0][:name]
+        expect(created_sample_pack.deleted).to be_falsey
       end
 
       it "redirects to the created session with a success notice" do
@@ -171,6 +178,10 @@ describe SessionsController do
           }.not_to change { Session.count }
         end
 
+        it "does not create any sample packs" do
+          expect { make_request }.to_not change { SamplePack.count }
+        end
+
         it "renders the new template" do
           make_request
           expect(response).to render_template('sessions/new')
@@ -184,14 +195,34 @@ describe SessionsController do
       put 'update', params
     end
 
-    let(:session_model) { create(:session, updated_at: 1.day.ago) }
+    let!(:session_model) { create(:session, updated_at: 1.day.ago) }
+    let!(:sample_pack_1) { create(:sample_pack, session: session_model) }
+    let!(:sample_pack_2) { create(:sample_pack, session: session_model) }
+
+    let(:sample_pack_1_params) do
+      {
+        url: sample_pack_1.url,
+        name: 'New Name For Sample Pack 1'
+      }
+    end
+
+    let(:new_sample_pack_params) do
+      { 
+        url: 'http://s3.amazon.com/sensori/sample-packs/new.zip', 
+        name: 'Brand New Hot Fiya Samplez'
+      }
+    end
 
     let(:params) do
       {
         id: session_model.id,
         session: {
           description: "new description!"
-        }
+        },
+        sample_packs: [
+          sample_pack_1_params,
+          new_sample_pack_params
+        ]
       }
     end
 
@@ -213,9 +244,20 @@ describe SessionsController do
         expect(session_model.description).to eq params[:session][:description]
       end
 
-      it "assigns the session" do
+      it "updates the associated sample packs" do
         make_request
-        expect(assigns[:session]).to eq session_model
+
+        sample_pack_1.reload
+        expect(sample_pack_1.name).to eq sample_pack_1_params[:name]
+        expect(sample_pack_1.deleted).to be_falsey
+
+        sample_pack_2.reload
+        expect(sample_pack_2.deleted).to be_truthy
+
+        sample_pack_3 = session_model.sample_packs.last
+        expect(sample_pack_3.url).to eq new_sample_pack_params[:url]
+        expect(sample_pack_3.name).to eq new_sample_pack_params[:name]
+        expect(sample_pack_3.deleted).to be_falsey
       end
 
       it "redirects to the session with a success notice" do
@@ -233,6 +275,12 @@ describe SessionsController do
           expect {
             make_request
           }.not_to change { session_model.reload.updated_at }
+        end
+
+        it "does not change any sample packs" do
+          make_request
+
+          SamplePack.where(deleted: false, session_id: session_model.id).should =~ [sample_pack_1, sample_pack_2]
         end
 
         it "renders the edit template" do
