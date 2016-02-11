@@ -21,6 +21,7 @@ module Sensori
     config.autoload_paths += [
       "#{config.root}/lib", 
       "#{config.root}/forms",
+      "#{config.root}/representers",
       "#{config.root}/responders",
       "#{config.root}/services",
       "#{config.root}/view_models",

@@ -39,7 +39,9 @@
 
 <script type="text/javascript">
 Sensori.Session = new Sensori.Models.Session(<%= raw @session.to_json %>);
-Sensori.SamplePacks = new Sensori.Collections.SamplePacks(<%= raw @session.sample_packs.live.to_json %>);
+Sensori.SamplePacks = new Sensori.Collections.SamplePacks(
+  <%= raw @session.sample_packs.live.map { |sample_pack| SamplePacks::AttachmentUploaderJSONRepresenter.new(sample_pack) }.to_json %>
+);
 Sensori.SessionView = new Sensori.Views.Session({
   model: Sensori.Session,
   collection: Sensori.SamplePacks,
