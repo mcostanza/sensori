@@ -31,8 +31,8 @@ describe("Sensori.Views.Session", function() {
 		});
 		
 		it("creates hidden inputs from the sample packs collection", function() {
-			collection.add({ url: 'http://s3.amazon.com/sensori/samples-1.zip', name: 'one.zip' });
-			collection.add({ url: 'http://s3.amazon.com/sensori/samples-2.zip', name: 'two.zip' });
+			collection.add({ attachment_url: 'http://s3.amazon.com/sensori/samples-1.zip', attachment_name: 'one.zip' });
+			collection.add({ attachment_url: 'http://s3.amazon.com/sensori/samples-2.zip', attachment_name: 'two.zip' });
 			
 			view.submitForm();
 			
@@ -113,8 +113,8 @@ describe("Sensori.Views.Session", function() {
 			};
 			mockView.render.returns(mockView);
 
-			collection.add({ url: 'http://s3.amazon.com/sensori/samples-1.zip', name: 'one.zip' });
-			collection.add({ url: 'http://s3.amazon.com/sensori/samples-2.zip', name: 'two.zip' });
+			collection.add({ attachment_url: 'http://s3.amazon.com/sensori/samples-1.zip', attachment_name: 'one.zip' });
+			collection.add({ attachment_url: 'http://s3.amazon.com/sensori/samples-2.zip', attachment_name: 'two.zip' });
 
 			sinon.stub(Sensori.Views, "AttachmentUploader").returns(mockView);
 		});
