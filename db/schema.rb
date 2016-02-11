@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160110204332) do
+ActiveRecord::Schema.define(:version => 20160211004748) do
 
   create_table "discussion_notifications", :force => true do |t|
     t.integer  "discussion_id", :null => false
@@ -94,6 +94,17 @@ ActiveRecord::Schema.define(:version => 20160110204332) do
 
   add_index "responses", ["discussion_id"], :name => "responses_discussion_id_fk"
   add_index "responses", ["member_id"], :name => "responses_member_id_fk"
+
+  create_table "sample_packs", :force => true do |t|
+    t.string   "url"
+    t.string   "name"
+    t.integer  "session_id"
+    t.boolean  "deleted",    :default => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+  end
+
+  add_index "sample_packs", ["url"], :name => "index_sample_packs_on_url"
 
   create_table "sessions", :force => true do |t|
     t.string   "title",                   :null => false
