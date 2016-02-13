@@ -10,6 +10,7 @@ class SessionsController < ApplicationController
   # GET /sessions/1
   def show
     @session = find_session
+    @sample_packs = @session.sample_packs.live
     if signed_in?
       @submission = @current_member.submissions.find_or_initialize_by_session_id(@session.id)
     end
