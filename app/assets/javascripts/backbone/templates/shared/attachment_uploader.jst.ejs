@@ -1,4 +1,5 @@
 <div class="attachment-buttons">
+	<div class="attachment-name"><%= attachmentName %></div>
 	<% if (attachmentUrl) { %>
 	<a href="<%= attachmentUrl %>" class="btn btn-primary btn-download-alt download-button">
 	  <i class="icon-white icon-download-alt"></i> Download Samples
@@ -12,6 +13,11 @@
 		<i class="icon-white icon-upload"></i> Upload Samples
 		<%= uploadForm %>
 	</span>
+	<% if (removeButton) { %>
+	<a href='javascript:;' class="btn btn-danger remove-button <%= attachmentUrl ? '' : 'disabled' %>" data-trigger="remove-attachment">
+		<i class="icon-white icon-remove-sign"></i> Remove
+	</a>
+	<% } %>
 </div>
 <div class="progress progress-striped active" style="display:none">
 	<div class="bar progress-bar"></div>

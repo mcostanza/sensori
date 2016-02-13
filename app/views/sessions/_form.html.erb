@@ -1,38 +1,45 @@
-<div class="form-container">
-  <% if @session.errors.any? %>
-    <div id="error_explanation">
-      <h4><%= pluralize(@session.errors.count, "error") %> prohibited this session from being saved:</h4>
+<div class="form-container row">
+  <div class="span7 well">
+    <% if @session.errors.any? %>
+      <div id="error_explanation">
+        <h4><%= pluralize(@session.errors.count, "error") %> prohibited this session from being saved:</h4>
 
-      <ul>
-      <% @session.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+        <ul>
+        <% @session.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
 
-  <%= form_for(@session, :html => { :multipart => true, :id => "session-form" }) do |f| %>
-    <%= f.label :title %>
-    <%= f.text_field :title, :placeholder => "Title", :class => 'span6' %>
-    <%= f.label :description %>
-    <%= f.text_area :description, :placeholder => "Description", :rows => 10, :class => 'span6' %>
-    <%= f.label :image %>
-    <%= f.file_field :image %>
-    <%= f.label :facebook_event_id %>
-    <%= f.text_field :facebook_event_id, :placeholder => "Facebook Event ID", :class => 'span6' %>
-    <%= f.label :end_date %>
-    <%= f.date_select :end_date, {} , { :class => "span2" } %>
-    <%= f.label :soundcloud_playlist_url, "Soundcloud Playlist URL" %>
-    <%= f.text_field :soundcloud_playlist_url, :placeholder => "Soundcloud Playlist URL", :class => 'span6' %>
-    <%= f.label :bandcamp_album_id, "Bandcamp Album ID" %>
-    <%= f.text_field :bandcamp_album_id, :placeholder => "Bandcamp Album ID", :class => 'span6' %>
-  <% end %>
+    <%= form_for(@session, :html => { :multipart => true, :id => "session-form" }) do |f| %>
+      <%= f.label :title %>
+      <%= f.text_field :title, :placeholder => "Title", :class => 'span6' %>
+      <%= f.label :description %>
+      <%= f.text_area :description, :placeholder => "Description", :rows => 10, :class => 'span6' %>
+      <%= f.label :image %>
+      <%= f.file_field :image %>
+      <%= f.label :facebook_event_id %>
+      <%= f.text_field :facebook_event_id, :placeholder => "Facebook Event ID", :class => 'span6' %>
+      <%= f.label :end_date %>
+      <%= f.date_select :end_date, {} , { :class => "span2" } %>
+      <%= f.label :soundcloud_playlist_url, "Soundcloud Playlist URL" %>
+      <%= f.text_field :soundcloud_playlist_url, :placeholder => "Soundcloud Playlist URL", :class => 'span6' %>
+      <%= f.label :bandcamp_album_id, "Bandcamp Album ID" %>
+      <%= f.text_field :bandcamp_album_id, :placeholder => "Bandcamp Album ID", :class => 'span6' %>
+    <% end %>
 
-  <div class="attachments-container"></div>
+    <div class="sample-packs-wrap">
+      <label>Sample Packs</label>
+      <div class="attachments-container"></div>
 
-  <button class="btn btn-primary" data-trigger="add-sample-pack">Add Sample Pack</button>
+      <button class="btn btn-primary" data-trigger="add-sample-pack">Add Sample Pack</button>
+    </div>  
+  </div>
 
-  <a href="javascript:;" class="btn btn-primary" data-trigger='save'>Save</a>
+  <div class='span7'>
+    <%= button_tag "Save", class: "btn btn-primary", data: { trigger: 'save' } %>
+  </div>
 </div>
 
 <%= render '/shared/s3_uploader_form_jst' %>

@@ -96,6 +96,10 @@ describe("Sensori.Views.AttachmentUploader", function() {
         view.onAdd(event, data);
         expect(jQuery.fn.fadeOut.getCall(0).thisValue.selector).toEqual(".control-group .help-inline");
       });
+      it("displays the file name", function() {
+        view.onAdd(event, data);
+        expect(view.$el.text()).toContain("audio.wav");
+      });
     });
     describe("with an invalid attachment", function() {
       beforeEach(function() {
@@ -195,4 +199,50 @@ describe("Sensori.Views.AttachmentUploader", function() {
       expect(view.render()).toEqual(view);
     });
   });
+
+  describe("clicking a remove button", function() {
+    var attachmentListener;
+
+    beforeEach(function() {
+      model.set("attachment_url", "http://s3.amazon.com/sensori/attachment.zip");
+      view = new Sensori.Views.AttachmentUploader({
+        model: model,
+        removeButton: true
+      }).render();
+
+      attachmentListener = sinon.stub();
+      view.on("remove-attachment", attachmentListener);
+    });
+
+    describe("confirmed", function() {
+      beforeEach(function() {
+        sinon.stub(window, 'confirm').returns(true);
+      });
+      
+      afterEach(function() {
+        window.confirm.restore();
+      });
+
+      it("triggers a remove-attachment event", function() {
+        view.$("[data-trigger='remove-attachment']").click();
+        expect(attachmentListener.callCount).toEqual(1);
+        expect(attachmentListener.getCall(0).args).toEqual([model]);
+      });      
+    })
+
+    describe("cancelled", function() {
+      beforeEach(function() {
+        sinon.stub(window, 'confirm').returns(false);
+      });
+      
+      afterEach(function() {
+        window.confirm.restore();
+      });
+
+      it('does nothing', function() {
+        view.$("[data-trigger='remove-attachment']").click();
+        expect(attachmentListener.callCount).toEqual(0);
+      });
+    });
+  })
 });

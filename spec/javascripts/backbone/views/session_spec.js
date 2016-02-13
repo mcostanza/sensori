@@ -61,9 +61,9 @@ describe("Sensori.Views.Session", function() {
 			view.render()			
 		});
 		it("should remove the disabled class from the save button", function() {
-			view.saveButton.addClass("disabled");
+			view.$saveButton.addClass("disabled");
 			view.enableSaveButton();
-			expect(view.saveButton.hasClass("disabled")).toBe(false);
+			expect(view.$saveButton.hasClass("disabled")).toBe(false);
 		});
 	});
 
@@ -73,7 +73,7 @@ describe("Sensori.Views.Session", function() {
 		});
 		it("should add the disabled class from the save button", function() {
 			view.disableSaveButton();
-			expect(view.saveButton.hasClass("disabled")).toBe(true);
+			expect(view.$saveButton.hasClass("disabled")).toBe(true);
 		});
 	});
 
@@ -121,9 +121,9 @@ describe("Sensori.Views.Session", function() {
 		afterEach(function() {
 			Sensori.Views.AttachmentUploader.restore()
 		});
-		it("should set this.saveButton to the save button element", function() {
+		it("should set this.$saveButton to the save button element", function() {
 			view.render();
-			expect(view.saveButton).toEqual(view.$("[data-trigger='save']"));
+			expect(view.$saveButton).toEqual(view.$("[data-trigger='save']"));
 		});
 
 		it("renders an attachment uploader subview for each sample pack", function() {
@@ -137,6 +137,44 @@ describe("Sensori.Views.Session", function() {
 		});
 		it("should return itself", function() {
 			expect(view.render()).toEqual(view);
+		});
+	});
+
+	describe("removing a sample pack", function() {
+		var samplePack1,
+				samplePack2;
+
+		beforeEach(function() {
+			samplePack1 = new Sensori.Models.SamplePack({
+				attachment_name: 'samples-1.zip', 
+				attachment_url: 'http://s3.amazon.com/sensori/samples-1.zip'
+			});
+
+			samplePack2 = new Sensori.Models.SamplePack({
+				attachment_name: 'samples-2.zip', 
+				attachment_url: 'http://s3.amazon.com/sensori/samples-2.zip'
+			});
+
+			collection.add(samplePack1);
+			collection.add(samplePack2);
+			
+			view.render();
+
+			sinon.stub(window, 'confirm').returns(true);
+		});
+
+		afterEach(function() {
+			window.confirm.restore();
+		});
+
+		it("removes the sample pack from the view and collection", function() {
+			view.$("[data-trigger='remove-attachment']").first().click();
+
+			expect(collection.length).toEqual(1);
+			expect(collection.first().cid).toEqual(samplePack2.cid);
+
+			expect(view.$("[data-cid=" + samplePack1.cid + "]").length).toEqual(0);
+			expect(view.$("[data-cid=" + samplePack2.cid + "]").length).toEqual(1);
 		});
 	});
 });

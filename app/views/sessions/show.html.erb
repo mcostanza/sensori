@@ -20,7 +20,7 @@
     <h2><%= title @session.title %></h2>
     <p><%= simple_format(@session.description) %></p>
 
-    <% @session.sample_packs.each_with_index do |sample_pack, index| %>
+    <% @session.sample_packs.live.each_with_index do |sample_pack, index| %>
       <p>
         <%= link_to(sample_pack.url, :class => "btn btn-primary") do %>
           <i class="icon-white icon-download-alt"></i> Download Sample Pack <%= index + 1 %>

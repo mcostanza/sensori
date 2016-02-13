@@ -10,7 +10,8 @@ Sensori.Views.AttachmentUploader = Backbone.View.extend({
 	},
 
 	events: {
-		"click .disabled": "preventDefault"
+		"click .disabled": "preventDefault",
+    "click [data-trigger='remove-attachment']": "triggerRemove"
 	},
 
 	preventDefault: function(event) {
@@ -24,7 +25,9 @@ Sensori.Views.AttachmentUploader = Backbone.View.extend({
 	},
 
 	onAdd: function(event, data) {
-    if (this.isValidAttachment(data.files[0])) {
+    var file = data.files[0];
+
+    if (this.isValidAttachment(file)) {
 			this.trigger("upload:add");
 			this.$(".download-button").addClass("disabled");
 
@@ -33,6 +36,8 @@ Sensori.Views.AttachmentUploader = Backbone.View.extend({
 
       this.$(".progress").fadeIn();
       this.$(".progress-bar").css({ width: "0%" });
+
+      this.$(".attachment-name").text(file.name);
 
       data.submit();
     } else {
@@ -68,17 +73,30 @@ Sensori.Views.AttachmentUploader = Backbone.View.extend({
     	.removeClass("disabled")
     	.attr("href", this.model.get("attachment_url"));
 
+    this.$(".remove-button").removeClass("disabled");
+
     this.trigger("upload:done");
   },
 
   onFail: function(e, data) {
   	this.trigger("upload:fail");
   },
+
+  // parent views can hook into this behavior
+  triggerRemove: function(event) {
+    var button = $(event.target).closest('[data-trigger]');
+    if (button.hasClass('disabled')) { return; }
+
+    if (window.confirm('Are you sure?')) {
+      this.trigger("remove-attachment", this.model);
+    }
+  },
 	
 	render: function() {
 		this.$el.html(JST[this.template]({
 			attachmentUrl: this.model.get("attachment_url"),
 			attachmentName: this.model.get("attachment_name"),
+      removeButton: this.options.removeButton,
 			uploadForm: JST["backbone/templates/shared/s3_uploader_form"]()
 		}));
 

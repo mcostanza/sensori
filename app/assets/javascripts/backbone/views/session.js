@@ -7,35 +7,34 @@ Sensori.Views.Session = Backbone.View.extend({
   },
 
   submitForm: function() {
-    if (this.saveButton.hasClass("disabled")) { return; }
+    if (this.$saveButton.hasClass("disabled")) { return; }
       
-    var $form = this.$("#session-form");
+    this.collection.each(this.renderHiddenInputsForSamplePack, this);
 
-    this.collection.each(_.bind(function(samplePack) {
-      var $nameInput = $("<input>")
-        .attr("type", "hidden")
-        .val(samplePack.get("attachment_name"))
-        .attr("name", "sample_packs[][name]");
+    this.$form.submit();
+  },
 
-      var $urlInput = $("<input>")
-        .attr("type", "hidden")
-        .val(samplePack.get("attachment_url"))
-        .attr("name", "sample_packs[][url]");
+  renderHiddenInputsForSamplePack: function(samplePack) {
+    var $nameInput = $("<input>")
+      .attr("type", "hidden")
+      .attr("name", "sample_packs[][name]")
+      .val(samplePack.get("attachment_name"));
 
-      $form.append($nameInput);
-      $form.append($urlInput);
-    }, this));
+    var $urlInput = $("<input>")
+      .attr("type", "hidden")
+      .attr("name", "sample_packs[][url]")
+      .val(samplePack.get("attachment_url"));
 
-
-    $form.submit();
+    this.$form.append($nameInput);
+    this.$form.append($urlInput);
   },
 
   enableSaveButton: function() {
-    this.saveButton.removeClass("disabled");
+    this.$saveButton.removeClass("disabled");
   },
 
   disableSaveButton: function() {
-    this.saveButton.addClass("disabled");
+    this.$saveButton.addClass("disabled");
   },
 
   addSamplePack: function() {
@@ -43,28 +42,31 @@ Sensori.Views.Session = Backbone.View.extend({
     this.renderNewSamplePackUploader(this.collection.last());
   },
 
-  removeSamplePack: function(event) {
-    $(event.target).closest("[data-sample-pack]").remove();
+  removeSamplePack: function(model) {
+    this.collection.remove(model);
+    this.$("[data-cid=" + model.cid + "]").remove();
   },
 
   renderNewSamplePackUploader: function(samplePack) {
     var attachmentUploader = new Sensori.Views.AttachmentUploader({
-      model: samplePack
+      model: samplePack,
+      removeButton: true
     }).render();
 
     attachmentUploader.on("upload:add", this.disableSaveButton, this);
     attachmentUploader.on("upload:done", this.enableSaveButton, this);
+    attachmentUploader.on("remove-attachment", this.removeSamplePack, this);
 
     var $attachmentUploaderContainer = $("<div>")
-      .data("sample-pack", true)
-      .append(attachmentUploader.$el)
-      .append("<button data-trigger='remove-sample-pack'>Remove</button>");
+      .attr("data-cid", samplePack.cid)
+      .append(attachmentUploader.$el);
 
     this.$(".attachments-container").append($attachmentUploaderContainer);
   },
 
   render: function() {
-    this.saveButton = this.$("[data-trigger='save']");
+    this.$form = this.$("#session-form");
+    this.$saveButton = this.$("[data-trigger='save']");
     this.collection.each(_.bind(this.renderNewSamplePackUploader, this));
     return this;
   }
