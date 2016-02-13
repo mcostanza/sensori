@@ -187,6 +187,20 @@ describe SessionsController do
           expect(response).to render_template('sessions/new')
         end
       end
+
+      context 'when there are no sample packs' do
+        before do
+          params[:sample_packs] = nil
+        end
+
+        it "does not change any sample packs" do
+          expect { make_request }.to_not change { SamplePack.count }
+        end
+
+        it "does not raise an error" do
+          expect { make_request }.to_not raise_error  
+        end
+      end  
     end
   end
 
@@ -288,6 +302,20 @@ describe SessionsController do
           expect(response).to render_template('sessions/edit')
         end
       end
+
+      context 'when there are no sample packs' do
+        before do
+          params[:sample_packs] = nil
+        end
+
+        it "does not change any sample packs" do
+          expect { make_request }.to_not change { session_model.sample_packs.live.count }
+        end
+
+        it "does not raise an error" do
+          expect { make_request }.to_not raise_error  
+        end
+      end      
     end
   end
 

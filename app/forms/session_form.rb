@@ -12,14 +12,17 @@ class SessionForm
 			ActiveRecord::Base.transaction do
 				@session.update_attributes!(@session_params)
 
-				@session.sample_packs.each do |sample_pack|
-					if !sample_pack_urls.include?(sample_pack.url)
-						sample_pack.deleted = true
-						sample_pack.save!
+				if !@sample_pack_params.nil?
+					@session.sample_packs.each do |sample_pack|
+						if !sample_pack_urls.include?(sample_pack.url)
+							sample_pack.deleted = true
+							sample_pack.save!
+						end
 					end
+
+					@sample_pack_params.each { |hash| create_or_update_sample_pack!(hash) }
 				end
 
-				@sample_pack_params.each { |hash| create_or_update_sample_pack!(hash) }
 			end
 
 			true
