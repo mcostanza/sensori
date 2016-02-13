@@ -315,7 +315,44 @@ describe SessionsController do
         it "does not raise an error" do
           expect { make_request }.to_not raise_error  
         end
-      end      
+      end   
+
+      context 'when a new image is not provided' do
+        before do
+          params[:session][:image] = nil
+        end
+
+        it "updates the session" do
+          expect { 
+            make_request
+          }.to change { session_model.reload.updated_at }
+
+          session_model.reload
+          expect(session_model.description).to eq params[:session][:description]
+        end
+
+        it "updates the associated sample packs" do
+          make_request
+
+          sample_pack_1.reload
+          expect(sample_pack_1.name).to eq sample_pack_1_params[:name]
+          expect(sample_pack_1.deleted).to be_falsey
+
+          sample_pack_2.reload
+          expect(sample_pack_2.deleted).to be_truthy
+
+          sample_pack_3 = session_model.sample_packs.last
+          expect(sample_pack_3.url).to eq new_sample_pack_params[:url]
+          expect(sample_pack_3.name).to eq new_sample_pack_params[:name]
+          expect(sample_pack_3.deleted).to be_falsey
+        end
+
+        it "redirects to the session with a success notice" do
+          make_request
+          expect(response).to redirect_to(session_model)
+          expect(flash[:notice]).to eq 'Session was successfully updated.'
+        end
+      end   
     end
   end
 

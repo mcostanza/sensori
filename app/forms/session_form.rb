@@ -10,7 +10,7 @@ class SessionForm
 	def save
 		begin
 			ActiveRecord::Base.transaction do
-				@session.update_attributes!(@session_params)
+				@session.update_attributes!(cleaned_session_params)
 
 				if !@sample_pack_params.nil?
 					@session.sample_packs.each do |sample_pack|
@@ -40,5 +40,11 @@ class SessionForm
 
 	def sample_pack_urls
 		@_sample_pack_urls ||= @sample_pack_params.map { |hash| hash[:url] }
+	end
+
+	def cleaned_session_params
+		@session_params.dup.tap do |session_params|
+			session_params.delete(:image) if @session.persisted? && session_params[:image].nil?
+		end
 	end
 end
