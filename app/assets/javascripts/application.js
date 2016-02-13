@@ -26,6 +26,7 @@
 //= require sensori
 //= require_tree ./backbone/mixins
 //= require_tree ./backbone/models
+//= require_tree ./backbone/collections
 //= require_tree .
 
 $(function() {

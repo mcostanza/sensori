@@ -7,6 +7,7 @@ class Session < ActiveRecord::Base
   belongs_to :member
 
   has_many :submissions
+  has_many :sample_packs
 
   validates :member, :presence => true
   validates :title, :presence => true

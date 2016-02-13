@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
 
   # GET /sessions/1
   def show
-    @session = Session.find(params[:id])
+    @session = find_session
     if signed_in?
       @submission = @current_member.submissions.find_or_initialize_by_session_id(@session.id)
     end
@@ -22,42 +22,55 @@ class SessionsController < ApplicationController
 
   # GET /sessions/:id/edit
   def edit
-    @session = Session.find(params[:id])
+    @session = find_session
   end
 
   # POST /sessions
   def create
-    @session = Session.new(params[:session].merge(:member_id => @current_member.id))
-
-    if @session.save
-      redirect_to @session, :notice => 'Session was successfully created.'
+    session_form = SessionForm.new(
+      session: Session.new(member_id: @current_member.id),
+      session_params: params[:session],
+      sample_pack_params: params[:sample_packs]
+    )
+    
+    if session_form.save
+      redirect_to session_form.session, :notice => 'Session was successfully created.'
     else
+      @session = session_form.session
       render :action => "new"
     end
   end
 
   # PUT /sessions/:id
   def update
-    @session = Session.find(params[:id])
+    session_form = SessionForm.new(
+      session: find_session,
+      session_params: params[:session],
+      sample_pack_params: params[:sample_packs]
+    )
 
-    if @session.update_attributes(params[:session])
-      redirect_to @session, :notice => 'Session was successfully updated.'
+    if session_form.save
+      redirect_to session_form.session, :notice => 'Session was successfully updated.'
     else
+      @session = session_form.session
       render :action => "edit"
     end
   end
 
   # DELETE /sessions/:id
   def destroy
-    @session = Session.find(params[:id])
-    @session.destroy
+    find_session.destroy
     flash[:notice] = "Session was successfully deleted."
     redirect_to :sessions
   end
 
   # GET /sessions/:id/submissions
   def submissions
-    @session = Session.find(params[:id])
+    @session = find_session
     @submissions = @session.submissions
+  end
+
+  def find_session
+    Session.find(params[:id])
   end
 end

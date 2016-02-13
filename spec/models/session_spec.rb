@@ -36,6 +36,9 @@ describe Session do
     it "has many submissions" do
       expect(Session.reflect_on_association(:submissions).macro).to eq :has_many
     end
+    it "has many sample_packs" do
+      expect(Session.reflect_on_association(:sample_packs).macro).to eq :has_many
+    end
   end
   
   describe "callbacks" do

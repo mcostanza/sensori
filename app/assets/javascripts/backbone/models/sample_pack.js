@@ -1,0 +1,1 @@
+Sensori.Models.SamplePack = Backbone.Model.extend({});
