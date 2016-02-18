@@ -24,7 +24,7 @@
       <%= render partial: 'sample_pack', locals: { sample_pack: @sample_packs.first, sample_pack_name: 'Samples' } %>
     <% else %>
       <% @sample_packs.each_with_index do |sample_pack, index| %>
-        <%= render partial: 'sample_pack', locals: { sample_pack: @sample_packs.first, sample_pack_name: "Sample Pack #{index + 1}" } %>
+        <%= render partial: 'sample_pack', locals: { sample_pack: sample_pack, sample_pack_name: "Sample Pack #{index + 1}" } %>
       <% end %>
     <% end %>
 
